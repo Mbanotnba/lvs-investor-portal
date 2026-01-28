@@ -1,75 +1,78 @@
-# LVS Investor & Customer Portal
+# LVS Investor & Customer Portal System
 
 **Last Updated:** January 28, 2026
-**Status:** Mockup/Demo Phase
-**Maintainer:** Engineering Team
+**Version:** 2.0
+**Maintainers:** Tayo Adesanya, Randy Hollines
+**Status:** Active Development
 
 ---
 
-## Quick Start
+## Quick Start for Developers
 
 ```bash
 # Clone the repo
 git clone https://github.com/Mbanotnba/lvs-investor-portal.git
 cd lvs-investor-portal
 
-# Open locally (no build required - static HTML)
-open index.html           # Investor Portal login
-open customer-portal-mockup.html  # Customer Portal (bypass auth for testing)
-
-# Or serve with Python for proper video playback
+# Serve locally (required for proper functionality)
 python3 -m http.server 8000
-# Then visit http://localhost:8000
+# Visit: http://localhost:8000/login.html
+
+# Or use Node.js
+npx serve .
 ```
 
-**Live URLs:**
-- Investor Portal: https://mbanotnba.github.io/lvs-investor-portal/
-- Customer Portal Mockup: https://mbanotnba.github.io/lvs-investor-portal/customer-portal-mockup.html
+### Access Credentials
 
-**Investor Portal Password:** `LVS_2026`
+| Role | URL | Email Required | Password |
+|------|-----|----------------|----------|
+| **Investor** | `/login.html` | No | `LVS_2026` |
+| **Founder** | `/login.html` | @lolavisionsystems.com | `LVS_2026` |
+| **Customer** | `/login.html` | Any + Company | Company-specific |
+| **Team Demo** | `/login.html` (toggle) | Optional | `LVS_2026` |
+
+**Live Site:** https://mbanotnba.github.io/lvs-investor-portal/
 
 ---
 
-## Screenshots
+## System Architecture Overview
 
-Current portal screenshots (auto-generated):
-
-### Customer Portal (Anduril)
-![Customer Portal](screenshots/customer-portal.png)
-
-### Investor Login
-![Investor Login](screenshots/investor-login.png)
-
-### Investor Roadmap
-![Investor Roadmap](screenshots/investor-roadmap.png)
-
-**Regenerate screenshots:**
-```bash
-./scripts/screenshot.sh
 ```
-
----
-
-## Project Overview
-
-This repository contains two web portals for Lola Vision Systems:
-
-### 1. Investor Portal (`index.html` → `roadmap.html`)
-Password-protected dashboard for investors showing:
-- LVS-100 to LVS-250 production roadmap
-- Financing timeline ($515K raised, $5M seed target)
-- Key milestones (DRC cutoff, silicon delivery, tapeout)
-- MPW1443 shuttle wafer run details
-
-### 2. Customer Portal (`customer-portal-mockup.html`)
-NDA-customer dashboard (currently mockup) with:
-- 6-stage engagement tracker
-- Product information with hero video
-- Technical specifications
-- Development kit details
-- SDK documentation
-- Document library
-- Support channels
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                        LVS PORTAL SYSTEM ARCHITECTURE                        │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│   ┌──────────────┐                                                          │
+│   │  login.html  │  ◄── Unified entry point with role selection             │
+│   │              │      Team Demo Mode available                            │
+│   └──────┬───────┘                                                          │
+│          │                                                                   │
+│          ├─────────────────┬─────────────────┬─────────────────┐           │
+│          ▼                 ▼                 ▼                 ▼           │
+│   ┌─────────────┐   ┌─────────────┐   ┌─────────────┐   ┌─────────────┐   │
+│   │  INVESTOR   │   │   FOUNDER   │   │  CUSTOMER   │   │   LEGACY    │   │
+│   │  dashboard  │   │   founder-  │   │  *-portal   │   │  index.html │   │
+│   │    .html    │   │  portal.html│   │    .html    │   │  (redirect) │   │
+│   └─────────────┘   └─────────────┘   └─────────────┘   └─────────────┘   │
+│          │                 │                 │                              │
+│          │                 │                 └── Customer-specific portals  │
+│          │                 │                     (Anduril, Koniku, etc.)    │
+│          │                 │                                                │
+│          │                 └── Full access to all portals                   │
+│          │                                                                   │
+│          └── Can view investor dashboard + customer portals                 │
+│                                                                              │
+├─────────────────────────────────────────────────────────────────────────────┤
+│   DATA LAYER (JSON)                                                          │
+│   ┌────────────────────┐    ┌────────────────────────┐                      │
+│   │ data/customers.json│    │ data/financial-model.json│                    │
+│   │ - 21 customers     │    │ - Revenue projections    │                    │
+│   │ - Pipeline data    │    │ - 2026/2027/2028 weighted│                    │
+│   │ - Gov engagements  │    │ - Breakdown by source    │                    │
+│   └────────────────────┘    └────────────────────────┘                      │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
 
 ---
 
@@ -77,285 +80,324 @@ NDA-customer dashboard (currently mockup) with:
 
 ```
 lvs-investor-portal/
-├── index.html                    # Investor login page (password protected)
-├── roadmap.html                  # Investor dashboard (post-login)
-├── customer-portal-mockup.html   # Customer portal (full mockup)
-├── README.md                     # This file
-├── ARCHITECTURE.md               # Technical architecture details
-├── scripts/
-│   └── screenshot.sh             # Auto-generate portal screenshots
-├── screenshots/                  # Auto-generated screenshots
-│   ├── customer-portal.png       # Customer portal dashboard
-│   ├── investor-login.png        # Investor login page
-│   └── investor-roadmap.png      # Investor roadmap dashboard
-└── assets/
-    ├── lvs-logo.png              # Company logo (white on transparent)
-    ├── anduril-logo.png          # Anduril customer logo
-    ├── lvs-chiplet-hero.mp4      # Product hero video (12MB)
-    ├── LVS_Production_Roadmap.svg # Roadmap infographic
-    └── LVS_Production_Roadmap.png # PNG export of roadmap
+│
+├── 🔐 ACCESS CONTROL
+│   ├── login.html              # Unified login (Investor/Customer/Founder)
+│   ├── index.html              # Legacy investor login (redirects work)
+│   └── founder-login.html      # Legacy founder login
+│
+├── 📊 INVESTOR PORTAL
+│   ├── dashboard.html          # Main investor dashboard (metrics, highlights)
+│   ├── pipeline.html           # Customer pipeline by tier
+│   ├── financials.html         # Financial model & projections
+│   ├── seed-round.html         # Seed round details & SAFE terms
+│   └── roadmap.html            # Production timeline
+│
+├── 👔 FOUNDER PORTAL
+│   └── founder-portal.html     # Customer management dashboard
+│
+├── 🏢 CUSTOMER PORTALS
+│   ├── customer-portal-mockup.html  # Anduril Industries
+│   ├── koniku-portal.html           # Koniku (MOU Proposed)
+│   ├── glid-portal.html             # Glid Technologies
+│   ├── mach-portal.html             # Mach Industries (Stalled)
+│   └── terrahaptix-portal.html      # Terrahaptix
+│
+├── 📁 DATA
+│   └── data/
+│       ├── customers.json           # All customer data + gov engagements
+│       └── financial-model.json     # Revenue projections
+│
+├── 🎨 ASSETS
+│   └── assets/
+│       ├── lvs-logo.png             # Company logo
+│       ├── demos/                   # Demo videos
+│       └── testimonials/            # Testimonial videos
+│
+├── 📖 DOCUMENTATION
+│   ├── README.md                    # This file
+│   ├── ARCHITECTURE.md              # Technical deep-dive
+│   └── DEVELOPER_GUIDE.md           # How to make changes
+│
+└── 🛠️ SCRIPTS
+    └── scripts/
+        └── screenshot.sh            # Generate screenshots
 ```
 
 ---
 
-## Architecture Overview
+## Access Control System
 
-### Authentication Model
+### Session Storage Keys
 
-```
-┌─────────────────────────────────────────────────────────┐
-│                    CURRENT STATE                         │
-│                  (Client-Side Auth)                      │
-├─────────────────────────────────────────────────────────┤
-│                                                          │
-│   index.html                    roadmap.html             │
-│   ┌──────────┐                 ┌──────────────┐         │
-│   │ Password │ ──validates──▶  │ Session      │         │
-│   │ Input    │    hash         │ Storage      │         │
-│   └──────────┘                 │ Check        │         │
-│        │                       └──────────────┘         │
-│        ▼                              │                  │
-│   simpleHash()                        ▼                  │
-│   Compare to                    Show Dashboard           │
-│   '790995832'                   or Redirect              │
-│                                                          │
-└─────────────────────────────────────────────────────────┘
-
-NOTE: This is demo-grade security. Production will require
-server-side authentication with proper session management.
+```javascript
+// Set on login - check these to determine access level
+sessionStorage.getItem('lvs_auth')              // 'true' = logged in
+sessionStorage.getItem('lvs_role')              // 'investor' | 'customer' | 'founder'
+sessionStorage.getItem('lvs_can_view_customers') // 'true' = can browse all customer portals
+sessionStorage.getItem('lvs_founder_auth')       // 'true' = founder access
+sessionStorage.getItem('lvs_team_mode')          // 'true' = team demo mode
+sessionStorage.getItem('lvs_customer')           // Customer ID (e.g., 'anduril')
 ```
 
-### Customer Portal Tab Structure
+### Access Matrix
 
-```
-┌─────────────────────────────────────────────────────────┐
-│  LOLA VISION SYSTEMS              [Customer Portal] [X] │
-├─────────────────────────────────────────────────────────┤
-│ Dashboard │ Product │ Specs │ DevKit │ SDK │ Docs │ ?  │
-├─────────────────────────────────────────────────────────┤
-│                                                          │
-│  Tab Content Area                                        │
-│  (Single-page app with JS tab switching)                │
-│                                                          │
-└─────────────────────────────────────────────────────────┘
+| Feature | Investor | Customer | Founder |
+|---------|----------|----------|---------|
+| Investor Dashboard | ✅ | ❌ | ✅ |
+| Pipeline Details | ✅ | ❌ | ✅ |
+| Financial Model | ✅ | ❌ | ✅ |
+| Seed Round Info | ✅ | ❌ | ✅ |
+| Own Customer Portal | ✅ | ✅ | ✅ |
+| All Customer Portals | ✅ | ❌ | ✅ |
+| Founder Dashboard | ❌ | ❌ | ✅ |
+
+---
+
+## Data Architecture
+
+### customers.json Structure
+
+```json
+{
+  "customers": [
+    {
+      "id": "anduril",                    // Unique identifier
+      "name": "Anduril Industries",       // Display name
+      "industry": "Defense Tech",         // Industry category
+      "tier": 1,                          // 1, 2, or 3
+      "product": "LVS-250",               // Target product
+      "currentStage": 3,                  // 1-6 engagement stage
+      "stages": [...],                    // Stage progression
+      "milestones": [...],                // Key milestones
+      "summary": {
+        "status": "IRAD Proposed",        // Current status
+        "totalValue": "$15,000,000",      // Deal value
+        "probability": "60%",             // Win probability
+        "weightedValue": "$9,000,000",    // value × probability
+        "primaryContact": "Name"          // Main contact
+      },
+      "nextActions": [...]                // Pending tasks
+    }
+  ],
+  "governmentEngagements": [
+    {
+      "id": "army-iews",
+      "name": "US Army IEW&S / C5ISR",
+      "strategy": "OEM Partner Positioning",
+      "oem_partners": [...],
+      "potentialImpact": {...}
+    }
+  ]
+}
 ```
 
-| Tab | ID | Purpose |
-|-----|----|---------|
-| Dashboard | `#dashboard` | Engagement progress, milestones, contact |
-| Product | `#product` | Hero video, executive summary, key specs |
-| Specifications | `#specs` | Full technical specifications |
-| Development Kit | `#devkit` | Hardware kit contents and specs |
-| Software SDK | `#sdk` | SDK architecture, code samples |
-| Documents | `#documents` | Shared legal/technical docs |
-| Support | `#support` | Contact channels, knowledge base |
+### financial-model.json Structure
+
+```json
+{
+  "lastUpdated": "January 28, 2026",
+  "weightedRevenue": {
+    "2026": { "amount": "$1,200,000", "value": 1200000, "breakdown": {...} },
+    "2027": { "amount": "$12,400,000", "value": 12400000, "breakdown": {...} },
+    "2028": { "amount": "$28,000,000", "value": 28000000, "breakdown": {...} }
+  },
+  "cumulativeWeighted": {
+    "threeYear": "$41,600,000"
+  }
+}
+```
+
+---
+
+## Common Tasks
+
+### Add a New Customer Portal
+
+1. **Copy template:**
+   ```bash
+   cp koniku-portal.html newcustomer-portal.html
+   ```
+
+2. **Find & replace:**
+   - `Koniku` → `New Customer`
+   - `koniku` → `newcustomer`
+   - Update all customer-specific data (stage, value, milestones)
+
+3. **Add to customers.json:**
+   ```json
+   {
+     "id": "newcustomer",
+     "name": "New Customer Inc",
+     ...
+   }
+   ```
+
+4. **Add to founder-portal.html:**
+   ```javascript
+   const customersWithPortals = ['anduril', 'terrahaptix', 'koniku', 'glid', 'mach', 'newcustomer'];
+   ```
+   And add the portal link logic.
+
+5. **Add to login.html** (customer dropdown):
+   ```html
+   <option value="newcustomer">New Customer Inc</option>
+   ```
+
+6. **Add to dashboard.html** (Customer Portals section)
+
+### Update Pipeline Metrics
+
+1. **Edit dashboard.html** - Top metrics grid
+2. **Edit pipeline.html** - Tier tables and totals
+3. **Edit data/customers.json** - Source of truth
+
+### Update Financial Projections
+
+1. **Edit data/financial-model.json** - Update values
+2. **Dashboard auto-updates** from the card display
+3. **financials.html auto-loads** from JSON
+
+### Change Access Passwords
+
+Edit `login.html`:
+```javascript
+const CONFIG = {
+    teamPassword: '790995832',  // Hash of LVS_2026
+    passwords: {
+        investor: '790995832',
+        founder: '790995832',
+        customer: {
+            anduril: '1438927492',  // Hash of ANDURIL_2026
+            // Add more...
+        }
+    }
+}
+```
+
+To generate a new hash, use the browser console:
+```javascript
+function simpleHash(str) {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+        const char = str.charCodeAt(i);
+        hash = ((hash << 5) - hash) + char;
+        hash = hash & hash;
+    }
+    return String(Math.abs(hash));
+}
+simpleHash('YOUR_NEW_PASSWORD');
+```
 
 ---
 
 ## Design System
 
-### Color Palette
+### Colors (CSS Variables)
 
 ```css
-/* Primary Colors */
---bg: #0b1021;           /* Dark background */
---panel: #141a30;        /* Card/panel background */
---panel-light: #1a2240;  /* Lighter panel variant */
-
-/* Accent Colors */
---accent: #7c4dff;       /* Purple - LVS brand primary */
---accent-light: #9d7aff; /* Light purple */
---gold: #d4af37;         /* Gold - premium accent */
-
-/* Text Colors */
---text: #e6e8f0;         /* Primary text */
---muted: #9aa3c2;        /* Secondary/muted text */
-
-/* Status Colors */
---success: #10b981;      /* Green - complete/success */
---warn: #f97316;         /* Orange - warning/critical */
---info: #06b6d4;         /* Cyan - informational */
+:root {
+    --bg: #0a0a0f;           /* Page background */
+    --panel: #12121a;        /* Card background */
+    --panel-light: #1a1a24;  /* Lighter panels */
+    --text: #f5f5f7;         /* Primary text */
+    --muted: #6b7280;        /* Secondary text */
+    --accent: #7c4dff;       /* Purple - primary brand */
+    --gold: #d4af37;         /* Gold - premium/founder */
+    --success: #10b981;      /* Green - complete/good */
+    --warn: #f59e0b;         /* Orange - warning */
+}
 ```
 
-### Typography
+### Status Badge Classes
 
-- **Primary Font:** Inter, -apple-system, BlinkMacSystemFont, sans-serif
-- **Code Font:** Monaco, Consolas, monospace
-- **Headings:** 700-800 weight
-- **Body:** 400-600 weight
-
-### Component Patterns
-
-1. **Panels** - Rounded cards with subtle border (`border-radius: 16px`)
-2. **Tables** - Minimal with hover states
-3. **Buttons** - Primary (white/purple), Secondary (transparent)
-4. **Progress Indicators** - Dot-based stage tracker
-5. **Badges** - Pill-shaped status indicators
-
----
-
-## Key Features
-
-### Video Player (Product Tab)
-```html
-<video id="heroVideo" autoplay muted loop playsinline>
-    <source src="assets/lvs-chiplet-hero.mp4" type="video/mp4">
-</video>
+```css
+.stage-badge.negotiation  /* Green */
+.stage-badge.evaluation   /* Purple */
+.stage-badge.opportunity  /* Orange */
+.stage-badge.discovery    /* Gray */
+.stage-badge.proposed     /* Cyan */
+.stage-badge.stalled      /* Yellow */
 ```
-- **Autoplay:** Yes (muted by default for browser compliance)
-- **Loop:** Yes (continuous playback)
-- **Audio Toggle:** Bottom-right button
-- **Playsinline:** Prevents fullscreen on mobile
-
-### Tab Navigation
-```javascript
-// Tab switching - vanilla JS, no framework
-document.querySelectorAll('.tab-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-        // Remove active from all
-        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-        // Activate selected
-        btn.classList.add('active');
-        document.getElementById(btn.dataset.tab).classList.add('active');
-    });
-});
-```
-
-### Engagement Progress Tracker
-6-stage visual tracker showing customer journey:
-1. Discovery → 2. NDA Signed → 3. Evaluation → 4. IRAD Active → 5. Design Win → 6. Production
-
----
-
-## Data Sources (Current State)
-
-Currently, all data is **hardcoded in HTML**. This is intentional for the mockup phase.
-
-### Future: Centralized Data Hub
-
-A planned `lvs-data-hub` system will provide:
-- Single JSON source of truth (`lvs_master_data.json`)
-- Template-based HTML generation
-- Auto-rebuild on data change
-- Multiple access levels (Master/Founder/Company/External/Customer)
-
-See: `/Users/admin/Lola_Vision_Systems/09_Internal_Operations/LVS_DATA_ARCHITECTURE_PLAN.md`
-
----
-
-## Testing Locally
-
-### Basic Testing
-```bash
-# Just open the files directly
-open customer-portal-mockup.html
-```
-
-### With Video Playback (Recommended)
-```bash
-# Python 3 server
-python3 -m http.server 8000
-
-# Or Node.js
-npx serve .
-
-# Then visit http://localhost:8000
-```
-
-### Test Checklist
-- [ ] All 7 tabs navigate correctly
-- [ ] Video autoplays (muted)
-- [ ] Mute/unmute button works
-- [ ] Responsive on mobile (resize browser)
-- [ ] Investor portal password works (`LVS_2026`)
-- [ ] Session persists after login
-
----
-
-## Making Changes
-
-### Update Content
-1. Edit HTML directly in the relevant section
-2. Search for the section header comment (e.g., `<!-- ==================== PRODUCT TAB ====================`)
-3. Modify text/values
-4. Commit and push (auto-deploys to GitHub Pages)
-
-### Update Styles
-1. All CSS is in `<style>` block at top of each HTML file
-2. Use CSS variables for colors (e.g., `var(--accent)`)
-3. Test responsive behavior at 768px and 1000px breakpoints
-
-### Add New Tab
-1. Add button to `.tab-nav`: `<button class="tab-btn" data-tab="newtab">New Tab</button>`
-2. Add content section: `<div id="newtab" class="tab-content">...</div>`
-3. Tab switching JS handles it automatically
 
 ---
 
 ## Deployment
 
-### GitHub Pages (Current)
-- **Branch:** `main`
-- **Path:** `/` (root)
-- **Auto-deploy:** Yes (on push to main)
-- **URL:** https://mbanotnba.github.io/lvs-investor-portal/
+### Automatic (GitHub Pages)
 
-### Manual Deploy
 ```bash
 git add -A
 git commit -m "Description of changes"
 git push origin main
-# GitHub Pages rebuilds automatically (~1-2 min)
+# Auto-deploys in ~1-2 minutes
 ```
 
----
+### Verify Deployment
 
-## Security Notes
-
-### Current State (Demo)
-- Client-side password hash comparison
-- Session storage for auth state
-- No server-side validation
-- Password visible in source code (hashed)
-
-### Production Requirements
-- [ ] Server-side authentication
-- [ ] HTTPS enforcement
-- [ ] Rate limiting on login attempts
-- [ ] Proper session management
-- [ ] Per-customer unique credentials
-- [ ] Audit logging
+1. Visit: https://mbanotnba.github.io/lvs-investor-portal/
+2. Hard refresh: `Cmd+Shift+R` (Mac) or `Ctrl+Shift+R` (Windows)
+3. Check GitHub Actions if issues
 
 ---
 
-## Related Documents
+## Troubleshooting
 
-| Document | Location | Description |
-|----------|----------|-------------|
-| Data Architecture Plan | `09_Internal_Operations/LVS_DATA_ARCHITECTURE_PLAN.md` | Central data hub design |
-| Production Roadmap SVG | `04_Technical_Documentation/Foundry/LVS_100_MPW1443/` | Source roadmap files |
-| Pipeline Tracker | `06_Customer_Partner_Materials/` | Customer pipeline data |
+### "Changes not showing on live site"
+- Wait 1-2 minutes for GitHub Pages rebuild
+- Hard refresh browser (`Cmd+Shift+R`)
+- Check git push succeeded: `git log --oneline -1`
+
+### "Login not working"
+- Check sessionStorage in browser dev tools
+- Verify password hash matches in login.html
+- Clear sessionStorage: `sessionStorage.clear()`
+
+### "Customer portal not loading"
+- Check file exists and naming matches
+- Verify added to customersWithPortals array
+- Check browser console for errors
+
+### "Videos not playing"
+- Must serve via HTTP server (not file://)
+- Check assets/demos/ and assets/testimonials/ folders
+- Verify video format is MP4
 
 ---
 
-## Contact
+## Team
 
-- **Engineering:** engineering@lolavisionsystems.com
-- **Issues:** https://github.com/Mbanotnba/lvs-investor-portal/issues
+| Name | Role | Focus Areas |
+|------|------|-------------|
+| Tayo Adesanya | Founder & CEO | Strategy, Customer Relations |
+| Randy Hollines | VP Software Engineering | Architecture, Code Quality |
+| Jordan Page | Principal Systems Engineer | Hardware Integration |
+| Joshua Bush | Director Strategic Ops | Partnerships, Operations |
+
+---
+
+## Contact & Support
+
+- **Code Issues:** Create GitHub issue or ping Randy
+- **Content Updates:** Coordinate with Tayo
+- **Deployment Help:** Check this README first
 
 ---
 
 ## Changelog
 
-### 2026-01-28
-- Added Customer Portal mockup with 7 tabs
-- Added hero video with mute controls
-- Separated Specifications into own tab
-- Updated data architecture plan
-- Added comprehensive documentation
+### 2026-01-28 (v2.0)
+- Added unified login system with role selection
+- Added 5 customer portals (Anduril, Koniku, Glid, Mach, Terrahaptix)
+- Added Founder Portal with customer management
+- Added Team section to investor dashboard
+- Added Government Engagements tracking (US Army IEW&S)
+- Added Financial Model with 3-year projections
+- Added Seed Round details page
+- Implemented role-based access control
+- Added Team Demo Mode for persona switching
 
-### 2026-01-27
+### 2026-01-27 (v1.0)
 - Initial investor portal with password protection
-- Production roadmap SVG integration
+- Production roadmap integration
 - GitHub Pages deployment
