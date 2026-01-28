@@ -1458,28 +1458,50 @@ processor = ImageProcessor(resize=(640, 640), normalize=<span class="code-keywor
         <!-- ==================== DEMOS TAB ==================== -->
         <div id="demos" class="tab-content">
             <div class="video-section-header">
-                <h2>Product Demos</h2>
-                <p>See the LVS-250 in action. Videos play automatically at 2x speed.</p>
+                <h2>Real-Time Object Detection</h2>
+                <p>LVS Software running fine-tuned vision models that capture mission-critical details in real-time.</p>
+                <div style="margin-top: 16px; display: flex; flex-wrap: wrap; gap: 8px;">
+                    <span style="background: rgba(124,77,255,0.2); color: var(--accent-light); padding: 6px 12px; border-radius: 20px; font-size: 12px;">Vehicle Detection</span>
+                    <span style="background: rgba(124,77,255,0.2); color: var(--accent-light); padding: 6px 12px; border-radius: 20px; font-size: 12px;">Personnel Tracking</span>
+                    <span style="background: rgba(124,77,255,0.2); color: var(--accent-light); padding: 6px 12px; border-radius: 20px; font-size: 12px;">Threat Classification</span>
+                    <span style="background: rgba(124,77,255,0.2); color: var(--accent-light); padding: 6px 12px; border-radius: 20px; font-size: 12px;">Perimeter Monitoring</span>
+                    <span style="background: rgba(124,77,255,0.2); color: var(--accent-light); padding: 6px 12px; border-radius: 20px; font-size: 12px;">Anomaly Detection</span>
+                </div>
             </div>
             <div class="video-grid single-row">
                 <div class="video-card">
+                    <div style="background: var(--panel-light); padding: 8px 16px; display: flex; align-items: center; gap: 8px;">
+                        <span style="font-size: 16px;">&#9728;</span>
+                        <span style="font-weight: 600; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px;">Day-Time Detection</span>
+                    </div>
                     <video class="demo-video" autoplay muted loop playsinline>
                         <source src="assets/demos/demo-1.mp4" type="video/mp4">
                     </video>
                     <div class="video-card-info">
-                        <div class="video-card-title">LVS-250 Performance Demo</div>
-                        <div class="video-card-desc">Real-time neural network inference at edge</div>
+                        <div class="video-card-title">Visible Spectrum Analysis</div>
+                        <div class="video-card-desc">High-accuracy object detection and tracking in daylight conditions</div>
                     </div>
                 </div>
                 <div class="video-card">
+                    <div style="background: var(--panel-light); padding: 8px 16px; display: flex; align-items: center; gap: 8px;">
+                        <span style="font-size: 16px;">&#9789;</span>
+                        <span style="font-weight: 600; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px;">Night-Time Detection</span>
+                    </div>
                     <video class="demo-video" autoplay muted loop playsinline>
                         <source src="assets/demos/demo-2.mp4" type="video/mp4">
                     </video>
                     <div class="video-card-info">
-                        <div class="video-card-title">SDK Integration Walkthrough</div>
-                        <div class="video-card-desc">Developer workflow and toolchain overview</div>
+                        <div class="video-card-title">Low-Light &amp; IR Analysis</div>
+                        <div class="video-card-desc">Thermal and infrared detection for 24/7 operational capability</div>
                     </div>
                 </div>
+            </div>
+            <div style="margin-top: 24px; padding: 16px 20px; background: linear-gradient(135deg, rgba(124,77,255,0.1), rgba(212,175,55,0.1)); border-radius: 12px; border-left: 3px solid var(--gold);">
+                <p style="font-size: 13px; color: var(--text); margin: 0;">
+                    <strong style="color: var(--gold);">LVS-250 Performance Note:</strong>
+                    The LVS-250 delivers <strong>3-5x performance efficiency</strong> compared to current solutions, enabling either
+                    <em>increased FPS for faster detection</em> or <em>reduced power consumption</em> for extended mission duration—a critical trade-off benefit for edge deployment.
+                </p>
             </div>
         </div>
 
