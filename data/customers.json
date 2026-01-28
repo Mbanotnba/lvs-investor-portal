@@ -205,26 +205,29 @@
       "stages": [
         {"name": "Discovery", "date": "Aug 2025", "complete": true},
         {"name": "LOI Draft", "date": "Sep 2025", "complete": true},
-        {"name": "Negotiation", "date": "In Progress", "current": true},
+        {"name": "Evaluation", "date": "Jan 2026", "current": true},
         {"name": "Agreement", "date": "TBD"},
         {"name": "Integration", "date": "TBD"},
         {"name": "Production", "date": "2027"}
       ],
       "milestones": [
         {"title": "Initial Meeting", "date": "Aug 2025", "status": "complete"},
-        {"title": "LOI Negotiation", "date": "In Progress", "status": "in-progress"}
+        {"title": "LOI Draft Complete", "date": "Sep 2025", "status": "complete"},
+        {"title": "Technical Evaluation", "date": "Feb 2026", "status": "in-progress"}
       ],
       "summary": {
-        "status": "Negotiation",
+        "status": "Evaluation",
         "totalValue": "$5,000,000",
         "nearTermValue": "$300,000",
         "probability": "40%",
         "weightedValue": "$2,000,000",
         "expectedClose": "Q4 2026",
-        "primaryContact": "Kevin A. Damoa"
+        "primaryContact": "Kevin A. Damoa",
+        "secondaryContact": "Jessica Robertson (EA to CEO)"
       },
       "nextActions": [
-        {"task": "Hybrid vehicle use case review", "due": "2026-03-01", "assigned": "Tayo"}
+        {"task": "Technical deep-dive with engineering team", "due": "2026-02-07", "assigned": "Randy"},
+        {"task": "Coordinate agenda with Jessica Robertson", "due": "2026-02-03", "assigned": "Tayo"}
       ]
     },
     {
