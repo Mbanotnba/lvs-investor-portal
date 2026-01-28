@@ -675,8 +675,8 @@
       "oem_partners": [
         {"name": "Mach Industries", "status": "Invited to pitch", "application": "Kamikaze Drones"},
         {"name": "Anduril Industries", "status": "Confirmed", "application": "ISR/C-UAS"},
-        {"name": "Koniku", "status": "Positioning", "application": "Biosensor Systems"},
-        {"name": "Glid Technologies", "status": "Positioning", "application": "Autonomous Vehicles"},
+        {"name": "Koniku", "status": "Confirmed", "application": "Biosensor Systems"},
+        {"name": "Glid Technologies", "status": "Confirmed", "application": "Autonomous Vehicles"},
         {"name": "Revenant Industries", "status": "Positioning", "application": "Autonomous Defense Systems"},
         {"name": "Seasats", "status": "Positioning", "application": "Maritime Autonomous Systems"}
       ],
@@ -684,7 +684,9 @@
         {"title": "Initial Army Contact", "date": "Q4 2025", "status": "complete"},
         {"title": "LVS Pitch to IEW&S/C5ISR", "date": "Feb 2026", "status": "in-progress"},
         {"title": "Mach Industries Pitch Invitation Sent", "date": "Jan 2026", "status": "in-progress"},
-        {"title": "Anduril Confirmed for Army Discussion", "date": "Jan 28, 2026", "status": "complete"}
+        {"title": "Anduril Confirmed for Army Discussion", "date": "Jan 28, 2026", "status": "complete"},
+        {"title": "Koniku Confirmed for Army Discussion", "date": "Jan 28, 2026", "status": "complete"},
+        {"title": "Glid Technologies Confirmed for Army Discussion", "date": "Jan 28, 2026", "status": "complete"}
       ],
       "potentialImpact": {
         "description": "Army contract wins by OEM partners create guaranteed demand for LVS chips",
