@@ -618,7 +618,7 @@
         let filteredCustomers = [];
 
         // Customer portals available for these IDs
-        const customersWithPortals = ['anduril', 'terrahaptix', 'koniku', 'glid', 'mach'];
+        const customersWithPortals = ['anduril', 'terrahaptix', 'koniku', 'glid', 'mach', 'amd'];
 
         // Load customer data
         async function loadCustomers() {
@@ -789,6 +789,10 @@
                 portalLink.style.opacity = '1';
             } else if (customer.id === 'mach') {
                 portalLink.href = 'mach-portal.html';
+                portalLink.onclick = null;
+                portalLink.style.opacity = '1';
+            } else if (customer.id === 'amd') {
+                portalLink.href = 'amd-portal.html';
                 portalLink.onclick = null;
                 portalLink.style.opacity = '1';
             } else {
