@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LVS-100 to LVS-250 Production Roadmap | Lola Vision Systems</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f5f5;
+            min-height: 100vh;
+        }
+        .nav {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            padding: 16px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .nav-brand {
+            color: white;
+            font-weight: 700;
+            font-size: 18px;
+        }
+        .nav-brand span { color: #d4af37; }
+        .nav-link {
+            color: #888;
+            text-decoration: none;
+            font-size: 13px;
+            transition: color 0.2s;
+        }
+        .nav-link:hover { color: white; }
+        .container {
+            max-width: 1500px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+            padding: 30px 40px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+        .header h1 { font-size: 28px; margin-bottom: 5px; }
+        .header .subtitle { color: #d4af37; font-size: 16px; }
+        .header .meta { color: #888; font-size: 13px; margin-top: 10px; }
+
+        .infographic-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        .infographic-container svg {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .key-dates {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+        .date-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+        }
+        .date-card.critical { border-left: 4px solid #ff9800; }
+        .date-card.milestone { border-left: 4px solid #4fc3f7; }
+        .date-card.production { border-left: 4px solid #7c4dff; }
+        .date-card.current { border-left: 4px solid #ffc107; }
+        .date-card h3 {
+            font-size: 12px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+        }
+        .date-card .date {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1a1a2e;
+        }
+        .date-card .description {
+            font-size: 12px;
+            color: #888;
+            margin-top: 6px;
+        }
+        .date-card .countdown {
+            display: inline-block;
+            background: #fff3e0;
+            color: #e65100;
+            padding: 3px 8px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-top: 8px;
+        }
+
+        .financing-summary {
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 20px;
+        }
+        .financing-summary h3 {
+            color: #1b5e20;
+            font-size: 18px;
+            margin-bottom: 16px;
+        }
+        .funding-timeline {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+        }
+        .funding-item {
+            background: white;
+            border-radius: 8px;
+            padding: 12px 16px;
+            border: 2px solid #4caf50;
+        }
+        .funding-item.current {
+            border-color: #ffc107;
+            background: #fffde7;
+        }
+        .funding-item.future {
+            border-color: #7c4dff;
+            background: #ede7f6;
+        }
+        .funding-item .source {
+            font-size: 11px;
+            color: #666;
+            font-weight: 600;
+        }
+        .funding-item .amount {
+            font-size: 16px;
+            font-weight: 700;
+            color: #2e7d32;
+        }
+        .funding-item.current .amount { color: #ff9800; }
+        .funding-item.future .amount { color: #7c4dff; }
+        .funding-item .date {
+            font-size: 10px;
+            color: #888;
+        }
+        .funding-arrow {
+            color: #4caf50;
+            font-size: 20px;
+        }
+        .total-raised {
+            background: #1b5e20;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+        }
+        .summary-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+        }
+        .summary-card h3 {
+            font-size: 14px;
+            color: #1a1a2e;
+            margin-bottom: 14px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        .summary-card ul { list-style: none; }
+        .summary-card li {
+            padding: 6px 0;
+            font-size: 13px;
+            color: #444;
+            display: flex;
+            align-items: center;
+        }
+        .summary-card li::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            margin-right: 10px;
+            flex-shrink: 0;
+        }
+        .summary-card.completed li::before { background: #00d4aa; }
+        .summary-card.inprogress li::before { background: #ffc107; }
+        .summary-card.upcoming li::before { background: #4fc3f7; }
+        .summary-card.production li::before { background: #7c4dff; }
+
+        .footer {
+            text-align: center;
+            padding: 24px;
+            color: #888;
+            font-size: 12px;
+        }
+
+        @media print {
+            body { background: white; }
+            .container { padding: 0; }
+            .header { border-radius: 0; }
+            .infographic-container { box-shadow: none; border: 1px solid #ddd; }
+            .nav { display: none; }
+        }
+    </style>
+    <script>
+        // Check authentication
+        if (sessionStorage.getItem('lvs_auth') !== 'true') {
+            window.location.href = 'index.html';
+        }
+    </script>
+</head>
+<body>
+    <nav class="nav">
+        <div class="nav-brand">LOLA VISION <span>SYSTEMS</span></div>
+        <a href="index.html" class="nav-link" onclick="sessionStorage.removeItem('lvs_auth')">Logout</a>
+    </nav>
+
+    <div class="container">
+        <header class="header">
+            <h1>LOLA VISION SYSTEMS</h1>
+            <div class="subtitle">LVS-100 to LVS-250 Production Roadmap</div>
+            <div class="meta">MPW1443 - Shuttle Wafer Run | GlobalFoundries 12LP+ | Updated January 28, 2026</div>
+        </header>
+
+        <div class="key-dates">
+            <div class="date-card current">
+                <h3>RTL + IP Integration</h3>
+                <div class="date">Feb 2026</div>
+                <div class="description">Completing for both LVS-100 and LVS-250</div>
+                <span class="countdown">In Progress since Jul 2025</span>
+            </div>
+            <div class="date-card critical">
+                <h3>DRC Cutoff Date</h3>
+                <div class="date">May 14, 2026</div>
+                <div class="description">Final DRC/LVS signoff deadline for MPW1443</div>
+                <span class="countdown">Critical Milestone</span>
+            </div>
+            <div class="date-card milestone">
+                <h3>Bare Die Ship</h3>
+                <div class="date">Mid-Oct 2026</div>
+                <div class="description">LVS-100 validation silicon arrives (11x11mm)</div>
+                <div class="description" style="margin-top:4px; font-size:11px; color:#2e7d32;">~78 TOPS | NPU + ARM CPU + VDSP + tRoot HSM</div>
+            </div>
+            <div class="date-card production">
+                <h3>LVS-250 Production</h3>
+                <div class="date">Q2-Q3 2027</div>
+                <div class="description">Full production tapeout target (~35x35mm)</div>
+                <div class="description" style="margin-top:4px; font-size:11px; color:#7c4dff;">~230 TOPS | 5-chiplet UCIe 2.0 | LPDDR5</div>
+            </div>
+        </div>
+
+        <div class="financing-summary">
+            <h3>Financing Timeline</h3>
+            <div class="funding-timeline">
+                <div class="funding-item">
+                    <div class="source">Techstars Demo Day</div>
+                    <div class="amount">$120K</div>
+                    <div class="date">Jun 2024</div>
+                </div>
+                <span class="funding-arrow">&rarr;</span>
+                <div class="funding-item">
+                    <div class="source">IAI North America</div>
+                    <div class="amount">$100K</div>
+                    <div class="date">Dec 2024</div>
+                </div>
+                <span class="funding-arrow">&rarr;</span>
+                <div class="funding-item">
+                    <div class="source">Grant Park Ventures</div>
+                    <div class="amount">$25K</div>
+                    <div class="date"></div>
+                </div>
+                <span class="funding-arrow">&rarr;</span>
+                <div class="funding-item">
+                    <div class="source">A16z Scout (Andrew Cote)</div>
+                    <div class="amount">$20K</div>
+                    <div class="date">Mar 2025</div>
+                </div>
+                <span class="funding-arrow">&rarr;</span>
+                <div class="funding-item">
+                    <div class="source">Open Opportunity Fund + EYL</div>
+                    <div class="amount">$125K</div>
+                    <div class="date">Aug 2025 (Invest Fest Pitch Win)</div>
+                </div>
+                <span class="funding-arrow">&rarr;</span>
+                <div class="funding-item">
+                    <div class="source">Angel Investments</div>
+                    <div class="amount">$125K</div>
+                    <div class="date">2024-2025</div>
+                </div>
+                <span class="funding-arrow">&rarr;</span>
+                <div class="total-raised">TOTAL RAISED: $515K</div>
+                <span class="funding-arrow">&rarr;</span>
+                <div class="funding-item current">
+                    <div class="source">Seed Round</div>
+                    <div class="amount">$5M Target</div>
+                    <div class="date">Jan - Mar 2026</div>
+                </div>
+                <span class="funding-arrow">&rarr;</span>
+                <div class="funding-item future">
+                    <div class="source">Series A</div>
+                    <div class="amount">Q1/Q2 2027</div>
+                    <div class="date">Prep: Oct 2026</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="infographic-container">
+            <object type="image/svg+xml" data="assets/LVS_Production_Roadmap.svg" style="width:100%;"></object>
+        </div>
+
+        <div class="summary-grid">
+            <div class="summary-card completed">
+                <h3>Completed Phases</h3>
+                <ul>
+                    <li>18 months customer engagement and discovery</li>
+                    <li>Significant scaling over past 6 months</li>
+                    <li>Block diagram iterations (Jul-Dec 2025)</li>
+                    <li>Architecture and IP selection finalized</li>
+                    <li>Both LVS-100 and LVS-250 designs</li>
+                </ul>
+            </div>
+            <div class="summary-card inprogress">
+                <h3>In Progress (Now)</h3>
+                <ul>
+                    <li>RTL Development + IP Integration (Jul 25-Feb 26)</li>
+                    <li>Firmware + SDK Development ongoing</li>
+                    <li>$5M Seed Round fundraising (Jan-Mar 2026)</li>
+                    <li>Customer IRAD: Feb 26 - Alpha Demos + Custom LVS Software</li>
+                </ul>
+            </div>
+            <div class="summary-card upcoming">
+                <h3>LVS-100 MPW1443 Milestones</h3>
+                <ul>
+                    <li>Mar 2026 - Physical Design begins</li>
+                    <li>Apr 2, 2026 - Reservation Close</li>
+                    <li>May 14, 2026 - DRC Cutoff (Critical)</li>
+                    <li>May 28, 2026 - GDS-In to GlobalFoundries</li>
+                    <li>Mid-Oct 2026 - Bare Die + Demo Kit + SDK Early Access</li>
+                </ul>
+            </div>
+            <div class="summary-card production">
+                <h3>Path to LVS-250 Production (~230 TOPS)</h3>
+                <ul>
+                    <li>Oct-Dec 2026 - Silicon bring-up + drivers</li>
+                    <li>Oct 2026 - Series A prep kicks off</li>
+                    <li>Q1 2027 - LVS-100 validation de-risks LVS-250</li>
+                    <li>Q1/Q2 2027 - Series A close</li>
+                    <li>Q2-Q3 2027 - LVS-250 tapeout + volume mfg</li>
+                </ul>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <p>Lola Vision Systems | Confidential | Last Updated: January 28, 2026</p>
+        </footer>
+    </div>
+</body>
+</html>

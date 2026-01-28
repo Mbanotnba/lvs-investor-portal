@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lola Vision Systems | Investor Portal</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .login-container {
+            background: white;
+            border-radius: 16px;
+            padding: 48px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            text-align: center;
+            max-width: 420px;
+            width: 90%;
+        }
+        .logo-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 24px;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .logo-icon svg {
+            width: 48px;
+            height: 48px;
+            fill: #d4af37;
+        }
+        h1 {
+            font-size: 24px;
+            color: #1a1a2e;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+        .subtitle {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 32px;
+        }
+        .form-group {
+            margin-bottom: 24px;
+        }
+        label {
+            display: block;
+            text-align: left;
+            font-size: 12px;
+            font-weight: 600;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+        input[type="password"] {
+            width: 100%;
+            padding: 14px 16px;
+            font-size: 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            transition: border-color 0.2s;
+        }
+        input[type="password"]:focus {
+            outline: none;
+            border-color: #7c4dff;
+        }
+        button {
+            width: 100%;
+            padding: 14px;
+            font-size: 16px;
+            font-weight: 600;
+            color: white;
+            background: linear-gradient(135deg, #7c4dff 0%, #651fff 100%);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(124, 77, 255, 0.4);
+        }
+        .error {
+            color: #e53935;
+            font-size: 13px;
+            margin-top: 12px;
+            display: none;
+        }
+        .footer {
+            margin-top: 32px;
+            font-size: 11px;
+            color: #999;
+        }
+        .gold { color: #d4af37; }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="logo-icon">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="12" cy="12" r="3" fill="currentColor"/>
+                <circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                <line x1="12" y1="2" x2="12" y2="4" stroke="currentColor" stroke-width="1.5"/>
+                <line x1="12" y1="20" x2="12" y2="22" stroke="currentColor" stroke-width="1.5"/>
+                <line x1="2" y1="12" x2="4" y2="12" stroke="currentColor" stroke-width="1.5"/>
+                <line x1="20" y1="12" x2="22" y2="12" stroke="currentColor" stroke-width="1.5"/>
+                <circle cx="12" cy="4" r="1.5" fill="currentColor"/>
+                <circle cx="12" cy="20" r="1.5" fill="currentColor"/>
+                <circle cx="4" cy="12" r="1.5" fill="currentColor"/>
+                <circle cx="20" cy="12" r="1.5" fill="currentColor"/>
+            </svg>
+        </div>
+        <h1>LOLA VISION SYSTEMS</h1>
+        <p class="subtitle">Investor Portal</p>
+
+        <form onsubmit="return checkPassword()">
+            <div class="form-group">
+                <label for="password">Access Code</label>
+                <input type="password" id="password" placeholder="Enter your access code" autofocus>
+            </div>
+            <button type="submit">Access Portal</button>
+            <p class="error" id="error">Invalid access code. Please try again.</p>
+        </form>
+
+        <p class="footer">Confidential. For authorized investors only.<br><span class="gold">Lola Vision Systems</span> &copy; 2026</p>
+    </div>
+
+    <script>
+        function checkPassword() {
+            const password = document.getElementById('password').value;
+            const hash = simpleHash(password);
+            // Hash of LVS_2026
+            if (hash === '850477083') {
+                sessionStorage.setItem('lvs_auth', 'true');
+                window.location.href = 'roadmap.html';
+            } else {
+                document.getElementById('error').style.display = 'block';
+                document.getElementById('password').value = '';
+            }
+            return false;
+        }
+
+        function simpleHash(str) {
+            let hash = 0;
+            for (let i = 0; i < str.length; i++) {
+                const char = str.charCodeAt(i);
+                hash = ((hash << 5) - hash) + char;
+                hash = hash & hash;
+            }
+            return String(Math.abs(hash));
+        }
+    </script>
+</body>
+</html>

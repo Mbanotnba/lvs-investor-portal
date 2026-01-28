@@ -1,0 +1,309 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 680">
+  <defs>
+    <linearGradient id="headerGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#1a1a2e"/>
+      <stop offset="100%" style="stop-color:#16213e"/>
+    </linearGradient>
+    <linearGradient id="phaseComplete" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#00d4aa"/>
+      <stop offset="100%" style="stop-color:#00a085"/>
+    </linearGradient>
+    <linearGradient id="phaseCurrent" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#ffc107"/>
+      <stop offset="100%" style="stop-color:#ff9800"/>
+    </linearGradient>
+    <linearGradient id="phaseFuture" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#4fc3f7"/>
+      <stop offset="100%" style="stop-color:#0288d1"/>
+    </linearGradient>
+    <linearGradient id="phaseProduction" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#7c4dff"/>
+      <stop offset="100%" style="stop-color:#651fff"/>
+    </linearGradient>
+    <linearGradient id="riskArrow" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#4caf50"/>
+      <stop offset="100%" style="stop-color:#7c4dff"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="2" dy="3" stdDeviation="3" flood-opacity="0.3"/>
+    </filter>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#7c4dff"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1400" height="680" fill="#f8f9fa"/>
+
+  <!-- Header -->
+  <rect width="1400" height="90" fill="url(#headerGrad)"/>
+  <text x="50" y="45" font-family="Arial, sans-serif" font-size="28" font-weight="bold" fill="#ffffff">LOLA VISION SYSTEMS</text>
+  <text x="50" y="72" font-family="Arial, sans-serif" font-size="16" fill="#d4af37">LVS-100 Validation to LVS-250 Production Roadmap</text>
+  <text x="1350" y="45" font-family="Arial, sans-serif" font-size="13" fill="#888" text-anchor="end">January 28, 2026</text>
+  <text x="1350" y="65" font-family="Arial, sans-serif" font-size="11" fill="#666" text-anchor="end">MPW1443 - Shuttle Wafer Run | GlobalFoundries 12LP+</text>
+
+  <!-- ==================== RISK REDUCTION SHOWCASE ==================== -->
+  <rect x="100" y="105" width="1200" height="145" rx="10" fill="white" filter="url(#shadow)"/>
+
+  <!-- Risk reduction arrow -->
+  <rect x="120" y="115" width="1160" height="22" rx="5" fill="url(#riskArrow)" opacity="0.15"/>
+  <text x="700" y="130" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#333" text-anchor="middle">VALIDATION PATH: LVS-100 Risk Reduction → LVS-250 Production</text>
+  <line x1="150" y1="126" x2="1250" y2="126" stroke="url(#riskArrow)" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+  <!-- LVS-100 Box -->
+  <rect x="130" y="145" width="480" height="95" rx="8" fill="#e8f5e9" stroke="#4caf50" stroke-width="2"/>
+  <rect x="130" y="145" width="480" height="20" rx="8" fill="#4caf50"/>
+  <text x="370" y="160" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="white" text-anchor="middle">LVS-100 VALIDATION SILICON</text>
+
+  <text x="145" y="180" font-family="Arial, sans-serif" font-size="9" font-weight="bold" fill="#2e7d32">Silicon:</text>
+  <text x="185" y="180" font-family="Arial, sans-serif" font-size="9" fill="#333">11x11mm shuttle | GF 12LP+ | ~78 TOPS</text>
+
+  <text x="145" y="195" font-family="Arial, sans-serif" font-size="9" font-weight="bold" fill="#2e7d32">Compute:</text>
+  <text x="195" y="195" font-family="Arial, sans-serif" font-size="9" fill="#333">1 NPU + ARM CPU + VDSP + tRoot HSM</text>
+
+  <text x="145" y="210" font-family="Arial, sans-serif" font-size="9" font-weight="bold" fill="#2e7d32">I/O:</text>
+  <text x="165" y="210" font-family="Arial, sans-serif" font-size="9" fill="#333">PCIe Gen4 | MIPI CSI | UART/I2C/GPIO</text>
+
+  <text x="145" y="225" font-family="Arial, sans-serif" font-size="9" font-weight="bold" fill="#2e7d32">Purpose:</text>
+  <text x="195" y="225" font-family="Arial, sans-serif" font-size="9" fill="#333">IP validation, architecture de-risk, software bring-up</text>
+
+  <!-- Arrow between boxes -->
+  <path d="M 615 190 L 685 190" stroke="#7c4dff" stroke-width="3" fill="none" marker-end="url(#arrowhead)"/>
+
+  <!-- LVS-250 Box -->
+  <rect x="690" y="145" width="480" height="95" rx="8" fill="#ede7f6" stroke="#7c4dff" stroke-width="2"/>
+  <rect x="690" y="145" width="480" height="20" rx="8" fill="#7c4dff"/>
+  <text x="930" y="160" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="white" text-anchor="middle">LVS-250 PRODUCTION SILICON</text>
+
+  <text x="705" y="180" font-family="Arial, sans-serif" font-size="9" font-weight="bold" fill="#512da8">Package:</text>
+  <text x="755" y="180" font-family="Arial, sans-serif" font-size="9" fill="#333">~35x35mm | 5-chiplet UCIe 2.0 | LPDDR5 | ~230 TOPS</text>
+
+  <text x="705" y="195" font-family="Arial, sans-serif" font-size="9" font-weight="bold" fill="#512da8">Compute Engine:</text>
+  <text x="785" y="195" font-family="Arial, sans-serif" font-size="9" fill="#333">NPU (64kMACs) + 8-core ARM64 + Quad-core VDSP + tRoot HSM</text>
+
+  <text x="705" y="210" font-family="Arial, sans-serif" font-size="9" font-weight="bold" fill="#512da8">Chiplets:</text>
+  <text x="755" y="210" font-family="Arial, sans-serif" font-size="9" fill="#333">Neural Compute Engine + Secure Interface + RF Modem + Beamformer + MRAM Memory</text>
+
+  <text x="705" y="225" font-family="Arial, sans-serif" font-size="9" font-weight="bold" fill="#512da8">Purpose:</text>
+  <text x="755" y="225" font-family="Arial, sans-serif" font-size="9" fill="#333">Volume production, customer delivery, commercial deployment</text>
+
+  <!-- ==================== ENGINEERING SECTION ==================== -->
+  <text x="70" y="290" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#1a1a2e" transform="rotate(-90 70 290)">ENGINEERING</text>
+
+  <!-- Silicon HW Track -->
+  <rect x="100" y="255" width="1200" height="55" rx="5" fill="#e3f2fd" opacity="0.6"/>
+  <text x="115" y="272" font-family="Arial, sans-serif" font-size="9" font-weight="bold" fill="#0d47a1">SILICON HW</text>
+
+  <rect x="200" y="262" width="160" height="40" rx="4" fill="white" stroke="#ffc107" stroke-width="2"/>
+  <text x="210" y="280" font-family="Arial, sans-serif" font-size="9" font-weight="bold" fill="#333">RTL + IP Integration</text>
+  <text x="210" y="293" font-family="Arial, sans-serif" font-size="8" fill="#ff9800">Jul 25 - Feb 26 | In Progress</text>
+
+  <rect x="375" y="262" width="130" height="40" rx="4" fill="white" stroke="#4fc3f7" stroke-width="2"/>
+  <text x="385" y="280" font-family="Arial, sans-serif" font-size="9" font-weight="bold" fill="#333">Physical Design</text>
+  <text x="385" y="293" font-family="Arial, sans-serif" font-size="8" fill="#0288d1">Mar - May 14, 2026</text>
+
+  <rect x="520" y="262" width="70" height="40" rx="4" fill="white" stroke="#e65100" stroke-width="2"/>
+  <text x="530" y="280" font-family="Arial, sans-serif" font-size="9" font-weight="bold" fill="#e65100">DRC/LVS</text>
+  <text x="530" y="293" font-family="Arial, sans-serif" font-size="8" fill="#e65100">May 14</text>
+
+  <rect x="605" y="262" width="60" height="40" rx="4" fill="white" stroke="#4fc3f7" stroke-width="2"/>
+  <text x="615" y="280" font-family="Arial, sans-serif" font-size="9" font-weight="bold" fill="#333">GDS</text>
+  <text x="615" y="293" font-family="Arial, sans-serif" font-size="8" fill="#0288d1">May 28</text>
+
+  <rect x="680" y="262" width="110" height="40" rx="4" fill="white" stroke="#4fc3f7" stroke-width="2"/>
+  <text x="690" y="280" font-family="Arial, sans-serif" font-size="9" font-weight="bold" fill="#333">Si Validation</text>
+  <text x="690" y="293" font-family="Arial, sans-serif" font-size="8" fill="#0288d1">Oct 26 - Q1 27</text>
+
+  <rect x="805" y="262" width="100" height="40" rx="4" fill="white" stroke="#7c4dff" stroke-width="2"/>
+  <text x="815" y="280" font-family="Arial, sans-serif" font-size="9" font-weight="bold" fill="#7c4dff">LVS-250 TO</text>
+  <text x="815" y="293" font-family="Arial, sans-serif" font-size="8" fill="#7c4dff">Q2 2027</text>
+
+  <rect x="920" y="262" width="90" height="40" rx="4" fill="white" stroke="#7c4dff" stroke-width="2"/>
+  <text x="930" y="280" font-family="Arial, sans-serif" font-size="9" font-weight="bold" fill="#7c4dff">Vol Mfg</text>
+  <text x="930" y="293" font-family="Arial, sans-serif" font-size="8" fill="#7c4dff">Q3 27+</text>
+
+  <!-- Software Track -->
+  <rect x="100" y="315" width="1200" height="55" rx="5" fill="#fff8e1" opacity="0.6"/>
+  <text x="115" y="332" font-family="Arial, sans-serif" font-size="9" font-weight="bold" fill="#e65100">SOFTWARE</text>
+
+  <rect x="200" y="322" width="180" height="40" rx="4" fill="white" stroke="#ffc107" stroke-width="2"/>
+  <text x="210" y="340" font-family="Arial, sans-serif" font-size="9" font-weight="bold" fill="#333">Firmware + SDK Dev</text>
+  <text x="210" y="353" font-family="Arial, sans-serif" font-size="8" fill="#ff9800">Jul 25 - Ongoing | In Progress</text>
+
+  <rect x="395" y="322" width="160" height="40" rx="4" fill="white" stroke="#4fc3f7" stroke-width="2"/>
+  <text x="405" y="340" font-family="Arial, sans-serif" font-size="9" font-weight="bold" fill="#333">LVS SDK Alpha</text>
+  <text x="405" y="353" font-family="Arial, sans-serif" font-size="8" fill="#0288d1">Feb - May 2026</text>
+
+  <rect x="570" y="322" width="200" height="40" rx="4" fill="white" stroke="#4fc3f7" stroke-width="2"/>
+  <text x="580" y="340" font-family="Arial, sans-serif" font-size="9" font-weight="bold" fill="#333">Silicon Bring-up + Drivers</text>
+  <text x="580" y="353" font-family="Arial, sans-serif" font-size="8" fill="#0288d1">Oct 26 - Q1 27</text>
+
+  <rect x="785" y="322" width="160" height="40" rx="4" fill="white" stroke="#7c4dff" stroke-width="2"/>
+  <text x="795" y="340" font-family="Arial, sans-serif" font-size="9" font-weight="bold" fill="#7c4dff">Production SDK</text>
+  <text x="795" y="353" font-family="Arial, sans-serif" font-size="8" fill="#7c4dff">Q2 2027+</text>
+
+  <!-- ==================== CUSTOMER SECTION ==================== -->
+  <text x="70" y="410" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#1a1a2e" transform="rotate(-90 70 410)">CUSTOMER</text>
+  <rect x="100" y="380" width="1200" height="55" rx="5" fill="#fff3e0" opacity="0.5"/>
+
+  <rect x="120" y="388" width="300" height="40" rx="4" fill="white" stroke="#ffc107" stroke-width="2"/>
+  <text x="130" y="406" font-family="Arial, sans-serif" font-size="9" font-weight="bold" fill="#333">Customer Discovery + LOIs</text>
+  <text x="130" y="419" font-family="Arial, sans-serif" font-size="8" fill="#ff9800">18 months | Continuing through Late Q1 26</text>
+
+  <!-- Anduril LOI highlight -->
+  <rect x="430" y="388" width="80" height="40" rx="4" fill="#fff3e0" stroke="#ff9800" stroke-width="2"/>
+  <text x="470" y="404" font-family="Arial, sans-serif" font-size="9" font-weight="bold" fill="#333" text-anchor="middle">Anduril LOI</text>
+  <text x="470" y="418" font-family="Arial, sans-serif" font-size="8" fill="#666" text-anchor="middle">Jan 2026</text>
+
+  <rect x="520" y="388" width="200" height="40" rx="4" fill="white" stroke="#4fc3f7" stroke-width="2"/>
+  <text x="530" y="406" font-family="Arial, sans-serif" font-size="9" font-weight="bold" fill="#333">Customer IRAD Programs</text>
+  <text x="530" y="419" font-family="Arial, sans-serif" font-size="8" fill="#0288d1">Feb 26 - Alpha Demos + Custom SW</text>
+
+  <rect x="730" y="388" width="200" height="40" rx="4" fill="white" stroke="#4fc3f7" stroke-width="2"/>
+  <text x="740" y="406" font-family="Arial, sans-serif" font-size="9" font-weight="bold" fill="#333">LVS Demo Kit + SDK Access</text>
+  <text x="740" y="419" font-family="Arial, sans-serif" font-size="8" fill="#0288d1">Oct 26+</text>
+
+  <rect x="945" y="388" width="100" height="40" rx="4" fill="white" stroke="#7c4dff" stroke-width="2"/>
+  <text x="955" y="406" font-family="Arial, sans-serif" font-size="9" font-weight="bold" fill="#7c4dff">Prod Orders</text>
+  <text x="955" y="419" font-family="Arial, sans-serif" font-size="8" fill="#7c4dff">Q2 27+</text>
+
+  <!-- ==================== FINANCING SECTION ==================== -->
+  <text x="70" y="485" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#1a1a2e" transform="rotate(-90 70 485)">FINANCING</text>
+  <rect x="100" y="445" width="1200" height="85" rx="5" fill="#e8f5e9" opacity="0.5"/>
+
+  <!-- Pre-seed investments (compressed) -->
+  <rect x="115" y="455" width="70" height="50" rx="4" fill="white" stroke="#4caf50" stroke-width="2"/>
+  <text x="123" y="470" font-family="Arial, sans-serif" font-size="7" font-weight="bold" fill="#2e7d32">Techstars</text>
+  <text x="123" y="497" font-family="Arial, sans-serif" font-size="9" font-weight="bold" fill="#2e7d32">$120K</text>
+
+  <rect x="190" y="455" width="70" height="50" rx="4" fill="white" stroke="#4caf50" stroke-width="2"/>
+  <text x="196" y="475" font-family="Arial, sans-serif" font-size="5" font-weight="bold" fill="#2e7d32">IAI North America</text>
+  <text x="196" y="497" font-family="Arial, sans-serif" font-size="9" font-weight="bold" fill="#2e7d32">$100K</text>
+
+  <rect x="265" y="455" width="60" height="50" rx="4" fill="white" stroke="#4caf50" stroke-width="2"/>
+  <text x="271" y="470" font-family="Arial, sans-serif" font-size="6" font-weight="bold" fill="#2e7d32">Grant Park</text>
+  <text x="271" y="497" font-family="Arial, sans-serif" font-size="9" font-weight="bold" fill="#2e7d32">$25K</text>
+
+  <rect x="330" y="455" width="60" height="50" rx="4" fill="white" stroke="#4caf50" stroke-width="2"/>
+  <text x="336" y="470" font-family="Arial, sans-serif" font-size="6" font-weight="bold" fill="#2e7d32">A16z Scout</text>
+  <text x="336" y="497" font-family="Arial, sans-serif" font-size="9" font-weight="bold" fill="#2e7d32">$20K</text>
+
+  <rect x="395" y="455" width="60" height="50" rx="4" fill="white" stroke="#4caf50" stroke-width="2"/>
+  <text x="401" y="468" font-family="Arial, sans-serif" font-size="5" font-weight="bold" fill="#2e7d32">Open Opportunity</text>
+  <text x="401" y="476" font-family="Arial, sans-serif" font-size="5" font-weight="bold" fill="#2e7d32">Fund + EYL</text>
+  <text x="401" y="497" font-family="Arial, sans-serif" font-size="9" font-weight="bold" fill="#2e7d32">$125K</text>
+
+  <rect x="460" y="455" width="60" height="50" rx="4" fill="white" stroke="#4caf50" stroke-width="2"/>
+  <text x="466" y="470" font-family="Arial, sans-serif" font-size="6" font-weight="bold" fill="#2e7d32">Angels</text>
+  <text x="466" y="497" font-family="Arial, sans-serif" font-size="9" font-weight="bold" fill="#2e7d32">$125K</text>
+
+  <!-- Pre-seed total -->
+  <rect x="115" y="510" width="405" height="18" rx="3" fill="#c8e6c9"/>
+  <text x="318" y="523" font-family="Arial, sans-serif" font-size="9" font-weight="bold" fill="#1b5e20" text-anchor="middle">PRE-SEED: $390K + $125K Angels = $515K Raised</text>
+
+  <!-- Seed Round -->
+  <rect x="525" y="455" width="120" height="50" rx="4" fill="white" stroke="#ffc107" stroke-width="2"/>
+  <text x="535" y="472" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#ff9800">SEED ROUND</text>
+  <text x="535" y="486" font-family="Arial, sans-serif" font-size="8" fill="#666">Jan - Mar 2026</text>
+  <text x="535" y="500" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#ff9800">$5M Target</text>
+
+  <!-- Series A -->
+  <rect x="660" y="455" width="100" height="50" rx="4" fill="white" stroke="#4fc3f7" stroke-width="2"/>
+  <text x="670" y="472" font-family="Arial, sans-serif" font-size="9" font-weight="bold" fill="#0288d1">Series A Prep</text>
+  <text x="670" y="486" font-family="Arial, sans-serif" font-size="8" fill="#666">Oct 2026</text>
+
+  <rect x="775" y="455" width="100" height="50" rx="4" fill="white" stroke="#7c4dff" stroke-width="2"/>
+  <text x="785" y="472" font-family="Arial, sans-serif" font-size="9" font-weight="bold" fill="#7c4dff">Series A Close</text>
+  <text x="785" y="486" font-family="Arial, sans-serif" font-size="8" fill="#666">Q1/Q2 2027</text>
+
+  <rect x="890" y="455" width="80" height="50" rx="4" fill="white" stroke="#7c4dff" stroke-width="2"/>
+  <text x="900" y="472" font-family="Arial, sans-serif" font-size="9" font-weight="bold" fill="#7c4dff">Revenue</text>
+  <text x="900" y="486" font-family="Arial, sans-serif" font-size="8" fill="#666">Q3 2027+</text>
+
+  <!-- ==================== TIMELINE (proportional: 30px/month from Jun 24) ==================== -->
+  <line x1="100" y1="555" x2="1300" y2="555" stroke="#ddd" stroke-width="3" stroke-linecap="round"/>
+
+  <!-- History (compressed) -->
+  <circle cx="120" cy="555" r="4" fill="#4caf50"/>
+  <text x="120" y="572" font-family="Arial, sans-serif" font-size="8" fill="#666" text-anchor="middle">Jun 24</text>
+
+  <circle cx="180" cy="555" r="4" fill="#00d4aa"/>
+  <text x="180" y="572" font-family="Arial, sans-serif" font-size="8" fill="#666" text-anchor="middle">Jul 25</text>
+
+  <circle cx="240" cy="555" r="4" fill="#4caf50"/>
+  <text x="240" y="572" font-family="Arial, sans-serif" font-size="8" fill="#666" text-anchor="middle">Oct 25</text>
+
+  <circle cx="280" cy="555" r="4" fill="#00d4aa"/>
+  <text x="280" y="572" font-family="Arial, sans-serif" font-size="8" fill="#666" text-anchor="middle">Dec 25</text>
+
+  <!-- NOW marker (Jan 26) -->
+  <circle cx="340" cy="555" r="8" fill="#ffc107" stroke="#ff9800" stroke-width="2"/>
+  <text x="340" y="572" font-family="Arial, sans-serif" font-size="8" font-weight="bold" fill="#ff9800" text-anchor="middle">NOW</text>
+
+  <!-- Critical upcoming dates (expanded for visibility) -->
+  <circle cx="420" cy="555" r="4" fill="#ffc107"/>
+  <text x="420" y="572" font-family="Arial, sans-serif" font-size="8" fill="#666" text-anchor="middle">Feb 26</text>
+
+  <circle cx="500" cy="555" r="4" fill="#ffc107"/>
+  <text x="500" y="572" font-family="Arial, sans-serif" font-size="8" fill="#666" text-anchor="middle">Mar 26</text>
+
+  <circle cx="620" cy="555" r="6" fill="#e65100" stroke="#e65100" stroke-width="2"/>
+  <text x="620" y="572" font-family="Arial, sans-serif" font-size="8" font-weight="bold" fill="#e65100" text-anchor="middle">May 14</text>
+
+  <circle cx="680" cy="555" r="4" fill="#4fc3f7"/>
+  <text x="680" y="572" font-family="Arial, sans-serif" font-size="8" fill="#666" text-anchor="middle">May 28</text>
+
+  <circle cx="820" cy="555" r="5" fill="#4fc3f7"/>
+  <text x="820" y="572" font-family="Arial, sans-serif" font-size="8" fill="#0288d1" text-anchor="middle">Oct 26</text>
+
+  <circle cx="960" cy="555" r="4" fill="#4fc3f7"/>
+  <text x="960" y="572" font-family="Arial, sans-serif" font-size="8" fill="#666" text-anchor="middle">Q1 27</text>
+
+  <circle cx="1100" cy="555" r="5" fill="#7c4dff"/>
+  <text x="1100" y="572" font-family="Arial, sans-serif" font-size="8" fill="#666" text-anchor="middle">Q2 27</text>
+
+  <circle cx="1240" cy="555" r="7" fill="#7c4dff" stroke="#651fff" stroke-width="2"/>
+  <text x="1240" y="572" font-family="Arial, sans-serif" font-size="8" font-weight="bold" fill="#7c4dff" text-anchor="middle">Q3 27+</text>
+
+  <!-- ==================== BOTTOM SECTION ==================== -->
+
+  <!-- Silicon Development Path + Next Critical Milestone (combined) -->
+  <rect x="100" y="590" width="550" height="75" rx="8" fill="#ede7f6" stroke="#7c4dff" stroke-width="2"/>
+  <rect x="100" y="590" width="550" height="20" rx="8" fill="#7c4dff"/>
+  <text x="120" y="605" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#ffffff">Silicon Development Path to Production</text>
+  <rect x="120" y="618" width="280" height="12" rx="6" fill="white" stroke="#7c4dff" stroke-width="1"/>
+  <rect x="120" y="618" width="84" height="12" rx="6" fill="#7c4dff"/>
+  <text x="410" y="628" font-family="Arial, sans-serif" font-size="9" font-weight="bold" fill="#512da8">~30%</text>
+
+  <!-- Next Critical Milestone inline -->
+  <rect x="120" y="638" width="510" height="20" rx="4" fill="#fff3e0" stroke="#e65100" stroke-width="1"/>
+  <text x="130" y="652" font-family="Arial, sans-serif" font-size="9" font-weight="bold" fill="#e65100">NEXT MILESTONE: DRC Cutoff - May 14, 2026</text>
+  <text x="355" y="652" font-family="Arial, sans-serif" font-size="8" fill="#666">- Final design rule check before foundry submission (no changes after)</text>
+
+  <!-- Key Dates -->
+  <rect x="670" y="590" width="280" height="75" rx="8" fill="white" filter="url(#shadow)"/>
+  <rect x="670" y="590" width="280" height="16" rx="8" fill="#e65100"/>
+  <text x="810" y="602" font-family="Arial, sans-serif" font-size="9" font-weight="bold" fill="white" text-anchor="middle">MPW1443 KEY DATES</text>
+  <text x="685" y="620" font-family="Arial, sans-serif" font-size="8" fill="#333">Apr 2: Reservation | Apr 30: Cancel Deadline</text>
+  <text x="685" y="633" font-family="Arial, sans-serif" font-size="8" fill="#e65100" font-weight="bold">May 14: DRC Cutoff | May 28: GDS-In</text>
+  <text x="685" y="646" font-family="Arial, sans-serif" font-size="8" fill="#0288d1" font-weight="bold">Mid-Oct 2026: Bare Die Ship</text>
+  <text x="685" y="659" font-family="Arial, sans-serif" font-size="7" fill="#888">GF 12LP+ | LVS-250 Target: Q3 2027</text>
+
+  <!-- Legend -->
+  <rect x="970" y="590" width="330" height="75" rx="8" fill="white" stroke="#ddd"/>
+  <text x="990" y="608" font-family="Arial, sans-serif" font-size="9" font-weight="bold" fill="#333">Legend:</text>
+  <circle cx="1050" cy="604" r="5" fill="#00d4aa"/>
+  <text x="1062" y="608" font-family="Arial, sans-serif" font-size="8" fill="#666">Complete</text>
+  <circle cx="1130" cy="604" r="5" fill="#ffc107"/>
+  <text x="1142" y="608" font-family="Arial, sans-serif" font-size="8" fill="#666">In Progress</text>
+  <circle cx="1220" cy="604" r="5" fill="#4fc3f7"/>
+  <text x="1232" y="608" font-family="Arial, sans-serif" font-size="8" fill="#666">Upcoming</text>
+  <circle cx="1050" cy="626" r="5" fill="#7c4dff"/>
+  <text x="1062" y="630" font-family="Arial, sans-serif" font-size="8" fill="#666">Production</text>
+  <circle cx="1130" cy="626" r="5" fill="#e65100"/>
+  <text x="1142" y="630" font-family="Arial, sans-serif" font-size="8" fill="#666">Critical</text>
+
+  <text x="990" y="650" font-family="Arial, sans-serif" font-size="7" font-weight="bold" fill="#0288d1">LVS-100: Validation silicon (~78 TOPS)</text>
+  <text x="990" y="660" font-family="Arial, sans-serif" font-size="7" font-weight="bold" fill="#7c4dff">LVS-250: Production silicon (~230 TOPS)</text>
+
+</svg>
