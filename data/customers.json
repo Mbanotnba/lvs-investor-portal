@@ -286,12 +286,14 @@
       ],
       "summary": {
         "status": "MOU Proposed",
-        "totalValue": "$15,000,000",
-        "nearTermValue": "$750,000",
+        "totalValue": "$16,500,000",
+        "nearTermValue": "$16,500,000",
         "probability": "45%",
-        "weightedValue": "$6,750,000",
-        "expectedClose": "Q2 2026",
-        "primaryContact": "Osh Agabi"
+        "weightedValue": "$7,425,000",
+        "expectedClose": "2027",
+        "primaryContact": "Osh Agabi",
+        "unitCount": 10000,
+        "pricePerUnit": "$1,650"
       },
       "nextActions": [
         {"task": "Finalize integration requirements", "due": "2026-02-15", "assigned": "Randy"},

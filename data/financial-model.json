@@ -12,11 +12,12 @@
       }
     },
     "2027": {
-      "amount": "$8,500,000",
-      "value": 8500000,
-      "notes": "LVS-250 production ramp",
+      "amount": "$12,400,000",
+      "value": 12400000,
+      "notes": "LVS-250 production ramp including Koniku",
       "breakdown": {
-        "production": "$7,000,000",
+        "koniku": "$7,400,000",
+        "otherProduction": "$3,500,000",
         "irad": "$1,500,000"
       }
     },
@@ -31,8 +32,8 @@
     }
   },
   "cumulativeWeighted": {
-    "threeYear": "$37,700,000",
-    "value": 37700000
+    "threeYear": "$41,600,000",
+    "value": 41600000
   },
   "notes": "Values are probability-weighted based on customer pipeline probabilities. Update from Excel model as deals progress."
 }
