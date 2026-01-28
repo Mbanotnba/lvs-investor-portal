@@ -73,29 +73,54 @@
             padding: 16px 8px;
             cursor: pointer;
             transition: all 0.2s;
+            opacity: 0.6;
         }
         .role-btn:hover {
-            border-color: rgba(124,77,255,0.5);
-            background: rgba(124,77,255,0.1);
+            opacity: 0.8;
+            border-color: rgba(255,255,255,0.2);
         }
-        .role-btn.active {
+        /* Investor - Purple when active */
+        .role-btn.investor.active {
             border-color: #7c4dff;
             background: rgba(124,77,255,0.15);
+            opacity: 1;
+            box-shadow: 0 0 20px rgba(124,77,255,0.3);
         }
-        .role-btn.founder { border-color: #d4af37; background: rgba(212,175,55,0.15); }
-        .role-btn.founder:hover { border-color: #d4af37; }
-        .role-btn.investor.active { border-color: #7c4dff; }
-        .role-btn.customer.active { border-color: #10b981; }
-        .role-btn.founder.active { border-color: #d4af37; }
+        /* Customer - Green when active */
+        .role-btn.customer.active {
+            border-color: #10b981;
+            background: rgba(16,185,129,0.15);
+            opacity: 1;
+            box-shadow: 0 0 20px rgba(16,185,129,0.3);
+        }
+        /* Founder - Gold when active */
+        .role-btn.founder.active {
+            border-color: #d4af37;
+            background: rgba(212,175,55,0.15);
+            opacity: 1;
+            box-shadow: 0 0 20px rgba(212,175,55,0.3);
+        }
         .role-icon {
             font-size: 24px;
             margin-bottom: 8px;
+            filter: grayscale(50%);
+            transition: filter 0.2s;
+        }
+        .role-btn.active .role-icon {
+            filter: grayscale(0%);
         }
         .role-label {
             font-size: 12px;
             font-weight: 600;
+            color: #9ca3af;
+            transition: color 0.2s;
+        }
+        .role-btn.active .role-label {
             color: #f5f5f7;
         }
+        .role-btn.investor.active .role-label { color: #a78bfa; }
+        .role-btn.customer.active .role-label { color: #34d399; }
+        .role-btn.founder.active .role-label { color: #d4af37; }
         .role-desc {
             font-size: 10px;
             color: #6b7280;
@@ -215,41 +240,6 @@
         }
         .gold { color: #d4af37; }
 
-        /* Team Mode */
-        .team-mode {
-            margin-bottom: 20px;
-        }
-        .toggle-label {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            cursor: pointer;
-            padding: 8px 16px;
-            background: rgba(212,175,55,0.1);
-            border: 1px solid rgba(212,175,55,0.3);
-            border-radius: 20px;
-            transition: all 0.2s;
-        }
-        .toggle-label:hover {
-            background: rgba(212,175,55,0.2);
-        }
-        .toggle-label input {
-            width: 16px;
-            height: 16px;
-            accent-color: #d4af37;
-        }
-        .toggle-text {
-            font-size: 11px;
-            font-weight: 600;
-            color: #d4af37;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        .team-mode.active .toggle-label {
-            background: rgba(212,175,55,0.25);
-            border-color: #d4af37;
-        }
-
         /* Access Level Badges */
         .access-badge {
             display: inline-block;
@@ -296,17 +286,9 @@
         <p class="subtitle">Secure Access Portal</p>
         <p class="description">Select your role to access the appropriate dashboard</p>
 
-        <!-- Team Mode Toggle -->
-        <div class="team-mode" id="teamMode">
-            <label class="toggle-label">
-                <input type="checkbox" id="teamToggle" onchange="toggleTeamMode()">
-                <span class="toggle-text">Team Demo Mode</span>
-            </label>
-        </div>
-
         <!-- Role Selector -->
         <div class="role-selector">
-            <div class="role-btn investor active" onclick="selectRole('investor')">
+            <div class="role-btn investor" onclick="selectRole('investor')">
                 <div class="role-icon">&#128200;</div>
                 <div class="role-label">Investor</div>
                 <div class="role-desc">Dashboard</div>
@@ -386,9 +368,7 @@
     <script>
         // Configuration
         const CONFIG = {
-            // Team master password (for demo/testing)
-            teamPassword: '790995832',  // LVS_2026
-            // Password hashes
+            // Password hashes (LVS_2026 for all roles)
             passwords: {
                 investor: '790995832',    // LVS_2026
                 founder: '790995832',     // LVS_2026
@@ -422,23 +402,7 @@
             }
         };
 
-        let selectedRole = 'investor';
-        let teamMode = false;
-
-        // Toggle team mode
-        function toggleTeamMode() {
-            teamMode = document.getElementById('teamToggle').checked;
-            document.getElementById('teamMode').classList.toggle('active', teamMode);
-
-            // In team mode, show email field for all roles to simulate personas
-            if (teamMode) {
-                document.getElementById('emailField').classList.add('show');
-                document.getElementById('email').placeholder = 'team@lolavisionsystems.com';
-            } else {
-                // Restore normal behavior based on role
-                selectRole(selectedRole);
-            }
-        }
+        let selectedRole = null;
 
         // Hash function
         function simpleHash(str) {
@@ -483,48 +447,16 @@
             errorEl.style.display = 'none';
             successEl.style.display = 'none';
 
-            const passwordHash = simpleHash(password);
-
-            // Team Mode: Use master password for any persona
-            if (teamMode) {
-                if (passwordHash === CONFIG.teamPassword) {
-                    // Grant access based on selected role
-                    sessionStorage.setItem('lvs_auth', 'true');
-                    sessionStorage.setItem('lvs_team_mode', 'true');
-                    sessionStorage.setItem('lvs_role', selectedRole);
-
-                    if (selectedRole === 'founder') {
-                        sessionStorage.setItem('lvs_founder_auth', 'true');
-                        sessionStorage.setItem('lvs_can_view_customers', 'true');
-                        sessionStorage.setItem('lvs_can_view_investor', 'true');
-                        successEl.textContent = 'Founder access granted (Team Mode). Redirecting...';
-                        successEl.style.display = 'block';
-                        setTimeout(() => window.location.href = 'founder-portal.html', 500);
-                    } else if (selectedRole === 'investor') {
-                        sessionStorage.setItem('lvs_can_view_customers', 'true');
-                        successEl.textContent = 'Investor access granted (Team Mode). Redirecting...';
-                        successEl.style.display = 'block';
-                        setTimeout(() => window.location.href = 'dashboard.html', 500);
-                    } else if (selectedRole === 'customer') {
-                        if (!customer) {
-                            errorEl.textContent = 'Please select a company to simulate.';
-                            errorEl.style.display = 'block';
-                            return false;
-                        }
-                        sessionStorage.setItem('lvs_customer', customer);
-                        successEl.textContent = 'Customer access granted (Team Mode). Redirecting...';
-                        successEl.style.display = 'block';
-                        const portalUrl = CONFIG.customerPortals[customer];
-                        setTimeout(() => window.location.href = portalUrl, 500);
-                    }
-                } else {
-                    errorEl.textContent = 'Invalid team access code.';
-                    errorEl.style.display = 'block';
-                }
+            // Check if a role is selected
+            if (!selectedRole) {
+                errorEl.textContent = 'Please select a role first.';
+                errorEl.style.display = 'block';
                 return false;
             }
 
-            // Normal Mode: Role-specific authentication
+            const passwordHash = simpleHash(password);
+
+            // Role-based authentication
             if (selectedRole === 'investor') {
                 if (passwordHash === CONFIG.passwords.investor) {
                     sessionStorage.setItem('lvs_auth', 'true');
