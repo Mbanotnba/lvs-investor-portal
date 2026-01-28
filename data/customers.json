@@ -623,5 +623,44 @@
       },
       "nextActions": []
     }
+  ],
+  "governmentEngagements": [
+    {
+      "id": "army-iews",
+      "name": "US Army IEW&S / C5ISR",
+      "fullName": "Intelligence, Electronic Warfare & Sensors / Command, Control, Computers, Communications, Cyber, Intelligence, Surveillance and Reconnaissance",
+      "type": "Government Channel",
+      "strategy": "OEM Partner Positioning",
+      "goal": "Position OEM partners to win Army contracts for sales velocity and LVS technology pull-through",
+      "status": "Active Engagement",
+      "currentStage": "Pitch Scheduled",
+      "stages": [
+        {"name": "Initial Contact", "date": "Q4 2025", "complete": true},
+        {"name": "Pitch Scheduled", "date": "Feb 2026", "current": true},
+        {"name": "Partner Positioning", "date": "Q1 2026"},
+        {"name": "Contract Award", "date": "TBD"},
+        {"name": "Technology Pull-Through", "date": "TBD"}
+      ],
+      "oem_partners": [
+        {"name": "Mach Industries", "status": "Invited to pitch", "application": "Kamikaze Drones"},
+        {"name": "Anduril Industries", "status": "Potential", "application": "ISR/C-UAS"}
+      ],
+      "milestones": [
+        {"title": "Initial Army Contact", "date": "Q4 2025", "status": "complete"},
+        {"title": "LVS Pitch to IEW&S/C5ISR", "date": "Feb 2026", "status": "in-progress"},
+        {"title": "Mach Industries Pitch Invitation Sent", "date": "Jan 2026", "status": "in-progress"}
+      ],
+      "potentialImpact": {
+        "description": "Army contract wins by OEM partners create guaranteed demand for LVS chips",
+        "estimatedPullThrough": "$20,000,000+",
+        "timeline": "2027-2028"
+      },
+      "nextActions": [
+        {"task": "Prepare IEW&S pitch deck", "due": "2026-02-10", "assigned": "Tayo"},
+        {"task": "Follow up with Mach on joint pitch", "due": "2026-02-07", "assigned": "Tayo"},
+        {"task": "Identify C5ISR program managers", "due": "2026-02-14", "assigned": "Tayo"}
+      ],
+      "notes": "Primary goal is to position OEM partners (Mach, Anduril) to win Army contracts. LVS technology gets pulled through as the AI edge processor in winning OEM solutions."
+    }
   ]
 }
