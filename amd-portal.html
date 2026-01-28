@@ -738,22 +738,64 @@ OVERVIEW:
         <div id="integration" class="tab-content">
             <div class="integration-section">
                 <h3>&#128268; AMD + LVS Integration Architecture</h3>
-                <div class="integration-diagram">
-                    <h4>Chiplet Integration Overview</h4>
-                    <div class="integration-boxes">
-                        <div class="integration-box amd">
-                            <div style="font-weight: 700; color: var(--amd-red); margin-bottom: 4px;">AMD Host</div>
-                            <div style="font-size: 12px; color: var(--muted);">CPU/GPU Platform</div>
+                <div class="integration-diagram" style="padding: 40px 24px;">
+                    <h4>UCIe Chiplet Integration Overview</h4>
+                    <p style="color: var(--muted); font-size: 13px; margin-bottom: 24px;">AMD Xilinx Versal RF bare die integrated with LVS-250 multi-chiplet package</p>
+
+                    <div style="display: flex; justify-content: center; align-items: stretch; gap: 20px; flex-wrap: wrap;">
+                        <!-- AMD Versal RF Die -->
+                        <div style="background: linear-gradient(135deg, rgba(237,28,36,0.15), rgba(237,28,36,0.05)); border: 2px solid var(--amd-red); border-radius: 12px; padding: 24px; min-width: 200px;">
+                            <div style="font-weight: 800; color: var(--amd-red); font-size: 16px; margin-bottom: 8px;">AMD Xilinx</div>
+                            <div style="font-weight: 700; color: var(--text); font-size: 18px; margin-bottom: 4px;">Versal RF</div>
+                            <div style="color: var(--muted); font-size: 12px; margin-bottom: 12px;">1900 Series Bare Die</div>
+                            <div style="background: rgba(0,0,0,0.3); border-radius: 8px; padding: 12px; font-size: 11px;">
+                                <div style="color: var(--amd-red); font-weight: 600; margin-bottom: 6px;">Capabilities</div>
+                                <div style="color: var(--muted);">• RF-ADC/DAC</div>
+                                <div style="color: var(--muted);">• Programmable Logic</div>
+                                <div style="color: var(--muted);">• ARM Processors</div>
+                            </div>
                         </div>
-                        <div class="integration-arrow">&#8596;</div>
-                        <div class="integration-box" style="border-color: var(--success);">
-                            <div style="font-weight: 700; color: var(--success); margin-bottom: 4px;">UCIe</div>
-                            <div style="font-size: 12px; color: var(--muted);">Chiplet Interface</div>
+
+                        <!-- UCIe Connection -->
+                        <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px 0;">
+                            <div style="font-size: 28px; color: var(--success);">&#8596;</div>
+                            <div style="background: var(--success); color: white; padding: 8px 16px; border-radius: 20px; font-size: 12px; font-weight: 700; margin: 8px 0;">UCIe</div>
+                            <div style="font-size: 10px; color: var(--muted);">High-Speed Interface</div>
                         </div>
-                        <div class="integration-arrow">&#8596;</div>
-                        <div class="integration-box lvs">
-                            <div style="font-weight: 700; color: var(--accent); margin-bottom: 4px;">LVS Chiplet</div>
-                            <div style="font-size: 12px; color: var(--muted);">Neuromorphic AI</div>
+
+                        <!-- LVS-250 Package -->
+                        <div style="background: linear-gradient(135deg, rgba(124,77,255,0.15), rgba(124,77,255,0.05)); border: 2px solid var(--accent); border-radius: 12px; padding: 24px; min-width: 320px;">
+                            <div style="font-weight: 800; color: var(--accent); font-size: 16px; margin-bottom: 4px;">LVS-250</div>
+                            <div style="color: var(--muted); font-size: 12px; margin-bottom: 16px;">5 Chiplets in Package</div>
+
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                                <div style="background: rgba(124,77,255,0.2); border: 1px solid var(--accent); border-radius: 8px; padding: 12px; text-align: center;">
+                                    <div style="font-weight: 700; font-size: 13px; color: var(--text);">RF Modem</div>
+                                    <div style="font-size: 10px; color: var(--muted); margin-top: 4px;">w/ Data Converters</div>
+                                </div>
+                                <div style="background: rgba(124,77,255,0.2); border: 1px solid var(--accent); border-radius: 8px; padding: 12px; text-align: center;">
+                                    <div style="font-weight: 700; font-size: 13px; color: var(--text);">Beamformer</div>
+                                    <div style="font-size: 10px; color: var(--muted); margin-top: 4px;">Dedicated Chiplet</div>
+                                </div>
+                                <div style="background: rgba(124,77,255,0.2); border: 1px solid var(--accent); border-radius: 8px; padding: 12px; text-align: center;">
+                                    <div style="font-weight: 700; font-size: 13px; color: var(--text);">Neuromorphic</div>
+                                    <div style="font-size: 10px; color: var(--muted); margin-top: 4px;">AI Processing</div>
+                                </div>
+                                <div style="background: rgba(124,77,255,0.2); border: 1px solid var(--accent); border-radius: 8px; padding: 12px; text-align: center;">
+                                    <div style="font-weight: 700; font-size: 13px; color: var(--text);">Memory I/F</div>
+                                    <div style="font-size: 10px; color: var(--muted); margin-top: 4px;">HBM/LPDDR5</div>
+                                </div>
+                                <div style="grid-column: span 2; background: rgba(124,77,255,0.2); border: 1px solid var(--accent); border-radius: 8px; padding: 12px; text-align: center;">
+                                    <div style="font-weight: 700; font-size: 13px; color: var(--text);">I/O & Control</div>
+                                    <div style="font-size: 10px; color: var(--muted); margin-top: 4px;">System Integration Chiplet</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 24px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1);">
+                        <div style="font-size: 11px; color: var(--muted); text-align: center;">
+                            <strong style="color: var(--text);">Partnership Direction:</strong> LVS may purchase AMD Versal RF bare die for integration into end customer solutions
                         </div>
                     </div>
                 </div>
