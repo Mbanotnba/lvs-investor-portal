@@ -551,7 +551,9 @@
                 <input type="text" class="search-box" placeholder="Search customers..." id="searchBox" oninput="searchCustomers(this.value)">
             </div>
             <div class="customer-grid" id="customerGrid">
-                <!-- Populated by JavaScript -->
+                <div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: var(--muted);">
+                    Loading customers...
+                </div>
             </div>
         </main>
     </div>
@@ -621,6 +623,9 @@
         async function loadCustomers() {
             try {
                 const response = await fetch('data/customers.json');
+                if (!response.ok) {
+                    throw new Error('Failed to load: ' + response.status);
+                }
                 const data = await response.json();
                 customers = data.customers;
                 // Default to showing customers with active portals
@@ -630,6 +635,11 @@
                 document.getElementById('allCustomerCount').textContent = customers.length;
             } catch (error) {
                 console.error('Error loading customers:', error);
+                document.getElementById('customerGrid').innerHTML = `
+                    <div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: var(--warn);">
+                        Error loading customers. <a href="javascript:loadCustomers()" style="color: var(--accent);">Retry</a>
+                    </div>
+                `;
             }
         }
 
@@ -834,8 +844,12 @@
             if (e.key === 'Escape') closeDetail();
         });
 
-        // Initialize
-        loadCustomers();
+        // Initialize when DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', loadCustomers);
+        } else {
+            loadCustomers();
+        }
     </script>
 </body>
 </html>
