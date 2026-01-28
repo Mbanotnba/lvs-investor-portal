@@ -3,13 +3,13 @@
 ================================================================================
 LVS PRESENTATION PORTAL - NSIC January 2026
 ================================================================================
-Version: 1.0
+Version: 2.0
 Last Updated: January 28, 2026
 Status: Active Presentation Portal
 
 OVERVIEW:
   Presentation viewer for LVS NSIC Presentation January 2026.
-  Allows PDF viewing with fullscreen capability.
+  Renders PDF pages inline for smooth scrolling experience.
 ================================================================================
 -->
 <html lang="en">
@@ -17,6 +17,7 @@ OVERVIEW:
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NSIC Presentation | Lola Vision Systems</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
     <style>
         :root {
             --bg: #0b1021;
@@ -35,8 +36,6 @@ OVERVIEW:
             background: var(--bg);
             color: var(--text);
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
         }
 
         .nav {
@@ -47,10 +46,12 @@ OVERVIEW:
             display: flex;
             justify-content: space-between;
             align-items: center;
-            flex-shrink: 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
         .nav-brand { display: flex; align-items: center; gap: 16px; }
-        .nav-logo { height: 60px; width: auto; }
+        .nav-logo { height: 50px; width: auto; }
         .nav-title { font-size: 18px; font-weight: 700; color: white; }
         .nav-user { display: flex; align-items: center; gap: 12px; }
         .nav-badge {
@@ -76,7 +77,9 @@ OVERVIEW:
             display: flex;
             justify-content: space-between;
             align-items: center;
-            flex-shrink: 0;
+            position: sticky;
+            top: 82px;
+            z-index: 99;
         }
         .presentation-info h1 {
             font-size: 20px;
@@ -90,6 +93,14 @@ OVERVIEW:
         .presentation-controls {
             display: flex;
             gap: 12px;
+            align-items: center;
+        }
+        .page-indicator {
+            font-size: 13px;
+            color: var(--muted);
+            padding: 8px 16px;
+            background: var(--panel-light);
+            border-radius: 8px;
         }
         .control-btn {
             padding: 10px 20px;
@@ -121,83 +132,118 @@ OVERVIEW:
         }
 
         .presentation-container {
-            flex: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 32px;
+        }
+
+        .slides-container {
             display: flex;
             flex-direction: column;
-            padding: 24px;
-            background: var(--bg);
+            gap: 24px;
+            align-items: center;
         }
-        .pdf-wrapper {
-            flex: 1;
-            background: var(--panel);
+
+        .slide {
+            background: white;
             border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
             overflow: hidden;
-            border: 1px solid rgba(255,255,255,0.06);
-            display: flex;
-            flex-direction: column;
-        }
-        .pdf-embed {
-            flex: 1;
             width: 100%;
-            border: none;
-            background: #525659;
+            max-width: 1000px;
         }
-        .pdf-fallback {
-            flex: 1;
+        .slide canvas {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+        .slide-number {
+            background: var(--panel);
+            padding: 8px 16px;
+            font-size: 12px;
+            color: var(--muted);
+            text-align: center;
+            border-top: 1px solid rgba(255,255,255,0.06);
+        }
+
+        .loading {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 40px;
+            padding: 100px 40px;
             text-align: center;
         }
-        .pdf-fallback-icon {
+        .loading-spinner {
+            width: 48px;
+            height: 48px;
+            border: 4px solid var(--panel-light);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .loading h3 {
+            font-size: 18px;
+            margin-bottom: 8px;
+        }
+        .loading p {
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .error-message {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 100px 40px;
+            text-align: center;
+        }
+        .error-message.show {
+            display: flex;
+        }
+        .error-icon {
             font-size: 64px;
             margin-bottom: 20px;
             opacity: 0.5;
         }
-        .pdf-fallback h3 {
+        .error-message h3 {
             font-size: 18px;
             margin-bottom: 8px;
         }
-        .pdf-fallback p {
+        .error-message p {
             color: var(--muted);
             font-size: 14px;
             margin-bottom: 20px;
         }
 
-        /* Fullscreen styles */
-        .presentation-container.fullscreen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            z-index: 9999;
-            padding: 0;
-            border-radius: 0;
-        }
-        .presentation-container.fullscreen .pdf-wrapper {
-            border-radius: 0;
-            border: none;
+        .footer {
+            text-align: center;
+            padding: 32px;
+            color: var(--muted);
+            font-size: 11px;
         }
 
         @media (max-width: 768px) {
             .nav { padding: 12px 16px; }
-            .nav-logo { height: 48px; }
+            .nav-logo { height: 40px; }
+            .nav-title { font-size: 14px; }
             .presentation-header {
                 flex-direction: column;
                 gap: 16px;
                 padding: 16px;
+                top: 64px;
             }
             .presentation-info { text-align: center; }
             .presentation-container { padding: 16px; }
+            .slides-container { gap: 16px; }
+            .control-btn { padding: 8px 12px; font-size: 12px; }
         }
     </style>
-    <script>
-        // Presentation portal - no authentication required
-        // Allow access from login page presentation button or direct link
-    </script>
 </head>
 <body>
     <nav class="nav">
@@ -207,8 +253,7 @@ OVERVIEW:
         </div>
         <div class="nav-user">
             <span class="nav-badge">NSIC Presentation</span>
-            <a href="founder-portal.html" class="nav-link" id="founderLink" style="display:none;">&larr; Back to Portal</a>
-            <a href="login.html" class="nav-link" onclick="sessionStorage.clear()">Logout</a>
+            <a href="login.html" class="nav-link" id="founderLink">&larr; Back</a>
         </div>
     </nav>
 
@@ -218,37 +263,44 @@ OVERVIEW:
             <p>January 2026 | Investor Overview</p>
         </div>
         <div class="presentation-controls">
+            <span class="page-indicator" id="pageIndicator">Loading...</span>
             <button class="control-btn secondary" onclick="downloadPDF()">
-                <span>&#8595;</span> Download PDF
-            </button>
-            <button class="control-btn primary" onclick="toggleFullscreen()">
-                <span id="fullscreenIcon">&#9974;</span> <span id="fullscreenText">Fullscreen</span>
+                <span>&#8595;</span> Download
             </button>
         </div>
     </div>
 
-    <div class="presentation-container" id="presentationContainer">
-        <div class="pdf-wrapper">
-            <object
-                id="pdfObject"
-                data="assets/presentations/LVS NSIC Presentation Jan 2026.pdf"
-                type="application/pdf"
-                class="pdf-embed"
-            >
-                <div class="pdf-fallback">
-                    <div class="pdf-fallback-icon">&#128196;</div>
-                    <h3>PDF Viewer Not Available</h3>
-                    <p>Your browser doesn't support embedded PDF viewing.</p>
-                    <a href="assets/presentations/LVS NSIC Presentation Jan 2026.pdf" download class="control-btn primary">
-                        <span>&#8595;</span> Download PDF
-                    </a>
-                </div>
-            </object>
+    <div class="presentation-container">
+        <div class="loading" id="loading">
+            <div class="loading-spinner"></div>
+            <h3>Loading Presentation</h3>
+            <p>Please wait while slides are being rendered...</p>
         </div>
+
+        <div class="error-message" id="errorMessage">
+            <div class="error-icon">&#128196;</div>
+            <h3>Presentation Not Available</h3>
+            <p>The PDF file could not be loaded. Please check back later.</p>
+            <a href="login.html" class="control-btn primary">
+                &larr; Back to Portal
+            </a>
+        </div>
+
+        <div class="slides-container" id="slidesContainer"></div>
     </div>
+
+    <footer class="footer">
+        <p>Lola Vision Systems | NSIC Presentation | Confidential</p>
+        <p style="margin-top: 8px;">January 2026</p>
+    </footer>
 
     <script>
         const pdfPath = 'assets/presentations/LVS NSIC Presentation Jan 2026.pdf';
+        let pdfDoc = null;
+        let totalPages = 0;
+
+        // Initialize PDF.js worker
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
         function downloadPDF() {
             const link = document.createElement('a');
@@ -257,74 +309,93 @@ OVERVIEW:
             link.click();
         }
 
-        function toggleFullscreen() {
-            const container = document.getElementById('presentationContainer');
-            const icon = document.getElementById('fullscreenIcon');
-            const text = document.getElementById('fullscreenText');
+        async function renderPage(pageNum, container) {
+            const page = await pdfDoc.getPage(pageNum);
 
-            if (!document.fullscreenElement) {
-                container.requestFullscreen().then(() => {
-                    container.classList.add('fullscreen');
-                    icon.innerHTML = '&#10005;';
-                    text.textContent = 'Exit';
-                }).catch(err => {
-                    // Fallback for browsers that don't support fullscreen API
-                    container.classList.toggle('fullscreen');
-                    if (container.classList.contains('fullscreen')) {
-                        icon.innerHTML = '&#10005;';
-                        text.textContent = 'Exit';
-                    } else {
-                        icon.innerHTML = '&#9974;';
-                        text.textContent = 'Fullscreen';
-                    }
-                });
-            } else {
-                document.exitFullscreen().then(() => {
-                    container.classList.remove('fullscreen');
-                    icon.innerHTML = '&#9974;';
-                    text.textContent = 'Fullscreen';
-                });
+            // Calculate scale to fit container width
+            const containerWidth = Math.min(1000, window.innerWidth - 64);
+            const viewport = page.getViewport({ scale: 1 });
+            const scale = containerWidth / viewport.width;
+            const scaledViewport = page.getViewport({ scale: scale * 2 }); // 2x for retina
+
+            // Create slide wrapper
+            const slideDiv = document.createElement('div');
+            slideDiv.className = 'slide';
+            slideDiv.id = `slide-${pageNum}`;
+
+            // Create canvas
+            const canvas = document.createElement('canvas');
+            const context = canvas.getContext('2d');
+            canvas.width = scaledViewport.width;
+            canvas.height = scaledViewport.height;
+            canvas.style.width = `${scaledViewport.width / 2}px`;
+            canvas.style.height = `${scaledViewport.height / 2}px`;
+
+            // Render page
+            await page.render({
+                canvasContext: context,
+                viewport: scaledViewport
+            }).promise;
+
+            slideDiv.appendChild(canvas);
+
+            // Add slide number
+            const slideNumber = document.createElement('div');
+            slideNumber.className = 'slide-number';
+            slideNumber.textContent = `Slide ${pageNum} of ${totalPages}`;
+            slideDiv.appendChild(slideNumber);
+
+            container.appendChild(slideDiv);
+        }
+
+        async function loadPDF() {
+            const loadingEl = document.getElementById('loading');
+            const errorEl = document.getElementById('errorMessage');
+            const container = document.getElementById('slidesContainer');
+            const pageIndicator = document.getElementById('pageIndicator');
+
+            try {
+                // Load PDF
+                pdfDoc = await pdfjsLib.getDocument(pdfPath).promise;
+                totalPages = pdfDoc.numPages;
+
+                // Hide loading, show container
+                loadingEl.style.display = 'none';
+
+                // Update page indicator
+                pageIndicator.textContent = `${totalPages} slides`;
+
+                // Render all pages
+                for (let i = 1; i <= totalPages; i++) {
+                    await renderPage(i, container);
+                    // Update progress
+                    pageIndicator.textContent = `Loaded ${i} of ${totalPages} slides`;
+                }
+
+                pageIndicator.textContent = `${totalPages} slides`;
+
+            } catch (error) {
+                console.error('Error loading PDF:', error);
+                loadingEl.style.display = 'none';
+                errorEl.classList.add('show');
+                pageIndicator.textContent = 'Error';
             }
         }
 
-        // Handle fullscreen change events
-        document.addEventListener('fullscreenchange', () => {
-            const container = document.getElementById('presentationContainer');
-            const icon = document.getElementById('fullscreenIcon');
-            const text = document.getElementById('fullscreenText');
-
-            if (!document.fullscreenElement) {
-                container.classList.remove('fullscreen');
-                icon.innerHTML = '&#9974;';
-                text.textContent = 'Fullscreen';
-            }
-        });
-
-        // Escape key to exit fullscreen
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                const container = document.getElementById('presentationContainer');
-                if (container.classList.contains('fullscreen') && !document.fullscreenElement) {
-                    container.classList.remove('fullscreen');
-                    document.getElementById('fullscreenIcon').innerHTML = '&#9974;';
-                    document.getElementById('fullscreenText').textContent = 'Fullscreen';
-                }
-            }
-        });
-
-        // Show back link - always show link to login for navigation
+        // Update back link based on auth status
         const founderLink = document.getElementById('founderLink');
         if (sessionStorage.getItem('lvs_founder_auth') === 'true' ||
             sessionStorage.getItem('lvs_investor_auth') === 'true' ||
             sessionStorage.getItem('lvs_can_view_customers') === 'true') {
-            founderLink.style.display = 'inline';
             founderLink.href = 'founder-portal.html';
             founderLink.textContent = '← Back to Portal';
         } else {
-            founderLink.style.display = 'inline';
             founderLink.href = 'login.html';
             founderLink.textContent = '← Back to Login';
         }
+
+        // Load PDF on page load
+        loadPDF();
     </script>
 </body>
 </html>
