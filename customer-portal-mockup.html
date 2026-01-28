@@ -750,6 +750,18 @@ SEE ALSO:
             .video-grid {
                 grid-template-columns: 1fr;
             }
+            .video-grid.single-row {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+            .video-grid.single-row .video-card {
+                border-radius: 8px;
+            }
+            .video-grid.single-row .video-card video {
+                max-height: none;
+                width: 100%;
+                cursor: pointer;
+            }
             .video-grid.testimonials-grid {
                 grid-template-columns: 1fr;
                 gap: 20px;
@@ -1697,6 +1709,16 @@ processor = ImageProcessor(resize=(640, 640), normalize=<span class="code-keywor
         document.querySelectorAll('.demo-video').forEach(video => {
             video.playbackRate = 2.0;
             video.play().catch(() => {}); // Handle autoplay restrictions
+
+            // Click to pause/play (especially useful on mobile)
+            video.style.cursor = 'pointer';
+            video.addEventListener('click', () => {
+                if (video.paused) {
+                    video.play();
+                } else {
+                    video.pause();
+                }
+            });
         });
 
         // Testimonial videos - different behavior for mobile vs desktop
