@@ -22,8 +22,19 @@
             color: white;
             font-weight: 700;
             font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
         .nav-brand span { color: #d4af37; }
+        .nav-logo {
+            height: 32px;
+            width: auto;
+        }
+        @media (max-width: 600px) {
+            .nav-logo { height: 28px; }
+            .nav-brand { font-size: 14px; }
+        }
         .nav-link {
             color: #888;
             text-decoration: none;
@@ -227,7 +238,10 @@
 </head>
 <body>
     <nav class="nav">
-        <div class="nav-brand">LOLA VISION <span>SYSTEMS</span></div>
+        <div class="nav-brand">
+            <img src="assets/lvs-logo.png" alt="LVS" class="nav-logo">
+            LOLA VISION <span>SYSTEMS</span>
+        </div>
         <a href="index.html" class="nav-link" onclick="sessionStorage.removeItem('lvs_auth')">Logout</a>
     </nav>
 
@@ -329,9 +343,8 @@
                 <h3>Completed Phases</h3>
                 <ul>
                     <li>18 months customer engagement and discovery</li>
-                    <li>Significant scaling over past 6 months</li>
+                    <li>Generated 10+ Letters of Intent and 2 Letters of Support (US Army + Space Force)</li>
                     <li>Block diagram iterations (Jul-Dec 2025)</li>
-                    <li>Architecture and IP selection finalized</li>
                     <li>Both LVS-100 and LVS-250 designs</li>
                 </ul>
             </div>
