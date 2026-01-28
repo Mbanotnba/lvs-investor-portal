@@ -84,6 +84,35 @@
             margin-top: 8px;
         }
 
+        /* Pipeline Summary */
+        .pipeline-summary {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+        .summary-card {
+            background: var(--panel);
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid rgba(255,255,255,0.06);
+            text-align: center;
+        }
+        .summary-value {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+        .summary-value.gold { color: var(--gold); }
+        .summary-value.accent { color: var(--accent); }
+        .summary-value.success { color: var(--success); }
+        .summary-label {
+            font-size: 11px;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
         /* Revenue Cards */
         .revenue-grid {
             display: grid;
@@ -139,6 +168,41 @@
         .breakdown-label { color: var(--muted); }
         .breakdown-value { font-weight: 600; }
 
+        /* Customer Details */
+        .customer-details {
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid rgba(255,255,255,0.06);
+        }
+        .customer-details-header {
+            font-size: 11px;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 10px;
+        }
+        .customer-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 10px;
+            background: var(--panel-light);
+            border-radius: 6px;
+            margin-bottom: 6px;
+            font-size: 12px;
+        }
+        .customer-name {
+            font-weight: 600;
+        }
+        .customer-type {
+            color: var(--muted);
+            font-size: 10px;
+        }
+        .customer-weighted {
+            color: var(--success);
+            font-weight: 600;
+        }
+
         /* Total Card */
         .total-card {
             background: linear-gradient(135deg, var(--panel), rgba(212,175,55,0.1));
@@ -166,7 +230,59 @@
             color: var(--muted);
         }
 
-        /* Chart Placeholder */
+        /* Government Upside */
+        .upside-card {
+            background: var(--panel);
+            border-radius: 16px;
+            padding: 28px;
+            border: 1px solid rgba(6,182,212,0.3);
+            margin-bottom: 32px;
+        }
+        .upside-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        .upside-title {
+            font-size: 18px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .upside-badge {
+            background: rgba(6,182,212,0.2);
+            color: #06b6d4;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        .upside-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-top: 16px;
+        }
+        .upside-stat {
+            background: var(--panel-light);
+            padding: 16px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        .upside-stat-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: #06b6d4;
+        }
+        .upside-stat-label {
+            font-size: 11px;
+            color: var(--muted);
+            margin-top: 4px;
+        }
+
+        /* Chart Section */
         .chart-section {
             background: var(--panel);
             border-radius: 16px;
@@ -212,6 +328,43 @@
             margin-bottom: 8px;
         }
 
+        /* Assumptions Section */
+        .assumptions-section {
+            background: var(--panel);
+            border-radius: 16px;
+            padding: 28px;
+            border: 1px solid rgba(255,255,255,0.06);
+            margin-bottom: 32px;
+        }
+        .assumptions-section h2 {
+            font-size: 18px;
+            margin-bottom: 16px;
+        }
+        .assumptions-list {
+            list-style: none;
+        }
+        .assumptions-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+            font-size: 14px;
+            color: var(--muted);
+        }
+        .assumptions-list li:last-child {
+            border-bottom: none;
+        }
+        .assumptions-list li::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            background: var(--accent);
+            border-radius: 50%;
+            margin-top: 6px;
+            flex-shrink: 0;
+        }
+
         /* Notes Section */
         .notes-section {
             background: var(--panel);
@@ -247,12 +400,15 @@
 
         @media (max-width: 900px) {
             .revenue-grid { grid-template-columns: 1fr; }
+            .pipeline-summary { grid-template-columns: repeat(2, 1fr); }
+            .upside-grid { grid-template-columns: 1fr; }
             .chart-bars { height: 150px; }
         }
         @media (max-width: 600px) {
             .container { padding: 16px; }
             .revenue-amount { font-size: 28px; }
             .total-amount { font-size: 36px; }
+            .pipeline-summary { grid-template-columns: 1fr; }
         }
     </style>
     <script>
@@ -285,31 +441,48 @@
             <div class="updated" id="lastUpdated">Loading...</div>
         </header>
 
+        <!-- Pipeline Summary -->
+        <div class="pipeline-summary">
+            <div class="summary-card">
+                <div class="summary-value gold" id="totalPipeline">--</div>
+                <div class="summary-label">Total Pipeline</div>
+            </div>
+            <div class="summary-card">
+                <div class="summary-value accent" id="weightedPipeline">--</div>
+                <div class="summary-label">Weighted Pipeline</div>
+            </div>
+            <div class="summary-card">
+                <div class="summary-value success" id="activeCustomers">--</div>
+                <div class="summary-label">Active Customers</div>
+            </div>
+            <div class="summary-card">
+                <div class="summary-value" id="tier1Customers">--</div>
+                <div class="summary-label">Tier 1 Customers</div>
+            </div>
+        </div>
+
         <!-- Revenue Cards -->
         <div class="revenue-grid">
             <div class="revenue-card">
                 <div class="revenue-year">2026</div>
                 <div class="revenue-amount" id="revenue2026">--</div>
                 <div class="revenue-notes" id="notes2026">--</div>
-                <div class="revenue-breakdown" id="breakdown2026">
-                    <!-- Populated by JS -->
-                </div>
+                <div class="revenue-breakdown" id="breakdown2026"></div>
+                <div class="customer-details" id="customers2026"></div>
             </div>
             <div class="revenue-card">
                 <div class="revenue-year">2027</div>
                 <div class="revenue-amount" id="revenue2027">--</div>
                 <div class="revenue-notes" id="notes2027">--</div>
-                <div class="revenue-breakdown" id="breakdown2027">
-                    <!-- Populated by JS -->
-                </div>
+                <div class="revenue-breakdown" id="breakdown2027"></div>
+                <div class="customer-details" id="customers2027"></div>
             </div>
             <div class="revenue-card">
                 <div class="revenue-year">2028</div>
                 <div class="revenue-amount" id="revenue2028">--</div>
                 <div class="revenue-notes" id="notes2028">--</div>
-                <div class="revenue-breakdown" id="breakdown2028">
-                    <!-- Populated by JS -->
-                </div>
+                <div class="revenue-breakdown" id="breakdown2028"></div>
+                <div class="customer-details" id="customers2028"></div>
             </div>
         </div>
 
@@ -318,6 +491,31 @@
             <div class="total-label">3-Year Cumulative Weighted Revenue</div>
             <div class="total-amount" id="totalAmount">--</div>
             <div class="total-period">2026 - 2028</div>
+        </div>
+
+        <!-- Government Upside -->
+        <div class="upside-card" id="upsideSection">
+            <div class="upside-header">
+                <div class="upside-title">
+                    <span>&#127386;</span> Government Upside (Not in Base Case)
+                </div>
+                <span class="upside-badge">ADDITIONAL OPPORTUNITY</span>
+            </div>
+            <p style="color: var(--muted); font-size: 13px;" id="upsideDescription">--</p>
+            <div class="upside-grid">
+                <div class="upside-stat">
+                    <div class="upside-stat-value" id="upsidePartners">--</div>
+                    <div class="upside-stat-label">OEM Partners</div>
+                </div>
+                <div class="upside-stat">
+                    <div class="upside-stat-value" id="upsidePotential">--</div>
+                    <div class="upside-stat-label">Pull-Through Potential</div>
+                </div>
+                <div class="upside-stat">
+                    <div class="upside-stat-value" id="upsideTimeline">--</div>
+                    <div class="upside-stat-label">Timeline</div>
+                </div>
+            </div>
         </div>
 
         <!-- Chart -->
@@ -340,6 +538,14 @@
                     <div class="chart-bar-label">2028</div>
                 </div>
             </div>
+        </div>
+
+        <!-- Key Assumptions -->
+        <div class="assumptions-section">
+            <h2>Key Assumptions</h2>
+            <ul class="assumptions-list" id="assumptionsList">
+                <!-- Populated by JS -->
+            </ul>
         </div>
 
         <!-- Notes -->
@@ -366,23 +572,54 @@
                 // Update last updated
                 document.getElementById('lastUpdated').textContent = 'Last updated: ' + data.lastUpdated;
 
+                // Update pipeline summary
+                if (data.pipelineSummary) {
+                    document.getElementById('totalPipeline').textContent = data.pipelineSummary.totalPipeline;
+                    document.getElementById('weightedPipeline').textContent = data.pipelineSummary.weightedPipeline;
+                    document.getElementById('activeCustomers').textContent = data.pipelineSummary.activeCustomers;
+                    document.getElementById('tier1Customers').textContent = data.pipelineSummary.tier1Customers;
+                }
+
                 // Update 2026
                 document.getElementById('revenue2026').textContent = data.weightedRevenue['2026'].amount;
                 document.getElementById('notes2026').textContent = data.weightedRevenue['2026'].notes;
                 updateBreakdown('breakdown2026', data.weightedRevenue['2026'].breakdown);
+                if (data.weightedRevenue['2026'].customers) {
+                    updateCustomers('customers2026', data.weightedRevenue['2026'].customers);
+                }
 
                 // Update 2027
                 document.getElementById('revenue2027').textContent = data.weightedRevenue['2027'].amount;
                 document.getElementById('notes2027').textContent = data.weightedRevenue['2027'].notes;
                 updateBreakdown('breakdown2027', data.weightedRevenue['2027'].breakdown);
+                if (data.weightedRevenue['2027'].customers) {
+                    updateCustomers('customers2027', data.weightedRevenue['2027'].customers);
+                }
 
                 // Update 2028
                 document.getElementById('revenue2028').textContent = data.weightedRevenue['2028'].amount;
                 document.getElementById('notes2028').textContent = data.weightedRevenue['2028'].notes;
                 updateBreakdown('breakdown2028', data.weightedRevenue['2028'].breakdown);
+                if (data.weightedRevenue['2028'].customers) {
+                    updateCustomers('customers2028', data.weightedRevenue['2028'].customers);
+                }
 
                 // Update total
                 document.getElementById('totalAmount').textContent = data.cumulativeWeighted.threeYear;
+
+                // Update government upside
+                if (data.governmentUpside) {
+                    document.getElementById('upsideDescription').textContent = data.governmentUpside.description;
+                    document.getElementById('upsidePartners').textContent = data.governmentUpside.partners;
+                    document.getElementById('upsidePotential').textContent = data.governmentUpside.potentialPullThrough;
+                    document.getElementById('upsideTimeline').textContent = data.governmentUpside.timeline;
+                }
+
+                // Update key assumptions
+                if (data.keyAssumptions) {
+                    const assumptionsList = document.getElementById('assumptionsList');
+                    assumptionsList.innerHTML = data.keyAssumptions.map(a => `<li>${a}</li>`).join('');
+                }
 
                 // Update chart
                 const maxValue = data.weightedRevenue['2028'].value;
@@ -410,6 +647,21 @@
                     <span class="breakdown-value">${value}</span>
                 </div>`;
             }
+            el.innerHTML = html;
+        }
+
+        function updateCustomers(elementId, customers) {
+            const el = document.getElementById(elementId);
+            let html = '<div class="customer-details-header">Customer Breakdown</div>';
+            customers.forEach(c => {
+                html += `<div class="customer-item">
+                    <div>
+                        <div class="customer-name">${c.name}</div>
+                        <div class="customer-type">${c.type}${c.units ? ' - ' + c.units : ''}</div>
+                    </div>
+                    <div class="customer-weighted">${c.weighted}</div>
+                </div>`;
+            });
             el.innerHTML = html;
         }
 
