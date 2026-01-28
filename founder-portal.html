@@ -258,6 +258,7 @@
         .status-badge.opportunity { background: rgba(245,158,11,0.2); color: var(--warn); }
         .status-badge.discovery { background: rgba(107,114,128,0.2); color: var(--muted); }
         .status-badge.proposed { background: rgba(124,77,255,0.2); color: var(--accent); }
+        .status-badge.stalled { background: rgba(234,179,8,0.2); color: #eab308; }
 
         /* Customer Detail Panel */
         .detail-panel {
@@ -492,7 +493,7 @@
                 <div class="sidebar-item active" onclick="showCustomersWithPortals()">
                     <span class="sidebar-item-icon">&#127760;</span>
                     <span class="sidebar-item-text">Active Portals</span>
-                    <span class="sidebar-item-badge" id="customerCount">2</span>
+                    <span class="sidebar-item-badge" id="customerCount">5</span>
                 </div>
                 <div class="sidebar-item" onclick="showSection('customers')">
                     <span class="sidebar-item-icon">&#128188;</span>
@@ -617,7 +618,7 @@
         let filteredCustomers = [];
 
         // Customer portals available for these IDs
-        const customersWithPortals = ['anduril', 'terrahaptix'];
+        const customersWithPortals = ['anduril', 'terrahaptix', 'koniku', 'glid', 'mach'];
 
         // Load customer data
         async function loadCustomers() {
@@ -776,6 +777,18 @@
                 portalLink.style.opacity = '1';
             } else if (customer.id === 'terrahaptix') {
                 portalLink.href = 'terrahaptix-portal.html';
+                portalLink.onclick = null;
+                portalLink.style.opacity = '1';
+            } else if (customer.id === 'koniku') {
+                portalLink.href = 'koniku-portal.html';
+                portalLink.onclick = null;
+                portalLink.style.opacity = '1';
+            } else if (customer.id === 'glid') {
+                portalLink.href = 'glid-portal.html';
+                portalLink.onclick = null;
+                portalLink.style.opacity = '1';
+            } else if (customer.id === 'mach') {
+                portalLink.href = 'mach-portal.html';
                 portalLink.onclick = null;
                 portalLink.style.opacity = '1';
             } else {

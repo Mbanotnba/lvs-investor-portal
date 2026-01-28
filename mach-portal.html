@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<!--
+================================================================================
+LVS CUSTOMER PORTAL - MOCKUP
+================================================================================
+Version: 1.0
+Last Updated: January 28, 2026
+Status: MOCKUP - Feature decommissioned until launch
+
+OVERVIEW:
+  This is a customer-facing portal for NDA-signed partners. Each customer
+  would see their own engagement progress, product information, and documents.
+  Currently showing Mach Industries as example customer.
+
+STRUCTURE:
+  - 7 Tabs: Dashboard | Product | Specifications | DevKit | SDK | Docs | Support
+  - Single-page app using vanilla JS tab switching (no framework)
+  - All CSS in <style> block, all JS in <script> block at bottom
+
+CUSTOMIZATION POINTS:
+  - Customer name: Search for "Mach Industries" to replace
+  - Engagement stage: Modify .stage-dot classes (complete/current/upcoming)
+  - Status: Stalled - awaiting responses
+================================================================================
+-->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mach Industries Portal | Lola Vision Systems</title>
+    <style>
+        :root {
+            --bg: #0b1021;
+            --panel: #141a30;
+            --panel-light: #1a2240;
+            --accent: #7c4dff;
+            --accent-light: #9d7aff;
+            --gold: #d4af37;
+            --text: #e6e8f0;
+            --muted: #9aa3c2;
+            --success: #10b981;
+            --warn: #f97316;
+            --stalled: #eab308;
+            --info: #06b6d4;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+            background: radial-gradient(circle at 10% 20%, rgba(124,77,255,0.15), transparent 30%),
+                        radial-gradient(circle at 90% 80%, rgba(234,179,8,0.1), transparent 25%),
+                        var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        /* Navigation */
+        .nav {
+            background: rgba(20, 26, 48, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            padding: 16px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .nav-brand { display: flex; align-items: center; gap: 16px; }
+        .nav-logo { height: 79px; width: auto; }
+        .nav-title { font-size: 18px; font-weight: 700; color: white; }
+        .nav-title span { color: white; }
+        .nav-user { display: flex; align-items: center; gap: 12px; }
+        .customer-badge {
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .nav-link { color: var(--muted); text-decoration: none; font-size: 13px; }
+
+        /* Tab Navigation */
+        .tab-nav {
+            background: var(--panel);
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            padding: 0 32px;
+            display: flex;
+            gap: 4px;
+            overflow-x: auto;
+        }
+        .tab-btn {
+            padding: 16px 24px;
+            background: none;
+            border: none;
+            color: var(--muted);
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+        .tab-btn:hover { color: var(--text); }
+        .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+        .tab-btn .badge {
+            background: var(--accent);
+            color: white;
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 10px;
+            margin-left: 6px;
+        }
+
+        .container { max-width: 1400px; margin: 0 auto; padding: 32px; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        /* Welcome Header */
+        .welcome {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 32px;
+            padding: 32px;
+            background: var(--panel);
+            border-radius: 16px;
+            border: 1px solid rgba(255,255,255,0.06);
+        }
+        .welcome-content h1 { font-size: 28px; margin-bottom: 8px; }
+        .welcome-content h1 span { color: var(--gold); }
+        .welcome-content p { color: var(--muted); font-size: 14px; }
+
+        /* Stalled Alert Banner */
+        .stalled-banner {
+            background: linear-gradient(135deg, rgba(234,179,8,0.15), rgba(234,179,8,0.05));
+            border: 1px solid rgba(234,179,8,0.3);
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .stalled-banner-icon {
+            font-size: 24px;
+        }
+        .stalled-banner-content {
+            flex: 1;
+        }
+        .stalled-banner-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--stalled);
+            margin-bottom: 4px;
+        }
+        .stalled-banner-text {
+            font-size: 13px;
+            color: var(--muted);
+        }
+
+        /* Stage Progress Tracker */
+        .stage-tracker {
+            background: var(--panel);
+            border-radius: 16px;
+            padding: 28px;
+            margin-bottom: 24px;
+            border: 1px solid rgba(255,255,255,0.06);
+        }
+        .stage-tracker h2 {
+            font-size: 16px;
+            margin-bottom: 24px;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .stages {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+        }
+        .stages::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 40px;
+            right: 40px;
+            height: 4px;
+            background: var(--panel-light);
+            border-radius: 2px;
+        }
+        .stages::after {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 40px;
+            width: 40%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--success), var(--stalled));
+            border-radius: 2px;
+        }
+        .stage {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+        .stage-dot {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            border: 3px solid var(--panel);
+        }
+        .stage-dot.complete { background: var(--success); color: white; }
+        .stage-dot.current { background: var(--stalled); color: white; box-shadow: 0 0 20px rgba(234,179,8,0.5); }
+        .stage-dot.upcoming { background: var(--panel-light); color: var(--muted); }
+        .stage-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted); }
+        .stage.active .stage-label { color: var(--stalled); }
+        .stage-date { font-size: 10px; color: var(--muted); margin-top: 4px; }
+
+        /* Grid Layout */
+        .grid { display: grid; grid-template-columns: 2fr 1fr; gap: 24px; }
+        @media (max-width: 1000px) { .grid { grid-template-columns: 1fr; } }
+
+        /* Panels */
+        .panel {
+            background: var(--panel);
+            border-radius: 16px;
+            padding: 24px;
+            border: 1px solid rgba(255,255,255,0.06);
+        }
+        .panel h3 {
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--muted);
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+
+        /* Milestones */
+        .milestone {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            padding: 16px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+        }
+        .milestone:last-child { border-bottom: none; }
+        .milestone-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+        .milestone-icon.complete { background: rgba(16, 185, 129, 0.15); color: var(--success); }
+        .milestone-icon.in-progress { background: rgba(124, 77, 255, 0.15); color: var(--accent); }
+        .milestone-icon.stalled { background: rgba(234, 179, 8, 0.15); color: var(--stalled); }
+        .milestone-icon.upcoming { background: rgba(255,255,255,0.05); color: var(--muted); }
+        .milestone-content { flex: 1; }
+        .milestone-title { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+        .milestone-date { font-size: 12px; color: var(--muted); }
+        .milestone-badge {
+            font-size: 10px;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        .milestone-badge.complete { background: rgba(16, 185, 129, 0.15); color: var(--success); }
+        .milestone-badge.in-progress { background: rgba(124, 77, 255, 0.15); color: var(--accent); }
+        .milestone-badge.stalled { background: rgba(234, 179, 8, 0.15); color: var(--stalled); }
+        .milestone-badge.upcoming { background: rgba(255,255,255,0.05); color: var(--muted); }
+
+        /* Contact Card */
+        .contact-card {
+            background: linear-gradient(135deg, var(--accent), #5b2da8);
+            border-radius: 14px;
+            padding: 24px;
+            margin-top: 24px;
+        }
+        .contact-card h4 { font-size: 14px; margin-bottom: 16px; opacity: 0.9; }
+        .contact-person { display: flex; align-items: center; gap: 14px; }
+        .contact-avatar {
+            width: 48px;
+            height: 48px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: 700;
+        }
+        .contact-info h5 { font-size: 15px; margin-bottom: 2px; }
+        .contact-info p { font-size: 12px; opacity: 0.8; }
+        .contact-actions { display: flex; gap: 10px; margin-top: 16px; }
+        .contact-btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .contact-btn.primary { background: white; color: var(--accent); }
+        .contact-btn.secondary { background: rgba(255,255,255,0.15); color: white; }
+
+        /* Pending Actions */
+        .pending-action {
+            background: var(--panel-light);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            border-left: 3px solid var(--stalled);
+        }
+        .pending-action-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+        .pending-action-icon {
+            font-size: 16px;
+        }
+        .pending-action-title {
+            font-size: 14px;
+            font-weight: 600;
+        }
+        .pending-action-desc {
+            font-size: 13px;
+            color: var(--muted);
+            margin-bottom: 8px;
+        }
+        .pending-action-status {
+            display: inline-block;
+            background: rgba(234,179,8,0.15);
+            color: var(--stalled);
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 32px;
+            color: var(--muted);
+            font-size: 11px;
+        }
+
+        /* Coming Soon Banner */
+        .coming-soon {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: rgba(249, 115, 22, 0.9);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .tab-nav { padding: 0 16px; overflow-x: auto; }
+            .tab-btn { padding: 12px 16px; font-size: 12px; white-space: nowrap; }
+            .container { padding: 16px; }
+            .welcome { flex-direction: column; gap: 16px; }
+            .stage-tracker { padding: 20px 16px; overflow: hidden; }
+            .stages {
+                overflow-x: auto;
+                padding-bottom: 12px;
+                margin: 0 -8px;
+                padding-left: 8px;
+                padding-right: 8px;
+            }
+            .stages::before, .stages::after { display: none; }
+            .stage { min-width: 90px; flex-shrink: 0; }
+            .stage-dot { width: 32px; height: 32px; font-size: 12px; }
+            .stage-label { font-size: 9px; }
+            .stage-date { font-size: 8px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-brand">
+            <img src="assets/lvs-logo.png" alt="LVS" class="nav-logo">
+            <div class="nav-title">LOLA VISION <span>SYSTEMS</span></div>
+        </div>
+        <div class="nav-user">
+            <span class="customer-badge">Customer Portal</span>
+            <a href="#" class="nav-link">Logout</a>
+        </div>
+    </nav>
+
+    <!-- Tab Navigation -->
+    <div class="tab-nav">
+        <button class="tab-btn active" data-tab="dashboard">Dashboard</button>
+        <button class="tab-btn" data-tab="product">Product<span class="badge">LVS-250</span></button>
+        <button class="tab-btn" data-tab="specs">Specifications</button>
+        <button class="tab-btn" data-tab="devkit">Development Kit</button>
+        <button class="tab-btn" data-tab="sdk">Software SDK</button>
+        <button class="tab-btn" data-tab="documents">Documents</button>
+        <button class="tab-btn" data-tab="support">Support</button>
+    </div>
+
+    <div class="container">
+        <!-- ==================== DASHBOARD TAB ==================== -->
+        <div id="dashboard" class="tab-content active">
+            <!-- Welcome Header -->
+            <div class="welcome">
+                <div class="welcome-content">
+                    <h1>Welcome back, <span>Mach Industries</span></h1>
+                    <p>Your partnership dashboard - Last updated January 28, 2026</p>
+                </div>
+                <div style="background: linear-gradient(135deg, #1a1a2e, #16213e); padding: 24px 32px; border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                    <span style="font-size: 22px; font-weight: 800; color: white; letter-spacing: 2px;">MACH</span>
+                </div>
+            </div>
+
+            <!-- Stalled Status Banner -->
+            <div class="stalled-banner">
+                <span class="stalled-banner-icon">&#9888;</span>
+                <div class="stalled-banner-content">
+                    <div class="stalled-banner-title">Engagement Status: Stalled</div>
+                    <div class="stalled-banner-text">Awaiting response on IRAD proposal signature and US Army pitch invitation. Last outreach: January 2026.</div>
+                </div>
+            </div>
+
+            <!-- Stage Progress Tracker -->
+            <div class="stage-tracker">
+                <h2>Engagement Progress</h2>
+                <div class="stages">
+                    <div class="stage">
+                        <div class="stage-dot complete">&#10003;</div>
+                        <span class="stage-label">Discovery</span>
+                        <span class="stage-date">Sep 2025</span>
+                    </div>
+                    <div class="stage">
+                        <div class="stage-dot complete">&#10003;</div>
+                        <span class="stage-label">NDA Signed</span>
+                        <span class="stage-date">Oct 2025</span>
+                    </div>
+                    <div class="stage active">
+                        <div class="stage-dot current">3</div>
+                        <span class="stage-label">Evaluation</span>
+                        <span class="stage-date">Stalled</span>
+                    </div>
+                    <div class="stage">
+                        <div class="stage-dot upcoming">4</div>
+                        <span class="stage-label">IRAD Contract</span>
+                        <span class="stage-date">TBD</span>
+                    </div>
+                    <div class="stage">
+                        <div class="stage-dot upcoming">5</div>
+                        <span class="stage-label">Integration</span>
+                        <span class="stage-date">TBD</span>
+                    </div>
+                    <div class="stage">
+                        <div class="stage-dot upcoming">6</div>
+                        <span class="stage-label">Production</span>
+                        <span class="stage-date">2027+</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Grid -->
+            <div class="grid">
+                <div>
+                    <div class="panel">
+                        <h3>Engagement Milestones</h3>
+                        <div class="milestone">
+                            <div class="milestone-icon complete">&#10003;</div>
+                            <div class="milestone-content">
+                                <div class="milestone-title">Initial Contact</div>
+                                <div class="milestone-date">September 2025</div>
+                            </div>
+                            <span class="milestone-badge complete">Complete</span>
+                        </div>
+                        <div class="milestone">
+                            <div class="milestone-icon complete">&#10003;</div>
+                            <div class="milestone-content">
+                                <div class="milestone-title">NDA Executed</div>
+                                <div class="milestone-date">October 2025</div>
+                            </div>
+                            <span class="milestone-badge complete">Complete</span>
+                        </div>
+                        <div class="milestone">
+                            <div class="milestone-icon complete">&#10003;</div>
+                            <div class="milestone-content">
+                                <div class="milestone-title">IRAD Proposal Submitted</div>
+                                <div class="milestone-date">November 2025</div>
+                            </div>
+                            <span class="milestone-badge complete">Complete</span>
+                        </div>
+                        <div class="milestone">
+                            <div class="milestone-icon stalled">&#9679;</div>
+                            <div class="milestone-content">
+                                <div class="milestone-title">IRAD Proposal - Awaiting Signature</div>
+                                <div class="milestone-date">Pending response</div>
+                            </div>
+                            <span class="milestone-badge stalled">Stalled</span>
+                        </div>
+                        <div class="milestone">
+                            <div class="milestone-icon stalled">&#9679;</div>
+                            <div class="milestone-content">
+                                <div class="milestone-title">US Army IEW&S/C5ISR Pitch Invitation</div>
+                                <div class="milestone-date">January 2026 - Awaiting response</div>
+                            </div>
+                            <span class="milestone-badge stalled">Stalled</span>
+                        </div>
+                    </div>
+
+                    <!-- Pending Actions -->
+                    <div class="panel" style="margin-top: 24px; border-left: 3px solid var(--stalled);">
+                        <h3>Pending Actions</h3>
+                        <div class="pending-action">
+                            <div class="pending-action-header">
+                                <span class="pending-action-icon">&#128196;</span>
+                                <span class="pending-action-title">IRAD Proposal Signature</span>
+                            </div>
+                            <div class="pending-action-desc">
+                                IRAD proposal submitted November 2025. Awaiting Mach Industries signature to proceed with joint development agreement.
+                            </div>
+                            <span class="pending-action-status">Awaiting Response</span>
+                        </div>
+                        <div class="pending-action">
+                            <div class="pending-action-header">
+                                <span class="pending-action-icon">&#127919;</span>
+                                <span class="pending-action-title">US Army Pitch Invitation</span>
+                            </div>
+                            <div class="pending-action-desc">
+                                Email invitation sent to join LVS pitch to US Army IEW&S and C5ISR. Potential joint presentation opportunity.
+                            </div>
+                            <span class="pending-action-status">Awaiting Response</span>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="panel">
+                        <h3>Your LVS Contact</h3>
+                        <div class="contact-card">
+                            <h4>Dedicated Support</h4>
+                            <div class="contact-person">
+                                <div class="contact-avatar">TA</div>
+                                <div class="contact-info">
+                                    <h5>Tayo Adesanya</h5>
+                                    <p>CEO &bull; Lola Vision Systems</p>
+                                </div>
+                            </div>
+                            <div class="contact-actions" style="flex-direction: column; gap: 8px;">
+                                <div style="display: flex; gap: 8px;">
+                                    <a href="https://wa.me/16304792126" target="_blank" class="contact-btn primary" style="text-decoration: none; text-align: center;">WhatsApp</a>
+                                    <a href="sms:+16304792126" class="contact-btn secondary" style="text-decoration: none; text-align: center;">iMessage</a>
+                                </div>
+                                <a href="mailto:tayo@lolavisionsystems.com" class="contact-btn secondary" style="text-decoration: none; text-align: center; width: 100%;">Email</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel" style="margin-top: 24px;">
+                        <h3>Partnership Summary</h3>
+                        <div style="display: grid; gap: 12px;">
+                            <div style="display: flex; justify-content: space-between; padding: 12px; background: rgba(234,179,8,0.1); border-radius: 8px;">
+                                <span style="color: var(--muted); font-size: 13px;">Engagement Status</span>
+                                <span style="font-weight: 700; color: var(--stalled);">Stalled</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; padding: 12px; background: rgba(255,255,255,0.03); border-radius: 8px;">
+                                <span style="color: var(--muted); font-size: 13px;">Target Product</span>
+                                <span style="font-weight: 600; color: var(--accent);">LVS-250</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; padding: 12px; background: rgba(255,255,255,0.03); border-radius: 8px;">
+                                <span style="color: var(--muted); font-size: 13px;">Application</span>
+                                <span style="font-weight: 600;">Kamikaze Drones</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; padding: 12px; background: rgba(255,255,255,0.03); border-radius: 8px;">
+                                <span style="color: var(--muted); font-size: 13px;">Potential Value</span>
+                                <span style="font-weight: 700; color: var(--gold);">$10M</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; padding: 12px; background: rgba(255,255,255,0.03); border-radius: 8px;">
+                                <span style="color: var(--muted); font-size: 13px;">Probability</span>
+                                <span style="font-weight: 600;">35%</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; padding: 12px; background: rgba(255,255,255,0.03); border-radius: 8px;">
+                                <span style="color: var(--muted); font-size: 13px;">Production Target</span>
+                                <span style="font-weight: 600;">2027+</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== PRODUCT TAB ==================== -->
+        <div id="product" class="tab-content">
+            <div class="welcome" style="margin-bottom: 24px;">
+                <div class="welcome-content">
+                    <h1>LVS-250 <span>Overview</span></h1>
+                    <p>High-performance edge AI processor optimized for defense applications</p>
+                </div>
+            </div>
+            <div class="panel">
+                <h3>Product Details</h3>
+                <p style="color: var(--muted); font-size: 14px; line-height: 1.7;">
+                    The LVS-250 is designed for autonomous systems requiring real-time AI inference at the edge.
+                    With ultra-low power consumption and high compute density, it's ideal for kamikaze drone applications
+                    where SWaP (Size, Weight, and Power) constraints are critical.
+                </p>
+                <div style="margin-top: 24px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;">
+                    <div style="background: var(--panel-light); padding: 20px; border-radius: 12px; text-align: center;">
+                        <div style="font-size: 28px; font-weight: 800; color: var(--accent);">50+</div>
+                        <div style="font-size: 12px; color: var(--muted); margin-top: 4px;">TOPS Performance</div>
+                    </div>
+                    <div style="background: var(--panel-light); padding: 20px; border-radius: 12px; text-align: center;">
+                        <div style="font-size: 28px; font-weight: 800; color: var(--gold);">&lt;5W</div>
+                        <div style="font-size: 12px; color: var(--muted); margin-top: 4px;">Power Consumption</div>
+                    </div>
+                    <div style="background: var(--panel-light); padding: 20px; border-radius: 12px; text-align: center;">
+                        <div style="font-size: 28px; font-weight: 800; color: var(--success);">12nm</div>
+                        <div style="font-size: 12px; color: var(--muted); margin-top: 4px;">Process Node</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== SPECS TAB ==================== -->
+        <div id="specs" class="tab-content">
+            <div class="welcome" style="margin-bottom: 24px;">
+                <div class="welcome-content">
+                    <h1>Technical <span>Specifications</span></h1>
+                    <p>Detailed specifications for the LVS-250 processor</p>
+                </div>
+            </div>
+            <div class="panel">
+                <h3>Core Specifications</h3>
+                <table style="width: 100%; border-collapse: collapse;">
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.06);">
+                        <td style="padding: 14px 16px; color: var(--muted);">Process Technology</td>
+                        <td style="padding: 14px 16px; font-weight: 600;">GlobalFoundries 12nm</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.06);">
+                        <td style="padding: 14px 16px; color: var(--muted);">Peak Performance</td>
+                        <td style="padding: 14px 16px; font-weight: 600;">50+ TOPS (INT8)</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.06);">
+                        <td style="padding: 14px 16px; color: var(--muted);">Power Consumption</td>
+                        <td style="padding: 14px 16px; font-weight: 600;">&lt;5W typical</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.06);">
+                        <td style="padding: 14px 16px; color: var(--muted);">Memory Interface</td>
+                        <td style="padding: 14px 16px; font-weight: 600;">LPDDR4x</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 14px 16px; color: var(--muted);">Operating Temperature</td>
+                        <td style="padding: 14px 16px; font-weight: 600;">-40C to +85C</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- ==================== DEVKIT TAB ==================== -->
+        <div id="devkit" class="tab-content">
+            <div class="welcome" style="margin-bottom: 24px;">
+                <div class="welcome-content">
+                    <h1>Development <span>Kit</span></h1>
+                    <p>Hardware and tools for LVS-250 integration</p>
+                </div>
+            </div>
+            <div class="panel">
+                <h3>DevKit Status</h3>
+                <p style="color: var(--muted); font-size: 14px;">Development kit availability pending IRAD contract execution.</p>
+            </div>
+        </div>
+
+        <!-- ==================== SDK TAB ==================== -->
+        <div id="sdk" class="tab-content">
+            <div class="welcome" style="margin-bottom: 24px;">
+                <div class="welcome-content">
+                    <h1>Software <span>SDK</span></h1>
+                    <p>Development tools and APIs</p>
+                </div>
+            </div>
+            <div class="panel">
+                <h3>SDK Access</h3>
+                <p style="color: var(--muted); font-size: 14px;">SDK access will be provided upon IRAD contract execution.</p>
+            </div>
+        </div>
+
+        <!-- ==================== DOCUMENTS TAB ==================== -->
+        <div id="documents" class="tab-content">
+            <div class="welcome" style="margin-bottom: 24px;">
+                <div class="welcome-content">
+                    <h1>Partner <span>Documents</span></h1>
+                    <p>Agreements, proposals, and technical documentation</p>
+                </div>
+            </div>
+            <div class="panel">
+                <h3>Available Documents</h3>
+                <div style="display: flex; align-items: center; gap: 14px; padding: 14px; background: var(--panel-light); border-radius: 10px; margin-bottom: 10px;">
+                    <div style="width: 40px; height: 40px; background: rgba(16, 185, 129, 0.15); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: var(--success);">&#128196;</div>
+                    <div style="flex: 1;">
+                        <div style="font-size: 13px; font-weight: 600;">Mutual NDA</div>
+                        <div style="font-size: 11px; color: var(--muted);">Executed October 2025</div>
+                    </div>
+                    <span style="color: var(--success); font-size: 12px;">&#10003; Signed</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 14px; padding: 14px; background: var(--panel-light); border-radius: 10px; margin-bottom: 10px;">
+                    <div style="width: 40px; height: 40px; background: rgba(234, 179, 8, 0.15); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: var(--stalled);">&#128196;</div>
+                    <div style="flex: 1;">
+                        <div style="font-size: 13px; font-weight: 600;">IRAD Proposal</div>
+                        <div style="font-size: 11px; color: var(--muted);">Submitted November 2025</div>
+                    </div>
+                    <span style="color: var(--stalled); font-size: 12px;">Awaiting Signature</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== SUPPORT TAB ==================== -->
+        <div id="support" class="tab-content">
+            <div class="welcome" style="margin-bottom: 24px;">
+                <div class="welcome-content">
+                    <h1>Technical <span>Support</span></h1>
+                    <p>Get help from the Lola Vision Systems team</p>
+                </div>
+            </div>
+            <div class="grid">
+                <div class="panel">
+                    <h3>Support Channels</h3>
+                    <p style="color: var(--muted); font-size: 14px; margin-bottom: 16px;">
+                        For questions about the IRAD proposal or partnership status, please contact your LVS representative.
+                    </p>
+                    <div style="background: var(--panel-light); padding: 16px; border-radius: 10px;">
+                        <div style="font-size: 13px; font-weight: 600; margin-bottom: 8px;">Email Support</div>
+                        <div style="font-size: 14px; color: var(--accent);">partners@lolavisionsystems.com</div>
+                    </div>
+                </div>
+                <div class="panel">
+                    <h3>Your LVS Contact</h3>
+                    <div class="contact-card">
+                        <h4>Dedicated Support</h4>
+                        <div class="contact-person">
+                            <div class="contact-avatar">TA</div>
+                            <div class="contact-info">
+                                <h5>Tayo Adesanya</h5>
+                                <p>CEO &bull; Lola Vision Systems</p>
+                            </div>
+                        </div>
+                        <div class="contact-actions" style="flex-direction: column; gap: 8px;">
+                            <div style="display: flex; gap: 8px;">
+                                <a href="https://wa.me/16304792126" target="_blank" class="contact-btn primary" style="text-decoration: none; text-align: center;">WhatsApp</a>
+                                <a href="sms:+16304792126" class="contact-btn secondary" style="text-decoration: none; text-align: center;">iMessage</a>
+                            </div>
+                            <a href="mailto:tayo@lolavisionsystems.com" class="contact-btn secondary" style="text-decoration: none; text-align: center; width: 100%;">Email</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <p>Lola Vision Systems &bull; Customer Portal &bull; Confidential</p>
+            <p style="margin-top: 4px; opacity: 0.6;">For support: partners@lolavisionsystems.com</p>
+        </footer>
+    </div>
+
+    <!-- Coming Soon Banner -->
+    <div class="coming-soon">
+        &#9888; MOCKUP - Feature Coming Soon
+    </div>
+
+    <script>
+        // Tab switching functionality
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                btn.classList.add('active');
+                document.getElementById(btn.dataset.tab).classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>

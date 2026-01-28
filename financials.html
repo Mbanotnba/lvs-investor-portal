@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financial Model | Lola Vision Systems</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg: #0a0a0f;
+            --panel: #12121a;
+            --panel-light: #1a1a24;
+            --text: #f5f5f7;
+            --muted: #6b7280;
+            --accent: #7c4dff;
+            --accent-light: #a78bfa;
+            --gold: #d4af37;
+            --success: #10b981;
+            --warn: #f59e0b;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+        }
+        .nav {
+            background: var(--panel);
+            padding: 16px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .nav-logo { height: 44px; width: auto; }
+        .nav-title { font-weight: 700; font-size: 18px; }
+        .nav-title span { color: var(--gold); }
+        .nav-links { display: flex; gap: 24px; }
+        .nav-link {
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 13px;
+            transition: color 0.2s;
+        }
+        .nav-link:hover { color: var(--text); }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 32px;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 14px;
+            margin-bottom: 24px;
+            transition: color 0.2s;
+        }
+        .back-link:hover { color: var(--text); }
+
+        .header {
+            margin-bottom: 32px;
+        }
+        .header h1 {
+            font-size: 36px;
+            margin-bottom: 8px;
+        }
+        .header .subtitle {
+            color: var(--muted);
+            font-size: 16px;
+        }
+        .header .updated {
+            color: var(--gold);
+            font-size: 13px;
+            margin-top: 8px;
+        }
+
+        /* Revenue Cards */
+        .revenue-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+        .revenue-card {
+            background: var(--panel);
+            border-radius: 16px;
+            padding: 28px;
+            border: 1px solid rgba(255,255,255,0.06);
+            position: relative;
+            overflow: hidden;
+        }
+        .revenue-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--gold), var(--accent));
+        }
+        .revenue-year {
+            font-size: 14px;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+        .revenue-amount {
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--gold);
+            margin-bottom: 8px;
+        }
+        .revenue-notes {
+            font-size: 13px;
+            color: var(--muted);
+            margin-bottom: 16px;
+        }
+        .revenue-breakdown {
+            padding-top: 16px;
+            border-top: 1px solid rgba(255,255,255,0.06);
+        }
+        .breakdown-item {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            padding: 6px 0;
+        }
+        .breakdown-label { color: var(--muted); }
+        .breakdown-value { font-weight: 600; }
+
+        /* Total Card */
+        .total-card {
+            background: linear-gradient(135deg, var(--panel), rgba(212,175,55,0.1));
+            border: 1px solid var(--gold);
+            border-radius: 16px;
+            padding: 32px;
+            margin-bottom: 32px;
+            text-align: center;
+        }
+        .total-label {
+            font-size: 14px;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+        .total-amount {
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--gold);
+            margin-bottom: 8px;
+        }
+        .total-period {
+            font-size: 14px;
+            color: var(--muted);
+        }
+
+        /* Chart Placeholder */
+        .chart-section {
+            background: var(--panel);
+            border-radius: 16px;
+            padding: 28px;
+            border: 1px solid rgba(255,255,255,0.06);
+            margin-bottom: 32px;
+        }
+        .chart-section h2 {
+            font-size: 18px;
+            margin-bottom: 24px;
+        }
+        .chart-bars {
+            display: flex;
+            align-items: flex-end;
+            gap: 24px;
+            height: 200px;
+            padding: 0 20px;
+        }
+        .chart-bar-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100%;
+        }
+        .chart-bar {
+            width: 100%;
+            max-width: 80px;
+            background: linear-gradient(180deg, var(--gold), var(--accent));
+            border-radius: 8px 8px 0 0;
+            margin-top: auto;
+            transition: height 0.5s ease;
+        }
+        .chart-bar-label {
+            font-size: 12px;
+            color: var(--muted);
+            margin-top: 12px;
+        }
+        .chart-bar-value {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--gold);
+            margin-bottom: 8px;
+        }
+
+        /* Notes Section */
+        .notes-section {
+            background: var(--panel);
+            border-radius: 16px;
+            padding: 28px;
+            border: 1px solid rgba(255,255,255,0.06);
+        }
+        .notes-section h2 {
+            font-size: 18px;
+            margin-bottom: 16px;
+        }
+        .notes-content {
+            background: var(--panel-light);
+            border-radius: 10px;
+            padding: 20px;
+            border-left: 3px solid var(--accent);
+        }
+        .notes-content p {
+            font-size: 14px;
+            line-height: 1.7;
+            color: var(--muted);
+        }
+        .notes-content strong {
+            color: var(--text);
+        }
+
+        .footer {
+            text-align: center;
+            padding: 32px;
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        @media (max-width: 900px) {
+            .revenue-grid { grid-template-columns: 1fr; }
+            .chart-bars { height: 150px; }
+        }
+        @media (max-width: 600px) {
+            .container { padding: 16px; }
+            .revenue-amount { font-size: 28px; }
+            .total-amount { font-size: 36px; }
+        }
+    </style>
+    <script>
+        if (sessionStorage.getItem('lvs_auth') !== 'true') {
+            window.location.href = 'index.html';
+        }
+    </script>
+</head>
+<body>
+    <nav class="nav">
+        <div class="nav-brand">
+            <img src="assets/lvs-logo.png" alt="LVS" class="nav-logo">
+            <span class="nav-title">LOLA VISION <span>SYSTEMS</span></span>
+        </div>
+        <div class="nav-links">
+            <a href="dashboard.html" class="nav-link">Dashboard</a>
+            <a href="pipeline.html" class="nav-link">Pipeline</a>
+            <a href="roadmap.html" class="nav-link">Roadmap</a>
+            <a href="seed-round.html" class="nav-link">Seed Round</a>
+            <a href="index.html" class="nav-link" onclick="sessionStorage.removeItem('lvs_auth')">Logout</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <a href="dashboard.html" class="back-link">&larr; Back to Dashboard</a>
+
+        <header class="header">
+            <h1>Financial Model</h1>
+            <div class="subtitle">Expected weighted revenue projections based on pipeline probabilities</div>
+            <div class="updated" id="lastUpdated">Loading...</div>
+        </header>
+
+        <!-- Revenue Cards -->
+        <div class="revenue-grid">
+            <div class="revenue-card">
+                <div class="revenue-year">2026</div>
+                <div class="revenue-amount" id="revenue2026">--</div>
+                <div class="revenue-notes" id="notes2026">--</div>
+                <div class="revenue-breakdown" id="breakdown2026">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+            <div class="revenue-card">
+                <div class="revenue-year">2027</div>
+                <div class="revenue-amount" id="revenue2027">--</div>
+                <div class="revenue-notes" id="notes2027">--</div>
+                <div class="revenue-breakdown" id="breakdown2027">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+            <div class="revenue-card">
+                <div class="revenue-year">2028</div>
+                <div class="revenue-amount" id="revenue2028">--</div>
+                <div class="revenue-notes" id="notes2028">--</div>
+                <div class="revenue-breakdown" id="breakdown2028">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Card -->
+        <div class="total-card">
+            <div class="total-label">3-Year Cumulative Weighted Revenue</div>
+            <div class="total-amount" id="totalAmount">--</div>
+            <div class="total-period">2026 - 2028</div>
+        </div>
+
+        <!-- Chart -->
+        <div class="chart-section">
+            <h2>Revenue Growth Trajectory</h2>
+            <div class="chart-bars">
+                <div class="chart-bar-container">
+                    <div class="chart-bar-value" id="chartVal2026">--</div>
+                    <div class="chart-bar" id="chartBar2026" style="height: 0%;"></div>
+                    <div class="chart-bar-label">2026</div>
+                </div>
+                <div class="chart-bar-container">
+                    <div class="chart-bar-value" id="chartVal2027">--</div>
+                    <div class="chart-bar" id="chartBar2027" style="height: 0%;"></div>
+                    <div class="chart-bar-label">2027</div>
+                </div>
+                <div class="chart-bar-container">
+                    <div class="chart-bar-value" id="chartVal2028">--</div>
+                    <div class="chart-bar" id="chartBar2028" style="height: 0%;"></div>
+                    <div class="chart-bar-label">2028</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Notes -->
+        <div class="notes-section">
+            <h2>Methodology</h2>
+            <div class="notes-content">
+                <p id="notesText">Loading notes...</p>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <p>Lola Vision Systems | Confidential Investor Materials | January 2026</p>
+        </footer>
+    </div>
+
+    <script>
+        // Load financial data from JSON
+        async function loadFinancialData() {
+            try {
+                const response = await fetch('data/financial-model.json');
+                if (!response.ok) throw new Error('Failed to load financial data');
+                const data = await response.json();
+
+                // Update last updated
+                document.getElementById('lastUpdated').textContent = 'Last updated: ' + data.lastUpdated;
+
+                // Update 2026
+                document.getElementById('revenue2026').textContent = data.weightedRevenue['2026'].amount;
+                document.getElementById('notes2026').textContent = data.weightedRevenue['2026'].notes;
+                updateBreakdown('breakdown2026', data.weightedRevenue['2026'].breakdown);
+
+                // Update 2027
+                document.getElementById('revenue2027').textContent = data.weightedRevenue['2027'].amount;
+                document.getElementById('notes2027').textContent = data.weightedRevenue['2027'].notes;
+                updateBreakdown('breakdown2027', data.weightedRevenue['2027'].breakdown);
+
+                // Update 2028
+                document.getElementById('revenue2028').textContent = data.weightedRevenue['2028'].amount;
+                document.getElementById('notes2028').textContent = data.weightedRevenue['2028'].notes;
+                updateBreakdown('breakdown2028', data.weightedRevenue['2028'].breakdown);
+
+                // Update total
+                document.getElementById('totalAmount').textContent = data.cumulativeWeighted.threeYear;
+
+                // Update chart
+                const maxValue = data.weightedRevenue['2028'].value;
+                updateChart('2026', data.weightedRevenue['2026'].value, data.weightedRevenue['2026'].amount, maxValue);
+                updateChart('2027', data.weightedRevenue['2027'].value, data.weightedRevenue['2027'].amount, maxValue);
+                updateChart('2028', data.weightedRevenue['2028'].value, data.weightedRevenue['2028'].amount, maxValue);
+
+                // Update notes
+                document.getElementById('notesText').innerHTML =
+                    '<strong>Data Source:</strong> ' + data.source + '<br><br>' + data.notes;
+
+            } catch (error) {
+                console.error('Error loading financial data:', error);
+                document.getElementById('lastUpdated').textContent = 'Error loading data';
+            }
+        }
+
+        function updateBreakdown(elementId, breakdown) {
+            const el = document.getElementById(elementId);
+            let html = '';
+            for (const [key, value] of Object.entries(breakdown)) {
+                const label = key.charAt(0).toUpperCase() + key.slice(1).replace(/([A-Z])/g, ' $1');
+                html += `<div class="breakdown-item">
+                    <span class="breakdown-label">${label}</span>
+                    <span class="breakdown-value">${value}</span>
+                </div>`;
+            }
+            el.innerHTML = html;
+        }
+
+        function updateChart(year, value, displayAmount, maxValue) {
+            const percentage = (value / maxValue) * 100;
+            document.getElementById('chartBar' + year).style.height = percentage + '%';
+            document.getElementById('chartVal' + year).textContent = displayAmount;
+        }
+
+        // Load data on page load
+        loadFinancialData();
+    </script>
+</body>
+</html>

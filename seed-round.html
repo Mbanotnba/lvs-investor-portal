@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seed Round Details | Lola Vision Systems</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg: #0a0a0f;
+            --panel: #12121a;
+            --panel-light: #1a1a24;
+            --text: #f5f5f7;
+            --muted: #6b7280;
+            --accent: #7c4dff;
+            --accent-light: #a78bfa;
+            --gold: #d4af37;
+            --success: #10b981;
+            --warn: #f59e0b;
+            --danger: #ef4444;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+        }
+        .nav {
+            background: var(--panel);
+            padding: 16px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .nav-logo { height: 44px; width: auto; }
+        .nav-title { font-weight: 700; font-size: 18px; }
+        .nav-title span { color: var(--gold); }
+        .nav-links {
+            display: flex;
+            gap: 24px;
+        }
+        .nav-link {
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 13px;
+            transition: color 0.2s;
+        }
+        .nav-link:hover { color: var(--text); }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 32px;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 14px;
+            margin-bottom: 24px;
+            transition: color 0.2s;
+        }
+        .back-link:hover { color: var(--text); }
+
+        .header {
+            margin-bottom: 32px;
+        }
+        .header h1 {
+            font-size: 36px;
+            margin-bottom: 8px;
+        }
+        .header .subtitle {
+            color: var(--muted);
+            font-size: 16px;
+        }
+
+        /* Key Terms Grid */
+        .terms-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 32px;
+        }
+        .term-card {
+            background: var(--panel);
+            border-radius: 16px;
+            padding: 24px;
+            border: 1px solid rgba(255,255,255,0.06);
+        }
+        .term-card.highlight {
+            border-color: var(--gold);
+            background: linear-gradient(135deg, var(--panel), rgba(212,175,55,0.1));
+        }
+        .term-card.urgent {
+            border-color: var(--warn);
+            background: linear-gradient(135deg, var(--panel), rgba(245,158,11,0.1));
+        }
+        .term-label {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--muted);
+            margin-bottom: 8px;
+        }
+        .term-value {
+            font-size: 28px;
+            font-weight: 700;
+        }
+        .term-value.gold { color: var(--gold); }
+        .term-value.accent { color: var(--accent); }
+        .term-value.success { color: var(--success); }
+        .term-value.warn { color: var(--warn); }
+        .term-sub {
+            font-size: 13px;
+            color: var(--muted);
+            margin-top: 8px;
+        }
+
+        /* Section Cards */
+        .section-card {
+            background: var(--panel);
+            border-radius: 16px;
+            padding: 28px;
+            border: 1px solid rgba(255,255,255,0.06);
+            margin-bottom: 24px;
+        }
+        .section-card h2 {
+            font-size: 20px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .section-card h2 .icon {
+            font-size: 24px;
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding-left: 32px;
+        }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 11px;
+            top: 8px;
+            bottom: 8px;
+            width: 2px;
+            background: var(--panel-light);
+        }
+        .timeline-item {
+            position: relative;
+            padding-bottom: 24px;
+        }
+        .timeline-item:last-child { padding-bottom: 0; }
+        .timeline-dot {
+            position: absolute;
+            left: -32px;
+            top: 4px;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--panel-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+        .timeline-dot.active {
+            background: var(--warn);
+            box-shadow: 0 0 12px var(--warn);
+        }
+        .timeline-dot.upcoming {
+            background: var(--accent);
+        }
+        .timeline-dot.target {
+            background: var(--success);
+        }
+        .timeline-date {
+            font-size: 12px;
+            color: var(--muted);
+            margin-bottom: 4px;
+        }
+        .timeline-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        .timeline-desc {
+            font-size: 14px;
+            color: var(--muted);
+        }
+        .timeline-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+        .timeline-badge.now { background: rgba(245,158,11,0.2); color: var(--warn); }
+        .timeline-badge.deadline { background: rgba(239,68,68,0.2); color: var(--danger); }
+
+        /* Valuation Table */
+        .valuation-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .valuation-table th,
+        .valuation-table td {
+            padding: 16px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+        .valuation-table th {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--muted);
+            font-weight: 500;
+        }
+        .valuation-table td {
+            font-size: 15px;
+        }
+        .valuation-table tr:last-child td {
+            border-bottom: none;
+        }
+        .valuation-table .highlight-row {
+            background: rgba(212,175,55,0.1);
+        }
+        .valuation-table .highlight-row td {
+            color: var(--gold);
+            font-weight: 600;
+        }
+
+        /* Trigger Events */
+        .trigger-list {
+            display: grid;
+            gap: 12px;
+        }
+        .trigger-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px;
+            background: var(--panel-light);
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.06);
+        }
+        .trigger-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+        .trigger-info {
+            flex: 1;
+        }
+        .trigger-name {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+        .trigger-desc {
+            font-size: 13px;
+            color: var(--muted);
+        }
+        .trigger-status {
+            font-size: 12px;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-weight: 600;
+        }
+        .trigger-status.pending { background: rgba(107,114,128,0.2); color: var(--muted); }
+        .trigger-status.in-progress { background: rgba(245,158,11,0.2); color: var(--warn); }
+
+        /* Use of Funds */
+        .funds-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+        .funds-item {
+            background: var(--panel-light);
+            border-radius: 10px;
+            padding: 20px;
+            border: 1px solid rgba(255,255,255,0.06);
+        }
+        .funds-category {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .funds-amount {
+            color: var(--gold);
+        }
+        .funds-bar {
+            height: 6px;
+            background: var(--panel);
+            border-radius: 3px;
+            margin-bottom: 8px;
+            overflow: hidden;
+        }
+        .funds-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), var(--accent-light));
+            border-radius: 3px;
+        }
+        .funds-desc {
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        /* Notes */
+        .notes {
+            background: var(--panel-light);
+            border-radius: 10px;
+            padding: 20px;
+            border-left: 3px solid var(--accent);
+        }
+        .notes p {
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--muted);
+        }
+        .notes strong {
+            color: var(--text);
+        }
+
+        .footer {
+            text-align: center;
+            padding: 32px;
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        @media (max-width: 1024px) {
+            .terms-grid { grid-template-columns: repeat(2, 1fr); }
+            .funds-grid { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 600px) {
+            .terms-grid { grid-template-columns: 1fr; }
+            .container { padding: 16px; }
+        }
+    </style>
+    <script>
+        if (sessionStorage.getItem('lvs_auth') !== 'true') {
+            window.location.href = 'index.html';
+        }
+    </script>
+</head>
+<body>
+    <nav class="nav">
+        <div class="nav-brand">
+            <img src="assets/lvs-logo.png" alt="LVS" class="nav-logo">
+            <span class="nav-title">LOLA VISION <span>SYSTEMS</span></span>
+        </div>
+        <div class="nav-links">
+            <a href="dashboard.html" class="nav-link">Dashboard</a>
+            <a href="pipeline.html" class="nav-link">Pipeline</a>
+            <a href="roadmap.html" class="nav-link">Roadmap</a>
+            <a href="index.html" class="nav-link" onclick="sessionStorage.removeItem('lvs_auth')">Logout</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <a href="dashboard.html" class="back-link">&larr; Back to Dashboard</a>
+
+        <header class="header">
+            <h1>Seed Round Details</h1>
+            <div class="subtitle">$5M target raise with flexible valuation structure</div>
+        </header>
+
+        <div class="terms-grid">
+            <div class="term-card highlight">
+                <div class="term-label">Target Raise</div>
+                <div class="term-value gold">$5M</div>
+                <div class="term-sub">Seed round</div>
+            </div>
+            <div class="term-card urgent">
+                <div class="term-label">Current SAFE Cap</div>
+                <div class="term-value warn">$18.25M</div>
+                <div class="term-sub">Open through Jan 31</div>
+            </div>
+            <div class="term-card">
+                <div class="term-label">Target Valuation</div>
+                <div class="term-value accent">~$30M</div>
+                <div class="term-sub">Post customer milestone</div>
+            </div>
+            <div class="term-card">
+                <div class="term-label">Target Close</div>
+                <div class="term-value success">Mar 2026</div>
+                <div class="term-sub">Lead by Feb 21</div>
+            </div>
+        </div>
+
+        <div class="section-card">
+            <h2><span class="icon">&#128197;</span> Fundraise Timeline</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-dot active">&#9679;</div>
+                    <div class="timeline-date">Now - January 31, 2026</div>
+                    <div class="timeline-title">$18.25M Valuation Cap SAFE <span class="timeline-badge now">Active</span></div>
+                    <div class="timeline-desc">Early investor window at favorable valuation cap. SAFE notes open for commitments.</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot upcoming">&#9679;</div>
+                    <div class="timeline-date">January 31, 2026</div>
+                    <div class="timeline-title">$18.25M Cap SAFE Closes <span class="timeline-badge deadline">Deadline</span></div>
+                    <div class="timeline-desc">Last day to invest at the $18.25M valuation cap.</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot upcoming">&#9679;</div>
+                    <div class="timeline-date">February 21, 2026</div>
+                    <div class="timeline-title">Lead Investor Commitment Target</div>
+                    <div class="timeline-desc">Target deadline for lead investor to commit and set round terms. Friday of 3rd week of February.</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot target">&#9679;</div>
+                    <div class="timeline-date">March 2026</div>
+                    <div class="timeline-title">Seed Round Close</div>
+                    <div class="timeline-desc">Target close date for full $5M seed round.</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-card">
+            <h2><span class="icon">&#128200;</span> Valuation Structure</h2>
+            <table class="valuation-table">
+                <thead>
+                    <tr>
+                        <th>Scenario</th>
+                        <th>Valuation Cap</th>
+                        <th>Trigger</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="highlight-row">
+                        <td>Early SAFE (Current)</td>
+                        <td>$18.25M</td>
+                        <td>Open now through Jan 31</td>
+                        <td><span style="color: var(--warn);">Active</span></td>
+                    </tr>
+                    <tr>
+                        <td>Post-Milestone SAFE</td>
+                        <td>~$30M</td>
+                        <td>Upon customer milestone signing</td>
+                        <td><span style="color: var(--muted);">Pending trigger</span></td>
+                    </tr>
+                    <tr>
+                        <td>Priced Round</td>
+                        <td>~$30M (negotiable)</td>
+                        <td>Lead investor sets final terms</td>
+                        <td><span style="color: var(--muted);">Seeking lead</span></td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="notes" style="margin-top: 20px;">
+                <p><strong>Note:</strong> The ~$30M seed round valuation is negotiable by the lead investor setting terms. Early SAFE investors at $18.25M cap receive preferential pricing before milestone-driven valuation increase.</p>
+            </div>
+        </div>
+
+        <div class="section-card">
+            <h2><span class="icon">&#127919;</span> Valuation Trigger Events</h2>
+            <p style="color: var(--muted); margin-bottom: 20px; font-size: 14px;">Upon signing of any of the following, valuation targets $30M:</p>
+            <div class="trigger-list">
+                <div class="trigger-item">
+                    <div class="trigger-icon">&#128196;</div>
+                    <div class="trigger-info">
+                        <div class="trigger-name">Koniku MOU</div>
+                        <div class="trigger-desc">Memorandum of Understanding for 10,000 LVS-250 units</div>
+                    </div>
+                    <span class="trigger-status in-progress">MOU Proposed</span>
+                </div>
+                <div class="trigger-item">
+                    <div class="trigger-icon">&#128737;</div>
+                    <div class="trigger-info">
+                        <div class="trigger-name">Anduril IRAD Agreement</div>
+                        <div class="trigger-desc">Internal Research & Development agreement signing</div>
+                    </div>
+                    <span class="trigger-status pending">In Discussion</span>
+                </div>
+                <div class="trigger-item">
+                    <div class="trigger-icon">&#128640;</div>
+                    <div class="trigger-info">
+                        <div class="trigger-name">Mach Industries IRAD Agreement</div>
+                        <div class="trigger-desc">Internal Research & Development agreement signing</div>
+                    </div>
+                    <span class="trigger-status pending">In Discussion</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-card">
+            <h2><span class="icon">&#128176;</span> Use of Funds</h2>
+            <div class="funds-grid">
+                <div class="funds-item">
+                    <div class="funds-category">
+                        <span>Engineering & R&D</span>
+                        <span class="funds-amount">$2.0M (40%)</span>
+                    </div>
+                    <div class="funds-bar">
+                        <div class="funds-bar-fill" style="width: 40%;"></div>
+                    </div>
+                    <div class="funds-desc">MPW shuttle runs, chip development, FPGA prototyping, design tools</div>
+                </div>
+                <div class="funds-item">
+                    <div class="funds-category">
+                        <span>Team Expansion</span>
+                        <span class="funds-amount">$1.5M (30%)</span>
+                    </div>
+                    <div class="funds-bar">
+                        <div class="funds-bar-fill" style="width: 30%;"></div>
+                    </div>
+                    <div class="funds-desc">Key engineering hires, chip architects, applications engineers</div>
+                </div>
+                <div class="funds-item">
+                    <div class="funds-category">
+                        <span>Manufacturing Prep</span>
+                        <span class="funds-amount">$1.0M (20%)</span>
+                    </div>
+                    <div class="funds-bar">
+                        <div class="funds-bar-fill" style="width: 20%;"></div>
+                    </div>
+                    <div class="funds-desc">Packaging, test development, production tooling, supply chain</div>
+                </div>
+                <div class="funds-item">
+                    <div class="funds-category">
+                        <span>Operations & G&A</span>
+                        <span class="funds-amount">$0.5M (10%)</span>
+                    </div>
+                    <div class="funds-bar">
+                        <div class="funds-bar-fill" style="width: 10%;"></div>
+                    </div>
+                    <div class="funds-desc">Legal, IP protection, facilities, travel, customer engagement</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-card">
+            <h2><span class="icon">&#128221;</span> Investment Terms Summary</h2>
+            <div class="notes">
+                <p style="margin-bottom: 12px;"><strong>Current Opportunity:</strong> $18.25M valuation cap SAFE notes are available through January 31, 2026. This represents the most favorable entry point for early seed investors.</p>
+                <p style="margin-bottom: 12px;"><strong>Valuation Escalation:</strong> Upon signing of Koniku MOU, Anduril IRAD, or Mach Industries IRAD agreement, the company will target a ~$30M valuation for remaining seed round investments.</p>
+                <p><strong>Lead Investor Terms:</strong> The final ~$30M seed round valuation is negotiable, with the lead investor having the opportunity to set round terms. Target: lead commitment by Friday, February 21, 2026.</p>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <p>Lola Vision Systems | Confidential Investor Materials | January 2026</p>
+        </footer>
+    </div>
+</body>
+</html>

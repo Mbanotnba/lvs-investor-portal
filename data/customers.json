@@ -45,27 +45,30 @@
       "stages": [
         {"name": "Discovery", "date": "Sep 2025", "complete": true},
         {"name": "NDA Signed", "date": "Oct 2025", "complete": true},
-        {"name": "Negotiation", "date": "Nov 2025", "current": true},
-        {"name": "IRAD Contract", "date": "Q2 2026"},
+        {"name": "Evaluation", "date": "Nov 2025", "current": true},
+        {"name": "IRAD Contract", "date": "TBD"},
         {"name": "Integration", "date": "TBD"},
-        {"name": "Production", "date": "2027"}
+        {"name": "Production", "date": "2027+"}
       ],
       "milestones": [
         {"title": "Initial Contact", "date": "Sep 2025", "status": "complete"},
+        {"title": "NDA Executed", "date": "Oct 2025", "status": "complete"},
         {"title": "IRAD Proposal Submitted", "date": "Nov 2025", "status": "complete"},
-        {"title": "Contract Negotiation", "date": "In Progress", "status": "in-progress"}
+        {"title": "IRAD Proposal - Awaiting Signature", "date": "Pending", "status": "stalled"},
+        {"title": "US Army IEW&S/C5ISR Pitch Invitation", "date": "Jan 2026", "status": "stalled"}
       ],
       "summary": {
-        "status": "Negotiation",
+        "status": "Stalled",
         "totalValue": "$10,000,000",
         "nearTermValue": "$550,000",
-        "probability": "50%",
-        "weightedValue": "$5,000,000",
-        "expectedClose": "Q2 2026",
+        "probability": "35%",
+        "weightedValue": "$3,500,000",
+        "expectedClose": "TBD",
         "primaryContact": "BD Director"
       },
       "nextActions": [
-        {"task": "Finalize IRAD contract terms", "due": "2026-02-20", "assigned": "Tayo"}
+        {"task": "Follow up on IRAD proposal signature", "due": "2026-02-07", "assigned": "Tayo"},
+        {"task": "Await response on Army pitch invitation", "due": "2026-02-14", "assigned": "Tayo"}
       ]
     },
     {
@@ -259,6 +262,40 @@
       },
       "nextActions": [
         {"task": "Schedule intro call", "due": "2026-02-05", "assigned": "Tayo"}
+      ]
+    },
+    {
+      "id": "koniku",
+      "name": "Koniku",
+      "industry": "Neurotechnology - Biosensors",
+      "tier": 1,
+      "product": "LVS-250",
+      "currentStage": 3,
+      "stages": [
+        {"name": "Discovery", "date": "Sep 2025", "complete": true},
+        {"name": "NDA Signed", "date": "Nov 2025", "complete": true},
+        {"name": "Negotiation", "date": "Jan 2026", "current": true},
+        {"name": "Agreement", "date": "Q2 2026"},
+        {"name": "Integration", "date": "Q3 2026"},
+        {"name": "Production", "date": "2027"}
+      ],
+      "milestones": [
+        {"title": "Initial Discovery", "date": "Sep 2025", "status": "complete"},
+        {"title": "NDA Executed", "date": "Nov 2025", "status": "complete"},
+        {"title": "MOU Proposed - 10,000 Units", "date": "Jan 2026", "status": "in-progress"}
+      ],
+      "summary": {
+        "status": "MOU Proposed",
+        "totalValue": "$15,000,000",
+        "nearTermValue": "$750,000",
+        "probability": "45%",
+        "weightedValue": "$6,750,000",
+        "expectedClose": "Q2 2026",
+        "primaryContact": "Osh Agabi"
+      },
+      "nextActions": [
+        {"task": "Finalize integration requirements", "due": "2026-02-15", "assigned": "Randy"},
+        {"task": "Contract terms review", "due": "2026-02-10", "assigned": "Tayo"}
       ]
     },
     {
@@ -533,37 +570,6 @@
         "primaryContact": "TBD"
       },
       "nextActions": []
-    },
-    {
-      "id": "sierra-nevada",
-      "name": "Sierra Nevada Corporation",
-      "industry": "Defense - Space Systems",
-      "tier": 2,
-      "product": "LVS-750",
-      "currentStage": 2,
-      "stages": [
-        {"name": "Discovery", "date": "Oct 2025", "complete": true},
-        {"name": "NDA Signed", "date": "Dec 2025", "complete": true},
-        {"name": "Evaluation", "date": "In Progress", "current": true},
-        {"name": "Proposal", "date": "Q2 2026"},
-        {"name": "Production", "date": "2027"}
-      ],
-      "milestones": [
-        {"title": "NDA Executed", "date": "Dec 2025", "status": "complete"},
-        {"title": "Technical Evaluation", "date": "In Progress", "status": "in-progress"}
-      ],
-      "summary": {
-        "status": "Evaluation",
-        "totalValue": "$8,000,000",
-        "nearTermValue": "$500,000",
-        "probability": "45%",
-        "weightedValue": "$3,600,000",
-        "expectedClose": "Q3 2026",
-        "primaryContact": "TBD"
-      },
-      "nextActions": [
-        {"task": "Technical requirements review", "due": "2026-02-20", "assigned": "Randy"}
-      ]
     },
     {
       "id": "stellantis",
