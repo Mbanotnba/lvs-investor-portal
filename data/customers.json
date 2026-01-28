@@ -301,6 +301,37 @@
       ]
     },
     {
+      "id": "seasats",
+      "name": "Seasats",
+      "industry": "Maritime - Autonomous Systems",
+      "tier": 1,
+      "product": "LVS-250/750",
+      "currentStage": 1,
+      "stages": [
+        {"name": "Discovery", "date": "Jan 2026", "current": true},
+        {"name": "NDA", "date": "TBD"},
+        {"name": "Proposal", "date": "TBD"},
+        {"name": "Evaluation", "date": "TBD"},
+        {"name": "Integration", "date": "TBD"},
+        {"name": "Production", "date": "2027+"}
+      ],
+      "milestones": [
+        {"title": "Initial Contact", "date": "Jan 2026", "status": "in-progress"}
+      ],
+      "summary": {
+        "status": "Discovery",
+        "totalValue": "$5,000,000",
+        "nearTermValue": "$400,000",
+        "probability": "30%",
+        "weightedValue": "$1,500,000",
+        "expectedClose": "Q4 2026",
+        "primaryContact": "TBD"
+      },
+      "nextActions": [
+        {"task": "Schedule intro call", "due": "2026-02-10", "assigned": "Tayo"}
+      ]
+    },
+    {
       "id": "rtx",
       "name": "RTX Corporation",
       "industry": "Defense Prime - OEM",
@@ -643,7 +674,11 @@
       ],
       "oem_partners": [
         {"name": "Mach Industries", "status": "Invited to pitch", "application": "Kamikaze Drones"},
-        {"name": "Anduril Industries", "status": "Potential", "application": "ISR/C-UAS"}
+        {"name": "Anduril Industries", "status": "Potential", "application": "ISR/C-UAS"},
+        {"name": "Koniku", "status": "Positioning", "application": "Biosensor Systems"},
+        {"name": "Glid Technologies", "status": "Positioning", "application": "Autonomous Vehicles"},
+        {"name": "Revenant Industries", "status": "Positioning", "application": "Autonomous Defense Systems"},
+        {"name": "Seasats", "status": "Positioning", "application": "Maritime Autonomous Systems"}
       ],
       "milestones": [
         {"title": "Initial Army Contact", "date": "Q4 2025", "status": "complete"},
