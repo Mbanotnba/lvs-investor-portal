@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Portal | Lola Vision Systems</title>
+    <style>
+        :root {
+            --bg: #0b1021;
+            --panel: #141a30;
+            --panel-light: #1a2240;
+            --accent: #7c4dff;
+            --accent-light: #9d7aff;
+            --gold: #d4af37;
+            --text: #e6e8f0;
+            --muted: #9aa3c2;
+            --success: #10b981;
+            --warn: #f97316;
+            --info: #06b6d4;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+            background: radial-gradient(circle at 10% 20%, rgba(124,77,255,0.15), transparent 30%),
+                        radial-gradient(circle at 90% 80%, rgba(212,175,55,0.1), transparent 25%),
+                        var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        /* Navigation */
+        .nav {
+            background: rgba(20, 26, 48, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            padding: 16px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .nav-logo {
+            height: 36px;
+            width: auto;
+        }
+        .nav-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: white;
+        }
+        .nav-title span { color: var(--gold); }
+        .nav-user {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .customer-badge {
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .nav-link {
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 13px;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 32px;
+        }
+
+        /* Welcome Header */
+        .welcome {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 32px;
+            padding: 32px;
+            background: var(--panel);
+            border-radius: 16px;
+            border: 1px solid rgba(255,255,255,0.06);
+        }
+        .welcome-content h1 {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+        .welcome-content h1 span { color: var(--gold); }
+        .welcome-content p {
+            color: var(--muted);
+            font-size: 14px;
+        }
+        .customer-logo {
+            height: 60px;
+            opacity: 0.9;
+        }
+
+        /* Stage Progress */
+        .stage-tracker {
+            background: var(--panel);
+            border-radius: 16px;
+            padding: 28px;
+            margin-bottom: 24px;
+            border: 1px solid rgba(255,255,255,0.06);
+        }
+        .stage-tracker h2 {
+            font-size: 16px;
+            margin-bottom: 24px;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .stages {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+        }
+        .stages::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 40px;
+            right: 40px;
+            height: 4px;
+            background: var(--panel-light);
+            border-radius: 2px;
+        }
+        .stages::after {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 40px;
+            width: 60%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--success), var(--accent));
+            border-radius: 2px;
+        }
+        .stage {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+        .stage-dot {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            border: 3px solid var(--panel);
+        }
+        .stage-dot.complete {
+            background: var(--success);
+            color: white;
+        }
+        .stage-dot.current {
+            background: var(--accent);
+            color: white;
+            box-shadow: 0 0 20px rgba(124,77,255,0.5);
+        }
+        .stage-dot.upcoming {
+            background: var(--panel-light);
+            color: var(--muted);
+        }
+        .stage-label {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--muted);
+        }
+        .stage.active .stage-label {
+            color: var(--accent);
+        }
+        .stage-date {
+            font-size: 10px;
+            color: var(--muted);
+            margin-top: 4px;
+        }
+
+        /* Grid Layout */
+        .grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 24px;
+        }
+        @media (max-width: 1000px) {
+            .grid { grid-template-columns: 1fr; }
+        }
+
+        /* Panels */
+        .panel {
+            background: var(--panel);
+            border-radius: 16px;
+            padding: 24px;
+            border: 1px solid rgba(255,255,255,0.06);
+        }
+        .panel h3 {
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--muted);
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+
+        /* Milestones */
+        .milestone {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            padding: 16px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+        }
+        .milestone:last-child { border-bottom: none; }
+        .milestone-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+        .milestone-icon.complete {
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--success);
+        }
+        .milestone-icon.in-progress {
+            background: rgba(124, 77, 255, 0.15);
+            color: var(--accent);
+        }
+        .milestone-icon.upcoming {
+            background: rgba(255,255,255,0.05);
+            color: var(--muted);
+        }
+        .milestone-content { flex: 1; }
+        .milestone-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        .milestone-date {
+            font-size: 12px;
+            color: var(--muted);
+        }
+        .milestone-badge {
+            font-size: 10px;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        .milestone-badge.complete {
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--success);
+        }
+        .milestone-badge.in-progress {
+            background: rgba(124, 77, 255, 0.15);
+            color: var(--accent);
+        }
+        .milestone-badge.upcoming {
+            background: rgba(255,255,255,0.05);
+            color: var(--muted);
+        }
+
+        /* Documents */
+        .document {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 14px;
+            background: var(--panel-light);
+            border-radius: 10px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .document:hover {
+            background: rgba(124, 77, 255, 0.1);
+            transform: translateX(4px);
+        }
+        .doc-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(124, 77, 255, 0.15);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent);
+        }
+        .doc-info { flex: 1; }
+        .doc-name {
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+        .doc-meta {
+            font-size: 11px;
+            color: var(--muted);
+        }
+        .doc-download {
+            color: var(--muted);
+            font-size: 18px;
+        }
+
+        /* Contact Card */
+        .contact-card {
+            background: linear-gradient(135deg, var(--accent), #5b2da8);
+            border-radius: 14px;
+            padding: 24px;
+            margin-top: 24px;
+        }
+        .contact-card h4 {
+            font-size: 14px;
+            margin-bottom: 16px;
+            opacity: 0.9;
+        }
+        .contact-person {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+        .contact-avatar {
+            width: 48px;
+            height: 48px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: 700;
+        }
+        .contact-info h5 {
+            font-size: 15px;
+            margin-bottom: 2px;
+        }
+        .contact-info p {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+        .contact-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 16px;
+        }
+        .contact-btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .contact-btn.primary {
+            background: white;
+            color: var(--accent);
+        }
+        .contact-btn.secondary {
+            background: rgba(255,255,255,0.15);
+            color: white;
+        }
+
+        /* Product Card */
+        .product-card {
+            background: linear-gradient(135deg, var(--panel-light), var(--panel));
+            border: 1px solid rgba(124,77,255,0.3);
+            border-radius: 14px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .product-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        .product-name {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--accent);
+        }
+        .product-badge {
+            background: var(--gold);
+            color: #1a1a2e;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+        .product-specs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+        .spec {
+            background: rgba(255,255,255,0.03);
+            padding: 12px;
+            border-radius: 8px;
+        }
+        .spec-label {
+            font-size: 10px;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .spec-value {
+            font-size: 14px;
+            font-weight: 600;
+            margin-top: 4px;
+        }
+
+        /* Coming Soon Banner */
+        .coming-soon {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: rgba(249, 115, 22, 0.9);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 32px;
+            color: var(--muted);
+            font-size: 11px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-brand">
+            <img src="assets/lvs-logo.png" alt="LVS" class="nav-logo">
+            <div class="nav-title">LOLA VISION <span>SYSTEMS</span></div>
+        </div>
+        <div class="nav-user">
+            <span class="customer-badge">Customer Portal</span>
+            <a href="#" class="nav-link">Logout</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Welcome Header -->
+        <div class="welcome">
+            <div class="welcome-content">
+                <h1>Welcome back, <span>Anduril</span></h1>
+                <p>Your partnership dashboard - Last updated January 28, 2026</p>
+            </div>
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Anduril_logo.svg/200px-Anduril_logo.svg.png" alt="Anduril" class="customer-logo" style="filter: brightness(0) invert(1); opacity: 0.8;">
+        </div>
+
+        <!-- Stage Progress Tracker -->
+        <div class="stage-tracker">
+            <h2>Engagement Progress</h2>
+            <div class="stages">
+                <div class="stage">
+                    <div class="stage-dot complete">&#10003;</div>
+                    <span class="stage-label">Discovery</span>
+                    <span class="stage-date">Jun 2025</span>
+                </div>
+                <div class="stage">
+                    <div class="stage-dot complete">&#10003;</div>
+                    <span class="stage-label">NDA Signed</span>
+                    <span class="stage-date">Aug 2025</span>
+                </div>
+                <div class="stage">
+                    <div class="stage-dot complete">&#10003;</div>
+                    <span class="stage-label">Evaluation</span>
+                    <span class="stage-date">Oct 2025</span>
+                </div>
+                <div class="stage active">
+                    <div class="stage-dot current">4</div>
+                    <span class="stage-label">IRAD Active</span>
+                    <span class="stage-date">Current</span>
+                </div>
+                <div class="stage">
+                    <div class="stage-dot upcoming">5</div>
+                    <span class="stage-label">Design Win</span>
+                    <span class="stage-date">Q2 2026</span>
+                </div>
+                <div class="stage">
+                    <div class="stage-dot upcoming">6</div>
+                    <span class="stage-label">Production</span>
+                    <span class="stage-date">Q4 2026</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Grid -->
+        <div class="grid">
+            <!-- Left Column -->
+            <div>
+                <!-- Milestones Panel -->
+                <div class="panel">
+                    <h3>Engagement Milestones</h3>
+
+                    <div class="milestone">
+                        <div class="milestone-icon complete">&#10003;</div>
+                        <div class="milestone-content">
+                            <div class="milestone-title">NDA Executed</div>
+                            <div class="milestone-date">August 15, 2025</div>
+                        </div>
+                        <span class="milestone-badge complete">Complete</span>
+                    </div>
+
+                    <div class="milestone">
+                        <div class="milestone-icon complete">&#10003;</div>
+                        <div class="milestone-content">
+                            <div class="milestone-title">LOI Signed</div>
+                            <div class="milestone-date">January 20, 2026</div>
+                        </div>
+                        <span class="milestone-badge complete">Complete</span>
+                    </div>
+
+                    <div class="milestone">
+                        <div class="milestone-icon in-progress">&#9679;</div>
+                        <div class="milestone-content">
+                            <div class="milestone-title">IRAD Program Kickoff</div>
+                            <div class="milestone-date">February 1, 2026</div>
+                        </div>
+                        <span class="milestone-badge in-progress">In Progress</span>
+                    </div>
+
+                    <div class="milestone">
+                        <div class="milestone-icon upcoming">&#9675;</div>
+                        <div class="milestone-content">
+                            <div class="milestone-title">SDK Beta Delivery</div>
+                            <div class="milestone-date">March 15, 2026</div>
+                        </div>
+                        <span class="milestone-badge upcoming">Upcoming</span>
+                    </div>
+
+                    <div class="milestone">
+                        <div class="milestone-icon upcoming">&#9675;</div>
+                        <div class="milestone-content">
+                            <div class="milestone-title">Development Kit Shipment</div>
+                            <div class="milestone-date">June 1, 2026</div>
+                        </div>
+                        <span class="milestone-badge upcoming">Upcoming</span>
+                    </div>
+
+                    <div class="milestone">
+                        <div class="milestone-icon upcoming">&#9675;</div>
+                        <div class="milestone-content">
+                            <div class="milestone-title">Field Testing Phase</div>
+                            <div class="milestone-date">Q3 2026</div>
+                        </div>
+                        <span class="milestone-badge upcoming">Upcoming</span>
+                    </div>
+                </div>
+
+                <!-- Documents Panel -->
+                <div class="panel" style="margin-top: 24px;">
+                    <h3>Shared Documents</h3>
+
+                    <div class="document">
+                        <div class="doc-icon">&#128196;</div>
+                        <div class="doc-info">
+                            <div class="doc-name">Mutual NDA - Executed</div>
+                            <div class="doc-meta">Legal &bull; Aug 15, 2025</div>
+                        </div>
+                        <span class="doc-download">&#8594;</span>
+                    </div>
+
+                    <div class="document">
+                        <div class="doc-icon">&#128202;</div>
+                        <div class="doc-info">
+                            <div class="doc-name">LVS-250 Technical Specification</div>
+                            <div class="doc-meta">Technical &bull; Nov 1, 2025</div>
+                        </div>
+                        <span class="doc-download">&#8594;</span>
+                    </div>
+
+                    <div class="document">
+                        <div class="doc-icon">&#128176;</div>
+                        <div class="doc-info">
+                            <div class="doc-name">IRAD Proposal - $650K</div>
+                            <div class="doc-meta">Commercial &bull; Jan 10, 2026</div>
+                        </div>
+                        <span class="doc-download">&#8594;</span>
+                    </div>
+
+                    <div class="document">
+                        <div class="doc-icon">&#128221;</div>
+                        <div class="doc-info">
+                            <div class="doc-name">Letter of Intent - Signed</div>
+                            <div class="doc-meta">Legal &bull; Jan 20, 2026</div>
+                        </div>
+                        <span class="doc-download">&#8594;</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column -->
+            <div>
+                <!-- Product Card -->
+                <div class="product-card">
+                    <div class="product-header">
+                        <span class="product-name">LVS-250</span>
+                        <span class="product-badge">Production</span>
+                    </div>
+                    <div class="product-specs">
+                        <div class="spec">
+                            <div class="spec-label">Performance</div>
+                            <div class="spec-value">~230 TOPS</div>
+                        </div>
+                        <div class="spec">
+                            <div class="spec-label">Package</div>
+                            <div class="spec-value">35x35mm</div>
+                        </div>
+                        <div class="spec">
+                            <div class="spec-label">Architecture</div>
+                            <div class="spec-value">5-Chiplet UCIe</div>
+                        </div>
+                        <div class="spec">
+                            <div class="spec-label">Application</div>
+                            <div class="spec-value">ISR / C-UAS</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Your LVS Contact -->
+                <div class="panel">
+                    <h3>Your LVS Contact</h3>
+                    <div class="contact-card">
+                        <h4>Dedicated Support</h4>
+                        <div class="contact-person">
+                            <div class="contact-avatar">MB</div>
+                            <div class="contact-info">
+                                <h5>Mike Bano</h5>
+                                <p>CEO &bull; Lola Vision Systems</p>
+                            </div>
+                        </div>
+                        <div class="contact-actions">
+                            <button class="contact-btn primary">Schedule Call</button>
+                            <button class="contact-btn secondary">Send Message</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Stats -->
+                <div class="panel" style="margin-top: 24px;">
+                    <h3>Partnership Summary</h3>
+                    <div style="display: grid; gap: 16px;">
+                        <div style="display: flex; justify-content: space-between; padding: 12px; background: rgba(255,255,255,0.03); border-radius: 8px;">
+                            <span style="color: var(--muted); font-size: 13px;">IRAD Value</span>
+                            <span style="font-weight: 700; color: var(--success);">$650,000</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; padding: 12px; background: rgba(255,255,255,0.03); border-radius: 8px;">
+                            <span style="color: var(--muted); font-size: 13px;">Opportunity</span>
+                            <span style="font-weight: 700; color: var(--gold);">$15,000,000</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; padding: 12px; background: rgba(255,255,255,0.03); border-radius: 8px;">
+                            <span style="color: var(--muted); font-size: 13px;">Partnership Start</span>
+                            <span style="font-weight: 600;">June 2025</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; padding: 12px; background: rgba(255,255,255,0.03); border-radius: 8px;">
+                            <span style="color: var(--muted); font-size: 13px;">Est. Production</span>
+                            <span style="font-weight: 600;">Q4 2026</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <p>Lola Vision Systems &bull; Customer Portal &bull; Confidential</p>
+            <p style="margin-top: 4px; opacity: 0.6;">For support: partners@lolavisionsystems.com</p>
+        </footer>
+    </div>
+
+    <!-- Coming Soon Banner -->
+    <div class="coming-soon">
+        &#9888; MOCKUP - Feature Coming Soon
+    </div>
+</body>
+</html>
