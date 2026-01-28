@@ -30,6 +30,26 @@ python3 -m http.server 8000
 
 ---
 
+## Screenshots
+
+Current portal screenshots (auto-generated):
+
+### Customer Portal (Anduril)
+![Customer Portal](screenshots/customer-portal.png)
+
+### Investor Login
+![Investor Login](screenshots/investor-login.png)
+
+### Investor Roadmap
+![Investor Roadmap](screenshots/investor-roadmap.png)
+
+**Regenerate screenshots:**
+```bash
+./scripts/screenshot.sh
+```
+
+---
+
 ## Project Overview
 
 This repository contains two web portals for Lola Vision Systems:
@@ -62,14 +82,18 @@ lvs-investor-portal/
 ├── customer-portal-mockup.html   # Customer portal (full mockup)
 ├── README.md                     # This file
 ├── ARCHITECTURE.md               # Technical architecture details
+├── scripts/
+│   └── screenshot.sh             # Auto-generate portal screenshots
+├── screenshots/                  # Auto-generated screenshots
+│   ├── customer-portal.png       # Customer portal dashboard
+│   ├── investor-login.png        # Investor login page
+│   └── investor-roadmap.png      # Investor roadmap dashboard
 └── assets/
     ├── lvs-logo.png              # Company logo (white on transparent)
+    ├── anduril-logo.png          # Anduril customer logo
     ├── lvs-chiplet-hero.mp4      # Product hero video (12MB)
     ├── LVS_Production_Roadmap.svg # Roadmap infographic
-    ├── LVS_Production_Roadmap.png # PNG export of roadmap
-    ├── customer-portal-preview.png
-    ├── investor-portal-login-preview.png
-    └── investor-portal-roadmap-preview.png
+    └── LVS_Production_Roadmap.png # PNG export of roadmap
 ```
 
 ---
