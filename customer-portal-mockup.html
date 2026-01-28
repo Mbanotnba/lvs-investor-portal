@@ -616,13 +616,96 @@ SEE ALSO:
             font-size: 11px;
         }
 
+        /* Video Grid - Demos & Testimonials */
+        .video-section-header {
+            margin-bottom: 24px;
+        }
+        .video-section-header h2 {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        .video-section-header p {
+            color: var(--muted);
+            font-size: 14px;
+        }
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+        }
+        .video-grid.single-row {
+            grid-template-columns: repeat(2, 1fr);
+        }
+        .video-card {
+            background: var(--panel);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.06);
+        }
+        .video-card video {
+            width: 100%;
+            height: auto;
+            display: block;
+            background: #000;
+        }
+        .video-card-info {
+            padding: 16px;
+        }
+        .video-card-title {
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+        .video-card-desc {
+            font-size: 12px;
+            color: var(--muted);
+        }
+        .video-card-speaker {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid rgba(255,255,255,0.06);
+        }
+        .speaker-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 12px;
+        }
+        .speaker-info {
+            flex: 1;
+        }
+        .speaker-name {
+            font-weight: 600;
+            font-size: 13px;
+        }
+        .speaker-title {
+            font-size: 11px;
+            color: var(--muted);
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
-            .tab-nav { padding: 0 16px; }
-            .tab-btn { padding: 12px 16px; font-size: 12px; }
+            .tab-nav { padding: 0 16px; overflow-x: auto; }
+            .tab-btn { padding: 12px 16px; font-size: 12px; white-space: nowrap; }
             .container { padding: 16px; }
             .welcome { flex-direction: column; gap: 16px; }
             .exec-stats { grid-template-columns: 1fr 1fr; }
+            .video-grid {
+                grid-template-columns: 1fr;
+            }
+            .video-card video {
+                max-height: 250px;
+                object-fit: cover;
+            }
         }
     </style>
 </head>
@@ -648,6 +731,8 @@ SEE ALSO:
         <button class="tab-btn" data-tab="sdk">Software SDK</button>
         <button class="tab-btn" data-tab="documents">Documents</button>
         <button class="tab-btn" data-tab="support">Support</button>
+        <button class="tab-btn" data-tab="demos">Demos</button>
+        <button class="tab-btn" data-tab="testimonials">Testimonials</button>
     </div>
 
     <div class="container">
@@ -1370,6 +1455,119 @@ processor = ImageProcessor(resize=(640, 640), normalize=<span class="code-keywor
             </div>
         </div>
 
+        <!-- ==================== DEMOS TAB ==================== -->
+        <div id="demos" class="tab-content">
+            <div class="video-section-header">
+                <h2>Product Demos</h2>
+                <p>See the LVS-250 in action. Videos play automatically at 2x speed.</p>
+            </div>
+            <div class="video-grid single-row">
+                <div class="video-card">
+                    <video class="demo-video" autoplay muted loop playsinline>
+                        <source src="assets/demos/demo-1.mp4" type="video/mp4">
+                    </video>
+                    <div class="video-card-info">
+                        <div class="video-card-title">LVS-250 Performance Demo</div>
+                        <div class="video-card-desc">Real-time neural network inference at edge</div>
+                    </div>
+                </div>
+                <div class="video-card">
+                    <video class="demo-video" autoplay muted loop playsinline>
+                        <source src="assets/demos/demo-2.mp4" type="video/mp4">
+                    </video>
+                    <div class="video-card-info">
+                        <div class="video-card-title">SDK Integration Walkthrough</div>
+                        <div class="video-card-desc">Developer workflow and toolchain overview</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== TESTIMONIALS TAB ==================== -->
+        <div id="testimonials" class="tab-content">
+            <div class="video-section-header">
+                <h2>Expert Testimonials</h2>
+                <p>Industry leaders share their perspective on edge AI and the LVS platform.</p>
+            </div>
+            <div class="video-grid">
+                <div class="video-card">
+                    <video class="testimonial-video" muted playsinline>
+                        <source src="assets/testimonials/JamesUrgencyforChips.mp4" type="video/mp4">
+                    </video>
+                    <div class="video-card-info">
+                        <div class="video-card-title">The Urgency for Domestic Chips</div>
+                        <div class="video-card-speaker">
+                            <div class="speaker-avatar">JS</div>
+                            <div class="speaker-info">
+                                <div class="speaker-name">James Stewart</div>
+                                <div class="speaker-title">Industry Expert</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="video-card">
+                    <video class="testimonial-video" muted playsinline>
+                        <source src="assets/testimonials/JamesEWexplanation.mp4" type="video/mp4">
+                    </video>
+                    <div class="video-card-info">
+                        <div class="video-card-title">Electronic Warfare Explained</div>
+                        <div class="video-card-speaker">
+                            <div class="speaker-avatar">JS</div>
+                            <div class="speaker-info">
+                                <div class="speaker-name">James Stewart</div>
+                                <div class="speaker-title">Industry Expert</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="video-card">
+                    <video class="testimonial-video" muted playsinline>
+                        <source src="assets/testimonials/RandyChipletConfiguration.mp4" type="video/mp4">
+                    </video>
+                    <div class="video-card-info">
+                        <div class="video-card-title">Chiplet Configuration Benefits</div>
+                        <div class="video-card-speaker">
+                            <div class="speaker-avatar">RH</div>
+                            <div class="speaker-info">
+                                <div class="speaker-name">Randy Hollines</div>
+                                <div class="speaker-title">Industry Expert</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="video-card">
+                    <video class="testimonial-video" muted playsinline>
+                        <source src="assets/testimonials/MaynardHwEdgeAISecurityPriorities.mp4" type="video/mp4">
+                    </video>
+                    <div class="video-card-info">
+                        <div class="video-card-title">Edge AI Security Priorities</div>
+                        <div class="video-card-speaker">
+                            <div class="speaker-avatar">MH</div>
+                            <div class="speaker-info">
+                                <div class="speaker-name">Maynard Holliday</div>
+                                <div class="speaker-title">Industry Expert</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="video-card">
+                    <video class="testimonial-video" muted playsinline>
+                        <source src="assets/testimonials/MaynardChineseThreat.mp4" type="video/mp4">
+                    </video>
+                    <div class="video-card-info">
+                        <div class="video-card-title">Addressing the China Challenge</div>
+                        <div class="video-card-speaker">
+                            <div class="speaker-avatar">MH</div>
+                            <div class="speaker-info">
+                                <div class="speaker-name">Maynard Holliday</div>
+                                <div class="speaker-title">Industry Expert</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <footer class="footer">
             <p>Lola Vision Systems &bull; Customer Portal &bull; Confidential</p>
             <p style="margin-top: 4px; opacity: 0.6;">For support: partners@lolavisionsystems.com</p>
@@ -1412,6 +1610,63 @@ processor = ImageProcessor(resize=(640, 640), normalize=<span class="code-keywor
                     muteBtn.classList.add('muted');
                     muteBtn.title = 'Unmute';
                 }
+            });
+        }
+
+        // Demo & Testimonial Videos - 2x speed and scroll-based playback
+        const isMobile = window.innerWidth <= 768;
+
+        // Set all demo videos to 2x speed and autoplay
+        document.querySelectorAll('.demo-video').forEach(video => {
+            video.playbackRate = 2.0;
+            video.play().catch(() => {}); // Handle autoplay restrictions
+        });
+
+        // Testimonial videos - different behavior for mobile vs desktop
+        const testimonialVideos = document.querySelectorAll('.testimonial-video');
+
+        testimonialVideos.forEach(video => {
+            video.playbackRate = 2.0;
+            video.loop = true;
+        });
+
+        if (isMobile) {
+            // Mobile: Use Intersection Observer for scroll-based playback
+            const videoObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    const video = entry.target;
+                    if (entry.isIntersecting) {
+                        video.play().catch(() => {});
+                    } else {
+                        video.pause();
+                    }
+                });
+            }, {
+                threshold: 0.5 // Play when 50% visible
+            });
+
+            testimonialVideos.forEach(video => {
+                videoObserver.observe(video);
+            });
+        } else {
+            // Desktop: Play all testimonial videos simultaneously when tab is active
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    if (btn.dataset.tab === 'testimonials') {
+                        testimonialVideos.forEach(video => {
+                            video.play().catch(() => {});
+                        });
+                    } else {
+                        testimonialVideos.forEach(video => {
+                            video.pause();
+                        });
+                    }
+                    if (btn.dataset.tab === 'demos') {
+                        document.querySelectorAll('.demo-video').forEach(video => {
+                            video.play().catch(() => {});
+                        });
+                    }
+                });
             });
         }
     </script>
