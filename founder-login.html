@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Founder Access | Lola Vision Systems</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .login-container {
+            background: #12121a;
+            border-radius: 16px;
+            padding: 48px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            text-align: center;
+            max-width: 420px;
+            width: 90%;
+            border: 1px solid rgba(255,255,255,0.06);
+        }
+        .logo-icon {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 24px;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            border: 2px solid #7c4dff;
+        }
+        .logo-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        h1 {
+            font-size: 24px;
+            color: #f5f5f7;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+        .subtitle {
+            color: #d4af37;
+            font-size: 14px;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        .description {
+            color: #6b7280;
+            font-size: 12px;
+            margin-bottom: 32px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+        input[type="email"],
+        input[type="password"],
+        input[type="text"] {
+            width: 100%;
+            padding: 14px 16px;
+            font-size: 16px;
+            background: #1a1a24;
+            border: 2px solid rgba(255,255,255,0.1);
+            border-radius: 8px;
+            color: #f5f5f7;
+            transition: border-color 0.2s;
+        }
+        input:focus {
+            outline: none;
+            border-color: #7c4dff;
+        }
+        input::placeholder {
+            color: #4b5563;
+        }
+        button {
+            width: 100%;
+            padding: 14px;
+            font-size: 16px;
+            font-weight: 600;
+            color: white;
+            background: linear-gradient(135deg, #7c4dff 0%, #651fff 100%);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-top: 8px;
+        }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(124, 77, 255, 0.4);
+        }
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        .error {
+            color: #ef4444;
+            font-size: 13px;
+            margin-top: 12px;
+            display: none;
+        }
+        .footer {
+            margin-top: 32px;
+            font-size: 11px;
+            color: #4b5563;
+        }
+        .gold { color: #d4af37; }
+
+        /* Step indicator for 2FA (future) */
+        .step-indicator {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+        .step {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            transition: all 0.3s;
+        }
+        .step.active {
+            background: #7c4dff;
+            box-shadow: 0 0 12px rgba(124, 77, 255, 0.5);
+        }
+        .step.completed {
+            background: #10b981;
+        }
+
+        /* 2FA section (hidden for now) */
+        .auth-step {
+            display: none;
+        }
+        .auth-step.active {
+            display: block;
+        }
+
+        /* 2FA Badge */
+        .badge-2fa {
+            display: inline-block;
+            background: rgba(124, 77, 255, 0.2);
+            color: #a78bfa;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 24px;
+        }
+        .badge-2fa.coming-soon {
+            background: rgba(245, 158, 11, 0.2);
+            color: #fbbf24;
+        }
+
+        /* Security notice */
+        .security-notice {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            border-radius: 8px;
+            padding: 12px;
+            margin-top: 24px;
+            text-align: left;
+        }
+        .security-notice h4 {
+            color: #10b981;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+        }
+        .security-notice p {
+            color: #6b7280;
+            font-size: 11px;
+            line-height: 1.5;
+        }
+
+        /* Back to investor portal link */
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            color: #6b7280;
+            text-decoration: none;
+            font-size: 12px;
+            transition: color 0.2s;
+        }
+        .back-link:hover {
+            color: #7c4dff;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="logo-icon">
+            <img src="assets/lvs-logo.png" alt="Lola Vision Systems">
+        </div>
+        <h1>LOLA VISION SYSTEMS</h1>
+        <p class="subtitle">Founder Portal</p>
+        <p class="description">Unified access to customers, investors, and team updates</p>
+
+        <span class="badge-2fa coming-soon">2FA Coming Soon</span>
+
+        <!-- Step 1: Email/Password -->
+        <div id="step1" class="auth-step active">
+            <div class="step-indicator">
+                <div class="step active"></div>
+                <div class="step"></div>
+            </div>
+
+            <form onsubmit="return checkCredentials()">
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" placeholder="you@lolavisionsystems.com" autofocus>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" placeholder="Enter your password">
+                </div>
+                <button type="submit">Continue</button>
+                <p class="error" id="error">Invalid credentials. Please try again.</p>
+            </form>
+        </div>
+
+        <!-- Step 2: 2FA Code (Future - not enforced yet) -->
+        <div id="step2" class="auth-step">
+            <div class="step-indicator">
+                <div class="step completed"></div>
+                <div class="step active"></div>
+            </div>
+
+            <form onsubmit="return verify2FA()">
+                <div class="form-group">
+                    <label for="totp">Authenticator Code</label>
+                    <input type="text" id="totp" placeholder="Enter 6-digit code" maxlength="6" pattern="[0-9]{6}">
+                </div>
+                <button type="submit">Verify & Access</button>
+                <p class="error" id="error2fa">Invalid code. Please try again.</p>
+            </form>
+
+            <a href="#" class="back-link" onclick="backToStep1(); return false;">&larr; Back to login</a>
+        </div>
+
+        <div class="security-notice">
+            <h4>Security</h4>
+            <p>This portal is restricted to @lolavisionsystems.com emails. Two-factor authentication will be required once enabled. All access is logged.</p>
+        </div>
+
+        <p class="footer">
+            <span class="gold">Lola Vision Systems</span> &copy; 2026<br>
+            Founder-Only Access
+        </p>
+
+        <a href="index.html" class="back-link">&larr; Investor Portal</a>
+    </div>
+
+    <script>
+        // Configuration
+        const CONFIG = {
+            // Allowed email domain
+            allowedDomain: 'lolavisionsystems.com',
+            // 2FA enabled flag (set to true when ready to enforce)
+            require2FA: false,
+            // Password hash (same as investor portal for now: LVS_2026)
+            passwordHash: '790995832'
+        };
+
+        // Simple hash function (matches investor portal)
+        function simpleHash(str) {
+            let hash = 0;
+            for (let i = 0; i < str.length; i++) {
+                const char = str.charCodeAt(i);
+                hash = ((hash << 5) - hash) + char;
+                hash = hash & hash;
+            }
+            return String(Math.abs(hash));
+        }
+
+        // Validate email domain
+        function isValidEmail(email) {
+            const domain = email.split('@')[1];
+            return domain === CONFIG.allowedDomain;
+        }
+
+        // Step 1: Check email and password
+        function checkCredentials() {
+            const email = document.getElementById('email').value.trim().toLowerCase();
+            const password = document.getElementById('password').value;
+            const errorEl = document.getElementById('error');
+
+            // Validate email domain
+            if (!isValidEmail(email)) {
+                errorEl.textContent = 'Only @lolavisionsystems.com emails are allowed.';
+                errorEl.style.display = 'block';
+                return false;
+            }
+
+            // Validate password
+            const hash = simpleHash(password);
+            if (hash !== CONFIG.passwordHash) {
+                errorEl.textContent = 'Invalid password. Please try again.';
+                errorEl.style.display = 'block';
+                document.getElementById('password').value = '';
+                return false;
+            }
+
+            // Store email for session
+            sessionStorage.setItem('lvs_founder_email', email);
+
+            // Check if 2FA is required
+            if (CONFIG.require2FA) {
+                // Show 2FA step
+                document.getElementById('step1').classList.remove('active');
+                document.getElementById('step2').classList.add('active');
+            } else {
+                // Skip 2FA, go directly to portal
+                grantAccess();
+            }
+
+            return false;
+        }
+
+        // Step 2: Verify 2FA code (placeholder for future)
+        function verify2FA() {
+            const code = document.getElementById('totp').value;
+            const errorEl = document.getElementById('error2fa');
+
+            // TODO: Implement actual TOTP validation
+            // For now, accept any 6-digit code when 2FA is enabled
+            if (code.length === 6 && /^\d+$/.test(code)) {
+                grantAccess();
+            } else {
+                errorEl.style.display = 'block';
+            }
+
+            return false;
+        }
+
+        // Grant access and redirect
+        function grantAccess() {
+            sessionStorage.setItem('lvs_founder_auth', 'true');
+            sessionStorage.setItem('lvs_auth', 'true'); // Also auth for investor portal
+            window.location.href = 'founder-portal.html';
+        }
+
+        // Back to step 1
+        function backToStep1() {
+            document.getElementById('step2').classList.remove('active');
+            document.getElementById('step1').classList.add('active');
+            document.getElementById('totp').value = '';
+            document.getElementById('error2fa').style.display = 'none';
+        }
+
+        // Clear any previous errors on input
+        document.querySelectorAll('input').forEach(input => {
+            input.addEventListener('input', function() {
+                document.querySelectorAll('.error').forEach(e => e.style.display = 'none');
+            });
+        });
+    </script>
+</body>
+</html>

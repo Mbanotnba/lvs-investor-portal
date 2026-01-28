@@ -1,0 +1,445 @@
+{
+  "customers": [
+    {
+      "id": "anduril",
+      "name": "Anduril Industries",
+      "industry": "Defense Tech - ISR/C-UAS",
+      "tier": 1,
+      "product": "LVS-250",
+      "currentStage": 3,
+      "stages": [
+        {"name": "Discovery", "date": "Jun 2025", "complete": true},
+        {"name": "NDA Signed", "date": "Aug 2025", "complete": true},
+        {"name": "IRAD Proposed", "date": "Jan 2026", "current": true},
+        {"name": "Evaluation", "date": "TBD"},
+        {"name": "Integration", "date": "TBD"},
+        {"name": "Production", "date": "Q2 2027"}
+      ],
+      "milestones": [
+        {"title": "NDA Executed", "date": "Aug 15, 2025", "status": "complete"},
+        {"title": "LOI Signed", "date": "Jan 2026", "status": "complete"},
+        {"title": "IRAD Proposal Under Review", "date": "Pending", "status": "in-progress"},
+        {"title": "Technical Evaluation", "date": "TBD", "status": "pending"}
+      ],
+      "summary": {
+        "status": "IRAD Proposed",
+        "totalValue": "$15,000,000",
+        "nearTermValue": "$650,000",
+        "probability": "60%",
+        "weightedValue": "$9,000,000",
+        "expectedClose": "Q2 2026",
+        "primaryContact": "Chaffra Joseph"
+      },
+      "nextActions": [
+        {"task": "Follow up on IRAD proposal", "due": "2026-02-15", "assigned": "Tayo"},
+        {"task": "Schedule technical deep-dive", "due": "2026-02-28", "assigned": "Randy"}
+      ]
+    },
+    {
+      "id": "mach",
+      "name": "Mach Industries",
+      "industry": "Defense - Kamikaze Drones",
+      "tier": 1,
+      "product": "LVS-250",
+      "currentStage": 3,
+      "stages": [
+        {"name": "Discovery", "date": "Sep 2025", "complete": true},
+        {"name": "NDA Signed", "date": "Oct 2025", "complete": true},
+        {"name": "Negotiation", "date": "Nov 2025", "current": true},
+        {"name": "IRAD Contract", "date": "Q2 2026"},
+        {"name": "Integration", "date": "TBD"},
+        {"name": "Production", "date": "2027"}
+      ],
+      "milestones": [
+        {"title": "Initial Contact", "date": "Sep 2025", "status": "complete"},
+        {"title": "IRAD Proposal Submitted", "date": "Nov 2025", "status": "complete"},
+        {"title": "Contract Negotiation", "date": "In Progress", "status": "in-progress"}
+      ],
+      "summary": {
+        "status": "Negotiation",
+        "totalValue": "$10,000,000",
+        "nearTermValue": "$550,000",
+        "probability": "50%",
+        "weightedValue": "$5,000,000",
+        "expectedClose": "Q2 2026",
+        "primaryContact": "BD Director"
+      },
+      "nextActions": [
+        {"task": "Finalize IRAD contract terms", "due": "2026-02-20", "assigned": "Tayo"}
+      ]
+    },
+    {
+      "id": "terrahaptix",
+      "name": "Terrahaptix",
+      "industry": "Robotics/Haptics",
+      "tier": 1,
+      "product": "LVS-250",
+      "currentStage": 2,
+      "stages": [
+        {"name": "Discovery", "date": "Dec 2025", "complete": true},
+        {"name": "Opportunity", "date": "Jan 2026", "current": true},
+        {"name": "Proposal", "date": "Q2 2026"},
+        {"name": "Evaluation", "date": "TBD"},
+        {"name": "Integration", "date": "TBD"},
+        {"name": "Production", "date": "2027"}
+      ],
+      "milestones": [
+        {"title": "Initial Discovery", "date": "Dec 2025", "status": "complete"},
+        {"title": "Volume Discussion", "date": "Jan 2026", "status": "in-progress"}
+      ],
+      "summary": {
+        "status": "Opportunity",
+        "totalValue": "$67,000,000",
+        "nearTermValue": "$2,000,000",
+        "probability": "40%",
+        "weightedValue": "$26,800,000",
+        "expectedClose": "Q3 2026",
+        "primaryContact": "TBD"
+      },
+      "nextActions": [
+        {"task": "Schedule volume pricing discussion", "due": "2026-02-10", "assigned": "Tayo"}
+      ]
+    },
+    {
+      "id": "general-hypersonics",
+      "name": "General Hypersonics",
+      "industry": "Aerospace - Hypersonic",
+      "tier": 1,
+      "product": "LVS-750",
+      "currentStage": 3,
+      "stages": [
+        {"name": "Discovery", "date": "Sep 2025", "complete": true},
+        {"name": "NDA Signed", "date": "Oct 2025", "complete": true},
+        {"name": "Negotiation", "date": "Nov 2025", "current": true},
+        {"name": "LOI Signed", "date": "TBD"},
+        {"name": "Integration", "date": "TBD"},
+        {"name": "Production", "date": "2027"}
+      ],
+      "milestones": [
+        {"title": "Initial Meeting", "date": "Sep 2025", "status": "complete"},
+        {"title": "LOI Draft", "date": "Nov 2025", "status": "in-progress"}
+      ],
+      "summary": {
+        "status": "Negotiation",
+        "totalValue": "$12,000,000",
+        "nearTermValue": "$500,000",
+        "probability": "50%",
+        "weightedValue": "$6,000,000",
+        "expectedClose": "Q3 2026",
+        "primaryContact": "Mark C. Russell"
+      },
+      "nextActions": [
+        {"task": "Review LOI draft feedback", "due": "2026-02-05", "assigned": "Tayo"}
+      ]
+    },
+    {
+      "id": "leidos",
+      "name": "Leidos",
+      "industry": "Defense Prime - C5ISR",
+      "tier": 1,
+      "product": "LVS-750",
+      "currentStage": 2,
+      "stages": [
+        {"name": "Discovery", "date": "2025", "complete": true},
+        {"name": "NDA Executed", "date": "2025", "complete": true},
+        {"name": "Evaluation", "date": "In Progress", "current": true},
+        {"name": "Proposal", "date": "TBD"},
+        {"name": "Integration", "date": "TBD"},
+        {"name": "Production", "date": "2027+"}
+      ],
+      "milestones": [
+        {"title": "NDA Executed", "date": "2025", "status": "complete"},
+        {"title": "Technical Evaluation", "date": "In Progress", "status": "in-progress"}
+      ],
+      "summary": {
+        "status": "Evaluation",
+        "totalValue": "$12,000,000",
+        "nearTermValue": "$600,000",
+        "probability": "50%",
+        "weightedValue": "$6,000,000",
+        "expectedClose": "Q3 2026",
+        "primaryContact": "TBD"
+      },
+      "nextActions": [
+        {"task": "Provide technical documentation", "due": "2026-02-15", "assigned": "Randy"}
+      ]
+    },
+    {
+      "id": "eizo",
+      "name": "Eizo Rugged Solutions",
+      "industry": "Defense - Rugged Computing",
+      "tier": 1,
+      "product": "LVS-750/1000",
+      "currentStage": 3,
+      "stages": [
+        {"name": "Discovery", "date": "Mar 2025", "complete": true},
+        {"name": "LOI Signed", "date": "Apr 2025", "complete": true},
+        {"name": "Evaluation", "date": "In Progress", "current": true},
+        {"name": "Integration", "date": "TBD"},
+        {"name": "Production", "date": "2027"}
+      ],
+      "milestones": [
+        {"title": "LOI Signed", "date": "Apr 2025", "status": "complete"},
+        {"title": "Technical Evaluation", "date": "In Progress", "status": "in-progress"}
+      ],
+      "summary": {
+        "status": "Evaluation",
+        "totalValue": "$7,000,000",
+        "nearTermValue": "$600,000",
+        "probability": "50%",
+        "weightedValue": "$3,500,000",
+        "expectedClose": "Q2 2026",
+        "primaryContact": "Selwyn Henriques"
+      },
+      "nextActions": [
+        {"task": "VPX form factor discussion", "due": "2026-02-10", "assigned": "Jordan"}
+      ]
+    },
+    {
+      "id": "glid",
+      "name": "Glid Technologies",
+      "industry": "Autonomous Vehicles",
+      "tier": 1,
+      "product": "LVS-750",
+      "currentStage": 3,
+      "stages": [
+        {"name": "Discovery", "date": "Aug 2025", "complete": true},
+        {"name": "LOI Draft", "date": "Sep 2025", "complete": true},
+        {"name": "Negotiation", "date": "In Progress", "current": true},
+        {"name": "Agreement", "date": "TBD"},
+        {"name": "Integration", "date": "TBD"},
+        {"name": "Production", "date": "2027"}
+      ],
+      "milestones": [
+        {"title": "Initial Meeting", "date": "Aug 2025", "status": "complete"},
+        {"title": "LOI Negotiation", "date": "In Progress", "status": "in-progress"}
+      ],
+      "summary": {
+        "status": "Negotiation",
+        "totalValue": "$5,000,000",
+        "nearTermValue": "$300,000",
+        "probability": "40%",
+        "weightedValue": "$2,000,000",
+        "expectedClose": "Q4 2026",
+        "primaryContact": "Kevin A. Damoa"
+      },
+      "nextActions": [
+        {"task": "Hybrid vehicle use case review", "due": "2026-03-01", "assigned": "Tayo"}
+      ]
+    },
+    {
+      "id": "revenant",
+      "name": "Revenant Industries",
+      "industry": "Defense - Autonomous Systems",
+      "tier": 1,
+      "product": "LVS-250/750",
+      "currentStage": 1,
+      "stages": [
+        {"name": "Discovery", "date": "Jan 2026", "current": true},
+        {"name": "NDA", "date": "TBD"},
+        {"name": "Proposal", "date": "TBD"},
+        {"name": "Evaluation", "date": "TBD"},
+        {"name": "Integration", "date": "TBD"},
+        {"name": "Production", "date": "2027+"}
+      ],
+      "milestones": [
+        {"title": "Initial Contact", "date": "Jan 2026", "status": "in-progress"}
+      ],
+      "summary": {
+        "status": "Opportunity",
+        "totalValue": "$5,000,000",
+        "nearTermValue": "$400,000",
+        "probability": "35%",
+        "weightedValue": "$1,750,000",
+        "expectedClose": "Q3 2026",
+        "primaryContact": "TBD"
+      },
+      "nextActions": [
+        {"task": "Schedule intro call", "due": "2026-02-05", "assigned": "Tayo"}
+      ]
+    },
+    {
+      "id": "rtx",
+      "name": "RTX Corporation",
+      "industry": "Defense Prime - OEM",
+      "tier": 2,
+      "product": "LVS Chiplets",
+      "currentStage": 1,
+      "stages": [
+        {"name": "Discovery", "date": "TBD", "current": true},
+        {"name": "NDA", "date": "TBD"},
+        {"name": "Evaluation", "date": "TBD"},
+        {"name": "Licensing", "date": "2027+"}
+      ],
+      "milestones": [],
+      "summary": {
+        "status": "Discovery",
+        "totalValue": "$3,000,000",
+        "nearTermValue": "$0",
+        "probability": "30%",
+        "weightedValue": "$900,000",
+        "expectedClose": "2027+",
+        "primaryContact": "TBD"
+      },
+      "nextActions": [
+        {"task": "Identify point of contact", "due": "2026-03-15", "assigned": "Tayo"}
+      ]
+    },
+    {
+      "id": "lockheed",
+      "name": "Lockheed Martin",
+      "industry": "Defense Prime - OEM",
+      "tier": 2,
+      "product": "LVS Chiplets",
+      "currentStage": 1,
+      "stages": [
+        {"name": "Discovery", "date": "TBD", "current": true},
+        {"name": "NDA", "date": "TBD"},
+        {"name": "Evaluation", "date": "TBD"},
+        {"name": "Licensing", "date": "2027+"}
+      ],
+      "milestones": [],
+      "summary": {
+        "status": "Discovery",
+        "totalValue": "$3,000,000",
+        "nearTermValue": "$0",
+        "probability": "30%",
+        "weightedValue": "$900,000",
+        "expectedClose": "2027+",
+        "primaryContact": "TBD"
+      },
+      "nextActions": []
+    },
+    {
+      "id": "northrop",
+      "name": "Northrop Grumman",
+      "industry": "Defense Prime - OEM",
+      "tier": 2,
+      "product": "LVS Chiplets",
+      "currentStage": 1,
+      "stages": [
+        {"name": "Discovery", "date": "TBD", "current": true},
+        {"name": "NDA", "date": "TBD"},
+        {"name": "Evaluation", "date": "TBD"},
+        {"name": "Licensing", "date": "2027+"}
+      ],
+      "milestones": [],
+      "summary": {
+        "status": "Discovery",
+        "totalValue": "$3,000,000",
+        "nearTermValue": "$0",
+        "probability": "30%",
+        "weightedValue": "$900,000",
+        "expectedClose": "2027+",
+        "primaryContact": "TBD"
+      },
+      "nextActions": []
+    },
+    {
+      "id": "ultraview",
+      "name": "Ultraview AI",
+      "industry": "Aerospace - UAV Inspection",
+      "tier": 3,
+      "product": "LVS-750/1000",
+      "currentStage": 2,
+      "stages": [
+        {"name": "Discovery", "date": "Mar 2025", "complete": true},
+        {"name": "LOI Signed", "date": "Apr 2025", "complete": true},
+        {"name": "Evaluation", "date": "In Progress", "current": true},
+        {"name": "Integration", "date": "TBD"},
+        {"name": "Production", "date": "2027"}
+      ],
+      "milestones": [
+        {"title": "LOI Signed", "date": "Apr 2025", "status": "complete"}
+      ],
+      "summary": {
+        "status": "Evaluation",
+        "totalValue": "$8,000,000",
+        "nearTermValue": "$400,000",
+        "probability": "40%",
+        "weightedValue": "$3,200,000",
+        "expectedClose": "Q3 2026",
+        "primaryContact": "Colby Harvey"
+      },
+      "nextActions": []
+    },
+    {
+      "id": "orb-aerospace",
+      "name": "Orb Aerospace",
+      "industry": "Space - Satellite Systems",
+      "tier": 3,
+      "product": "LVS-750",
+      "currentStage": 2,
+      "stages": [
+        {"name": "Discovery", "date": "2025", "complete": true},
+        {"name": "Letter of Support", "date": "2025", "complete": true},
+        {"name": "Opportunity", "date": "In Progress", "current": true},
+        {"name": "Proposal", "date": "TBD"},
+        {"name": "Production", "date": "2027"}
+      ],
+      "milestones": [
+        {"title": "Letter of Support", "date": "2025", "status": "complete"}
+      ],
+      "summary": {
+        "status": "Opportunity",
+        "totalValue": "$5,000,000",
+        "nearTermValue": "$300,000",
+        "probability": "40%",
+        "weightedValue": "$2,000,000",
+        "expectedClose": "Q4 2026",
+        "primaryContact": "TBD"
+      },
+      "nextActions": []
+    },
+    {
+      "id": "stellantis",
+      "name": "Stellantis",
+      "industry": "Automotive - Volume Production",
+      "tier": 4,
+      "product": "LVS-1000",
+      "currentStage": 1,
+      "stages": [
+        {"name": "Discovery", "date": "TBD", "current": true},
+        {"name": "NDA", "date": "TBD"},
+        {"name": "Evaluation", "date": "2027"},
+        {"name": "Production", "date": "2028+"}
+      ],
+      "milestones": [],
+      "summary": {
+        "status": "Discovery",
+        "totalValue": "$120,000,000",
+        "nearTermValue": "$0",
+        "probability": "25%",
+        "weightedValue": "$30,000,000",
+        "expectedClose": "2028+",
+        "primaryContact": "TBD"
+      },
+      "nextActions": []
+    },
+    {
+      "id": "ford",
+      "name": "Ford Motor Company",
+      "industry": "Automotive - Volume Production",
+      "tier": 4,
+      "product": "LVS-1000",
+      "currentStage": 1,
+      "stages": [
+        {"name": "Discovery", "date": "TBD", "current": true},
+        {"name": "NDA", "date": "TBD"},
+        {"name": "Evaluation", "date": "2027"},
+        {"name": "Production", "date": "2028+"}
+      ],
+      "milestones": [],
+      "summary": {
+        "status": "Discovery",
+        "totalValue": "$100,000,000",
+        "nearTermValue": "$0",
+        "probability": "25%",
+        "weightedValue": "$25,000,000",
+        "expectedClose": "2028+",
+        "primaryContact": "TBD"
+      },
+      "nextActions": []
+    }
+  ]
+}
