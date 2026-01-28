@@ -746,8 +746,18 @@ SEE ALSO:
             text-align: center;
         }
         .marquee-container {
-            overflow: hidden;
+            overflow-x: auto;
+            overflow-y: hidden;
             position: relative;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            cursor: grab;
+        }
+        .marquee-container::-webkit-scrollbar {
+            display: none;
+        }
+        .marquee-container:active {
+            cursor: grabbing;
         }
         .marquee-container::before,
         .marquee-container::after {
@@ -755,7 +765,7 @@ SEE ALSO:
             position: absolute;
             top: 0;
             bottom: 0;
-            width: 60px;
+            width: 40px;
             z-index: 2;
             pointer-events: none;
         }
@@ -769,10 +779,11 @@ SEE ALSO:
         }
         .marquee-track {
             display: flex;
-            animation: marquee 30s linear infinite;
+            animation: marquee 15s linear infinite;
             width: max-content;
         }
-        .marquee-track:hover {
+        .marquee-container:hover .marquee-track,
+        .marquee-container.dragging .marquee-track {
             animation-play-state: paused;
         }
         @keyframes marquee {
@@ -1185,7 +1196,7 @@ SEE ALSO:
                             <span class="supporter-logo">💼</span>
                             <div class="supporter-text">
                                 <span class="supporter-name">InvestFest</span>
-                                <span class="supporter-program">Alumni</span>
+                                <span class="supporter-program">Pitch Win</span>
                             </div>
                         </div>
                         <div class="supporter-item award">
@@ -1228,7 +1239,7 @@ SEE ALSO:
                             <span class="supporter-logo">💼</span>
                             <div class="supporter-text">
                                 <span class="supporter-name">InvestFest</span>
-                                <span class="supporter-program">Alumni</span>
+                                <span class="supporter-program">Pitch Win</span>
                             </div>
                         </div>
                         <div class="supporter-item award">
@@ -2083,6 +2094,59 @@ processor = ImageProcessor(resize=(640, 640), normalize=<span class="code-keywor
                 }
             });
         });
+
+        // Marquee drag-to-scroll functionality
+        const marqueeContainer = document.querySelector('.marquee-container');
+        if (marqueeContainer) {
+            let isDown = false;
+            let startX;
+            let scrollLeft;
+
+            marqueeContainer.addEventListener('mousedown', (e) => {
+                isDown = true;
+                marqueeContainer.classList.add('dragging');
+                startX = e.pageX - marqueeContainer.offsetLeft;
+                scrollLeft = marqueeContainer.scrollLeft;
+            });
+
+            marqueeContainer.addEventListener('mouseleave', () => {
+                isDown = false;
+                marqueeContainer.classList.remove('dragging');
+            });
+
+            marqueeContainer.addEventListener('mouseup', () => {
+                isDown = false;
+                marqueeContainer.classList.remove('dragging');
+            });
+
+            marqueeContainer.addEventListener('mousemove', (e) => {
+                if (!isDown) return;
+                e.preventDefault();
+                const x = e.pageX - marqueeContainer.offsetLeft;
+                const walk = (x - startX) * 2;
+                marqueeContainer.scrollLeft = scrollLeft - walk;
+            });
+
+            // Touch support for mobile
+            marqueeContainer.addEventListener('touchstart', (e) => {
+                isDown = true;
+                marqueeContainer.classList.add('dragging');
+                startX = e.touches[0].pageX - marqueeContainer.offsetLeft;
+                scrollLeft = marqueeContainer.scrollLeft;
+            });
+
+            marqueeContainer.addEventListener('touchend', () => {
+                isDown = false;
+                marqueeContainer.classList.remove('dragging');
+            });
+
+            marqueeContainer.addEventListener('touchmove', (e) => {
+                if (!isDown) return;
+                const x = e.touches[0].pageX - marqueeContainer.offsetLeft;
+                const walk = (x - startX) * 2;
+                marqueeContainer.scrollLeft = scrollLeft - walk;
+            });
+        }
     </script>
 </body>
 </html>
