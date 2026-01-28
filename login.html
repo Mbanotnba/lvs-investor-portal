@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Access Portal | Lola Vision Systems</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .login-container {
+            background: #12121a;
+            border-radius: 16px;
+            padding: 48px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            text-align: center;
+            max-width: 440px;
+            width: 90%;
+            border: 1px solid rgba(255,255,255,0.06);
+        }
+        .logo-icon {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 24px;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px;
+            border: 2px solid #7c4dff;
+        }
+        .logo-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        h1 {
+            font-size: 22px;
+            color: #f5f5f7;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+        .subtitle {
+            color: #d4af37;
+            font-size: 14px;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        .description {
+            color: #6b7280;
+            font-size: 12px;
+            margin-bottom: 32px;
+        }
+
+        /* Role Selector */
+        .role-selector {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 24px;
+        }
+        .role-btn {
+            background: #1a1a24;
+            border: 2px solid rgba(255,255,255,0.1);
+            border-radius: 10px;
+            padding: 16px 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .role-btn:hover {
+            border-color: rgba(124,77,255,0.5);
+            background: rgba(124,77,255,0.1);
+        }
+        .role-btn.active {
+            border-color: #7c4dff;
+            background: rgba(124,77,255,0.15);
+        }
+        .role-btn.founder { border-color: #d4af37; background: rgba(212,175,55,0.15); }
+        .role-btn.founder:hover { border-color: #d4af37; }
+        .role-btn.investor.active { border-color: #7c4dff; }
+        .role-btn.customer.active { border-color: #10b981; }
+        .role-btn.founder.active { border-color: #d4af37; }
+        .role-icon {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+        .role-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #f5f5f7;
+        }
+        .role-desc {
+            font-size: 10px;
+            color: #6b7280;
+            margin-top: 4px;
+        }
+
+        /* Form */
+        .form-group {
+            margin-bottom: 16px;
+            text-align: left;
+        }
+        label {
+            display: block;
+            font-size: 11px;
+            font-weight: 600;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+        }
+        input[type="email"],
+        input[type="password"],
+        input[type="text"] {
+            width: 100%;
+            padding: 12px 14px;
+            font-size: 15px;
+            background: #1a1a24;
+            border: 2px solid rgba(255,255,255,0.1);
+            border-radius: 8px;
+            color: #f5f5f7;
+            transition: border-color 0.2s;
+        }
+        input:focus {
+            outline: none;
+            border-color: #7c4dff;
+        }
+        input::placeholder {
+            color: #4b5563;
+        }
+        .email-field {
+            display: none;
+        }
+        .email-field.show {
+            display: block;
+        }
+        button[type="submit"] {
+            width: 100%;
+            padding: 14px;
+            font-size: 15px;
+            font-weight: 600;
+            color: white;
+            background: linear-gradient(135deg, #7c4dff 0%, #651fff 100%);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-top: 8px;
+        }
+        button[type="submit"]:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(124, 77, 255, 0.4);
+        }
+        .error {
+            color: #ef4444;
+            font-size: 12px;
+            margin-top: 12px;
+            display: none;
+            text-align: center;
+        }
+        .success {
+            color: #10b981;
+            font-size: 12px;
+            margin-top: 12px;
+            display: none;
+            text-align: center;
+        }
+
+        /* Access info */
+        .access-info {
+            background: rgba(255,255,255,0.03);
+            border-radius: 10px;
+            padding: 16px;
+            margin-top: 24px;
+            text-align: left;
+        }
+        .access-info h4 {
+            color: #6b7280;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 10px;
+        }
+        .access-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+        }
+        .access-item:last-child {
+            border-bottom: none;
+        }
+        .access-icon {
+            font-size: 16px;
+        }
+        .access-text {
+            flex: 1;
+        }
+        .access-role {
+            font-size: 12px;
+            font-weight: 600;
+            color: #f5f5f7;
+        }
+        .access-desc {
+            font-size: 10px;
+            color: #6b7280;
+        }
+
+        .footer {
+            margin-top: 24px;
+            font-size: 11px;
+            color: #4b5563;
+        }
+        .gold { color: #d4af37; }
+
+        /* Customer selector */
+        .customer-select {
+            display: none;
+            margin-bottom: 16px;
+        }
+        .customer-select.show {
+            display: block;
+        }
+        select {
+            width: 100%;
+            padding: 12px 14px;
+            font-size: 15px;
+            background: #1a1a24;
+            border: 2px solid rgba(255,255,255,0.1);
+            border-radius: 8px;
+            color: #f5f5f7;
+            cursor: pointer;
+        }
+        select:focus {
+            outline: none;
+            border-color: #7c4dff;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="logo-icon">
+            <img src="assets/lvs-logo.png" alt="Lola Vision Systems">
+        </div>
+        <h1>LOLA VISION SYSTEMS</h1>
+        <p class="subtitle">Secure Access Portal</p>
+        <p class="description">Select your role to access the appropriate dashboard</p>
+
+        <!-- Role Selector -->
+        <div class="role-selector">
+            <div class="role-btn investor active" onclick="selectRole('investor')">
+                <div class="role-icon">&#128200;</div>
+                <div class="role-label">Investor</div>
+                <div class="role-desc">Dashboard</div>
+            </div>
+            <div class="role-btn customer" onclick="selectRole('customer')">
+                <div class="role-icon">&#128188;</div>
+                <div class="role-label">Customer</div>
+                <div class="role-desc">Partner Portal</div>
+            </div>
+            <div class="role-btn founder" onclick="selectRole('founder')">
+                <div class="role-icon">&#11088;</div>
+                <div class="role-label">Founder</div>
+                <div class="role-desc">Full Access</div>
+            </div>
+        </div>
+
+        <form onsubmit="return authenticate()">
+            <!-- Email field (shown for founder/customer) -->
+            <div class="form-group email-field" id="emailField">
+                <label for="email">Email</label>
+                <input type="email" id="email" placeholder="your@email.com">
+            </div>
+
+            <!-- Customer selector (shown for customer role) -->
+            <div class="form-group customer-select" id="customerSelect">
+                <label for="customer">Select Company</label>
+                <select id="customer">
+                    <option value="">-- Select your company --</option>
+                    <option value="anduril">Anduril Industries</option>
+                    <option value="koniku">Koniku</option>
+                    <option value="glid">Glid Technologies</option>
+                    <option value="mach">Mach Industries</option>
+                    <option value="terrahaptix">Terrahaptix</option>
+                </select>
+            </div>
+
+            <!-- Password -->
+            <div class="form-group">
+                <label for="password">Access Code</label>
+                <input type="password" id="password" placeholder="Enter your access code" autofocus>
+            </div>
+
+            <button type="submit">Access Portal</button>
+            <p class="error" id="error"></p>
+            <p class="success" id="success"></p>
+        </form>
+
+        <!-- Access Info -->
+        <div class="access-info">
+            <h4>Access Levels</h4>
+            <div class="access-item">
+                <span class="access-icon">&#128200;</span>
+                <div class="access-text">
+                    <div class="access-role">Investor</div>
+                    <div class="access-desc">Pipeline, financials, roadmap</div>
+                </div>
+            </div>
+            <div class="access-item">
+                <span class="access-icon">&#128188;</span>
+                <div class="access-text">
+                    <div class="access-role">Customer</div>
+                    <div class="access-desc">Your dedicated partner portal</div>
+                </div>
+            </div>
+            <div class="access-item">
+                <span class="access-icon">&#11088;</span>
+                <div class="access-text">
+                    <div class="access-role">Founder</div>
+                    <div class="access-desc">Full access to all portals</div>
+                </div>
+            </div>
+        </div>
+
+        <p class="footer">
+            <span class="gold">Lola Vision Systems</span> &copy; 2026<br>
+            Authorized Access Only
+        </p>
+    </div>
+
+    <script>
+        // Configuration
+        const CONFIG = {
+            founderDomain: 'lolavisionsystems.com',
+            // Password hashes
+            passwords: {
+                investor: '790995832',    // LVS_2026
+                founder: '790995832',     // LVS_2026
+                customer: {
+                    anduril: '1438927492',     // ANDURIL_2026
+                    koniku: '1789456123',      // KONIKU_2026
+                    glid: '987654321',         // GLID_2026
+                    mach: '1122334455',        // MACH_2026
+                    terrahaptix: '5566778899'  // TERRA_2026
+                }
+            },
+            // Customer portal URLs
+            customerPortals: {
+                anduril: 'customer-portal-mockup.html',
+                koniku: 'koniku-portal.html',
+                glid: 'glid-portal.html',
+                mach: 'mach-portal.html',
+                terrahaptix: 'terrahaptix-portal.html'
+            }
+        };
+
+        let selectedRole = 'investor';
+
+        // Hash function
+        function simpleHash(str) {
+            let hash = 0;
+            for (let i = 0; i < str.length; i++) {
+                const char = str.charCodeAt(i);
+                hash = ((hash << 5) - hash) + char;
+                hash = hash & hash;
+            }
+            return String(Math.abs(hash));
+        }
+
+        // Role selection
+        function selectRole(role) {
+            selectedRole = role;
+
+            // Update UI
+            document.querySelectorAll('.role-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelector(`.role-btn.${role}`).classList.add('active');
+
+            // Show/hide email field
+            const emailField = document.getElementById('emailField');
+            const customerSelect = document.getElementById('customerSelect');
+
+            if (role === 'founder') {
+                emailField.classList.add('show');
+                customerSelect.classList.remove('show');
+                document.getElementById('email').placeholder = 'you@lolavisionsystems.com';
+            } else if (role === 'customer') {
+                emailField.classList.add('show');
+                customerSelect.classList.add('show');
+                document.getElementById('email').placeholder = 'your@company.com';
+            } else {
+                emailField.classList.remove('show');
+                customerSelect.classList.remove('show');
+            }
+
+            // Clear errors
+            document.getElementById('error').style.display = 'none';
+            document.getElementById('success').style.display = 'none';
+        }
+
+        // Authentication
+        function authenticate() {
+            const email = document.getElementById('email').value.trim().toLowerCase();
+            const password = document.getElementById('password').value;
+            const customer = document.getElementById('customer').value;
+            const errorEl = document.getElementById('error');
+            const successEl = document.getElementById('success');
+
+            errorEl.style.display = 'none';
+            successEl.style.display = 'none';
+
+            const passwordHash = simpleHash(password);
+
+            if (selectedRole === 'investor') {
+                // Investor login
+                if (passwordHash === CONFIG.passwords.investor) {
+                    sessionStorage.setItem('lvs_auth', 'true');
+                    sessionStorage.setItem('lvs_role', 'investor');
+                    successEl.textContent = 'Access granted. Redirecting...';
+                    successEl.style.display = 'block';
+                    setTimeout(() => window.location.href = 'dashboard.html', 500);
+                } else {
+                    errorEl.textContent = 'Invalid access code.';
+                    errorEl.style.display = 'block';
+                }
+            } else if (selectedRole === 'founder') {
+                // Founder login - check email domain
+                const domain = email.split('@')[1];
+                if (domain !== CONFIG.founderDomain) {
+                    errorEl.textContent = 'Only @lolavisionsystems.com emails allowed.';
+                    errorEl.style.display = 'block';
+                    return false;
+                }
+                if (passwordHash === CONFIG.passwords.founder) {
+                    sessionStorage.setItem('lvs_auth', 'true');
+                    sessionStorage.setItem('lvs_founder_auth', 'true');
+                    sessionStorage.setItem('lvs_founder_email', email);
+                    sessionStorage.setItem('lvs_role', 'founder');
+                    successEl.textContent = 'Founder access granted. Redirecting...';
+                    successEl.style.display = 'block';
+                    setTimeout(() => window.location.href = 'founder-portal.html', 500);
+                } else {
+                    errorEl.textContent = 'Invalid password.';
+                    errorEl.style.display = 'block';
+                }
+            } else if (selectedRole === 'customer') {
+                // Customer login
+                if (!customer) {
+                    errorEl.textContent = 'Please select your company.';
+                    errorEl.style.display = 'block';
+                    return false;
+                }
+                if (!email) {
+                    errorEl.textContent = 'Please enter your email.';
+                    errorEl.style.display = 'block';
+                    return false;
+                }
+
+                const expectedHash = CONFIG.passwords.customer[customer];
+                if (passwordHash === expectedHash) {
+                    sessionStorage.setItem('lvs_auth', 'true');
+                    sessionStorage.setItem('lvs_customer', customer);
+                    sessionStorage.setItem('lvs_customer_email', email);
+                    sessionStorage.setItem('lvs_role', 'customer');
+                    successEl.textContent = 'Customer access granted. Redirecting...';
+                    successEl.style.display = 'block';
+                    const portalUrl = CONFIG.customerPortals[customer];
+                    setTimeout(() => window.location.href = portalUrl, 500);
+                } else {
+                    errorEl.textContent = 'Invalid access code for this company.';
+                    errorEl.style.display = 'block';
+                }
+            }
+
+            return false;
+        }
+
+        // Clear errors on input
+        document.querySelectorAll('input, select').forEach(el => {
+            el.addEventListener('input', () => {
+                document.getElementById('error').style.display = 'none';
+            });
+        });
+    </script>
+</body>
+</html>
