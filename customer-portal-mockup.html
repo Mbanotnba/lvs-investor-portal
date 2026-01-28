@@ -1,22 +1,79 @@
 <!DOCTYPE html>
+<!--
+================================================================================
+LVS CUSTOMER PORTAL - MOCKUP
+================================================================================
+Version: 1.0
+Last Updated: January 28, 2026
+Status: MOCKUP - Feature decommissioned until launch
+
+OVERVIEW:
+  This is a customer-facing portal for NDA-signed partners. Each customer
+  would see their own engagement progress, product information, and documents.
+  Currently showing Anduril as example customer.
+
+STRUCTURE:
+  - 7 Tabs: Dashboard | Product | Specifications | DevKit | SDK | Docs | Support
+  - Single-page app using vanilla JS tab switching (no framework)
+  - All CSS in <style> block, all JS in <script> block at bottom
+
+KEY COMPONENTS:
+  1. Tab Navigation (.tab-nav)     - Horizontal tab buttons
+  2. Progress Tracker (.stages)    - 6-stage engagement visual
+  3. Hero Video (#heroVideo)       - Product video with mute toggle
+  4. Spec Tables (.specs-table)    - Technical specifications
+  5. Feature Cards (.feature-card) - SDK/DevKit feature highlights
+
+CUSTOMIZATION POINTS:
+  - Customer name: Search for "Anduril" to replace
+  - Logo: Update customer-logo img src
+  - Engagement stage: Modify .stage-dot classes (complete/current/upcoming)
+  - Milestones: Edit milestone divs in #dashboard
+  - Product specs: Update tables in #specs
+
+CSS VARIABLES (defined in :root):
+  --bg           Dark background (#0b1021)
+  --panel        Card background (#141a30)
+  --accent       Purple primary (#7c4dff)
+  --gold         Gold accent (#d4af37)
+  --success      Green status (#10b981)
+  --warn         Orange warning (#f97316)
+
+SEE ALSO:
+  - README.md for setup instructions
+  - ARCHITECTURE.md for technical details
+  - LVS_DATA_ARCHITECTURE_PLAN.md for future data hub design
+================================================================================
+-->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Customer Portal | Lola Vision Systems</title>
     <style>
+        /* ====================================================================
+           CSS VARIABLES - Design System Tokens
+           Edit these to change colors globally across the portal
+           ==================================================================== */
         :root {
-            --bg: #0b1021;
-            --panel: #141a30;
-            --panel-light: #1a2240;
-            --accent: #7c4dff;
-            --accent-light: #9d7aff;
-            --gold: #d4af37;
-            --text: #e6e8f0;
-            --muted: #9aa3c2;
-            --success: #10b981;
-            --warn: #f97316;
-            --info: #06b6d4;
+            /* Background colors */
+            --bg: #0b1021;              /* Main page background */
+            --panel: #141a30;           /* Card/panel background */
+            --panel-light: #1a2240;     /* Lighter panel variant */
+
+            /* Brand colors */
+            --accent: #7c4dff;          /* LVS Purple - primary actions */
+            --accent-light: #9d7aff;    /* Light purple - hover states */
+            --gold: #d4af37;            /* Gold - premium accent */
+
+            /* Text colors */
+            --text: #e6e8f0;            /* Primary text */
+            --muted: #9aa3c2;           /* Secondary/muted text */
+
+            /* Status colors */
+            --success: #10b981;         /* Green - complete/success */
+            --warn: #f97316;            /* Orange - warning/in-progress */
+            --info: #06b6d4;            /* Cyan - informational */
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
