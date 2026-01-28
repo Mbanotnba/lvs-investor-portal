@@ -724,6 +724,29 @@ SEE ALSO:
             .container { padding: 16px; }
             .welcome { flex-direction: column; gap: 16px; }
             .exec-stats { grid-template-columns: 1fr 1fr; }
+            .stage-tracker { padding: 20px 16px; overflow: hidden; }
+            .stages {
+                overflow-x: auto;
+                padding-bottom: 12px;
+                margin: 0 -8px;
+                padding-left: 8px;
+                padding-right: 8px;
+                min-width: 100%;
+            }
+            .stages::before, .stages::after {
+                display: none;
+            }
+            .stage {
+                min-width: 90px;
+                flex-shrink: 0;
+            }
+            .stage-dot {
+                width: 32px;
+                height: 32px;
+                font-size: 12px;
+            }
+            .stage-label { font-size: 9px; }
+            .stage-date { font-size: 8px; }
             .video-grid {
                 grid-template-columns: 1fr;
             }
