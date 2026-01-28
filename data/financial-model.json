@@ -5,7 +5,9 @@
     "totalPipeline": "$412,000,000",
     "weightedPipeline": "$136,000,000",
     "activeCustomers": 22,
-    "tier1Customers": 10
+    "tier1Customers": 10,
+    "strategicPartners": 1,
+    "note": "AMD excluded from pipeline - Technology Partnership with no revenue expectation"
   },
   "weightedRevenue": {
     "2026": {

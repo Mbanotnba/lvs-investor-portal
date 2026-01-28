@@ -334,35 +334,34 @@
     {
       "id": "amd",
       "name": "AMD",
-      "industry": "Semiconductor - Chiplets",
-      "tier": 2,
-      "product": "LVS Chiplets",
+      "industry": "Semiconductor - Strategic Partner",
+      "tier": "strategic",
+      "product": "Chiplet Integration / Bare Die Supply",
       "currentStage": 2,
+      "partnershipType": "technology",
       "stages": [
         {"name": "Discovery", "date": "Q4 2025", "complete": true},
         {"name": "NDA Signed", "date": "Jan 2026", "complete": true},
-        {"name": "Evaluation", "date": "Q1 2026", "current": true},
-        {"name": "Technical Review", "date": "Q2 2026"},
-        {"name": "Licensing", "date": "TBD"},
-        {"name": "Production", "date": "2027+"}
+        {"name": "Technical Exploration", "date": "Q1 2026", "current": true},
+        {"name": "Architecture Review", "date": "Q2 2026"},
+        {"name": "Partnership Terms", "date": "TBD"},
+        {"name": "Integration", "date": "TBD"}
       ],
       "milestones": [
         {"title": "Initial Discovery", "date": "Dec 2025", "status": "complete"},
         {"title": "NDA Executed", "date": "Jan 15, 2026", "status": "complete"},
-        {"title": "Technical Evaluation", "date": "In Progress", "status": "in-progress"}
+        {"title": "Technical Exploration", "date": "In Progress", "status": "in-progress"}
       ],
       "summary": {
-        "status": "Evaluation",
-        "totalValue": "$8,000,000",
-        "nearTermValue": "$500,000",
-        "probability": "40%",
-        "weightedValue": "$3,200,000",
-        "expectedClose": "2027+",
+        "status": "Exploring",
+        "partnershipFocus": "UCIe chiplet integration architecture",
+        "potentialDirection": "LVS may purchase AMD bare die for end customer solutions",
+        "revenueExpectation": "None - Technology Partnership",
         "primaryContact": "TBD"
       },
       "nextActions": [
         {"task": "UCIe interface compatibility review", "due": "2026-02-28", "assigned": "Jordan"},
-        {"task": "Chiplet integration roadmap discussion", "due": "2026-03-15", "assigned": "Tayo"}
+        {"task": "Bare die supply chain discussion", "due": "2026-03-15", "assigned": "Tayo"}
       ]
     },
     {
