@@ -473,6 +473,67 @@
         .doc-meta { font-size: 11px; color: var(--muted); }
         .doc-download { color: var(--muted); font-size: 18px; }
 
+        /* Hero Video */
+        .hero-video-container {
+            position: relative;
+            width: 100%;
+            border-radius: 16px;
+            overflow: hidden;
+            margin-bottom: 24px;
+            background: #000;
+        }
+        .hero-video {
+            width: 100%;
+            display: block;
+            border-radius: 16px;
+        }
+        .video-controls {
+            position: absolute;
+            bottom: 16px;
+            right: 16px;
+            display: flex;
+            gap: 8px;
+        }
+        .video-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: rgba(0,0,0,0.6);
+            border: 2px solid rgba(255,255,255,0.2);
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            backdrop-filter: blur(10px);
+        }
+        .video-btn:hover {
+            background: rgba(124,77,255,0.8);
+            border-color: var(--accent);
+            transform: scale(1.1);
+        }
+        .video-btn.muted { color: var(--muted); }
+        .video-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 40px 24px 24px;
+            background: linear-gradient(transparent, rgba(0,0,0,0.8));
+            pointer-events: none;
+        }
+        .video-overlay h2 {
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 4px;
+        }
+        .video-overlay p {
+            color: var(--muted);
+            font-size: 14px;
+        }
+
         /* Coming Soon Banner */
         .coming-soon {
             position: fixed;
@@ -525,6 +586,7 @@
     <div class="tab-nav">
         <button class="tab-btn active" data-tab="dashboard">Dashboard</button>
         <button class="tab-btn" data-tab="product">Product<span class="badge">LVS-250</span></button>
+        <button class="tab-btn" data-tab="specs">Specifications</button>
         <button class="tab-btn" data-tab="devkit">Development Kit</button>
         <button class="tab-btn" data-tab="sdk">Software SDK</button>
         <button class="tab-btn" data-tab="documents">Documents</button>
@@ -668,6 +730,22 @@
 
         <!-- ==================== PRODUCT TAB ==================== -->
         <div id="product" class="tab-content">
+            <!-- Hero Video -->
+            <div class="hero-video-container">
+                <video id="heroVideo" class="hero-video" autoplay muted loop playsinline>
+                    <source src="assets/lvs-chiplet-hero.mp4" type="video/mp4">
+                </video>
+                <div class="video-controls">
+                    <button id="muteBtn" class="video-btn muted" title="Unmute">
+                        &#128263;
+                    </button>
+                </div>
+                <div class="video-overlay">
+                    <h2>LVS-250</h2>
+                    <p>Next-Generation Neural Compute Engine</p>
+                </div>
+            </div>
+
             <!-- Executive Summary -->
             <div class="exec-summary">
                 <div class="exec-header">
@@ -708,34 +786,61 @@
                 </div>
             </div>
 
-            <!-- Full Specifications -->
+            <!-- Quick Specs Summary -->
             <div class="panel">
-                <h3>Full Technical Specifications</h3>
-
+                <h3>Key Specifications</h3>
                 <div class="specs-section">
-                    <h4>Compute Architecture</h4>
                     <table class="specs-table">
-                        <tr><td>Neural Processing Unit (NPU)</td><td>64K MAC Array, INT8/FP16</td></tr>
-                        <tr><td>CPU Complex</td><td>8-core ARM Cortex-A78AE @ 2.0GHz</td></tr>
-                        <tr><td>Vector DSP</td><td>Quad-core VDSP for signal processing</td></tr>
-                        <tr><td>Security Module</td><td>tRoot HSM with secure boot, crypto acceleration</td></tr>
-                        <tr><td>Inference Performance</td><td>~230 TOPS (INT8), ~115 TFLOPS (FP16)</td></tr>
+                        <tr><td>Performance</td><td>~230 TOPS (INT8), ~115 TFLOPS (FP16)</td></tr>
+                        <tr><td>Architecture</td><td>5-Chiplet UCIe 2.0 (Neural + Secure + RF + Beam + MRAM)</td></tr>
+                        <tr><td>Compute</td><td>64K MAC NPU + 8-core ARM A78AE + Quad-core VDSP</td></tr>
+                        <tr><td>Memory</td><td>LPDDR5 up to 32GB @ 102.4 GB/s</td></tr>
+                        <tr><td>Package</td><td>35 x 35mm BGA, &lt;25W TDP</td></tr>
+                        <tr><td>Security</td><td>tRoot HSM, secure boot, crypto acceleration</td></tr>
                     </table>
                 </div>
-
-                <div class="specs-section">
-                    <h4>Chiplet Architecture (UCIe 2.0)</h4>
-                    <table class="specs-table">
-                        <tr><td>Neural Compute Chiplet</td><td>NPU + CPU + VDSP integration</td></tr>
-                        <tr><td>Secure Interface Chiplet</td><td>tRoot HSM + secure I/O</td></tr>
-                        <tr><td>RF Modem Chiplet</td><td>Multi-band SDR, SATCOM ready</td></tr>
-                        <tr><td>Beamformer Chiplet</td><td>Phased array control, EW support</td></tr>
-                        <tr><td>MRAM Chiplet</td><td>Non-volatile storage for models/config</td></tr>
-                    </table>
+                <div style="text-align: center; margin-top: 20px;">
+                    <button class="contact-btn primary" onclick="document.querySelector('[data-tab=specs]').click()" style="display: inline-block; width: auto; padding: 12px 32px;">
+                        View Full Specifications &rarr;
+                    </button>
                 </div>
+            </div>
+        </div>
 
-                <div class="specs-section">
-                    <h4>Memory & Storage</h4>
+        <!-- ==================== SPECIFICATIONS TAB ==================== -->
+        <div id="specs" class="tab-content">
+            <div class="welcome" style="margin-bottom: 24px;">
+                <div class="welcome-content">
+                    <h1>LVS-250 <span>Technical Specifications</span></h1>
+                    <p>Complete technical details for system integration and design</p>
+                </div>
+            </div>
+
+            <div class="panel">
+                <h3>Compute Architecture</h3>
+                <table class="specs-table">
+                    <tr><td>Neural Processing Unit (NPU)</td><td>64K MAC Array, INT8/FP16</td></tr>
+                    <tr><td>CPU Complex</td><td>8-core ARM Cortex-A78AE @ 2.0GHz</td></tr>
+                    <tr><td>Vector DSP</td><td>Quad-core VDSP for signal processing</td></tr>
+                    <tr><td>Security Module</td><td>tRoot HSM with secure boot, crypto acceleration</td></tr>
+                    <tr><td>Inference Performance</td><td>~230 TOPS (INT8), ~115 TFLOPS (FP16)</td></tr>
+                </table>
+            </div>
+
+            <div class="panel" style="margin-top: 24px;">
+                <h3>Chiplet Architecture (UCIe 2.0)</h3>
+                <table class="specs-table">
+                    <tr><td>Neural Compute Chiplet</td><td>NPU + CPU + VDSP integration</td></tr>
+                    <tr><td>Secure Interface Chiplet</td><td>tRoot HSM + secure I/O</td></tr>
+                    <tr><td>RF Modem Chiplet</td><td>Multi-band SDR, SATCOM ready</td></tr>
+                    <tr><td>Beamformer Chiplet</td><td>Phased array control, EW support</td></tr>
+                    <tr><td>MRAM Chiplet</td><td>Non-volatile storage for models/config</td></tr>
+                </table>
+            </div>
+
+            <div class="grid" style="margin-top: 24px;">
+                <div class="panel">
+                    <h3>Memory & Storage</h3>
                     <table class="specs-table">
                         <tr><td>System Memory</td><td>LPDDR5, up to 32GB</td></tr>
                         <tr><td>Memory Bandwidth</td><td>102.4 GB/s</td></tr>
@@ -743,20 +848,8 @@
                         <tr><td>Persistent Storage</td><td>Integrated MRAM chiplet</td></tr>
                     </table>
                 </div>
-
-                <div class="specs-section">
-                    <h4>I/O & Connectivity</h4>
-                    <table class="specs-table">
-                        <tr><td>PCIe</td><td>Gen5 x8 (host interface)</td></tr>
-                        <tr><td>Camera Interfaces</td><td>8x MIPI CSI-2 (4-lane each)</td></tr>
-                        <tr><td>Ethernet</td><td>10GbE, TSN support</td></tr>
-                        <tr><td>Serial</td><td>UART, SPI, I2C, GPIO</td></tr>
-                        <tr><td>Display</td><td>HDMI 2.1, DisplayPort 1.4</td></tr>
-                    </table>
-                </div>
-
-                <div class="specs-section">
-                    <h4>Physical & Environmental</h4>
+                <div class="panel">
+                    <h3>Physical & Environmental</h3>
                     <table class="specs-table">
                         <tr><td>Package Size</td><td>35 x 35 x 3.2mm BGA</td></tr>
                         <tr><td>Process Node</td><td>GlobalFoundries 12LP+</td></tr>
@@ -765,6 +858,17 @@
                         <tr><td>Reliability</td><td>MIL-STD-883 qualified</td></tr>
                     </table>
                 </div>
+            </div>
+
+            <div class="panel" style="margin-top: 24px;">
+                <h3>I/O & Connectivity</h3>
+                <table class="specs-table">
+                    <tr><td>PCIe</td><td>Gen5 x8 (host interface)</td></tr>
+                    <tr><td>Camera Interfaces</td><td>8x MIPI CSI-2 (4-lane each)</td></tr>
+                    <tr><td>Ethernet</td><td>10GbE, TSN support</td></tr>
+                    <tr><td>Serial</td><td>UART, SPI, I2C, GPIO</td></tr>
+                    <tr><td>Display</td><td>HDMI 2.1, DisplayPort 1.4</td></tr>
+                </table>
             </div>
         </div>
 
@@ -1192,6 +1296,26 @@ processor = ImageProcessor(resize=(640, 640), normalize=<span class="code-keywor
                 document.getElementById(btn.dataset.tab).classList.add('active');
             });
         });
+
+        // Video mute/unmute control
+        const heroVideo = document.getElementById('heroVideo');
+        const muteBtn = document.getElementById('muteBtn');
+
+        if (muteBtn && heroVideo) {
+            muteBtn.addEventListener('click', () => {
+                if (heroVideo.muted) {
+                    heroVideo.muted = false;
+                    muteBtn.innerHTML = '&#128266;'; // Speaker with sound
+                    muteBtn.classList.remove('muted');
+                    muteBtn.title = 'Mute';
+                } else {
+                    heroVideo.muted = true;
+                    muteBtn.innerHTML = '&#128263;'; // Muted speaker
+                    muteBtn.classList.add('muted');
+                    muteBtn.title = 'Unmute';
+                }
+            });
+        }
     </script>
 </body>
 </html>
