@@ -103,9 +103,9 @@ SEE ALSO:
             align-items: center;
             gap: 16px;
         }
-        .nav-logo { height: 36px; width: auto; }
+        .nav-logo { height: 63px; width: auto; }  /* 75% larger (36 * 1.75) */
         .nav-title { font-size: 18px; font-weight: 700; color: white; }
-        .nav-title span { color: var(--gold); }
+        .nav-title span { color: white; }  /* All white text */
         .nav-user { display: flex; align-items: center; gap: 12px; }
         .customer-badge {
             background: linear-gradient(135deg, var(--accent), var(--accent-light));
@@ -172,7 +172,7 @@ SEE ALSO:
         .welcome-content h1 { font-size: 28px; margin-bottom: 8px; }
         .welcome-content h1 span { color: var(--gold); }
         .welcome-content p { color: var(--muted); font-size: 14px; }
-        .customer-logo { height: 60px; opacity: 0.9; }
+        .customer-logo { height: 80px; opacity: 1; }  /* Larger, more prominent */
 
         /* Stage Progress */
         .stage-tracker {
@@ -659,7 +659,9 @@ SEE ALSO:
                     <h1>Welcome back, <span>Anduril</span></h1>
                     <p>Your partnership dashboard - Last updated January 28, 2026</p>
                 </div>
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Anduril_logo.svg/200px-Anduril_logo.svg.png" alt="Anduril" class="customer-logo" style="filter: brightness(0) invert(1); opacity: 0.8;">
+                <div style="background: white; padding: 16px 24px; border-radius: 12px;">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Anduril_logo.svg/200px-Anduril_logo.svg.png" alt="Anduril" class="customer-logo" style="height: 50px;">
+                </div>
             </div>
 
             <!-- Stage Progress Tracker -->
