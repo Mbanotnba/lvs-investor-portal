@@ -565,6 +565,140 @@ OVERVIEW:
             .video-grid { grid-template-columns: 1fr; }
         }
 
+        /* Testimonials Grid */
+        .video-grid.testimonials-grid {
+            grid-template-columns: repeat(5, 1fr);
+            gap: 12px;
+        }
+        .video-grid.testimonials-grid .video-card {
+            cursor: pointer;
+        }
+        .video-grid.testimonials-grid .video-card video {
+            aspect-ratio: 9/16;
+            object-fit: cover;
+            width: 100%;
+            height: auto;
+        }
+        .video-grid.testimonials-grid .video-card-info {
+            padding: 10px;
+        }
+        .video-grid.testimonials-grid .video-card-title {
+            font-size: 11px;
+            line-height: 1.3;
+        }
+        .video-grid.testimonials-grid .speaker-avatar {
+            width: 24px;
+            height: 24px;
+            font-size: 9px;
+        }
+        .video-grid.testimonials-grid .speaker-name {
+            font-size: 11px;
+        }
+        .video-grid.testimonials-grid .speaker-title {
+            font-size: 9px;
+        }
+        .video-grid.testimonials-grid .video-card-speaker {
+            margin-top: 8px;
+            padding-top: 8px;
+            gap: 8px;
+        }
+        .video-card-speaker {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid rgba(255,255,255,0.06);
+        }
+        .speaker-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 12px;
+        }
+        .speaker-info {
+            flex: 1;
+        }
+        .speaker-name {
+            font-weight: 600;
+            font-size: 13px;
+        }
+        .speaker-title {
+            font-size: 11px;
+            color: var(--muted);
+        }
+        @media (max-width: 1200px) {
+            .video-grid.testimonials-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+        @media (max-width: 768px) {
+            .video-grid.testimonials-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        /* Video Overlay Modal */
+        .video-overlay-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 9999;
+        }
+        .video-overlay-modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .video-overlay-backdrop {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(8px);
+        }
+        .video-overlay-content {
+            position: relative;
+            max-width: 90vw;
+            max-height: 90vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .video-overlay-content video {
+            max-width: 100%;
+            max-height: 85vh;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+        .video-overlay-close {
+            position: absolute;
+            top: -50px;
+            right: 0;
+            width: 44px;
+            height: 44px;
+            border: none;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s, transform 0.2s;
+        }
+        .video-overlay-close:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.1);
+        }
+
         .footer {
             text-align: center;
             padding: 32px;
@@ -605,6 +739,7 @@ OVERVIEW:
         <button class="tab-btn" data-tab="integration">Integration</button>
         <button class="tab-btn" data-tab="specs">Specifications</button>
         <button class="tab-btn" data-tab="demos">Demos</button>
+        <button class="tab-btn" data-tab="testimonials">Testimonials</button>
         <button class="tab-btn" data-tab="docs">Documents</button>
         <button class="tab-btn" data-tab="support">Support</button>
     </div>
@@ -811,7 +946,7 @@ OVERVIEW:
                         <div class="exec-subtitle">Production Neural Compute Engine for Defense & Aerospace</div>
                     </div>
                     <div style="display: flex; gap: 8px;">
-                        <span class="exec-badge" style="background: var(--gold); color: #1a1a2e;">GF 12LP+</span>
+                        <span class="exec-badge" style="background: var(--gold); color: #1a1a2e;">GF 12LP</span>
                         <span class="exec-badge" style="background: var(--accent);">Production 2027</span>
                     </div>
                 </div>
@@ -1025,7 +1160,7 @@ OVERVIEW:
                     <h3>Physical & Environmental</h3>
                     <table class="specs-table">
                         <tr><td>Package Size</td><td>35 x 35 x 3.2mm BGA</td></tr>
-                        <tr><td>Process Node</td><td>GlobalFoundries 12LP+</td></tr>
+                        <tr><td>Process Node</td><td>GlobalFoundries 12LP</td></tr>
                         <tr><td>TDP</td><td>&lt;25W (typical), 35W (max)</td></tr>
                         <tr><td>Operating Temp</td><td>-40C to +85C (industrial)</td></tr>
                         <tr><td>Reliability</td><td>MIL-STD-883 qualified</td></tr>
@@ -1092,6 +1227,91 @@ OVERVIEW:
                     The LVS-250 delivers <strong>3-5x performance efficiency</strong> compared to current solutions, enabling either
                     <em>increased FPS for faster detection</em> or <em>reduced power consumption</em> for extended mission duration—a critical trade-off benefit for edge deployment.
                 </p>
+            </div>
+        </div>
+
+        <!-- Testimonials Tab -->
+        <div id="testimonials" class="tab-content">
+            <div class="video-section-header">
+                <h2>Expert Testimonials</h2>
+                <p>Industry leaders share their perspective on edge AI and the LVS platform.</p>
+            </div>
+            <div class="video-grid testimonials-grid">
+                <div class="video-card">
+                    <video class="testimonial-video" muted playsinline>
+                        <source src="assets/testimonials/JamesUrgencyforChips.mp4" type="video/mp4">
+                    </video>
+                    <div class="video-card-info">
+                        <div class="video-card-title">The Urgency for Domestic Chips</div>
+                        <div class="video-card-speaker">
+                            <div class="speaker-avatar">JS</div>
+                            <div class="speaker-info">
+                                <div class="speaker-name">James Stewart</div>
+                                <div class="speaker-title">Industry Expert</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="video-card">
+                    <video class="testimonial-video" muted playsinline>
+                        <source src="assets/testimonials/JamesEWexplanation.mp4" type="video/mp4">
+                    </video>
+                    <div class="video-card-info">
+                        <div class="video-card-title">Electronic Warfare Explained</div>
+                        <div class="video-card-speaker">
+                            <div class="speaker-avatar">JS</div>
+                            <div class="speaker-info">
+                                <div class="speaker-name">James Stewart</div>
+                                <div class="speaker-title">Industry Expert</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="video-card">
+                    <video class="testimonial-video" muted playsinline>
+                        <source src="assets/testimonials/RandyChipletConfiguration.mp4" type="video/mp4">
+                    </video>
+                    <div class="video-card-info">
+                        <div class="video-card-title">Chiplet Configuration Benefits</div>
+                        <div class="video-card-speaker">
+                            <div class="speaker-avatar">RH</div>
+                            <div class="speaker-info">
+                                <div class="speaker-name">Randy Hollines</div>
+                                <div class="speaker-title">Industry Expert</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="video-card">
+                    <video class="testimonial-video" muted playsinline>
+                        <source src="assets/testimonials/MaynardHwEdgeAISecurityPriorities.mp4" type="video/mp4">
+                    </video>
+                    <div class="video-card-info">
+                        <div class="video-card-title">Edge AI Security Priorities</div>
+                        <div class="video-card-speaker">
+                            <div class="speaker-avatar">MH</div>
+                            <div class="speaker-info">
+                                <div class="speaker-name">Maynard Holliday</div>
+                                <div class="speaker-title">Industry Expert</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="video-card">
+                    <video class="testimonial-video" muted playsinline>
+                        <source src="assets/testimonials/MaynardChineseThreat.mp4" type="video/mp4">
+                    </video>
+                    <div class="video-card-info">
+                        <div class="video-card-title">Addressing the China Challenge</div>
+                        <div class="video-card-speaker">
+                            <div class="speaker-avatar">MH</div>
+                            <div class="speaker-info">
+                                <div class="speaker-name">Maynard Holliday</div>
+                                <div class="speaker-title">Industry Expert</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -1210,6 +1430,17 @@ OVERVIEW:
         </footer>
     </div>
 
+    <!-- Fullscreen Video Overlay -->
+    <div id="videoOverlay" class="video-overlay-modal">
+        <div class="video-overlay-backdrop"></div>
+        <div class="video-overlay-content">
+            <button class="video-overlay-close" aria-label="Close">&times;</button>
+            <video id="overlayVideo" controls playsinline>
+                <source src="" type="video/mp4">
+            </video>
+        </div>
+    </div>
+
     <script>
         // Tab switching
         document.querySelectorAll('.tab-btn').forEach(btn => {
@@ -1219,6 +1450,10 @@ OVERVIEW:
                 btn.classList.add('active');
                 document.getElementById(btn.dataset.tab).classList.add('active');
 
+                // Pause all testimonials when leaving tab
+                if (btn.dataset.tab !== 'testimonials') {
+                    pauseAllTestimonials();
+                }
                 // Play demos when entering demos tab
                 if (btn.dataset.tab === 'demos') {
                     document.querySelectorAll('.demo-video').forEach(video => {
@@ -1252,6 +1487,74 @@ OVERVIEW:
         document.querySelectorAll('.demo-video').forEach(video => {
             video.playbackRate = 2.0;
             video.play().catch(() => {});
+        });
+
+        // Testimonial videos - hover preview (desktop), click for fullscreen overlay
+        const testimonialVideos = document.querySelectorAll('.testimonial-video');
+        const videoOverlay = document.getElementById('videoOverlay');
+        const overlayVideo = document.getElementById('overlayVideo');
+        const overlayBackdrop = document.querySelector('.video-overlay-backdrop');
+        const overlayClose = document.querySelector('.video-overlay-close');
+        const isMobile = window.innerWidth <= 768;
+
+        // Helper to pause all testimonials
+        function pauseAllTestimonials() {
+            testimonialVideos.forEach(v => {
+                v.pause();
+                v.currentTime = 0;
+            });
+        }
+
+        // Open fullscreen overlay
+        function openVideoOverlay(videoSrc) {
+            pauseAllTestimonials();
+            overlayVideo.src = videoSrc;
+            videoOverlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            overlayVideo.play().catch(() => {});
+        }
+
+        // Close fullscreen overlay
+        function closeVideoOverlay() {
+            videoOverlay.classList.remove('active');
+            overlayVideo.pause();
+            overlayVideo.src = '';
+            document.body.style.overflow = '';
+        }
+
+        // Close triggers
+        if (overlayClose) overlayClose.addEventListener('click', closeVideoOverlay);
+        if (overlayBackdrop) overlayBackdrop.addEventListener('click', closeVideoOverlay);
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && videoOverlay.classList.contains('active')) {
+                closeVideoOverlay();
+            }
+        });
+
+        testimonialVideos.forEach(video => {
+            video.playbackRate = 1.0;
+            video.loop = true;
+            video.style.cursor = 'pointer';
+
+            const videoSrc = video.querySelector('source')?.src || video.src;
+
+            // Click to open fullscreen overlay
+            video.addEventListener('click', (e) => {
+                e.preventDefault();
+                openVideoOverlay(videoSrc);
+            });
+
+            if (!isMobile) {
+                // Desktop: hover to preview
+                video.addEventListener('mouseenter', () => {
+                    pauseAllTestimonials();
+                    video.play().catch(() => {});
+                });
+                video.addEventListener('mouseleave', () => {
+                    video.pause();
+                    video.currentTime = 0;
+                });
+            }
         });
 
         // Show founder portal link for founders/investors
