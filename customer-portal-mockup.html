@@ -728,6 +728,81 @@ SEE ALSO:
             color: var(--muted);
         }
 
+        /* Supported By Section */
+        .supported-by-section {
+            margin-top: 32px;
+            padding: 28px;
+            background: var(--panel);
+            border-radius: 16px;
+            border: 1px solid rgba(255,255,255,0.06);
+        }
+        .supported-by-section h3 {
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--muted);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .supporters-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 16px;
+        }
+        .supporter-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 12px;
+            padding: 16px 20px;
+            text-align: center;
+            min-width: 140px;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+        .supporter-card:hover {
+            transform: translateY(-2px);
+            border-color: rgba(124,77,255,0.3);
+        }
+        .supporter-logo {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+        .supporter-name {
+            font-weight: 600;
+            font-size: 13px;
+            color: var(--text);
+            margin-bottom: 2px;
+        }
+        .supporter-program {
+            font-size: 11px;
+            color: var(--muted);
+        }
+        .supporters-note {
+            text-align: center;
+            font-size: 12px;
+            color: var(--muted);
+            margin-top: 20px;
+            font-style: italic;
+        }
+        @media (max-width: 768px) {
+            .supporters-grid {
+                gap: 10px;
+            }
+            .supporter-card {
+                min-width: 100px;
+                padding: 12px 14px;
+            }
+            .supporter-logo {
+                font-size: 22px;
+            }
+            .supporter-name {
+                font-size: 11px;
+            }
+            .supporter-program {
+                font-size: 10px;
+            }
+        }
+
         /* Fullscreen Video Overlay */
         .video-overlay-modal {
             display: none;
@@ -1057,6 +1132,39 @@ SEE ALSO:
                         </div>
                     </div>
                 </div>
+            </div>
+
+            <!-- Supported By Section -->
+            <div class="supported-by-section">
+                <h3>Supported By</h3>
+                <div class="supporters-grid">
+                    <div class="supporter-card">
+                        <div class="supporter-logo">🚀</div>
+                        <div class="supporter-name">Plug and Play</div>
+                        <div class="supporter-program">Aerospace & Defense</div>
+                    </div>
+                    <div class="supporter-card">
+                        <div class="supporter-logo">🏭</div>
+                        <div class="supporter-name">Capital Factory</div>
+                        <div class="supporter-program">All-Access Program</div>
+                    </div>
+                    <div class="supporter-card">
+                        <div class="supporter-logo">🌱</div>
+                        <div class="supporter-name">LA Cleantech</div>
+                        <div class="supporter-program">Incubator</div>
+                    </div>
+                    <div class="supporter-card">
+                        <div class="supporter-logo" style="font-size: 20px;">☁️</div>
+                        <div class="supporter-name">Google Cloud</div>
+                        <div class="supporter-program">for Startups</div>
+                    </div>
+                    <div class="supporter-card">
+                        <div class="supporter-logo">💼</div>
+                        <div class="supporter-name">InvestFest</div>
+                        <div class="supporter-program">Alumni</div>
+                    </div>
+                </div>
+                <p class="supporters-note">Backed by pre-seed investors who believe in bringing advanced AI compute to the edge.</p>
             </div>
         </div>
 
