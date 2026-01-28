@@ -3,13 +3,14 @@
 ================================================================================
 LVS PRESENTATION PORTAL - NSIC January 2026
 ================================================================================
-Version: 2.1
+Version: 2.2
 Last Updated: January 28, 2026
 Status: Active Presentation Portal
 
 OVERVIEW:
   Presentation viewer for LVS NSIC Presentation January 2026.
-  Embeds PDF directly in page body for native browser scrolling.
+  Desktop: Native browser PDF embed
+  Mobile: PDF.js rendered slides for scrolling
 ================================================================================
 -->
 <html lang="en">
@@ -17,6 +18,7 @@ OVERVIEW:
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NSIC Presentation | Lola Vision Systems</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
     <style>
         :root {
             --bg: #0b1021;
@@ -31,7 +33,6 @@ OVERVIEW:
         * { margin: 0; padding: 0; box-sizing: border-box; }
         html, body {
             height: 100%;
-            overflow: hidden;
         }
         body {
             font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
@@ -39,6 +40,10 @@ OVERVIEW:
             color: var(--text);
             display: flex;
             flex-direction: column;
+            overflow: hidden;
+        }
+        body.mobile-mode {
+            overflow: auto;
         }
 
         .nav {
@@ -49,6 +54,9 @@ OVERVIEW:
             justify-content: space-between;
             align-items: center;
             flex-shrink: 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
         .nav-brand { display: flex; align-items: center; gap: 12px; }
         .nav-logo { height: 40px; width: auto; }
@@ -109,6 +117,7 @@ OVERVIEW:
             background: rgba(255,255,255,0.1);
         }
 
+        /* Desktop: Native PDF embed */
         .pdf-container {
             flex: 1;
             display: flex;
@@ -122,20 +131,95 @@ OVERVIEW:
             background: #525659;
         }
 
-        /* Mobile adjustments */
+        /* Mobile: PDF.js rendered slides */
+        .mobile-container {
+            display: none;
+            padding: 16px;
+            padding-bottom: 32px;
+        }
+        body.mobile-mode .pdf-container {
+            display: none;
+        }
+        body.mobile-mode .mobile-container {
+            display: block;
+        }
+
+        .slides-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            align-items: center;
+        }
+        .slide {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            overflow: hidden;
+            width: 100%;
+            max-width: 100%;
+        }
+        .slide canvas {
+            display: block;
+            width: 100% !important;
+            height: auto !important;
+        }
+        .slide-number {
+            background: var(--panel);
+            padding: 6px 12px;
+            font-size: 11px;
+            color: var(--muted);
+            text-align: center;
+        }
+
+        .loading {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 20px;
+            text-align: center;
+        }
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--panel-light);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 16px;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .loading p {
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .error-state {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            padding: 60px 20px;
+            text-align: center;
+        }
+        .error-state.show {
+            display: flex;
+        }
+        .error-state p {
+            color: var(--muted);
+            font-size: 14px;
+            margin-bottom: 16px;
+        }
+
+        /* Mobile nav adjustments */
         @media (max-width: 768px) {
             .nav {
                 padding: 10px 16px;
-                flex-wrap: wrap;
-                gap: 10px;
             }
             .nav-logo { height: 32px; }
-            .nav-title { font-size: 14px; }
-            .nav-center {
-                order: 3;
-                width: 100%;
-                justify-content: center;
-            }
+            .nav-title { display: none; }
+            .nav-center { display: none; }
             .nav-info h1 { font-size: 13px; }
             .control-btn { padding: 6px 12px; font-size: 11px; }
         }
@@ -162,7 +246,8 @@ OVERVIEW:
         </div>
     </nav>
 
-    <div class="pdf-container">
+    <!-- Desktop: Native PDF viewer -->
+    <div class="pdf-container" id="desktopContainer">
         <embed
             src="assets/presentations/LVS NSIC Presentation Jan 2026.pdf#toolbar=1&navpanes=0&scrollbar=1&view=FitH"
             type="application/pdf"
@@ -170,7 +255,91 @@ OVERVIEW:
         >
     </div>
 
+    <!-- Mobile: PDF.js rendered slides -->
+    <div class="mobile-container" id="mobileContainer">
+        <div class="loading" id="loading">
+            <div class="loading-spinner"></div>
+            <p id="loadingText">Loading presentation...</p>
+        </div>
+        <div class="error-state" id="errorState">
+            <p>Unable to load presentation.</p>
+            <a href="assets/presentations/LVS NSIC Presentation Jan 2026.pdf" download class="control-btn secondary">
+                <span>&#8595;</span> Download PDF Instead
+            </a>
+        </div>
+        <div class="slides-wrapper" id="slidesWrapper"></div>
+    </div>
+
     <script>
+        const pdfPath = 'assets/presentations/LVS NSIC Presentation Jan 2026.pdf';
+
+        // Detect mobile/tablet
+        function isMobileDevice() {
+            return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+                || window.innerWidth <= 768;
+        }
+
+        // Initialize PDF.js for mobile
+        async function initMobilePDF() {
+            pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+            const loading = document.getElementById('loading');
+            const loadingText = document.getElementById('loadingText');
+            const errorState = document.getElementById('errorState');
+            const wrapper = document.getElementById('slidesWrapper');
+
+            try {
+                const pdf = await pdfjsLib.getDocument(pdfPath).promise;
+                const totalPages = pdf.numPages;
+
+                loading.style.display = 'none';
+
+                for (let i = 1; i <= totalPages; i++) {
+                    loadingText.textContent = `Loading slide ${i} of ${totalPages}...`;
+
+                    const page = await pdf.getPage(i);
+                    const viewport = page.getViewport({ scale: 1 });
+
+                    // Scale to fit screen width with some padding
+                    const containerWidth = window.innerWidth - 32;
+                    const scale = (containerWidth / viewport.width) * 2; // 2x for retina
+                    const scaledViewport = page.getViewport({ scale });
+
+                    const slideDiv = document.createElement('div');
+                    slideDiv.className = 'slide';
+
+                    const canvas = document.createElement('canvas');
+                    const context = canvas.getContext('2d');
+                    canvas.width = scaledViewport.width;
+                    canvas.height = scaledViewport.height;
+
+                    await page.render({
+                        canvasContext: context,
+                        viewport: scaledViewport
+                    }).promise;
+
+                    slideDiv.appendChild(canvas);
+
+                    const slideNum = document.createElement('div');
+                    slideNum.className = 'slide-number';
+                    slideNum.textContent = `${i} / ${totalPages}`;
+                    slideDiv.appendChild(slideNum);
+
+                    wrapper.appendChild(slideDiv);
+                }
+            } catch (error) {
+                console.error('PDF load error:', error);
+                loading.style.display = 'none';
+                errorState.classList.add('show');
+            }
+        }
+
+        // Initialize based on device
+        if (isMobileDevice()) {
+            document.body.classList.add('mobile-mode');
+            initMobilePDF();
+        }
+
         // Update back link based on auth status
         const backLink = document.getElementById('backLink');
         if (sessionStorage.getItem('lvs_founder_auth') === 'true' ||
@@ -182,6 +351,15 @@ OVERVIEW:
             backLink.href = 'login.html';
             backLink.textContent = '← Back';
         }
+
+        // Handle resize (e.g., rotating device)
+        let wasMobile = isMobileDevice();
+        window.addEventListener('resize', () => {
+            const isMobile = isMobileDevice();
+            if (isMobile !== wasMobile) {
+                location.reload(); // Reload to switch modes
+            }
+        });
     </script>
 </body>
 </html>
