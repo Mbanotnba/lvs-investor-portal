@@ -135,12 +135,6 @@
         input::placeholder {
             color: #4b5563;
         }
-        .email-field {
-            display: none;
-        }
-        .email-field.show {
-            display: block;
-        }
         button[type="submit"] {
             width: 100%;
             padding: 14px;
@@ -330,12 +324,6 @@
         </div>
 
         <form onsubmit="return authenticate()">
-            <!-- Email field (shown for founder/customer) -->
-            <div class="form-group email-field" id="emailField">
-                <label for="email">Email</label>
-                <input type="email" id="email" placeholder="your@email.com">
-            </div>
-
             <!-- Customer selector (shown for customer role) -->
             <div class="form-group customer-select" id="customerSelect">
                 <label for="customer">Select Company</label>
@@ -398,7 +386,6 @@
     <script>
         // Configuration
         const CONFIG = {
-            founderDomain: 'lolavisionsystems.com',
             // Team master password (for demo/testing)
             teamPassword: '790995832',  // LVS_2026
             // Password hashes
@@ -472,20 +459,12 @@
             document.querySelectorAll('.role-btn').forEach(btn => btn.classList.remove('active'));
             document.querySelector(`.role-btn.${role}`).classList.add('active');
 
-            // Show/hide email field
-            const emailField = document.getElementById('emailField');
+            // Show/hide customer selector
             const customerSelect = document.getElementById('customerSelect');
 
-            if (role === 'founder') {
-                emailField.classList.add('show');
-                customerSelect.classList.remove('show');
-                document.getElementById('email').placeholder = 'you@lolavisionsystems.com';
-            } else if (role === 'customer') {
-                emailField.classList.add('show');
+            if (role === 'customer') {
                 customerSelect.classList.add('show');
-                document.getElementById('email').placeholder = 'your@company.com';
             } else {
-                emailField.classList.remove('show');
                 customerSelect.classList.remove('show');
             }
 
@@ -496,7 +475,6 @@
 
         // Authentication
         function authenticate() {
-            const email = document.getElementById('email').value.trim().toLowerCase();
             const password = document.getElementById('password').value;
             const customer = document.getElementById('customer').value;
             const errorEl = document.getElementById('error');
@@ -517,7 +495,6 @@
 
                     if (selectedRole === 'founder') {
                         sessionStorage.setItem('lvs_founder_auth', 'true');
-                        sessionStorage.setItem('lvs_founder_email', email || 'team@lolavisionsystems.com');
                         sessionStorage.setItem('lvs_can_view_customers', 'true');
                         sessionStorage.setItem('lvs_can_view_investor', 'true');
                         successEl.textContent = 'Founder access granted (Team Mode). Redirecting...';
@@ -535,7 +512,6 @@
                             return false;
                         }
                         sessionStorage.setItem('lvs_customer', customer);
-                        sessionStorage.setItem('lvs_customer_email', email || 'demo@' + customer + '.com');
                         successEl.textContent = 'Customer access granted (Team Mode). Redirecting...';
                         successEl.style.display = 'block';
                         const portalUrl = CONFIG.customerPortals[customer];
@@ -562,16 +538,9 @@
                     errorEl.style.display = 'block';
                 }
             } else if (selectedRole === 'founder') {
-                const domain = email.split('@')[1];
-                if (domain !== CONFIG.founderDomain) {
-                    errorEl.textContent = 'Only @lolavisionsystems.com emails allowed.';
-                    errorEl.style.display = 'block';
-                    return false;
-                }
                 if (passwordHash === CONFIG.passwords.founder) {
                     sessionStorage.setItem('lvs_auth', 'true');
                     sessionStorage.setItem('lvs_founder_auth', 'true');
-                    sessionStorage.setItem('lvs_founder_email', email);
                     sessionStorage.setItem('lvs_role', 'founder');
                     sessionStorage.setItem('lvs_can_view_customers', 'true');
                     sessionStorage.setItem('lvs_can_view_investor', 'true');
@@ -579,7 +548,7 @@
                     successEl.style.display = 'block';
                     setTimeout(() => window.location.href = 'founder-portal.html', 500);
                 } else {
-                    errorEl.textContent = 'Invalid password.';
+                    errorEl.textContent = 'Invalid access code.';
                     errorEl.style.display = 'block';
                 }
             } else if (selectedRole === 'customer') {
@@ -588,17 +557,11 @@
                     errorEl.style.display = 'block';
                     return false;
                 }
-                if (!email) {
-                    errorEl.textContent = 'Please enter your email.';
-                    errorEl.style.display = 'block';
-                    return false;
-                }
 
                 const expectedHash = CONFIG.passwords.customer[customer];
                 if (passwordHash === expectedHash) {
                     sessionStorage.setItem('lvs_auth', 'true');
                     sessionStorage.setItem('lvs_customer', customer);
-                    sessionStorage.setItem('lvs_customer_email', email);
                     sessionStorage.setItem('lvs_role', 'customer');
                     // Customers can only view their own portal
                     sessionStorage.removeItem('lvs_can_view_customers');
