@@ -62,9 +62,14 @@
         /* Role Selector */
         .role-selector {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(4, 1fr);
             gap: 10px;
             margin-bottom: 24px;
+        }
+        @media (max-width: 500px) {
+            .role-selector {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
         .role-btn {
             background: #1a1a24;
@@ -100,6 +105,13 @@
             opacity: 1;
             box-shadow: 0 0 20px rgba(212,175,55,0.3);
         }
+        /* Presentation - Cyan when active */
+        .role-btn.presentation.active {
+            border-color: #06b6d4;
+            background: rgba(6,182,212,0.15);
+            opacity: 1;
+            box-shadow: 0 0 20px rgba(6,182,212,0.3);
+        }
         .role-icon {
             font-size: 24px;
             margin-bottom: 8px;
@@ -121,6 +133,7 @@
         .role-btn.investor.active .role-label { color: #a78bfa; }
         .role-btn.customer.active .role-label { color: #34d399; }
         .role-btn.founder.active .role-label { color: #d4af37; }
+        .role-btn.presentation.active .role-label { color: #22d3ee; }
         .role-desc {
             font-size: 10px;
             color: #6b7280;
@@ -303,6 +316,11 @@
                 <div class="role-label">Founder</div>
                 <div class="role-desc">Full Access</div>
             </div>
+            <div class="role-btn presentation" onclick="goToPresentation()">
+                <div class="role-icon">&#128202;</div>
+                <div class="role-label">Presentation</div>
+                <div class="role-desc">No Password</div>
+            </div>
         </div>
 
         <form onsubmit="return authenticate()">
@@ -413,6 +431,19 @@
                 hash = hash & hash;
             }
             return String(Math.abs(hash));
+        }
+
+        // Go directly to presentation (no password required)
+        function goToPresentation() {
+            // Highlight the button briefly
+            document.querySelectorAll('.role-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelector('.role-btn.presentation').classList.add('active');
+
+            // Set minimal session for presentation access
+            sessionStorage.setItem('lvs_presentation_access', 'true');
+
+            // Redirect immediately
+            setTimeout(() => window.location.href = 'nsic-presentation.html', 300);
         }
 
         // Role selection

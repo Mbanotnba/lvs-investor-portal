@@ -195,10 +195,8 @@ OVERVIEW:
         }
     </style>
     <script>
-        // Check authentication
-        if (sessionStorage.getItem('lvs_auth') !== 'true') {
-            window.location.href = 'login.html';
-        }
+        // Presentation portal - no authentication required
+        // Allow access from login page presentation button or direct link
     </script>
 </head>
 <body>
@@ -314,11 +312,18 @@ OVERVIEW:
             }
         });
 
-        // Show back link for authenticated users
+        // Show back link - always show link to login for navigation
+        const founderLink = document.getElementById('founderLink');
         if (sessionStorage.getItem('lvs_founder_auth') === 'true' ||
             sessionStorage.getItem('lvs_investor_auth') === 'true' ||
             sessionStorage.getItem('lvs_can_view_customers') === 'true') {
-            document.getElementById('founderLink').style.display = 'inline';
+            founderLink.style.display = 'inline';
+            founderLink.href = 'founder-portal.html';
+            founderLink.textContent = '← Back to Portal';
+        } else {
+            founderLink.style.display = 'inline';
+            founderLink.href = 'login.html';
+            founderLink.textContent = '← Back to Login';
         }
     </script>
 </body>
