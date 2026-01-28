@@ -3,13 +3,13 @@
 ================================================================================
 LVS PRESENTATION PORTAL - NSIC January 2026
 ================================================================================
-Version: 2.0
+Version: 2.1
 Last Updated: January 28, 2026
 Status: Active Presentation Portal
 
 OVERVIEW:
   Presentation viewer for LVS NSIC Presentation January 2026.
-  Renders PDF pages inline for smooth scrolling experience.
+  Embeds PDF directly in page body for native browser scrolling.
 ================================================================================
 -->
 <html lang="en">
@@ -17,7 +17,6 @@ OVERVIEW:
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NSIC Presentation | Lola Vision Systems</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
     <style>
         :root {
             --bg: #0b1021;
@@ -28,39 +27,58 @@ OVERVIEW:
             --gold: #d4af37;
             --text: #e6e8f0;
             --muted: #9aa3c2;
-            --success: #10b981;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body {
+            height: 100%;
+            overflow: hidden;
+        }
         body {
             font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
             background: var(--bg);
             color: var(--text);
-            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
 
         .nav {
-            background: rgba(20, 26, 48, 0.95);
-            backdrop-filter: blur(10px);
+            background: rgba(20, 26, 48, 0.98);
             border-bottom: 1px solid rgba(255,255,255,0.06);
-            padding: 16px 32px;
+            padding: 12px 24px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 100;
+            flex-shrink: 0;
         }
-        .nav-brand { display: flex; align-items: center; gap: 16px; }
-        .nav-logo { height: 50px; width: auto; }
-        .nav-title { font-size: 18px; font-weight: 700; color: white; }
-        .nav-user { display: flex; align-items: center; gap: 12px; }
+        .nav-brand { display: flex; align-items: center; gap: 12px; }
+        .nav-logo { height: 40px; width: auto; }
+        .nav-title { font-size: 16px; font-weight: 700; color: white; }
+        .nav-center {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .nav-info h1 {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text);
+        }
+        .nav-info p {
+            font-size: 11px;
+            color: var(--muted);
+        }
         .nav-badge {
             background: linear-gradient(135deg, var(--gold), #b8960b);
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 12px;
+            padding: 4px 12px;
+            border-radius: 16px;
+            font-size: 11px;
             font-weight: 600;
             color: #1a1a2e;
+        }
+        .nav-controls {
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
         .nav-link {
             color: var(--muted);
@@ -69,58 +87,18 @@ OVERVIEW:
             transition: color 0.2s;
         }
         .nav-link:hover { color: var(--text); }
-
-        .presentation-header {
-            background: var(--panel);
-            border-bottom: 1px solid rgba(255,255,255,0.06);
-            padding: 20px 32px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: sticky;
-            top: 82px;
-            z-index: 99;
-        }
-        .presentation-info h1 {
-            font-size: 20px;
-            font-weight: 700;
-            margin-bottom: 4px;
-        }
-        .presentation-info p {
-            font-size: 13px;
-            color: var(--muted);
-        }
-        .presentation-controls {
-            display: flex;
-            gap: 12px;
-            align-items: center;
-        }
-        .page-indicator {
-            font-size: 13px;
-            color: var(--muted);
-            padding: 8px 16px;
-            background: var(--panel-light);
-            border-radius: 8px;
-        }
         .control-btn {
-            padding: 10px 20px;
+            padding: 8px 16px;
             border: none;
-            border-radius: 8px;
-            font-size: 13px;
+            border-radius: 6px;
+            font-size: 12px;
             font-weight: 600;
             cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
             transition: all 0.2s;
-        }
-        .control-btn.primary {
-            background: var(--accent);
-            color: white;
-        }
-        .control-btn.primary:hover {
-            background: var(--accent-light);
-            transform: translateY(-1px);
+            text-decoration: none;
         }
         .control-btn.secondary {
             background: var(--panel-light);
@@ -131,117 +109,35 @@ OVERVIEW:
             background: rgba(255,255,255,0.1);
         }
 
-        .presentation-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 32px;
-        }
-
-        .slides-container {
+        .pdf-container {
+            flex: 1;
             display: flex;
             flex-direction: column;
-            gap: 24px;
-            align-items: center;
-        }
-
-        .slide {
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
             overflow: hidden;
+        }
+        .pdf-embed {
+            flex: 1;
             width: 100%;
-            max-width: 1000px;
-        }
-        .slide canvas {
-            display: block;
-            width: 100%;
-            height: auto;
-        }
-        .slide-number {
-            background: var(--panel);
-            padding: 8px 16px;
-            font-size: 12px;
-            color: var(--muted);
-            text-align: center;
-            border-top: 1px solid rgba(255,255,255,0.06);
+            border: none;
+            background: #525659;
         }
 
-        .loading {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 100px 40px;
-            text-align: center;
-        }
-        .loading-spinner {
-            width: 48px;
-            height: 48px;
-            border: 4px solid var(--panel-light);
-            border-top-color: var(--accent);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-bottom: 20px;
-        }
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-        .loading h3 {
-            font-size: 18px;
-            margin-bottom: 8px;
-        }
-        .loading p {
-            color: var(--muted);
-            font-size: 14px;
-        }
-
-        .error-message {
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 100px 40px;
-            text-align: center;
-        }
-        .error-message.show {
-            display: flex;
-        }
-        .error-icon {
-            font-size: 64px;
-            margin-bottom: 20px;
-            opacity: 0.5;
-        }
-        .error-message h3 {
-            font-size: 18px;
-            margin-bottom: 8px;
-        }
-        .error-message p {
-            color: var(--muted);
-            font-size: 14px;
-            margin-bottom: 20px;
-        }
-
-        .footer {
-            text-align: center;
-            padding: 32px;
-            color: var(--muted);
-            font-size: 11px;
-        }
-
+        /* Mobile adjustments */
         @media (max-width: 768px) {
-            .nav { padding: 12px 16px; }
-            .nav-logo { height: 40px; }
-            .nav-title { font-size: 14px; }
-            .presentation-header {
-                flex-direction: column;
-                gap: 16px;
-                padding: 16px;
-                top: 64px;
+            .nav {
+                padding: 10px 16px;
+                flex-wrap: wrap;
+                gap: 10px;
             }
-            .presentation-info { text-align: center; }
-            .presentation-container { padding: 16px; }
-            .slides-container { gap: 16px; }
-            .control-btn { padding: 8px 12px; font-size: 12px; }
+            .nav-logo { height: 32px; }
+            .nav-title { font-size: 14px; }
+            .nav-center {
+                order: 3;
+                width: 100%;
+                justify-content: center;
+            }
+            .nav-info h1 { font-size: 13px; }
+            .control-btn { padding: 6px 12px; font-size: 11px; }
         }
     </style>
 </head>
@@ -251,151 +147,41 @@ OVERVIEW:
             <img src="assets/lvs-logo.png" alt="LVS" class="nav-logo">
             <span class="nav-title">LOLA VISION SYSTEMS</span>
         </div>
-        <div class="nav-user">
-            <span class="nav-badge">NSIC Presentation</span>
-            <a href="login.html" class="nav-link" id="founderLink">&larr; Back</a>
+        <div class="nav-center">
+            <span class="nav-badge">NSIC</span>
+            <div class="nav-info">
+                <h1>LVS NSIC Presentation</h1>
+                <p>January 2026</p>
+            </div>
+        </div>
+        <div class="nav-controls">
+            <a href="assets/presentations/LVS NSIC Presentation Jan 2026.pdf" download class="control-btn secondary">
+                <span>&#8595;</span> Download
+            </a>
+            <a href="login.html" class="nav-link" id="backLink">&larr; Back</a>
         </div>
     </nav>
 
-    <div class="presentation-header">
-        <div class="presentation-info">
-            <h1>LVS NSIC Presentation</h1>
-            <p>January 2026 | Investor Overview</p>
-        </div>
-        <div class="presentation-controls">
-            <span class="page-indicator" id="pageIndicator">Loading...</span>
-            <button class="control-btn secondary" onclick="downloadPDF()">
-                <span>&#8595;</span> Download
-            </button>
-        </div>
+    <div class="pdf-container">
+        <embed
+            src="assets/presentations/LVS NSIC Presentation Jan 2026.pdf#toolbar=1&navpanes=0&scrollbar=1&view=FitH"
+            type="application/pdf"
+            class="pdf-embed"
+        >
     </div>
-
-    <div class="presentation-container">
-        <div class="loading" id="loading">
-            <div class="loading-spinner"></div>
-            <h3>Loading Presentation</h3>
-            <p>Please wait while slides are being rendered...</p>
-        </div>
-
-        <div class="error-message" id="errorMessage">
-            <div class="error-icon">&#128196;</div>
-            <h3>Presentation Not Available</h3>
-            <p>The PDF file could not be loaded. Please check back later.</p>
-            <a href="login.html" class="control-btn primary">
-                &larr; Back to Portal
-            </a>
-        </div>
-
-        <div class="slides-container" id="slidesContainer"></div>
-    </div>
-
-    <footer class="footer">
-        <p>Lola Vision Systems | NSIC Presentation | Confidential</p>
-        <p style="margin-top: 8px;">January 2026</p>
-    </footer>
 
     <script>
-        const pdfPath = 'assets/presentations/LVS NSIC Presentation Jan 2026.pdf';
-        let pdfDoc = null;
-        let totalPages = 0;
-
-        // Initialize PDF.js worker
-        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-
-        function downloadPDF() {
-            const link = document.createElement('a');
-            link.href = pdfPath;
-            link.download = 'LVS NSIC Presentation Jan 2026.pdf';
-            link.click();
-        }
-
-        async function renderPage(pageNum, container) {
-            const page = await pdfDoc.getPage(pageNum);
-
-            // Calculate scale to fit container width
-            const containerWidth = Math.min(1000, window.innerWidth - 64);
-            const viewport = page.getViewport({ scale: 1 });
-            const scale = containerWidth / viewport.width;
-            const scaledViewport = page.getViewport({ scale: scale * 2 }); // 2x for retina
-
-            // Create slide wrapper
-            const slideDiv = document.createElement('div');
-            slideDiv.className = 'slide';
-            slideDiv.id = `slide-${pageNum}`;
-
-            // Create canvas
-            const canvas = document.createElement('canvas');
-            const context = canvas.getContext('2d');
-            canvas.width = scaledViewport.width;
-            canvas.height = scaledViewport.height;
-            canvas.style.width = `${scaledViewport.width / 2}px`;
-            canvas.style.height = `${scaledViewport.height / 2}px`;
-
-            // Render page
-            await page.render({
-                canvasContext: context,
-                viewport: scaledViewport
-            }).promise;
-
-            slideDiv.appendChild(canvas);
-
-            // Add slide number
-            const slideNumber = document.createElement('div');
-            slideNumber.className = 'slide-number';
-            slideNumber.textContent = `Slide ${pageNum} of ${totalPages}`;
-            slideDiv.appendChild(slideNumber);
-
-            container.appendChild(slideDiv);
-        }
-
-        async function loadPDF() {
-            const loadingEl = document.getElementById('loading');
-            const errorEl = document.getElementById('errorMessage');
-            const container = document.getElementById('slidesContainer');
-            const pageIndicator = document.getElementById('pageIndicator');
-
-            try {
-                // Load PDF
-                pdfDoc = await pdfjsLib.getDocument(pdfPath).promise;
-                totalPages = pdfDoc.numPages;
-
-                // Hide loading, show container
-                loadingEl.style.display = 'none';
-
-                // Update page indicator
-                pageIndicator.textContent = `${totalPages} slides`;
-
-                // Render all pages
-                for (let i = 1; i <= totalPages; i++) {
-                    await renderPage(i, container);
-                    // Update progress
-                    pageIndicator.textContent = `Loaded ${i} of ${totalPages} slides`;
-                }
-
-                pageIndicator.textContent = `${totalPages} slides`;
-
-            } catch (error) {
-                console.error('Error loading PDF:', error);
-                loadingEl.style.display = 'none';
-                errorEl.classList.add('show');
-                pageIndicator.textContent = 'Error';
-            }
-        }
-
         // Update back link based on auth status
-        const founderLink = document.getElementById('founderLink');
+        const backLink = document.getElementById('backLink');
         if (sessionStorage.getItem('lvs_founder_auth') === 'true' ||
             sessionStorage.getItem('lvs_investor_auth') === 'true' ||
             sessionStorage.getItem('lvs_can_view_customers') === 'true') {
-            founderLink.href = 'founder-portal.html';
-            founderLink.textContent = '← Back to Portal';
+            backLink.href = 'founder-portal.html';
+            backLink.textContent = '← Portal';
         } else {
-            founderLink.href = 'login.html';
-            founderLink.textContent = '← Back to Login';
+            backLink.href = 'login.html';
+            backLink.textContent = '← Back';
         }
-
-        // Load PDF on page load
-        loadPDF();
     </script>
 </body>
 </html>
