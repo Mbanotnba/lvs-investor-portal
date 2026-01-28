@@ -563,6 +563,54 @@
             </div>
         </div>
 
+        <!-- Customer Portals (visible to investors and founders) -->
+        <div class="funding-section" id="customerPortalsSection" style="border-left: 3px solid var(--success); margin-bottom: 24px; display: none;">
+            <h3 style="display: flex; align-items: center; gap: 10px;">
+                <span style="font-size: 20px;">&#128188;</span> Customer Portals
+                <span style="background: rgba(16,185,129,0.2); color: var(--success); padding: 4px 10px; border-radius: 10px; font-size: 10px; font-weight: 600; margin-left: auto;">INVESTOR ACCESS</span>
+            </h3>
+            <p style="color: var(--muted); font-size: 13px; margin-top: 8px; margin-bottom: 20px;">
+                View individual customer partnership portals to see engagement details and milestones.
+            </p>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px;">
+                <a href="customer-portal-mockup.html" style="background: var(--panel-light); padding: 16px; border-radius: 10px; text-decoration: none; display: flex; align-items: center; gap: 12px; border: 1px solid rgba(255,255,255,0.06); transition: all 0.2s;">
+                    <span style="font-size: 24px;">&#128737;</span>
+                    <div>
+                        <div style="font-size: 14px; font-weight: 600; color: var(--text);">Anduril Industries</div>
+                        <div style="font-size: 11px; color: var(--muted);">Defense - ISR/C-UAS</div>
+                    </div>
+                </a>
+                <a href="koniku-portal.html" style="background: var(--panel-light); padding: 16px; border-radius: 10px; text-decoration: none; display: flex; align-items: center; gap: 12px; border: 1px solid rgba(6,182,212,0.3); transition: all 0.2s;">
+                    <span style="font-size: 24px;">&#129504;</span>
+                    <div>
+                        <div style="font-size: 14px; font-weight: 600; color: var(--text);">Koniku</div>
+                        <div style="font-size: 11px; color: #06b6d4;">MOU Proposed</div>
+                    </div>
+                </a>
+                <a href="glid-portal.html" style="background: var(--panel-light); padding: 16px; border-radius: 10px; text-decoration: none; display: flex; align-items: center; gap: 12px; border: 1px solid rgba(255,255,255,0.06); transition: all 0.2s;">
+                    <span style="font-size: 24px;">&#128663;</span>
+                    <div>
+                        <div style="font-size: 14px; font-weight: 600; color: var(--text);">Glid Technologies</div>
+                        <div style="font-size: 11px; color: var(--muted);">Autonomous Vehicles</div>
+                    </div>
+                </a>
+                <a href="mach-portal.html" style="background: var(--panel-light); padding: 16px; border-radius: 10px; text-decoration: none; display: flex; align-items: center; gap: 12px; border: 1px solid rgba(234,179,8,0.3); transition: all 0.2s;">
+                    <span style="font-size: 24px;">&#128640;</span>
+                    <div>
+                        <div style="font-size: 14px; font-weight: 600; color: var(--text);">Mach Industries</div>
+                        <div style="font-size: 11px; color: #eab308;">Stalled</div>
+                    </div>
+                </a>
+                <a href="terrahaptix-portal.html" style="background: var(--panel-light); padding: 16px; border-radius: 10px; text-decoration: none; display: flex; align-items: center; gap: 12px; border: 1px solid rgba(255,255,255,0.06); transition: all 0.2s;">
+                    <span style="font-size: 24px;">&#129302;</span>
+                    <div>
+                        <div style="font-size: 14px; font-weight: 600; color: var(--text);">Terrahaptix</div>
+                        <div style="font-size: 11px; color: var(--muted);">Robotics/Haptics</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+
         <div class="funding-section">
             <h3>Capital Raised to Date</h3>
             <div class="funding-progress">
@@ -604,5 +652,14 @@
             <p>Lola Vision Systems | Confidential Investor Materials | January 2026</p>
         </footer>
     </div>
+    <script>
+        // Show customer portals section for investors and founders
+        if (sessionStorage.getItem('lvs_can_view_customers') === 'true' ||
+            sessionStorage.getItem('lvs_role') === 'investor' ||
+            sessionStorage.getItem('lvs_role') === 'founder') {
+            const section = document.getElementById('customerPortalsSection');
+            if (section) section.style.display = 'block';
+        }
+    </script>
 </body>
 </html>

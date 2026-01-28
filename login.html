@@ -221,6 +221,54 @@
         }
         .gold { color: #d4af37; }
 
+        /* Team Mode */
+        .team-mode {
+            margin-bottom: 20px;
+        }
+        .toggle-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            padding: 8px 16px;
+            background: rgba(212,175,55,0.1);
+            border: 1px solid rgba(212,175,55,0.3);
+            border-radius: 20px;
+            transition: all 0.2s;
+        }
+        .toggle-label:hover {
+            background: rgba(212,175,55,0.2);
+        }
+        .toggle-label input {
+            width: 16px;
+            height: 16px;
+            accent-color: #d4af37;
+        }
+        .toggle-text {
+            font-size: 11px;
+            font-weight: 600;
+            color: #d4af37;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .team-mode.active .toggle-label {
+            background: rgba(212,175,55,0.25);
+            border-color: #d4af37;
+        }
+
+        /* Access Level Badges */
+        .access-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 9px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        .access-badge.full { background: rgba(212,175,55,0.2); color: #d4af37; }
+        .access-badge.elevated { background: rgba(124,77,255,0.2); color: #a78bfa; }
+        .access-badge.limited { background: rgba(107,114,128,0.2); color: #9ca3af; }
+
         /* Customer selector */
         .customer-select {
             display: none;
@@ -253,6 +301,14 @@
         <h1>LOLA VISION SYSTEMS</h1>
         <p class="subtitle">Secure Access Portal</p>
         <p class="description">Select your role to access the appropriate dashboard</p>
+
+        <!-- Team Mode Toggle -->
+        <div class="team-mode" id="teamMode">
+            <label class="toggle-label">
+                <input type="checkbox" id="teamToggle" onchange="toggleTeamMode()">
+                <span class="toggle-text">Team Demo Mode</span>
+            </label>
+        </div>
 
         <!-- Role Selector -->
         <div class="role-selector">
@@ -310,22 +366,22 @@
             <div class="access-item">
                 <span class="access-icon">&#128200;</span>
                 <div class="access-text">
-                    <div class="access-role">Investor</div>
-                    <div class="access-desc">Pipeline, financials, roadmap</div>
+                    <div class="access-role">Investor <span class="access-badge elevated">Elevated</span></div>
+                    <div class="access-desc">Investor Dashboard + View Customer Portals</div>
                 </div>
             </div>
             <div class="access-item">
                 <span class="access-icon">&#128188;</span>
                 <div class="access-text">
-                    <div class="access-role">Customer</div>
-                    <div class="access-desc">Your dedicated partner portal</div>
+                    <div class="access-role">Customer <span class="access-badge limited">Limited</span></div>
+                    <div class="access-desc">Own partner portal only</div>
                 </div>
             </div>
             <div class="access-item">
                 <span class="access-icon">&#11088;</span>
                 <div class="access-text">
-                    <div class="access-role">Founder</div>
-                    <div class="access-desc">Full access to all portals</div>
+                    <div class="access-role">Founder <span class="access-badge full">Full</span></div>
+                    <div class="access-desc">All portals + Founder dashboard</div>
                 </div>
             </div>
         </div>
@@ -340,6 +396,8 @@
         // Configuration
         const CONFIG = {
             founderDomain: 'lolavisionsystems.com',
+            // Team master password (for demo/testing)
+            teamPassword: '790995832',  // LVS_2026
             // Password hashes
             passwords: {
                 investor: '790995832',    // LVS_2026
@@ -359,10 +417,32 @@
                 glid: 'glid-portal.html',
                 mach: 'mach-portal.html',
                 terrahaptix: 'terrahaptix-portal.html'
+            },
+            // Access levels
+            accessLevels: {
+                founder: ['founder-portal', 'investor-dashboard', 'customer-portals', 'all'],
+                investor: ['investor-dashboard', 'customer-portals'],
+                customer: ['own-portal-only']
             }
         };
 
         let selectedRole = 'investor';
+        let teamMode = false;
+
+        // Toggle team mode
+        function toggleTeamMode() {
+            teamMode = document.getElementById('teamToggle').checked;
+            document.getElementById('teamMode').classList.toggle('active', teamMode);
+
+            // In team mode, show email field for all roles to simulate personas
+            if (teamMode) {
+                document.getElementById('emailField').classList.add('show');
+                document.getElementById('email').placeholder = 'team@lolavisionsystems.com';
+            } else {
+                // Restore normal behavior based on role
+                selectRole(selectedRole);
+            }
+        }
 
         // Hash function
         function simpleHash(str) {
@@ -418,12 +498,54 @@
 
             const passwordHash = simpleHash(password);
 
+            // Team Mode: Use master password for any persona
+            if (teamMode) {
+                if (passwordHash === CONFIG.teamPassword) {
+                    // Grant access based on selected role
+                    sessionStorage.setItem('lvs_auth', 'true');
+                    sessionStorage.setItem('lvs_team_mode', 'true');
+                    sessionStorage.setItem('lvs_role', selectedRole);
+
+                    if (selectedRole === 'founder') {
+                        sessionStorage.setItem('lvs_founder_auth', 'true');
+                        sessionStorage.setItem('lvs_founder_email', email || 'team@lolavisionsystems.com');
+                        sessionStorage.setItem('lvs_can_view_customers', 'true');
+                        sessionStorage.setItem('lvs_can_view_investor', 'true');
+                        successEl.textContent = 'Founder access granted (Team Mode). Redirecting...';
+                        successEl.style.display = 'block';
+                        setTimeout(() => window.location.href = 'founder-portal.html', 500);
+                    } else if (selectedRole === 'investor') {
+                        sessionStorage.setItem('lvs_can_view_customers', 'true');
+                        successEl.textContent = 'Investor access granted (Team Mode). Redirecting...';
+                        successEl.style.display = 'block';
+                        setTimeout(() => window.location.href = 'dashboard.html', 500);
+                    } else if (selectedRole === 'customer') {
+                        if (!customer) {
+                            errorEl.textContent = 'Please select a company to simulate.';
+                            errorEl.style.display = 'block';
+                            return false;
+                        }
+                        sessionStorage.setItem('lvs_customer', customer);
+                        sessionStorage.setItem('lvs_customer_email', email || 'demo@' + customer + '.com');
+                        successEl.textContent = 'Customer access granted (Team Mode). Redirecting...';
+                        successEl.style.display = 'block';
+                        const portalUrl = CONFIG.customerPortals[customer];
+                        setTimeout(() => window.location.href = portalUrl, 500);
+                    }
+                } else {
+                    errorEl.textContent = 'Invalid team access code.';
+                    errorEl.style.display = 'block';
+                }
+                return false;
+            }
+
+            // Normal Mode: Role-specific authentication
             if (selectedRole === 'investor') {
-                // Investor login
                 if (passwordHash === CONFIG.passwords.investor) {
                     sessionStorage.setItem('lvs_auth', 'true');
                     sessionStorage.setItem('lvs_role', 'investor');
-                    successEl.textContent = 'Access granted. Redirecting...';
+                    sessionStorage.setItem('lvs_can_view_customers', 'true');
+                    successEl.textContent = 'Investor access granted. Redirecting...';
                     successEl.style.display = 'block';
                     setTimeout(() => window.location.href = 'dashboard.html', 500);
                 } else {
@@ -431,7 +553,6 @@
                     errorEl.style.display = 'block';
                 }
             } else if (selectedRole === 'founder') {
-                // Founder login - check email domain
                 const domain = email.split('@')[1];
                 if (domain !== CONFIG.founderDomain) {
                     errorEl.textContent = 'Only @lolavisionsystems.com emails allowed.';
@@ -443,6 +564,8 @@
                     sessionStorage.setItem('lvs_founder_auth', 'true');
                     sessionStorage.setItem('lvs_founder_email', email);
                     sessionStorage.setItem('lvs_role', 'founder');
+                    sessionStorage.setItem('lvs_can_view_customers', 'true');
+                    sessionStorage.setItem('lvs_can_view_investor', 'true');
                     successEl.textContent = 'Founder access granted. Redirecting...';
                     successEl.style.display = 'block';
                     setTimeout(() => window.location.href = 'founder-portal.html', 500);
@@ -451,7 +574,6 @@
                     errorEl.style.display = 'block';
                 }
             } else if (selectedRole === 'customer') {
-                // Customer login
                 if (!customer) {
                     errorEl.textContent = 'Please select your company.';
                     errorEl.style.display = 'block';
@@ -469,6 +591,8 @@
                     sessionStorage.setItem('lvs_customer', customer);
                     sessionStorage.setItem('lvs_customer_email', email);
                     sessionStorage.setItem('lvs_role', 'customer');
+                    // Customers can only view their own portal
+                    sessionStorage.removeItem('lvs_can_view_customers');
                     successEl.textContent = 'Customer access granted. Redirecting...';
                     successEl.style.display = 'block';
                     const portalUrl = CONFIG.customerPortals[customer];
