@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<!--
+================================================================================
+LVS PRESENTATION PORTAL - NSIC January 2026
+================================================================================
+Version: 1.0
+Last Updated: January 28, 2026
+Status: Active Presentation Portal
+
+OVERVIEW:
+  Presentation viewer for LVS NSIC Presentation January 2026.
+  Allows PDF viewing with fullscreen capability.
+================================================================================
+-->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NSIC Presentation | Lola Vision Systems</title>
+    <style>
+        :root {
+            --bg: #0b1021;
+            --panel: #141a30;
+            --panel-light: #1a2240;
+            --accent: #7c4dff;
+            --accent-light: #9d7aff;
+            --gold: #d4af37;
+            --text: #e6e8f0;
+            --muted: #9aa3c2;
+            --success: #10b981;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .nav {
+            background: rgba(20, 26, 48, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            padding: 16px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+        }
+        .nav-brand { display: flex; align-items: center; gap: 16px; }
+        .nav-logo { height: 60px; width: auto; }
+        .nav-title { font-size: 18px; font-weight: 700; color: white; }
+        .nav-user { display: flex; align-items: center; gap: 12px; }
+        .nav-badge {
+            background: linear-gradient(135deg, var(--gold), #b8960b);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #1a1a2e;
+        }
+        .nav-link {
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 13px;
+            transition: color 0.2s;
+        }
+        .nav-link:hover { color: var(--text); }
+
+        .presentation-header {
+            background: var(--panel);
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            padding: 20px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+        }
+        .presentation-info h1 {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+        .presentation-info p {
+            font-size: 13px;
+            color: var(--muted);
+        }
+        .presentation-controls {
+            display: flex;
+            gap: 12px;
+        }
+        .control-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+        .control-btn.primary {
+            background: var(--accent);
+            color: white;
+        }
+        .control-btn.primary:hover {
+            background: var(--accent-light);
+            transform: translateY(-1px);
+        }
+        .control-btn.secondary {
+            background: var(--panel-light);
+            color: var(--text);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .control-btn.secondary:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .presentation-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 24px;
+            background: var(--bg);
+        }
+        .pdf-wrapper {
+            flex: 1;
+            background: var(--panel);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.06);
+            display: flex;
+            flex-direction: column;
+        }
+        .pdf-embed {
+            flex: 1;
+            width: 100%;
+            border: none;
+            background: #525659;
+        }
+        .pdf-fallback {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            text-align: center;
+        }
+        .pdf-fallback-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+        .pdf-fallback h3 {
+            font-size: 18px;
+            margin-bottom: 8px;
+        }
+        .pdf-fallback p {
+            color: var(--muted);
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        /* Fullscreen styles */
+        .presentation-container.fullscreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 9999;
+            padding: 0;
+            border-radius: 0;
+        }
+        .presentation-container.fullscreen .pdf-wrapper {
+            border-radius: 0;
+            border: none;
+        }
+
+        @media (max-width: 768px) {
+            .nav { padding: 12px 16px; }
+            .nav-logo { height: 48px; }
+            .presentation-header {
+                flex-direction: column;
+                gap: 16px;
+                padding: 16px;
+            }
+            .presentation-info { text-align: center; }
+            .presentation-container { padding: 16px; }
+        }
+    </style>
+    <script>
+        // Check authentication
+        if (sessionStorage.getItem('lvs_auth') !== 'true') {
+            window.location.href = 'login.html';
+        }
+    </script>
+</head>
+<body>
+    <nav class="nav">
+        <div class="nav-brand">
+            <img src="assets/lvs-logo.png" alt="LVS" class="nav-logo">
+            <span class="nav-title">LOLA VISION SYSTEMS</span>
+        </div>
+        <div class="nav-user">
+            <span class="nav-badge">NSIC Presentation</span>
+            <a href="founder-portal.html" class="nav-link" id="founderLink" style="display:none;">&larr; Back to Portal</a>
+            <a href="login.html" class="nav-link" onclick="sessionStorage.clear()">Logout</a>
+        </div>
+    </nav>
+
+    <div class="presentation-header">
+        <div class="presentation-info">
+            <h1>LVS NSIC Presentation</h1>
+            <p>January 2026 | Investor Overview</p>
+        </div>
+        <div class="presentation-controls">
+            <button class="control-btn secondary" onclick="downloadPDF()">
+                <span>&#8595;</span> Download PDF
+            </button>
+            <button class="control-btn primary" onclick="toggleFullscreen()">
+                <span id="fullscreenIcon">&#9974;</span> <span id="fullscreenText">Fullscreen</span>
+            </button>
+        </div>
+    </div>
+
+    <div class="presentation-container" id="presentationContainer">
+        <div class="pdf-wrapper">
+            <object
+                id="pdfObject"
+                data="assets/presentations/LVS NSIC Presentation Jan 2026.pdf"
+                type="application/pdf"
+                class="pdf-embed"
+            >
+                <div class="pdf-fallback">
+                    <div class="pdf-fallback-icon">&#128196;</div>
+                    <h3>PDF Viewer Not Available</h3>
+                    <p>Your browser doesn't support embedded PDF viewing.</p>
+                    <a href="assets/presentations/LVS NSIC Presentation Jan 2026.pdf" download class="control-btn primary">
+                        <span>&#8595;</span> Download PDF
+                    </a>
+                </div>
+            </object>
+        </div>
+    </div>
+
+    <script>
+        const pdfPath = 'assets/presentations/LVS NSIC Presentation Jan 2026.pdf';
+
+        function downloadPDF() {
+            const link = document.createElement('a');
+            link.href = pdfPath;
+            link.download = 'LVS NSIC Presentation Jan 2026.pdf';
+            link.click();
+        }
+
+        function toggleFullscreen() {
+            const container = document.getElementById('presentationContainer');
+            const icon = document.getElementById('fullscreenIcon');
+            const text = document.getElementById('fullscreenText');
+
+            if (!document.fullscreenElement) {
+                container.requestFullscreen().then(() => {
+                    container.classList.add('fullscreen');
+                    icon.innerHTML = '&#10005;';
+                    text.textContent = 'Exit';
+                }).catch(err => {
+                    // Fallback for browsers that don't support fullscreen API
+                    container.classList.toggle('fullscreen');
+                    if (container.classList.contains('fullscreen')) {
+                        icon.innerHTML = '&#10005;';
+                        text.textContent = 'Exit';
+                    } else {
+                        icon.innerHTML = '&#9974;';
+                        text.textContent = 'Fullscreen';
+                    }
+                });
+            } else {
+                document.exitFullscreen().then(() => {
+                    container.classList.remove('fullscreen');
+                    icon.innerHTML = '&#9974;';
+                    text.textContent = 'Fullscreen';
+                });
+            }
+        }
+
+        // Handle fullscreen change events
+        document.addEventListener('fullscreenchange', () => {
+            const container = document.getElementById('presentationContainer');
+            const icon = document.getElementById('fullscreenIcon');
+            const text = document.getElementById('fullscreenText');
+
+            if (!document.fullscreenElement) {
+                container.classList.remove('fullscreen');
+                icon.innerHTML = '&#9974;';
+                text.textContent = 'Fullscreen';
+            }
+        });
+
+        // Escape key to exit fullscreen
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                const container = document.getElementById('presentationContainer');
+                if (container.classList.contains('fullscreen') && !document.fullscreenElement) {
+                    container.classList.remove('fullscreen');
+                    document.getElementById('fullscreenIcon').innerHTML = '&#9974;';
+                    document.getElementById('fullscreenText').textContent = 'Fullscreen';
+                }
+            }
+        });
+
+        // Show back link for authenticated users
+        if (sessionStorage.getItem('lvs_founder_auth') === 'true' ||
+            sessionStorage.getItem('lvs_investor_auth') === 'true' ||
+            sessionStorage.getItem('lvs_can_view_customers') === 'true') {
+            document.getElementById('founderLink').style.display = 'inline';
+        }
+    </script>
+</body>
+</html>
