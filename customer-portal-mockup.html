@@ -637,6 +637,31 @@ SEE ALSO:
         .video-grid.single-row {
             grid-template-columns: repeat(2, 1fr);
         }
+        .video-grid.testimonials-grid {
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+        .video-grid.testimonials-grid .video-card video {
+            max-height: 180px;
+            object-fit: cover;
+        }
+        .video-grid.testimonials-grid .video-card-info {
+            padding: 12px;
+        }
+        .video-grid.testimonials-grid .video-card-title {
+            font-size: 13px;
+        }
+        .video-grid.testimonials-grid .speaker-avatar {
+            width: 28px;
+            height: 28px;
+            font-size: 10px;
+        }
+        .video-grid.testimonials-grid .speaker-name {
+            font-size: 12px;
+        }
+        .video-grid.testimonials-grid .speaker-title {
+            font-size: 10px;
+        }
         .video-card {
             background: var(--panel);
             border-radius: 12px;
@@ -701,6 +726,13 @@ SEE ALSO:
             .exec-stats { grid-template-columns: 1fr 1fr; }
             .video-grid {
                 grid-template-columns: 1fr;
+            }
+            .video-grid.testimonials-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            .video-grid.testimonials-grid .video-card video {
+                max-height: 220px;
             }
             .video-card video {
                 max-height: 250px;
@@ -1511,7 +1543,7 @@ processor = ImageProcessor(resize=(640, 640), normalize=<span class="code-keywor
                 <h2>Expert Testimonials</h2>
                 <p>Industry leaders share their perspective on edge AI and the LVS platform.</p>
             </div>
-            <div class="video-grid">
+            <div class="video-grid testimonials-grid">
                 <div class="video-card">
                     <video class="testimonial-video" muted playsinline>
                         <source src="assets/testimonials/JamesUrgencyforChips.mp4" type="video/mp4">
@@ -1648,7 +1680,7 @@ processor = ImageProcessor(resize=(640, 640), normalize=<span class="code-keywor
         const testimonialVideos = document.querySelectorAll('.testimonial-video');
 
         testimonialVideos.forEach(video => {
-            video.playbackRate = 2.0;
+            video.playbackRate = 1.0;  // Normal speed for testimonials
             video.loop = true;
         });
 
