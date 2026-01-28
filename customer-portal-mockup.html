@@ -638,29 +638,40 @@ SEE ALSO:
             grid-template-columns: repeat(2, 1fr);
         }
         .video-grid.testimonials-grid {
-            grid-template-columns: repeat(3, 1fr);
-            gap: 16px;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 12px;
+        }
+        .video-grid.testimonials-grid .video-card {
+            cursor: pointer;
         }
         .video-grid.testimonials-grid .video-card video {
-            max-height: 180px;
+            aspect-ratio: 9/16;
             object-fit: cover;
+            width: 100%;
+            height: auto;
         }
         .video-grid.testimonials-grid .video-card-info {
-            padding: 12px;
+            padding: 10px;
         }
         .video-grid.testimonials-grid .video-card-title {
-            font-size: 13px;
+            font-size: 11px;
+            line-height: 1.3;
         }
         .video-grid.testimonials-grid .speaker-avatar {
-            width: 28px;
-            height: 28px;
-            font-size: 10px;
+            width: 24px;
+            height: 24px;
+            font-size: 9px;
         }
         .video-grid.testimonials-grid .speaker-name {
-            font-size: 12px;
+            font-size: 11px;
         }
         .video-grid.testimonials-grid .speaker-title {
-            font-size: 10px;
+            font-size: 9px;
+        }
+        .video-grid.testimonials-grid .video-card-speaker {
+            margin-top: 8px;
+            padding-top: 8px;
+            gap: 8px;
         }
         .video-card {
             background: var(--panel);
@@ -763,11 +774,12 @@ SEE ALSO:
                 cursor: pointer;
             }
             .video-grid.testimonials-grid {
-                grid-template-columns: 1fr;
-                gap: 20px;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
             }
             .video-grid.testimonials-grid .video-card video {
-                max-height: 220px;
+                aspect-ratio: 9/16;
+                max-height: none;
             }
             .video-card video {
                 max-height: 250px;
@@ -1721,53 +1733,61 @@ processor = ImageProcessor(resize=(640, 640), normalize=<span class="code-keywor
             });
         });
 
-        // Testimonial videos - different behavior for mobile vs desktop
+        // Testimonial videos - one at a time, hover (desktop) or tap (mobile)
         const testimonialVideos = document.querySelectorAll('.testimonial-video');
 
-        testimonialVideos.forEach(video => {
-            video.playbackRate = 1.0;  // Normal speed for testimonials
-            video.loop = true;
-        });
+        // Helper to pause all testimonials except one
+        function pauseAllTestimonialsExcept(exceptVideo) {
+            testimonialVideos.forEach(v => {
+                if (v !== exceptVideo) {
+                    v.pause();
+                    v.currentTime = 0;
+                }
+            });
+        }
 
-        if (isMobile) {
-            // Mobile: Use Intersection Observer for scroll-based playback
-            const videoObserver = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    const video = entry.target;
-                    if (entry.isIntersecting) {
+        testimonialVideos.forEach(video => {
+            video.playbackRate = 1.0;
+            video.loop = true;
+
+            if (isMobile) {
+                // Mobile: tap to play/pause, one at a time
+                video.addEventListener('click', () => {
+                    if (video.paused) {
+                        pauseAllTestimonialsExcept(video);
                         video.play().catch(() => {});
                     } else {
                         video.pause();
                     }
                 });
-            }, {
-                threshold: 0.5 // Play when 50% visible
-            });
-
-            testimonialVideos.forEach(video => {
-                videoObserver.observe(video);
-            });
-        } else {
-            // Desktop: Play all testimonial videos simultaneously when tab is active
-            document.querySelectorAll('.tab-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    if (btn.dataset.tab === 'testimonials') {
-                        testimonialVideos.forEach(video => {
-                            video.play().catch(() => {});
-                        });
-                    } else {
-                        testimonialVideos.forEach(video => {
-                            video.pause();
-                        });
-                    }
-                    if (btn.dataset.tab === 'demos') {
-                        document.querySelectorAll('.demo-video').forEach(video => {
-                            video.play().catch(() => {});
-                        });
-                    }
+            } else {
+                // Desktop: hover to play, one at a time
+                video.addEventListener('mouseenter', () => {
+                    pauseAllTestimonialsExcept(video);
+                    video.play().catch(() => {});
                 });
+                video.addEventListener('mouseleave', () => {
+                    video.pause();
+                    video.currentTime = 0;
+                });
+            }
+        });
+
+        // Handle tab switching for demos
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Pause all testimonials when leaving tab
+                if (btn.dataset.tab !== 'testimonials') {
+                    testimonialVideos.forEach(video => video.pause());
+                }
+                // Play demos when entering demos tab
+                if (btn.dataset.tab === 'demos') {
+                    document.querySelectorAll('.demo-video').forEach(video => {
+                        video.play().catch(() => {});
+                    });
+                }
             });
-        }
+        });
     </script>
 </body>
 </html>
