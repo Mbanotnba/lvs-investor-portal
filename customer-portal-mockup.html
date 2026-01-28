@@ -209,7 +209,7 @@ SEE ALSO:
             position: absolute;
             top: 20px;
             left: 40px;
-            width: 60%;
+            width: 40%;  /* Stage 3 of 6 - Proposed */
             height: 4px;
             background: linear-gradient(90deg, var(--success), var(--accent));
             border-radius: 2px;
@@ -676,25 +676,25 @@ SEE ALSO:
                         <span class="stage-label">NDA Signed</span>
                         <span class="stage-date">Aug 2025</span>
                     </div>
-                    <div class="stage">
-                        <div class="stage-dot complete">&#10003;</div>
-                        <span class="stage-label">Evaluation</span>
-                        <span class="stage-date">Oct 2025</span>
-                    </div>
                     <div class="stage active">
-                        <div class="stage-dot current">4</div>
-                        <span class="stage-label">IRAD Active</span>
-                        <span class="stage-date">Current</span>
+                        <div class="stage-dot current">3</div>
+                        <span class="stage-label">Proposed</span>
+                        <span class="stage-date">Jan 2026</span>
+                    </div>
+                    <div class="stage">
+                        <div class="stage-dot upcoming">4</div>
+                        <span class="stage-label">Evaluation</span>
+                        <span class="stage-date">TBD</span>
                     </div>
                     <div class="stage">
                         <div class="stage-dot upcoming">5</div>
-                        <span class="stage-label">Design Win</span>
-                        <span class="stage-date">Q2 2026</span>
+                        <span class="stage-label">Integration Success</span>
+                        <span class="stage-date">TBD</span>
                     </div>
                     <div class="stage">
                         <div class="stage-dot upcoming">6</div>
-                        <span class="stage-label">Production</span>
-                        <span class="stage-date">Q4 2026</span>
+                        <span class="stage-label">Production Target</span>
+                        <span class="stage-date">Q2 2027</span>
                     </div>
                 </div>
             </div>
@@ -716,23 +716,23 @@ SEE ALSO:
                             <div class="milestone-icon complete">&#10003;</div>
                             <div class="milestone-content">
                                 <div class="milestone-title">LOI Signed</div>
-                                <div class="milestone-date">January 20, 2026</div>
+                                <div class="milestone-date">January 2026</div>
                             </div>
                             <span class="milestone-badge complete">Complete</span>
                         </div>
                         <div class="milestone">
                             <div class="milestone-icon in-progress">&#9679;</div>
                             <div class="milestone-content">
-                                <div class="milestone-title">IRAD Program Kickoff</div>
-                                <div class="milestone-date">February 1, 2026</div>
+                                <div class="milestone-title">IRAD Proposal Under Review</div>
+                                <div class="milestone-date">Pending</div>
                             </div>
-                            <span class="milestone-badge in-progress">In Progress</span>
+                            <span class="milestone-badge in-progress">Proposed</span>
                         </div>
                         <div class="milestone">
                             <div class="milestone-icon upcoming">&#9675;</div>
                             <div class="milestone-content">
                                 <div class="milestone-title">SDK Beta Delivery</div>
-                                <div class="milestone-date">March 15, 2026</div>
+                                <div class="milestone-date">TBD</div>
                             </div>
                             <span class="milestone-badge upcoming">Upcoming</span>
                         </div>
@@ -740,9 +740,42 @@ SEE ALSO:
                             <div class="milestone-icon upcoming">&#9675;</div>
                             <div class="milestone-content">
                                 <div class="milestone-title">Development Kit Shipment</div>
-                                <div class="milestone-date">June 1, 2026</div>
+                                <div class="milestone-date">September 2026</div>
                             </div>
                             <span class="milestone-badge upcoming">Upcoming</span>
+                        </div>
+                    </div>
+
+                    <!-- Next Action Plan -->
+                    <div class="panel" style="margin-top: 24px; border-left: 3px solid var(--gold);">
+                        <h3>Next Action</h3>
+                        <div style="padding: 16px 0;">
+                            <div style="font-size: 16px; font-weight: 700; color: var(--gold); margin-bottom: 8px;">
+                                Technical Requirements Meeting
+                            </div>
+                            <div style="font-size: 14px; color: var(--text); margin-bottom: 12px;">
+                                Meeting with Chief Product Engineer and <strong>Chaffra Affouda</strong>, Anduril Imaging Business Development Director
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 16px;">
+                                <span style="background: var(--warn); color: white; padding: 4px 12px; border-radius: 12px; font-size: 11px; font-weight: 600;">DATE PENDING</span>
+                            </div>
+                            <div style="background: var(--panel-light); border-radius: 10px; padding: 16px;">
+                                <div style="font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px;">Agenda</div>
+                                <ul style="list-style: none; font-size: 13px; color: var(--text);">
+                                    <li style="padding: 6px 0; display: flex; align-items: flex-start; gap: 10px;">
+                                        <span style="color: var(--accent);">&#9679;</span>
+                                        MWIR Sensors and Anduril IRIS next generation requirements
+                                    </li>
+                                    <li style="padding: 6px 0; display: flex; align-items: flex-start; gap: 10px;">
+                                        <span style="color: var(--accent);">&#9679;</span>
+                                        LVS-250 hardware capabilities and integration approach
+                                    </li>
+                                    <li style="padding: 6px 0; display: flex; align-items: flex-start; gap: 10px;">
+                                        <span style="color: var(--accent);">&#9679;</span>
+                                        LVS SDK and software development platform overview
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -752,15 +785,18 @@ SEE ALSO:
                         <div class="contact-card">
                             <h4>Dedicated Support</h4>
                             <div class="contact-person">
-                                <div class="contact-avatar">MB</div>
+                                <div class="contact-avatar">TA</div>
                                 <div class="contact-info">
-                                    <h5>Mike Bano</h5>
+                                    <h5>Tayo Adesanya</h5>
                                     <p>CEO &bull; Lola Vision Systems</p>
                                 </div>
                             </div>
-                            <div class="contact-actions">
-                                <button class="contact-btn primary">Schedule Call</button>
-                                <button class="contact-btn secondary">Send Message</button>
+                            <div class="contact-actions" style="flex-direction: column; gap: 8px;">
+                                <div style="display: flex; gap: 8px;">
+                                    <a href="https://wa.me/16304792126" target="_blank" class="contact-btn primary" style="text-decoration: none; text-align: center;">WhatsApp</a>
+                                    <a href="sms:+16304792126" class="contact-btn secondary" style="text-decoration: none; text-align: center;">iMessage</a>
+                                </div>
+                                <a href="mailto:tayo@lolavisionsystems.com" class="contact-btn secondary" style="text-decoration: none; text-align: center; width: 100%;">Email</a>
                             </div>
                         </div>
                     </div>
@@ -768,16 +804,16 @@ SEE ALSO:
                         <h3>Partnership Summary</h3>
                         <div style="display: grid; gap: 12px;">
                             <div style="display: flex; justify-content: space-between; padding: 12px; background: rgba(255,255,255,0.03); border-radius: 8px;">
-                                <span style="color: var(--muted); font-size: 13px;">IRAD Value</span>
-                                <span style="font-weight: 700; color: var(--success);">$650,000</span>
+                                <span style="color: var(--muted); font-size: 13px;">Proposal Status</span>
+                                <span style="font-weight: 700; color: var(--warn);">Under Review</span>
                             </div>
                             <div style="display: flex; justify-content: space-between; padding: 12px; background: rgba(255,255,255,0.03); border-radius: 8px;">
                                 <span style="color: var(--muted); font-size: 13px;">Target Product</span>
                                 <span style="font-weight: 600; color: var(--accent);">LVS-250</span>
                             </div>
                             <div style="display: flex; justify-content: space-between; padding: 12px; background: rgba(255,255,255,0.03); border-radius: 8px;">
-                                <span style="color: var(--muted); font-size: 13px;">Est. Production</span>
-                                <span style="font-weight: 600;">Q4 2026</span>
+                                <span style="color: var(--muted); font-size: 13px;">Production Target</span>
+                                <span style="font-weight: 600;">Q2 2027</span>
                             </div>
                         </div>
                     </div>
@@ -1293,15 +1329,18 @@ processor = ImageProcessor(resize=(640, 640), normalize=<span class="code-keywor
                         <div class="contact-card">
                             <h4>Dedicated Support</h4>
                             <div class="contact-person">
-                                <div class="contact-avatar">MB</div>
+                                <div class="contact-avatar">TA</div>
                                 <div class="contact-info">
-                                    <h5>Mike Bano</h5>
+                                    <h5>Tayo Adesanya</h5>
                                     <p>CEO &bull; Lola Vision Systems</p>
                                 </div>
                             </div>
-                            <div class="contact-actions">
-                                <button class="contact-btn primary">Schedule Call</button>
-                                <button class="contact-btn secondary">Send Message</button>
+                            <div class="contact-actions" style="flex-direction: column; gap: 8px;">
+                                <div style="display: flex; gap: 8px;">
+                                    <a href="https://wa.me/16304792126" target="_blank" class="contact-btn primary" style="text-decoration: none; text-align: center;">WhatsApp</a>
+                                    <a href="sms:+16304792126" class="contact-btn secondary" style="text-decoration: none; text-align: center;">iMessage</a>
+                                </div>
+                                <a href="mailto:tayo@lolavisionsystems.com" class="contact-btn secondary" style="text-decoration: none; text-align: center; width: 100%;">Email</a>
                             </div>
                         </div>
                     </div>
