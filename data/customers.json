@@ -392,6 +392,177 @@
       "nextActions": []
     },
     {
+      "id": "orbits-edge",
+      "name": "Orbits Edge",
+      "industry": "Space - Edge Computing",
+      "tier": 3,
+      "product": "LVS Chiplets",
+      "currentStage": 2,
+      "stages": [
+        {"name": "Discovery", "date": "2025", "complete": true},
+        {"name": "NDA Signed", "date": "2025", "complete": true},
+        {"name": "Evaluation", "date": "In Progress", "current": true},
+        {"name": "Proposal", "date": "TBD"},
+        {"name": "Production", "date": "2027"}
+      ],
+      "milestones": [
+        {"title": "NDA Executed", "date": "2025", "status": "complete"}
+      ],
+      "summary": {
+        "status": "Evaluation",
+        "totalValue": "$4,000,000",
+        "nearTermValue": "$250,000",
+        "probability": "35%",
+        "weightedValue": "$1,400,000",
+        "expectedClose": "Q4 2026",
+        "primaryContact": "TBD"
+      },
+      "nextActions": []
+    },
+    {
+      "id": "orbitswarm",
+      "name": "Orbitswarm",
+      "industry": "Space - SoOp Sensors",
+      "tier": 3,
+      "product": "LVS Chiplets",
+      "currentStage": 2,
+      "stages": [
+        {"name": "Discovery", "date": "2025", "complete": true},
+        {"name": "LOI Signed", "date": "2025", "complete": true},
+        {"name": "Evaluation", "date": "In Progress", "current": true},
+        {"name": "Proposal", "date": "TBD"},
+        {"name": "Production", "date": "2027"}
+      ],
+      "milestones": [
+        {"title": "LOI Signed", "date": "2025", "status": "complete"}
+      ],
+      "summary": {
+        "status": "Evaluation",
+        "totalValue": "$3,000,000",
+        "nearTermValue": "$200,000",
+        "probability": "35%",
+        "weightedValue": "$1,050,000",
+        "expectedClose": "Q3 2026",
+        "primaryContact": "TBD"
+      },
+      "nextActions": []
+    },
+    {
+      "id": "amal-technologies",
+      "name": "AMAL Technologies",
+      "industry": "Industrial IoT - Africa",
+      "tier": 3,
+      "product": "LVS-750",
+      "currentStage": 2,
+      "stages": [
+        {"name": "Discovery", "date": "2025", "complete": true},
+        {"name": "LOI Signed", "date": "2025", "complete": true},
+        {"name": "Evaluation", "date": "In Progress", "current": true},
+        {"name": "Proposal", "date": "TBD"},
+        {"name": "Production", "date": "2027"}
+      ],
+      "milestones": [
+        {"title": "LOI Signed", "date": "2025", "status": "complete"}
+      ],
+      "summary": {
+        "status": "Evaluation",
+        "totalValue": "$3,000,000",
+        "nearTermValue": "$200,000",
+        "probability": "35%",
+        "weightedValue": "$1,050,000",
+        "expectedClose": "Q4 2026",
+        "primaryContact": "TBD"
+      },
+      "nextActions": []
+    },
+    {
+      "id": "strut-motors",
+      "name": "Strut Motors",
+      "industry": "Electric Vehicles",
+      "tier": 3,
+      "product": "LVS Chiplets",
+      "currentStage": 2,
+      "stages": [
+        {"name": "Discovery", "date": "2025", "complete": true},
+        {"name": "LOI Signed", "date": "2025", "complete": true},
+        {"name": "Opportunity", "date": "In Progress", "current": true},
+        {"name": "Proposal", "date": "TBD"},
+        {"name": "Production", "date": "2027"}
+      ],
+      "milestones": [
+        {"title": "LOI Signed", "date": "2025", "status": "complete"}
+      ],
+      "summary": {
+        "status": "Opportunity",
+        "totalValue": "$2,500,000",
+        "nearTermValue": "$150,000",
+        "probability": "30%",
+        "weightedValue": "$750,000",
+        "expectedClose": "Q4 2026",
+        "primaryContact": "TBD"
+      },
+      "nextActions": []
+    },
+    {
+      "id": "esper-industries",
+      "name": "Esper Industries",
+      "industry": "Space - Earth Observation",
+      "tier": 3,
+      "product": "LVS-750/1000",
+      "currentStage": 2,
+      "stages": [
+        {"name": "Discovery", "date": "2025", "complete": true},
+        {"name": "LOI Signed", "date": "2025", "complete": true},
+        {"name": "Evaluation", "date": "In Progress", "current": true},
+        {"name": "Proposal", "date": "TBD"},
+        {"name": "Production", "date": "2027"}
+      ],
+      "milestones": [
+        {"title": "LOI Signed", "date": "2025", "status": "complete"}
+      ],
+      "summary": {
+        "status": "Evaluation",
+        "totalValue": "$2,500,000",
+        "nearTermValue": "$200,000",
+        "probability": "40%",
+        "weightedValue": "$1,000,000",
+        "expectedClose": "Q3 2026",
+        "primaryContact": "TBD"
+      },
+      "nextActions": []
+    },
+    {
+      "id": "sierra-nevada",
+      "name": "Sierra Nevada Corporation",
+      "industry": "Defense - Space Systems",
+      "tier": 2,
+      "product": "LVS-750",
+      "currentStage": 2,
+      "stages": [
+        {"name": "Discovery", "date": "Oct 2025", "complete": true},
+        {"name": "NDA Signed", "date": "Dec 2025", "complete": true},
+        {"name": "Evaluation", "date": "In Progress", "current": true},
+        {"name": "Proposal", "date": "Q2 2026"},
+        {"name": "Production", "date": "2027"}
+      ],
+      "milestones": [
+        {"title": "NDA Executed", "date": "Dec 2025", "status": "complete"},
+        {"title": "Technical Evaluation", "date": "In Progress", "status": "in-progress"}
+      ],
+      "summary": {
+        "status": "Evaluation",
+        "totalValue": "$8,000,000",
+        "nearTermValue": "$500,000",
+        "probability": "45%",
+        "weightedValue": "$3,600,000",
+        "expectedClose": "Q3 2026",
+        "primaryContact": "TBD"
+      },
+      "nextActions": [
+        {"task": "Technical requirements review", "due": "2026-02-20", "assigned": "Randy"}
+      ]
+    },
+    {
       "id": "stellantis",
       "name": "Stellantis",
       "industry": "Automotive - Volume Production",
