@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; media-src 'self' https:; font-src 'self' https:; connect-src 'self' http://localhost:8080 http://127.0.0.1:8080 http://api.lvs.local:8080 https://api.lolavisionsystems.com https://api.lvs.app;">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Access Portal | Lola Vision Systems</title>
@@ -20,7 +21,7 @@
             padding: 48px;
             box-shadow: 0 20px 60px rgba(0,0,0,0.5);
             text-align: center;
-            max-width: 440px;
+            max-width: 420px;
             width: 90%;
             border: 1px solid rgba(255,255,255,0.06);
         }
@@ -59,87 +60,6 @@
             margin-bottom: 32px;
         }
 
-        /* Role Selector */
-        .role-selector {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
-            margin-bottom: 24px;
-        }
-        @media (max-width: 500px) {
-            .role-selector {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-        .role-btn {
-            background: #1a1a24;
-            border: 2px solid rgba(255,255,255,0.1);
-            border-radius: 10px;
-            padding: 16px 8px;
-            cursor: pointer;
-            transition: all 0.2s;
-            opacity: 0.6;
-        }
-        .role-btn:hover {
-            opacity: 0.8;
-            border-color: rgba(255,255,255,0.2);
-        }
-        /* Investor - Purple when active */
-        .role-btn.investor.active {
-            border-color: #7c4dff;
-            background: rgba(124,77,255,0.15);
-            opacity: 1;
-            box-shadow: 0 0 20px rgba(124,77,255,0.3);
-        }
-        /* Customer - Green when active */
-        .role-btn.customer.active {
-            border-color: #10b981;
-            background: rgba(16,185,129,0.15);
-            opacity: 1;
-            box-shadow: 0 0 20px rgba(16,185,129,0.3);
-        }
-        /* Founder - Gold when active */
-        .role-btn.founder.active {
-            border-color: #d4af37;
-            background: rgba(212,175,55,0.15);
-            opacity: 1;
-            box-shadow: 0 0 20px rgba(212,175,55,0.3);
-        }
-        /* Presentation - Cyan when active */
-        .role-btn.presentation.active {
-            border-color: #06b6d4;
-            background: rgba(6,182,212,0.15);
-            opacity: 1;
-            box-shadow: 0 0 20px rgba(6,182,212,0.3);
-        }
-        .role-icon {
-            font-size: 24px;
-            margin-bottom: 8px;
-            filter: grayscale(100%) brightness(0.7);
-            transition: filter 0.2s;
-        }
-        .role-btn.active .role-icon {
-            filter: grayscale(0%) brightness(1);
-        }
-        .role-label {
-            font-size: 12px;
-            font-weight: 600;
-            color: #9ca3af;
-            transition: color 0.2s;
-        }
-        .role-btn.active .role-label {
-            color: #f5f5f7;
-        }
-        .role-btn.investor.active .role-label { color: #a78bfa; }
-        .role-btn.customer.active .role-label { color: #34d399; }
-        .role-btn.founder.active .role-label { color: #d4af37; }
-        .role-btn.presentation.active .role-label { color: #22d3ee; }
-        .role-desc {
-            font-size: 10px;
-            color: #6b7280;
-            margin-top: 4px;
-        }
-
         /* Form */
         .form-group {
             margin-bottom: 16px;
@@ -158,22 +78,52 @@
         input[type="password"],
         input[type="text"] {
             width: 100%;
-            padding: 12px 14px;
+            padding: 14px 16px;
             font-size: 15px;
             background: #1a1a24;
             border: 2px solid rgba(255,255,255,0.1);
-            border-radius: 8px;
+            border-radius: 10px;
             color: #f5f5f7;
-            transition: border-color 0.2s;
+            transition: border-color 0.2s, box-shadow 0.2s;
         }
         input:focus {
             outline: none;
             border-color: #7c4dff;
+            box-shadow: 0 0 0 3px rgba(124,77,255,0.1);
         }
         input::placeholder {
             color: #4b5563;
         }
-        button[type="submit"] {
+        input:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        /* 2FA Code Input */
+        .code-input-container {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+        }
+        .code-input {
+            width: 45px;
+            height: 56px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: 700;
+            background: #1a1a24;
+            border: 2px solid rgba(255,255,255,0.1);
+            border-radius: 10px;
+            color: #f5f5f7;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .code-input:focus {
+            outline: none;
+            border-color: #7c4dff;
+            box-shadow: 0 0 0 3px rgba(124,77,255,0.1);
+        }
+
+        button[type="submit"], .btn-primary {
             width: 100%;
             padding: 14px;
             font-size: 15px;
@@ -181,21 +131,53 @@
             color: white;
             background: linear-gradient(135deg, #7c4dff 0%, #651fff 100%);
             border: none;
-            border-radius: 8px;
+            border-radius: 10px;
             cursor: pointer;
             transition: transform 0.2s, box-shadow 0.2s;
             margin-top: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
-        button[type="submit"]:hover {
+        button[type="submit"]:hover, .btn-primary:hover {
             transform: translateY(-2px);
             box-shadow: 0 8px 24px rgba(124, 77, 255, 0.4);
         }
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+            box-shadow: none !important;
+        }
+
+        .btn-secondary {
+            width: 100%;
+            padding: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #9ca3af;
+            background: transparent;
+            border: 2px solid rgba(255,255,255,0.1);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 12px;
+        }
+        .btn-secondary:hover {
+            border-color: rgba(255,255,255,0.2);
+            color: #f5f5f7;
+        }
+
         .error {
             color: #ef4444;
             font-size: 12px;
             margin-top: 12px;
             display: none;
             text-align: center;
+            padding: 10px;
+            background: rgba(239,68,68,0.1);
+            border-radius: 8px;
         }
         .success {
             color: #10b981;
@@ -203,47 +185,76 @@
             margin-top: 12px;
             display: none;
             text-align: center;
+            padding: 10px;
+            background: rgba(16,185,129,0.1);
+            border-radius: 8px;
         }
 
-        /* Access info */
-        .access-info {
-            background: rgba(255,255,255,0.03);
-            border-radius: 10px;
-            padding: 16px;
-            margin-top: 24px;
-            text-align: left;
+        /* Steps */
+        .step {
+            display: none;
         }
-        .access-info h4 {
-            color: #6b7280;
-            font-size: 10px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 10px;
+        .step.active {
+            display: block;
         }
-        .access-item {
+
+        /* Step indicator */
+        .step-indicator {
             display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 8px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.04);
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 24px;
         }
-        .access-item:last-child {
-            border-bottom: none;
+        .step-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            transition: all 0.3s;
         }
-        .access-icon {
-            font-size: 16px;
+        .step-dot.active {
+            background: #7c4dff;
+            width: 24px;
+            border-radius: 4px;
         }
-        .access-text {
-            flex: 1;
+        .step-dot.complete {
+            background: #10b981;
         }
-        .access-role {
+
+        /* Portal type badge */
+        .portal-badge {
+            display: inline-block;
+            padding: 6px 16px;
+            border-radius: 20px;
             font-size: 12px;
             font-weight: 600;
-            color: #f5f5f7;
+            margin-bottom: 16px;
         }
-        .access-desc {
-            font-size: 10px;
+        .portal-badge.investor { background: rgba(124,77,255,0.2); color: #a78bfa; }
+        .portal-badge.customer { background: rgba(16,185,129,0.2); color: #34d399; }
+        .portal-badge.partner { background: rgba(249,115,22,0.2); color: #fb923c; }
+        .portal-badge.founder { background: rgba(212,175,55,0.2); color: #d4af37; }
+
+        /* 2FA info */
+        .twofa-info {
+            background: rgba(255,255,255,0.03);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        .twofa-info h4 {
+            color: #f5f5f7;
+            font-size: 13px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .twofa-info p {
             color: #6b7280;
+            font-size: 12px;
+            line-height: 1.5;
         }
 
         .footer {
@@ -253,129 +264,148 @@
         }
         .gold { color: #d4af37; }
 
-        /* Access Level Badges */
-        .access-badge {
-            display: inline-block;
-            padding: 2px 8px;
-            border-radius: 10px;
-            font-size: 9px;
+        /* User info display */
+        .user-email {
+            color: #a78bfa;
             font-weight: 600;
-            text-transform: uppercase;
+            word-break: break-all;
         }
-        .access-badge.full { background: rgba(212,175,55,0.2); color: #d4af37; }
-        .access-badge.elevated { background: rgba(124,77,255,0.2); color: #a78bfa; }
-        .access-badge.limited { background: rgba(107,114,128,0.2); color: #9ca3af; }
 
-        /* Customer selector */
-        .customer-select {
-            display: none;
+        /* Loading spinner */
+        .spinner {
+            width: 18px;
+            height: 18px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Connection status */
+        .connection-status {
+            font-size: 10px;
+            padding: 4px 10px;
+            border-radius: 10px;
             margin-bottom: 16px;
+            display: inline-block;
         }
-        .customer-select.show {
-            display: block;
+        .connection-status.connected {
+            background: rgba(16,185,129,0.2);
+            color: #10b981;
         }
-        select {
-            width: 100%;
-            padding: 12px 14px;
-            font-size: 15px;
-            background: #1a1a24;
-            border: 2px solid rgba(255,255,255,0.1);
-            border-radius: 8px;
-            color: #f5f5f7;
-            cursor: pointer;
+        .connection-status.disconnected {
+            background: rgba(239,68,68,0.2);
+            color: #ef4444;
         }
-        select:focus {
-            outline: none;
-            border-color: #7c4dff;
+        .connection-status.checking {
+            background: rgba(251,191,36,0.2);
+            color: #fbbf24;
+        }
+
+        /* Mobile */
+        @media (max-width: 480px) {
+            .login-container {
+                padding: 32px 24px;
+                margin: 16px;
+            }
+            .logo-icon {
+                width: 80px;
+                height: 80px;
+            }
+            h1 { font-size: 18px; }
+            .code-input {
+                width: 40px;
+                height: 50px;
+                font-size: 20px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="login-container">
         <div class="logo-icon">
-            <img src="assets/lvs-logo.png" alt="Lola Vision Systems">
+            <img src="assets/lvs-logo.webp" alt="Lola Vision Systems">
         </div>
         <h1>LOLA VISION SYSTEMS</h1>
         <p class="subtitle">Secure Access Portal</p>
-        <p class="description">Select your role to access the appropriate dashboard</p>
 
-        <!-- Role Selector -->
-        <div class="role-selector">
-            <div class="role-btn investor" onclick="selectRole('investor')">
-                <div class="role-icon">&#128200;</div>
-                <div class="role-label">Investor</div>
-                <div class="role-desc">Dashboard</div>
-            </div>
-            <div class="role-btn customer" onclick="selectRole('customer')">
-                <div class="role-icon">&#128188;</div>
-                <div class="role-label">Customer</div>
-                <div class="role-desc">Partner Portal</div>
-            </div>
-            <div class="role-btn founder" onclick="selectRole('founder')">
-                <div class="role-icon">&#11088;</div>
-                <div class="role-label">Founder</div>
-                <div class="role-desc">Full Access</div>
-            </div>
-            <div class="role-btn presentation" onclick="goToPresentation()">
-                <div class="role-icon">&#128202;</div>
-                <div class="role-label">Presentation</div>
-                <div class="role-desc">No Password</div>
-            </div>
+        <!-- Connection Status -->
+        <div class="connection-status checking" id="connectionStatus">Connecting...</div>
+
+        <!-- Step Indicator -->
+        <div class="step-indicator">
+            <div class="step-dot active" id="dot1"></div>
+            <div class="step-dot" id="dot2"></div>
+            <div class="step-dot" id="dot3"></div>
         </div>
 
-        <form onsubmit="return authenticate()">
-            <!-- Customer selector (shown for customer role) -->
-            <div class="form-group customer-select" id="customerSelect">
-                <label for="customer">Select Company</label>
-                <select id="customer">
-                    <option value="">-- Select your company --</option>
-                    <option value="anduril">Anduril Industries</option>
-                    <option value="koniku">Koniku</option>
-                    <option value="glid">Glid Technologies</option>
-                    <option value="mach">Mach Industries</option>
-                    <option value="terrahaptix">Terrahaptix</option>
-                    <option value="revenant">Revenant Industries</option>
-                    <option value="seasats">Seasats</option>
-                    <option value="amd">AMD</option>
-                </select>
-            </div>
-
-            <!-- Password -->
-            <div class="form-group">
-                <label for="password">Access Code</label>
-                <input type="password" id="password" placeholder="Enter your access code" autofocus>
-            </div>
-
-            <button type="submit">Access Portal</button>
-            <p class="error" id="error"></p>
-            <p class="success" id="success"></p>
-        </form>
-
-        <!-- Access Info -->
-        <div class="access-info">
-            <h4>Access Levels</h4>
-            <div class="access-item">
-                <span class="access-icon">&#128200;</span>
-                <div class="access-text">
-                    <div class="access-role">Investor <span class="access-badge elevated">Elevated</span></div>
-                    <div class="access-desc">Investor Dashboard + View Customer Portals</div>
+        <!-- Step 1: Email -->
+        <div class="step active" id="step1">
+            <p class="description">Enter your email to continue</p>
+            <form onsubmit="return handleEmailSubmit()">
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" placeholder="you@company.com" required autofocus>
                 </div>
-            </div>
-            <div class="access-item">
-                <span class="access-icon">&#128188;</span>
-                <div class="access-text">
-                    <div class="access-role">Customer <span class="access-badge limited">Limited</span></div>
-                    <div class="access-desc">Own partner portal only</div>
-                </div>
-            </div>
-            <div class="access-item">
-                <span class="access-icon">&#11088;</span>
-                <div class="access-text">
-                    <div class="access-role">Founder <span class="access-badge full">Full</span></div>
-                    <div class="access-desc">All portals + Founder dashboard</div>
-                </div>
-            </div>
+                <button type="submit" id="emailBtn">
+                    <span id="emailBtnText">Continue</span>
+                    <div class="spinner" id="emailSpinner" style="display: none;"></div>
+                </button>
+            </form>
         </div>
+
+        <!-- Step 2: Password -->
+        <div class="step" id="step2">
+            <div id="portalBadge" class="portal-badge investor">Investor Portal</div>
+            <p class="description">Welcome, <span id="userEmailDisplay" class="user-email"></span></p>
+            <form onsubmit="return handlePasswordSubmit()">
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" placeholder="Enter your password" required>
+                </div>
+                <button type="submit" id="passwordBtn">
+                    <span id="passwordBtnText">Sign In</span>
+                    <div class="spinner" id="passwordSpinner" style="display: none;"></div>
+                </button>
+                <button type="button" class="btn-secondary" onclick="goToStep(1)">Back</button>
+            </form>
+        </div>
+
+        <!-- Step 3: 2FA -->
+        <div class="step" id="step3">
+            <div id="portalBadge2" class="portal-badge investor">Investor Portal</div>
+            <p class="description">Two-factor authentication</p>
+
+            <div class="twofa-info">
+                <h4>&#128274; Verification Required</h4>
+                <p>Enter the 6-digit code from your Google Authenticator app to complete sign-in.</p>
+            </div>
+
+            <form onsubmit="return handleTwoFactorSubmit()">
+                <div class="form-group">
+                    <label>Authentication Code</label>
+                    <div class="code-input-container">
+                        <input type="text" class="code-input" maxlength="1" id="code1" oninput="handleCodeInput(this, 'code2')" onkeydown="handleCodeKeydown(event, this, null, 'code2')">
+                        <input type="text" class="code-input" maxlength="1" id="code2" oninput="handleCodeInput(this, 'code3')" onkeydown="handleCodeKeydown(event, this, 'code1', 'code3')">
+                        <input type="text" class="code-input" maxlength="1" id="code3" oninput="handleCodeInput(this, 'code4')" onkeydown="handleCodeKeydown(event, this, 'code2', 'code4')">
+                        <input type="text" class="code-input" maxlength="1" id="code4" oninput="handleCodeInput(this, 'code5')" onkeydown="handleCodeKeydown(event, this, 'code3', 'code5')">
+                        <input type="text" class="code-input" maxlength="1" id="code5" oninput="handleCodeInput(this, 'code6')" onkeydown="handleCodeKeydown(event, this, 'code4', 'code6')">
+                        <input type="text" class="code-input" maxlength="1" id="code6" oninput="handleCodeInput(this, null)" onkeydown="handleCodeKeydown(event, this, 'code5', null)">
+                    </div>
+                </div>
+                <button type="submit" id="twofaBtn">
+                    <span id="twofaBtnText">Verify & Sign In</span>
+                    <div class="spinner" id="twofaSpinner" style="display: none;"></div>
+                </button>
+                <button type="button" class="btn-secondary" onclick="goToStep(2)">Back</button>
+            </form>
+        </div>
+
+        <p class="error" id="error"></p>
+        <p class="success" id="success"></p>
 
         <p class="footer">
             <span class="gold">Lola Vision Systems</span> &copy; 2026<br>
@@ -383,169 +413,388 @@
         </p>
     </div>
 
+    <script src="js/config.js"></script>
+    <script src="js/security.js"></script>
     <script>
-        // Configuration
-        const CONFIG = {
-            // Password hashes (LVS_2026 for all roles)
-            passwords: {
-                investor: '790995832',    // LVS_2026
-                founder: '790995832',     // LVS_2026
-                customer: {
-                    anduril: '139580790',      // AND_2026
-                    koniku: '1282448567',      // KON_2026
-                    glid: '95485021',          // GLI_2026
-                    mach: '618031634',         // MAC_2026
-                    terrahaptix: '382713216',  // TER_2026
-                    revenant: '541150014',     // REV_2026
-                    seasats: '1682748178',     // SEA_2026
-                    amd: '1027084471'          // AMD_2026
+        // API Configuration (from config.js)
+        const API_BASE_URL = LVS_CONFIG.API_BASE_URL;
+
+        // Portal URLs come from LVSSecurity.CONFIG.VALID_PORTALS (single source of truth)
+        // Use LVSSecurity.getPortalUrl() for safe redirects
+
+        // State
+        let currentStep = 1;
+        let userEmail = '';
+        let portalInfo = null;
+
+        // Check API connection on load
+        async function checkConnection() {
+            const statusEl = document.getElementById('connectionStatus');
+            statusEl.className = 'connection-status checking';
+            statusEl.textContent = 'Connecting...';
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/health`, {
+                    method: 'GET',
+                    headers: { 'Accept': 'application/json' }
+                });
+
+                if (response.ok) {
+                    statusEl.className = 'connection-status connected';
+                    statusEl.textContent = 'Secure Connection';
+                    setTimeout(() => {
+                        statusEl.style.display = 'none';
+                    }, 2000);
+                } else {
+                    throw new Error('API not responding');
                 }
-            },
-            // Customer portal URLs
-            customerPortals: {
-                anduril: 'customer-portal-mockup.html',
-                koniku: 'koniku-portal.html',
-                glid: 'glid-portal.html',
-                mach: 'mach-portal.html',
-                terrahaptix: 'terrahaptix-portal.html',
-                revenant: 'dashboard.html',    // Portal TBD - redirect to dashboard
-                seasats: 'dashboard.html',     // Portal TBD - redirect to dashboard
-                amd: 'amd-portal.html'
-            },
-            // Access levels
-            accessLevels: {
-                founder: ['founder-portal', 'investor-dashboard', 'customer-portals', 'all'],
-                investor: ['investor-dashboard', 'customer-portals'],
-                customer: ['own-portal-only']
+            } catch (error) {
+                statusEl.className = 'connection-status disconnected';
+                statusEl.textContent = 'Backend Offline - Start server on port 8080';
+                console.error('API connection failed:', error);
             }
-        };
-
-        let selectedRole = null;
-
-        // Hash function
-        function simpleHash(str) {
-            let hash = 0;
-            for (let i = 0; i < str.length; i++) {
-                const char = str.charCodeAt(i);
-                hash = ((hash << 5) - hash) + char;
-                hash = hash & hash;
-            }
-            return String(Math.abs(hash));
         }
 
-        // Go directly to presentation (no password required)
-        function goToPresentation() {
-            // Highlight the button briefly
-            document.querySelectorAll('.role-btn').forEach(btn => btn.classList.remove('active'));
-            document.querySelector('.role-btn.presentation').classList.add('active');
-
-            // Set minimal session for presentation access
-            sessionStorage.setItem('lvs_presentation_access', 'true');
-
-            // Redirect immediately
-            setTimeout(() => window.location.href = 'nsic-presentation.html', 300);
+        // Update step indicator
+        function updateStepIndicator(step) {
+            for (let i = 1; i <= 3; i++) {
+                const dot = document.getElementById('dot' + i);
+                dot.classList.remove('active', 'complete');
+                if (i < step) {
+                    dot.classList.add('complete');
+                } else if (i === step) {
+                    dot.classList.add('active');
+                }
+            }
         }
 
-        // Role selection
-        function selectRole(role) {
-            selectedRole = role;
+        // Go to specific step
+        function goToStep(step) {
+            document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+            document.getElementById('step' + step).classList.add('active');
+            currentStep = step;
+            updateStepIndicator(step);
+            clearMessages();
 
-            // Update UI
-            document.querySelectorAll('.role-btn').forEach(btn => btn.classList.remove('active'));
-            document.querySelector(`.role-btn.${role}`).classList.add('active');
+            // Focus appropriate input
+            setTimeout(() => {
+                if (step === 1) document.getElementById('email').focus();
+                if (step === 2) document.getElementById('password').focus();
+                if (step === 3) document.getElementById('code1').focus();
+            }, 100);
+        }
 
-            // Show/hide customer selector
-            const customerSelect = document.getElementById('customerSelect');
-
-            if (role === 'customer') {
-                customerSelect.classList.add('show');
-            } else {
-                customerSelect.classList.remove('show');
-            }
-
-            // Clear errors
+        // Clear error/success messages
+        function clearMessages() {
             document.getElementById('error').style.display = 'none';
             document.getElementById('success').style.display = 'none';
         }
 
-        // Authentication
-        function authenticate() {
-            const password = document.getElementById('password').value;
-            const customer = document.getElementById('customer').value;
-            const errorEl = document.getElementById('error');
-            const successEl = document.getElementById('success');
+        // Show error
+        function showError(message) {
+            const el = document.getElementById('error');
+            el.textContent = message;
+            el.style.display = 'block';
+            document.getElementById('success').style.display = 'none';
+        }
 
-            errorEl.style.display = 'none';
-            successEl.style.display = 'none';
+        // Show success
+        function showSuccess(message) {
+            const el = document.getElementById('success');
+            el.textContent = message;
+            el.style.display = 'block';
+            document.getElementById('error').style.display = 'none';
+        }
 
-            // Check if a role is selected
-            if (!selectedRole) {
-                errorEl.textContent = 'Please select a role first.';
-                errorEl.style.display = 'block';
+        // Set button loading state
+        function setButtonLoading(btnId, loading) {
+            const btn = document.getElementById(btnId);
+            const text = document.getElementById(btnId + 'Text');
+            const spinner = document.getElementById(btnId.replace('Btn', 'Spinner'));
+
+            btn.disabled = loading;
+            text.style.display = loading ? 'none' : 'inline';
+            if (spinner) spinner.style.display = loading ? 'block' : 'none';
+        }
+
+        // Step 1: Handle email submission
+        async function handleEmailSubmit() {
+            clearMessages();
+            userEmail = document.getElementById('email').value.trim().toLowerCase();
+
+            if (!userEmail || !userEmail.includes('@')) {
+                showError('Please enter a valid email address.');
                 return false;
             }
 
-            const passwordHash = simpleHash(password);
+            setButtonLoading('emailBtn', true);
 
-            // Role-based authentication
-            if (selectedRole === 'investor') {
-                if (passwordHash === CONFIG.passwords.investor) {
-                    sessionStorage.setItem('lvs_auth', 'true');
-                    sessionStorage.setItem('lvs_role', 'investor');
-                    sessionStorage.setItem('lvs_can_view_customers', 'true');
-                    successEl.textContent = 'Investor access granted. Redirecting...';
-                    successEl.style.display = 'block';
-                    setTimeout(() => window.location.href = 'dashboard.html', 500);
-                } else {
-                    errorEl.textContent = 'Invalid access code.';
-                    errorEl.style.display = 'block';
-                }
-            } else if (selectedRole === 'founder') {
-                if (passwordHash === CONFIG.passwords.founder) {
-                    sessionStorage.setItem('lvs_auth', 'true');
-                    sessionStorage.setItem('lvs_founder_auth', 'true');
-                    sessionStorage.setItem('lvs_role', 'founder');
-                    sessionStorage.setItem('lvs_can_view_customers', 'true');
-                    sessionStorage.setItem('lvs_can_view_investor', 'true');
-                    successEl.textContent = 'Founder access granted. Redirecting...';
-                    successEl.style.display = 'block';
-                    setTimeout(() => window.location.href = 'founder-portal.html', 500);
-                } else {
-                    errorEl.textContent = 'Invalid access code.';
-                    errorEl.style.display = 'block';
-                }
-            } else if (selectedRole === 'customer') {
-                if (!customer) {
-                    errorEl.textContent = 'Please select your company.';
-                    errorEl.style.display = 'block';
-                    return false;
+            try {
+                const response = await fetch(`${API_BASE_URL}/auth/email`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({ email: userEmail })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.detail || 'Failed to verify email');
                 }
 
-                const expectedHash = CONFIG.passwords.customer[customer];
-                if (passwordHash === expectedHash) {
-                    sessionStorage.setItem('lvs_auth', 'true');
-                    sessionStorage.setItem('lvs_customer', customer);
-                    sessionStorage.setItem('lvs_role', 'customer');
-                    // Customers can only view their own portal
-                    sessionStorage.removeItem('lvs_can_view_customers');
-                    successEl.textContent = 'Customer access granted. Redirecting...';
-                    successEl.style.display = 'block';
-                    const portalUrl = CONFIG.customerPortals[customer];
-                    setTimeout(() => window.location.href = portalUrl, 500);
+                // Store portal info
+                portalInfo = data.portal_info;
+
+                // Update UI for step 2
+                document.getElementById('userEmailDisplay').textContent = userEmail;
+
+                const badge = document.getElementById('portalBadge');
+                const badge2 = document.getElementById('portalBadge2');
+
+                badge.className = 'portal-badge ' + portalInfo.portal_type;
+                badge2.className = 'portal-badge ' + portalInfo.portal_type;
+
+                let badgeText = '';
+                if (portalInfo.portal_type === 'customer') {
+                    badgeText = (portalInfo.company_name || 'Customer') + ' Portal';
+                } else if (portalInfo.portal_type === 'partner') {
+                    badgeText = (portalInfo.company_name || 'Partner') + ' Portal';
+                } else if (portalInfo.portal_type === 'founder') {
+                    badgeText = 'Founder Portal';
                 } else {
-                    errorEl.textContent = 'Invalid access code for this company.';
-                    errorEl.style.display = 'block';
+                    badgeText = 'Investor Portal';
                 }
+                badge.textContent = badgeText;
+                badge2.textContent = badgeText;
+
+                goToStep(2);
+
+            } catch (error) {
+                showError(error.message);
+            } finally {
+                setButtonLoading('emailBtn', false);
             }
 
             return false;
         }
 
+        // Step 2: Handle password submission
+        async function handlePasswordSubmit() {
+            clearMessages();
+            const password = document.getElementById('password').value;
+
+            if (!password) {
+                showError('Please enter your password.');
+                return false;
+            }
+
+            setButtonLoading('passwordBtn', true);
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/auth/password`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email: userEmail,
+                        password: password
+                    })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.detail || 'Invalid credentials');
+                }
+
+                // Check if 2FA is required
+                if (data.next_step === '2fa') {
+                    portalInfo = data.portal_info;
+                    goToStep(3);
+                } else {
+                    // Login complete - we have a token
+                    completeLogin(data);
+                }
+
+            } catch (error) {
+                showError(error.message);
+            } finally {
+                setButtonLoading('passwordBtn', false);
+            }
+
+            return false;
+        }
+
+        // Handle 2FA code input
+        function handleCodeInput(current, nextId) {
+            // Only allow digits
+            current.value = current.value.replace(/\D/g, '');
+
+            if (current.value.length === 1 && nextId) {
+                document.getElementById(nextId).focus();
+            }
+
+            // Check if all codes are filled
+            let fullCode = '';
+            for (let i = 1; i <= 6; i++) {
+                fullCode += document.getElementById('code' + i).value;
+            }
+
+            // Auto-submit when 6 digits entered
+            if (fullCode.length === 6) {
+                setTimeout(() => handleTwoFactorSubmit(), 100);
+            }
+        }
+
+        // Handle backspace in code inputs
+        function handleCodeKeydown(event, current, prevId, nextId) {
+            if (event.key === 'Backspace' && current.value === '' && prevId) {
+                document.getElementById(prevId).focus();
+            }
+        }
+
+        // Step 3: Handle 2FA submission
+        async function handleTwoFactorSubmit() {
+            clearMessages();
+
+            let code = '';
+            for (let i = 1; i <= 6; i++) {
+                code += document.getElementById('code' + i).value;
+            }
+
+            if (code.length !== 6) {
+                showError('Please enter the complete 6-digit code.');
+                return false;
+            }
+
+            setButtonLoading('twofaBtn', true);
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/auth/2fa`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email: userEmail,
+                        code: code
+                    })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.detail || 'Invalid verification code');
+                }
+
+                // Login complete
+                completeLogin(data);
+
+            } catch (error) {
+                showError(error.message);
+                // Clear code inputs
+                for (let i = 1; i <= 6; i++) {
+                    document.getElementById('code' + i).value = '';
+                }
+                document.getElementById('code1').focus();
+            } finally {
+                setButtonLoading('twofaBtn', false);
+            }
+
+            return false;
+        }
+
+        // Complete login and redirect
+        function completeLogin(data) {
+            showSuccess('Authentication successful. Redirecting...');
+
+            // Store session data
+            sessionStorage.setItem('lvs_auth', 'true');
+            sessionStorage.setItem('lvs_token', data.access_token);
+            sessionStorage.setItem('lvs_role', data.portal_type);
+            sessionStorage.setItem('lvs_email', data.user.email);
+            sessionStorage.setItem('lvs_user_id', data.user.id);
+            sessionStorage.setItem('lvs_user_name', data.user.name);
+            sessionStorage.setItem('lvs_session_timestamp', Date.now().toString());
+
+            // Store NDA status
+            if (data.nda) {
+                sessionStorage.setItem('lvs_nda_status', data.nda.status);
+                sessionStorage.setItem('lvs_nda_allowed', data.nda.allowed ? 'true' : 'false');
+            }
+
+            // Set additional flags based on portal type
+            if (data.portal_type === 'founder') {
+                sessionStorage.setItem('lvs_founder_auth', 'true');
+                sessionStorage.setItem('lvs_can_view_customers', 'true');
+                sessionStorage.setItem('lvs_can_view_investor', 'true');
+            } else if (data.portal_type === 'investor') {
+                sessionStorage.setItem('lvs_can_view_customers', 'true');
+            } else if (data.portal_type === 'customer') {
+                sessionStorage.setItem('lvs_customer', data.user.company);
+            } else if (data.portal_type === 'partner') {
+                sessionStorage.setItem('lvs_partner', data.user.company);
+                sessionStorage.setItem('lvs_partner_tier', 'strategic');
+            }
+
+            // Redirect to portal using whitelist - ignore server's portal_url
+            // This prevents open redirect attacks where server could be compromised
+            const redirectUrl = LVSSecurity.getPortalUrl(
+                data.portal_type,
+                data.user.company,
+                data.nda?.allowed
+            );
+
+            setTimeout(() => {
+                window.location.href = redirectUrl;
+            }, 1000);
+        }
+
         // Clear errors on input
-        document.querySelectorAll('input, select').forEach(el => {
-            el.addEventListener('input', () => {
-                document.getElementById('error').style.display = 'none';
-            });
+        document.querySelectorAll('input').forEach(el => {
+            el.addEventListener('input', clearMessages);
+        });
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            checkConnection();
+            document.getElementById('email').focus();
+
+            // Check if already authenticated
+            const token = sessionStorage.getItem('lvs_token');
+            const role = sessionStorage.getItem('lvs_role');
+            if (token && role) {
+                // Validate token with API
+                fetch(`${API_BASE_URL}/auth/validate-token`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                }).then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        // Token invalid, clear session
+                        sessionStorage.clear();
+                        throw new Error('Invalid token');
+                    }
+                }).then(data => {
+                    // Use whitelist-based redirect with server-validated portal_type
+                    const company = sessionStorage.getItem('lvs_customer') ||
+                                    sessionStorage.getItem('lvs_partner');
+                    const ndaAllowed = data.nda?.allowed !== false;
+                    const redirectUrl = LVSSecurity.getPortalUrl(data.user.portal_type, company, ndaAllowed);
+                    window.location.href = redirectUrl;
+                }).catch(() => {
+                    // API error or invalid token, stay on login
+                });
+            }
         });
     </script>
 </body>

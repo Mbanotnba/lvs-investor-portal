@@ -22,14 +22,9 @@ python3 -m http.server 8000
 npx serve .
 ```
 
-### Access Credentials
+### Access
 
-| Role | URL | Email Required | Password |
-|------|-----|----------------|----------|
-| **Investor** | `/login.html` | No | `LVS_2026` |
-| **Founder** | `/login.html` | @lolavisionsystems.com | `LVS_2026` |
-| **Customer** | `/login.html` | Any + Company | Company-specific |
-| **Team Demo** | `/login.html` (toggle) | Optional | `LVS_2026` |
+Access credentials are managed internally. Contact Tayo Adesanya for access.
 
 **Live Site:** https://mbanotnba.github.io/lvs-investor-portal/
 
@@ -260,34 +255,7 @@ sessionStorage.getItem('lvs_customer')           // Customer ID (e.g., 'anduril'
 
 ### Change Access Passwords
 
-Edit `login.html`:
-```javascript
-const CONFIG = {
-    teamPassword: '790995832',  // Hash of LVS_2026
-    passwords: {
-        investor: '790995832',
-        founder: '790995832',
-        customer: {
-            anduril: '1438927492',  // Hash of ANDURIL_2026
-            // Add more...
-        }
-    }
-}
-```
-
-To generate a new hash, use the browser console:
-```javascript
-function simpleHash(str) {
-    let hash = 0;
-    for (let i = 0; i < str.length; i++) {
-        const char = str.charCodeAt(i);
-        hash = ((hash << 5) - hash) + char;
-        hash = hash & hash;
-    }
-    return String(Math.abs(hash));
-}
-simpleHash('YOUR_NEW_PASSWORD');
-```
+Password management is handled internally. Contact the development team for credential updates.
 
 ---
 

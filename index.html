@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; media-src 'self' https:; font-src 'self' https:; connect-src 'self';">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lola Vision Systems | Investor Portal</title>
@@ -152,7 +153,7 @@
 <body>
     <div class="login-container">
         <div class="logo-icon">
-            <img src="assets/lvs-logo.png" alt="Lola Vision Systems">
+            <img src="assets/lvs-logo.webp" alt="Lola Vision Systems">
         </div>
         <h1>LOLA VISION SYSTEMS</h1>
         <p class="subtitle">Investor Portal</p>
@@ -183,6 +184,7 @@
             // Hash of LVS_2026
             if (hash === '790995832') {
                 sessionStorage.setItem('lvs_auth', 'true');
+                sessionStorage.setItem('lvs_session_timestamp', Date.now().toString());
                 window.location.href = 'dashboard.html';
             } else {
                 document.getElementById('error').style.display = 'block';

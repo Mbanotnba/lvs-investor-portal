@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; media-src 'self' https:; font-src 'self' https:; connect-src 'self' http://localhost:8080 http://127.0.0.1:8080 http://api.lvs.local:8080 https://api.lolavisionsystems.com https://api.lvs.app;">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Founder Portal | Lola Vision Systems</title>
@@ -460,23 +461,225 @@
             font-size: 13px;
         }
 
+        /* NDA Management */
+        .nda-pending-count {
+            background: #f97316 !important;
+            color: #fff !important;
+        }
+        .nda-section { display: none; }
+        .nda-section.active { display: block; }
+        .nda-summary {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .nda-stat {
+            background: var(--panel);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.06);
+        }
+        .nda-stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+        .nda-stat-value.pending { color: #f97316; }
+        .nda-stat-value.approved { color: #10b981; }
+        .nda-stat-value.expired { color: #ef4444; }
+        .nda-stat-value.revoked { color: #6b7280; }
+        .nda-stat-label {
+            font-size: 12px;
+            color: var(--muted);
+            text-transform: uppercase;
+        }
+        .nda-table {
+            width: 100%;
+            background: var(--panel);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.06);
+        }
+        .nda-table th, .nda-table td {
+            padding: 14px 16px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+        .nda-table th {
+            background: var(--panel-light);
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: var(--muted);
+        }
+        .nda-table tr:last-child td {
+            border-bottom: none;
+        }
+        .nda-table tr:hover {
+            background: rgba(255,255,255,0.02);
+        }
+        .nda-status-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        .nda-status-badge.pending { background: rgba(249,115,22,0.2); color: #f97316; }
+        .nda-status-badge.approved { background: rgba(16,185,129,0.2); color: #10b981; }
+        .nda-status-badge.expired { background: rgba(239,68,68,0.2); color: #ef4444; }
+        .nda-status-badge.revoked { background: rgba(107,114,128,0.2); color: #6b7280; }
+        .nda-btn {
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+            margin-right: 6px;
+        }
+        .nda-btn.approve {
+            background: #10b981;
+            color: white;
+        }
+        .nda-btn.approve:hover {
+            background: #059669;
+        }
+        .nda-btn.revoke {
+            background: rgba(239,68,68,0.2);
+            color: #ef4444;
+        }
+        .nda-btn.revoke:hover {
+            background: rgba(239,68,68,0.3);
+        }
+        .nda-btn.extend {
+            background: rgba(124,77,255,0.2);
+            color: #a78bfa;
+        }
+        .nda-btn.extend:hover {
+            background: rgba(124,77,255,0.3);
+        }
+        .nda-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .nda-filter-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+        .nda-filter-tab {
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            cursor: pointer;
+            background: var(--panel);
+            color: var(--muted);
+            border: 1px solid rgba(255,255,255,0.06);
+            transition: all 0.2s;
+        }
+        .nda-filter-tab:hover {
+            border-color: var(--accent);
+            color: var(--text);
+        }
+        .nda-filter-tab.active {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+        .nda-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        .nda-modal.show { display: flex; }
+        .nda-modal-content {
+            background: var(--panel);
+            border-radius: 16px;
+            padding: 32px;
+            max-width: 400px;
+            width: 90%;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .nda-modal h3 {
+            margin-bottom: 16px;
+        }
+        .nda-modal label {
+            display: block;
+            font-size: 12px;
+            color: var(--muted);
+            margin-bottom: 6px;
+            margin-top: 12px;
+        }
+        .nda-modal input, .nda-modal select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            background: var(--panel-light);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: var(--text);
+            font-size: 14px;
+        }
+        .nda-modal-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+        }
+        .nda-modal-btn {
+            flex: 1;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+        }
+        .nda-modal-btn.primary {
+            background: var(--accent);
+            color: white;
+        }
+        .nda-modal-btn.secondary {
+            background: transparent;
+            color: var(--muted);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
         /* Mobile */
         @media (max-width: 1024px) {
             .sidebar { display: none; }
             .detail-panel { width: 100%; }
+            .nda-summary { grid-template-columns: repeat(2, 1fr); }
         }
         @media (max-width: 600px) {
             .content { padding: 16px; }
             .customer-grid { grid-template-columns: 1fr; }
             .section-header { flex-direction: column; gap: 12px; align-items: stretch; }
             .search-box { width: 100%; }
+            .nda-summary { grid-template-columns: 1fr; }
+            .nda-table { font-size: 12px; }
         }
     </style>
+    <script src="js/config.js"></script>
+    <script src="js/security.js"></script>
+    <script>
+        // Validate founder access - always force server validation for sensitive portal
+        LVSSecurity.initProtectedPage('founder', null, { force: true });
+    </script>
 </head>
 <body>
     <nav class="nav">
         <div class="nav-brand">
-            <img src="assets/lvs-logo.png" alt="LVS" class="nav-logo">
+            <img src="assets/lvs-logo.webp" alt="LVS" class="nav-logo">
             <span class="nav-title">LOLA VISION <span>SYSTEMS</span></span>
             <span class="nav-badge">Founder Access</span>
         </div>
@@ -532,6 +735,25 @@
                 </a>
             </div>
             <div class="sidebar-section">
+                <div class="sidebar-title">Technical</div>
+                <a href="software-platform.html" class="sidebar-item">
+                    <span class="sidebar-item-icon">&#128187;</span>
+                    <span class="sidebar-item-text">Software Platform</span>
+                </a>
+                <a href="nsic-presentation.html" class="sidebar-item">
+                    <span class="sidebar-item-icon">&#128202;</span>
+                    <span class="sidebar-item-text">NSIC Presentation</span>
+                </a>
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-title">Access Control</div>
+                <div class="sidebar-item" onclick="showNdaManagement()">
+                    <span class="sidebar-item-icon">&#128274;</span>
+                    <span class="sidebar-item-text">NDA Management</span>
+                    <span class="sidebar-item-badge nda-pending-count" id="ndaPendingCount">0</span>
+                </div>
+            </div>
+            <div class="sidebar-section">
                 <div class="sidebar-title">Team</div>
                 <div class="sidebar-item" style="opacity: 0.5; cursor: not-allowed;">
                     <span class="sidebar-item-icon">&#128172;</span>
@@ -547,16 +769,97 @@
         </aside>
 
         <main class="content">
-            <div class="section-header">
-                <h2 id="sectionTitle">Customer Portals</h2>
-                <input type="text" class="search-box" placeholder="Search customers..." id="searchBox" oninput="searchCustomers(this.value)">
-            </div>
-            <div class="customer-grid" id="customerGrid">
-                <div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: var(--muted);">
-                    Loading customers...
+            <!-- Customer Section -->
+            <div id="customerSection">
+                <div class="section-header">
+                    <h2 id="sectionTitle">Customer Portals</h2>
+                    <input type="text" class="search-box" placeholder="Search customers..." id="searchBox" oninput="searchCustomers(this.value)">
+                </div>
+                <div class="customer-grid" id="customerGrid">
+                    <div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: var(--muted);">
+                        Loading customers...
+                    </div>
                 </div>
             </div>
+
+            <!-- NDA Management Section -->
+            <div id="ndaSection" class="nda-section">
+                <div class="section-header">
+                    <h2>NDA Management</h2>
+                </div>
+
+                <!-- Summary Stats -->
+                <div class="nda-summary">
+                    <div class="nda-stat">
+                        <div class="nda-stat-value pending" id="ndaStatPending">0</div>
+                        <div class="nda-stat-label">Pending</div>
+                    </div>
+                    <div class="nda-stat">
+                        <div class="nda-stat-value approved" id="ndaStatApproved">0</div>
+                        <div class="nda-stat-label">Approved</div>
+                    </div>
+                    <div class="nda-stat">
+                        <div class="nda-stat-value expired" id="ndaStatExpired">0</div>
+                        <div class="nda-stat-label">Expired</div>
+                    </div>
+                    <div class="nda-stat">
+                        <div class="nda-stat-value revoked" id="ndaStatRevoked">0</div>
+                        <div class="nda-stat-label">Revoked</div>
+                    </div>
+                </div>
+
+                <!-- Filter Tabs -->
+                <div class="nda-filter-tabs">
+                    <button class="nda-filter-tab active" onclick="filterNdaUsers('all')">All</button>
+                    <button class="nda-filter-tab" onclick="filterNdaUsers('pending')">Pending</button>
+                    <button class="nda-filter-tab" onclick="filterNdaUsers('approved')">Approved</button>
+                    <button class="nda-filter-tab" onclick="filterNdaUsers('expired')">Expired</button>
+                </div>
+
+                <!-- Users Table -->
+                <table class="nda-table">
+                    <thead>
+                        <tr>
+                            <th>User</th>
+                            <th>Company</th>
+                            <th>Type</th>
+                            <th>NDA Status</th>
+                            <th>Expires</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ndaTableBody">
+                        <tr>
+                            <td colspan="6" style="text-align: center; color: var(--muted);">Loading...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </main>
+
+        <!-- NDA Approval Modal -->
+        <div class="nda-modal" id="ndaApproveModal">
+            <div class="nda-modal-content">
+                <h3>Approve NDA Access</h3>
+                <p style="color: var(--muted); font-size: 13px; margin-bottom: 16px;">
+                    Grant portal access for <strong id="approveUserName"></strong>
+                </p>
+                <label>Expiration Period</label>
+                <select id="approveExpiresDays">
+                    <option value="365">1 Year (Standard)</option>
+                    <option value="180">6 Months</option>
+                    <option value="90">90 Days</option>
+                    <option value="30">30 Days</option>
+                    <option value="730">2 Years</option>
+                </select>
+                <label>Notes (Optional)</label>
+                <input type="text" id="approveNotes" placeholder="e.g., NDA signed on DocuSign">
+                <div class="nda-modal-actions">
+                    <button class="nda-modal-btn secondary" onclick="closeNdaModal()">Cancel</button>
+                    <button class="nda-modal-btn primary" onclick="confirmApproveNda()">Approve Access</button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Customer Detail Panel -->
@@ -852,20 +1155,293 @@
 
         // Logout
         function logout() {
-            sessionStorage.removeItem('lvs_founder_auth');
-            window.location.href = 'founder-login.html';
+            sessionStorage.clear();
+            window.location.href = 'login.html';
         }
 
         // Close panel on escape
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') closeDetail();
+            if (e.key === 'Escape') {
+                closeDetail();
+                closeNdaModal();
+            }
         });
+
+        // ================================================================
+        // NDA MANAGEMENT
+        // ================================================================
+
+        const API_BASE_URL = typeof LVS_CONFIG !== 'undefined' ? LVS_CONFIG.API_BASE_URL : 'http://localhost:8080';
+        let ndaUsers = [];
+        let ndaFilterStatus = 'all';
+        let pendingApproveUserId = null;
+
+        // Show NDA Management section
+        function showNdaManagement() {
+            document.getElementById('customerSection').style.display = 'none';
+            document.getElementById('ndaSection').classList.add('active');
+            document.getElementById('searchBox').style.display = 'none';
+            document.querySelectorAll('.sidebar-item').forEach(el => el.classList.remove('active'));
+            loadNdaUsers();
+        }
+
+        // Show customers section
+        function showCustomersWithPortals() {
+            document.getElementById('ndaSection').classList.remove('active');
+            document.getElementById('customerSection').style.display = 'block';
+            document.getElementById('searchBox').style.display = 'block';
+            filteredCustomers = customers.filter(c => customersWithPortals.includes(c.id));
+            renderCustomers();
+            document.getElementById('sectionTitle').textContent = 'Customer Portals';
+            updateActiveMenuItem(0);
+        }
+
+        // Load NDA users from API
+        async function loadNdaUsers() {
+            const token = sessionStorage.getItem('lvs_token');
+            if (!token) {
+                console.error('No auth token');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/auth/nda/users`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Accept': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to load NDA users');
+                }
+
+                const data = await response.json();
+                ndaUsers = data.users || [];
+
+                // Update summary stats
+                document.getElementById('ndaStatPending').textContent = data.summary?.pending || 0;
+                document.getElementById('ndaStatApproved').textContent = data.summary?.approved || 0;
+                document.getElementById('ndaStatExpired').textContent = data.summary?.expired || 0;
+                document.getElementById('ndaStatRevoked').textContent = data.summary?.revoked || 0;
+
+                // Update sidebar badge
+                document.getElementById('ndaPendingCount').textContent = data.summary?.pending || 0;
+
+                renderNdaTable();
+            } catch (error) {
+                console.error('Error loading NDA users:', error);
+                document.getElementById('ndaTableBody').innerHTML = `
+                    <tr><td colspan="6" style="text-align: center; color: var(--warn);">
+                        Failed to load users. <a href="javascript:loadNdaUsers()" style="color: var(--accent);">Retry</a>
+                    </td></tr>`;
+            }
+        }
+
+        // Filter NDA users
+        function filterNdaUsers(status) {
+            ndaFilterStatus = status;
+            document.querySelectorAll('.nda-filter-tab').forEach(tab => {
+                tab.classList.toggle('active', tab.textContent.toLowerCase() === status);
+            });
+            renderNdaTable();
+        }
+
+        // Render NDA table
+        function renderNdaTable() {
+            let filtered = ndaUsers;
+            if (ndaFilterStatus !== 'all') {
+                filtered = ndaUsers.filter(u => u.nda_status === ndaFilterStatus);
+            }
+
+            if (filtered.length === 0) {
+                document.getElementById('ndaTableBody').innerHTML = `
+                    <tr><td colspan="6" style="text-align: center; color: var(--muted);">
+                        No users found
+                    </td></tr>`;
+                return;
+            }
+
+            const rows = filtered.map(user => {
+                const expiresDate = user.nda_expires_date
+                    ? new Date(user.nda_expires_date).toLocaleDateString()
+                    : '-';
+
+                const isExpiringSoon = user.nda_expires_date &&
+                    new Date(user.nda_expires_date) < new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
+
+                let actions = '';
+                if (user.nda_status === 'pending') {
+                    actions = `<button class="nda-btn approve" onclick="openApproveModal(${user.id}, '${user.name}')">Approve</button>`;
+                } else if (user.nda_status === 'approved') {
+                    actions = `
+                        <button class="nda-btn extend" onclick="extendNda(${user.id})">Extend</button>
+                        <button class="nda-btn revoke" onclick="revokeNda(${user.id}, '${user.name}')">Revoke</button>
+                    `;
+                } else if (user.nda_status === 'expired') {
+                    actions = `<button class="nda-btn approve" onclick="openApproveModal(${user.id}, '${user.name}')">Renew</button>`;
+                } else if (user.nda_status === 'revoked') {
+                    actions = `<button class="nda-btn approve" onclick="openApproveModal(${user.id}, '${user.name}')">Reinstate</button>`;
+                }
+
+                return `
+                    <tr>
+                        <td>
+                            <div style="font-weight: 500;">${user.name}</div>
+                            <div style="font-size: 12px; color: var(--muted);">${user.email}</div>
+                        </td>
+                        <td style="text-transform: capitalize;">${user.company || '-'}</td>
+                        <td style="text-transform: capitalize;">${user.portal_type}</td>
+                        <td><span class="nda-status-badge ${user.nda_status}">${formatNdaStatus(user.nda_status)}</span></td>
+                        <td ${isExpiringSoon ? 'style="color: #f97316;"' : ''}>${expiresDate}</td>
+                        <td>${actions}</td>
+                    </tr>
+                `;
+            }).join('');
+
+            document.getElementById('ndaTableBody').innerHTML = rows;
+        }
+
+        // Format NDA status
+        function formatNdaStatus(status) {
+            const map = {
+                'pending': 'Pending',
+                'approved': 'Approved',
+                'expired': 'Expired',
+                'revoked': 'Revoked',
+                'not_required': 'Not Required'
+            };
+            return map[status] || status;
+        }
+
+        // Open approve modal
+        function openApproveModal(userId, userName) {
+            pendingApproveUserId = userId;
+            document.getElementById('approveUserName').textContent = userName;
+            document.getElementById('approveExpiresDays').value = '365';
+            document.getElementById('approveNotes').value = '';
+            document.getElementById('ndaApproveModal').classList.add('show');
+        }
+
+        // Close NDA modal
+        function closeNdaModal() {
+            document.getElementById('ndaApproveModal').classList.remove('show');
+            pendingApproveUserId = null;
+        }
+
+        // Confirm approve NDA
+        async function confirmApproveNda() {
+            if (!pendingApproveUserId) return;
+
+            const expiresDays = document.getElementById('approveExpiresDays').value;
+            const notes = document.getElementById('approveNotes').value;
+            const token = sessionStorage.getItem('lvs_token');
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/auth/nda/approve/${pendingApproveUserId}?expires_days=${expiresDays}&notes=${encodeURIComponent(notes)}`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    const data = await response.json();
+                    throw new Error(data.detail || 'Failed to approve NDA');
+                }
+
+                closeNdaModal();
+                loadNdaUsers();
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
+        }
+
+        // Revoke NDA
+        async function revokeNda(userId, userName) {
+            if (!confirm(`Revoke portal access for ${userName}?`)) return;
+
+            const token = sessionStorage.getItem('lvs_token');
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/auth/nda/revoke/${userId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    const data = await response.json();
+                    throw new Error(data.detail || 'Failed to revoke NDA');
+                }
+
+                loadNdaUsers();
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
+        }
+
+        // Extend NDA
+        async function extendNda(userId) {
+            const days = prompt('Extend NDA by how many days?', '365');
+            if (!days || isNaN(days)) return;
+
+            const token = sessionStorage.getItem('lvs_token');
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/auth/nda/extend/${userId}?expires_days=${days}`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    const data = await response.json();
+                    throw new Error(data.detail || 'Failed to extend NDA');
+                }
+
+                loadNdaUsers();
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
+        }
+
+        // Load NDA pending count on page load
+        async function loadNdaPendingCount() {
+            const token = sessionStorage.getItem('lvs_token');
+            if (!token) return;
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/auth/nda/users?portal_type=customer`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Accept': 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    document.getElementById('ndaPendingCount').textContent = data.summary?.pending || 0;
+                }
+            } catch (error) {
+                console.error('Error loading NDA count:', error);
+            }
+        }
 
         // Initialize when DOM is ready
         if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', loadCustomers);
+            document.addEventListener('DOMContentLoaded', () => {
+                loadCustomers();
+                loadNdaPendingCount();
+            });
         } else {
             loadCustomers();
+            loadNdaPendingCount();
         }
     </script>
 </body>

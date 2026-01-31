@@ -1,0 +1,93 @@
+/**
+ * LVS Portal - Environment Configuration
+ *
+ * This file configures API endpoints based on the current environment.
+ * For production, update the PRODUCTION settings with your actual domain.
+ */
+
+const LVS_CONFIG = (function() {
+    const hostname = window.location.hostname;
+
+    // Environment detection
+    const ENVIRONMENTS = {
+        // Local development
+        localhost: {
+            name: 'development',
+            apiBase: 'http://localhost:8080',
+            portalBase: 'http://localhost:8000'
+        },
+        '127.0.0.1': {
+            name: 'development',
+            apiBase: 'http://127.0.0.1:8080',
+            portalBase: 'http://127.0.0.1:8000'
+        },
+        // Local domain (requires /etc/hosts entry)
+        'lvs.local': {
+            name: 'local',
+            apiBase: 'http://api.lvs.local:8080',
+            portalBase: 'http://lvs.local:8000'
+        },
+        // Production - UPDATE THESE FOR YOUR DOMAIN
+        'portal.lolavisionsystems.com': {
+            name: 'production',
+            apiBase: 'https://api.lolavisionsystems.com',
+            portalBase: 'https://portal.lolavisionsystems.com'
+        },
+        'lvs.app': {
+            name: 'production',
+            apiBase: 'https://api.lvs.app',
+            portalBase: 'https://lvs.app'
+        }
+    };
+
+    // Get current environment config
+    const env = ENVIRONMENTS[hostname] || ENVIRONMENTS['localhost'];
+
+    return {
+        ENV: env.name,
+        API_BASE_URL: env.apiBase,
+        PORTAL_BASE_URL: env.portalBase,
+
+        // Session settings
+        SESSION_TIMEOUT_MS: 30 * 60 * 1000, // 30 minutes
+
+        // Portal routes
+        ROUTES: {
+            login: 'login.html',
+            founder: 'founder-portal.html',
+            investor: 'dashboard.html',
+            customer: '{company}-portal.html',
+            partner: 'partner-portal.html?partner={company}'
+        },
+
+        // Get portal URL for a given type and company
+        getPortalUrl: function(portalType, company) {
+            let route = this.ROUTES[portalType] || this.ROUTES.investor;
+            if (company) {
+                route = route.replace('{company}', company);
+            }
+            return route;
+        },
+
+        // Check if running in production
+        isProduction: function() {
+            return this.ENV === 'production';
+        },
+
+        // Log config (dev only)
+        debug: function() {
+            if (this.ENV !== 'production') {
+                console.log('LVS Config:', {
+                    env: this.ENV,
+                    api: this.API_BASE_URL,
+                    portal: this.PORTAL_BASE_URL
+                });
+            }
+        }
+    };
+})();
+
+// Auto-log in development
+if (typeof window !== 'undefined') {
+    LVS_CONFIG.debug();
+}

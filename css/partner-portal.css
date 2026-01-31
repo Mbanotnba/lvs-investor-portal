@@ -1,0 +1,589 @@
+/**
+ * LVS Silicon IP Partner Portal - Additional Styles
+ *
+ * This file extends shared-portal.css with partner-specific components.
+ * Include after shared-portal.css.
+ */
+
+/* ====================================================================
+   Partner-specific CSS Variables
+   ==================================================================== */
+:root {
+    /* Partner tier colors */
+    --tier-strategic: #f97316;    /* Orange for strategic partners */
+    --tier-premier: #7c4dff;      /* Purple for premier partners */
+    --tier-standard: #06b6d4;     /* Cyan for standard partners */
+
+    /* Partner accent (can be overridden per-partner) */
+    --partner-accent: var(--tier-strategic);
+}
+
+/* ====================================================================
+   Partner Header / Welcome Section
+   ==================================================================== */
+.partner-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 32px;
+    padding: 32px;
+    background: var(--panel);
+    border-radius: 16px;
+    border: 1px solid rgba(255,255,255,0.06);
+}
+
+.partner-header-content h1 {
+    font-size: 28px;
+    margin-bottom: 8px;
+}
+
+.partner-header-content h1 span {
+    color: var(--partner-accent);
+}
+
+.partner-header-content p {
+    color: var(--muted);
+    font-size: 14px;
+}
+
+.partner-branding {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 12px;
+}
+
+.partner-logo {
+    height: 60px;
+    width: auto;
+}
+
+.partner-logo-text {
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--partner-accent);
+    letter-spacing: -1px;
+}
+
+.partnership-badge {
+    background: linear-gradient(135deg, var(--partner-accent), rgba(249,115,22,0.7));
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* ====================================================================
+   Integration Stage Tracker (Technical Focus)
+   ==================================================================== */
+.integration-tracker {
+    background: var(--panel);
+    border-radius: 16px;
+    padding: 28px;
+    margin-bottom: 24px;
+    border: 1px solid rgba(255,255,255,0.06);
+}
+
+.integration-tracker h2 {
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--muted);
+    margin-bottom: 8px;
+}
+
+.integration-tracker .tracker-subtitle {
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 24px;
+}
+
+.integration-tracker .tracker-subtitle span {
+    color: var(--partner-accent);
+    font-weight: 600;
+}
+
+.integration-stages {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+}
+
+/* Progress line background */
+.integration-stages::before {
+    content: '';
+    position: absolute;
+    top: 24px;
+    left: 50px;
+    right: 50px;
+    height: 4px;
+    background: var(--panel-light);
+    border-radius: 2px;
+}
+
+/* Progress line fill - dynamic width via inline style */
+.integration-stages::after {
+    content: '';
+    position: absolute;
+    top: 24px;
+    left: 50px;
+    width: var(--progress, 50%);
+    height: 4px;
+    background: linear-gradient(90deg, var(--success), var(--partner-accent));
+    border-radius: 2px;
+    transition: width 0.5s ease;
+}
+
+.integration-stage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+    min-width: 100px;
+    text-align: center;
+}
+
+.stage-number {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    border: 3px solid var(--panel);
+    transition: all 0.3s;
+}
+
+.stage-number.complete {
+    background: var(--success);
+    color: white;
+}
+
+.stage-number.current {
+    background: var(--partner-accent);
+    color: white;
+    box-shadow: 0 0 20px rgba(249,115,22,0.5);
+    animation: pulse 2s infinite;
+}
+
+.stage-number.upcoming {
+    background: var(--panel-light);
+    color: var(--muted);
+}
+
+@keyframes pulse {
+    0%, 100% { box-shadow: 0 0 20px rgba(249,115,22,0.5); }
+    50% { box-shadow: 0 0 30px rgba(249,115,22,0.8); }
+}
+
+.stage-name {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--muted);
+    margin-bottom: 4px;
+}
+
+.integration-stage.active .stage-name {
+    color: var(--partner-accent);
+}
+
+.stage-date {
+    font-size: 10px;
+    color: var(--muted);
+}
+
+/* Responsive stages */
+@media (max-width: 900px) {
+    .integration-stages {
+        overflow-x: auto;
+        padding-bottom: 12px;
+        justify-content: flex-start;
+        gap: 20px;
+    }
+    .integration-stages::before,
+    .integration-stages::after {
+        display: none;
+    }
+    .integration-stage {
+        min-width: 80px;
+        flex-shrink: 0;
+    }
+}
+
+/* ====================================================================
+   Download Cards
+   ==================================================================== */
+.downloads-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+}
+
+.download-card {
+    background: var(--panel);
+    border-radius: 12px;
+    padding: 20px;
+    border: 1px solid rgba(255,255,255,0.06);
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    transition: all 0.2s;
+}
+
+.download-card:hover {
+    border-color: rgba(249,115,22,0.3);
+    transform: translateY(-2px);
+}
+
+.download-card.coming-soon {
+    opacity: 0.6;
+}
+
+.download-card.coming-soon:hover {
+    transform: none;
+    border-color: rgba(255,255,255,0.06);
+}
+
+.download-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+}
+
+.download-icon.pdf {
+    background: rgba(239, 68, 68, 0.15);
+    color: #ef4444;
+}
+
+.download-icon.zip {
+    background: rgba(124, 77, 255, 0.15);
+    color: var(--accent);
+}
+
+.download-icon.doc {
+    background: rgba(6, 182, 212, 0.15);
+    color: var(--info);
+}
+
+.download-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.download-name {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.download-meta {
+    font-size: 11px;
+    color: var(--muted);
+    margin-bottom: 8px;
+}
+
+.download-status {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 10px;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.download-status.available {
+    background: rgba(16, 185, 129, 0.15);
+    color: var(--success);
+}
+
+.download-status.coming-soon {
+    background: rgba(249, 115, 22, 0.15);
+    color: var(--partner-accent);
+}
+
+.download-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    background: var(--panel-light);
+    border: none;
+    color: var(--muted);
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    flex-shrink: 0;
+}
+
+.download-btn:hover {
+    background: var(--partner-accent);
+    color: white;
+}
+
+.download-card.coming-soon .download-btn {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+/* ====================================================================
+   Documentation List
+   ==================================================================== */
+.doc-category {
+    margin-bottom: 24px;
+}
+
+.doc-category h4 {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--muted);
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.doc-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.doc-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px;
+    background: var(--panel-light);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.doc-item:hover {
+    background: rgba(249, 115, 22, 0.1);
+    transform: translateX(4px);
+}
+
+.doc-item-icon {
+    width: 40px;
+    height: 40px;
+    background: rgba(249, 115, 22, 0.15);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--partner-accent);
+    font-size: 18px;
+}
+
+.doc-item-info {
+    flex: 1;
+}
+
+.doc-item-name {
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 2px;
+}
+
+.doc-item-desc {
+    font-size: 11px;
+    color: var(--muted);
+}
+
+.doc-item-arrow {
+    color: var(--muted);
+    font-size: 16px;
+}
+
+/* ====================================================================
+   Integration Specs Table
+   ==================================================================== */
+.specs-panel {
+    background: var(--panel);
+    border-radius: 16px;
+    padding: 24px;
+    border: 1px solid rgba(255,255,255,0.06);
+    margin-bottom: 24px;
+}
+
+.specs-panel h3 {
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--muted);
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.specs-panel h3 .spec-badge {
+    background: var(--partner-accent);
+    color: white;
+    padding: 3px 8px;
+    border-radius: 10px;
+    font-size: 10px;
+    text-transform: uppercase;
+}
+
+.spec-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+
+.spec-row:last-child {
+    border-bottom: none;
+}
+
+.spec-label {
+    color: var(--muted);
+    font-size: 13px;
+}
+
+.spec-value {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+}
+
+/* ====================================================================
+   Architecture Diagram Placeholder
+   ==================================================================== */
+.architecture-diagram {
+    background: linear-gradient(135deg, var(--panel-light), var(--panel));
+    border-radius: 16px;
+    padding: 40px;
+    margin-bottom: 24px;
+    text-align: center;
+    border: 1px dashed rgba(249,115,22,0.3);
+    min-height: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.architecture-diagram .diagram-icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+    opacity: 0.5;
+}
+
+.architecture-diagram h4 {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--partner-accent);
+}
+
+.architecture-diagram p {
+    color: var(--muted);
+    font-size: 13px;
+}
+
+/* ====================================================================
+   Partner Badge in Navigation
+   ==================================================================== */
+.partner-nav-badge {
+    background: linear-gradient(135deg, var(--partner-accent), rgba(249,115,22,0.7));
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+/* ====================================================================
+   Summary Cards (Dashboard)
+   ==================================================================== */
+.summary-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.summary-card {
+    background: var(--panel);
+    border-radius: 12px;
+    padding: 20px;
+    border: 1px solid rgba(255,255,255,0.06);
+}
+
+.summary-card-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--muted);
+    margin-bottom: 8px;
+}
+
+.summary-card-value {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text);
+}
+
+.summary-card-value.accent {
+    color: var(--partner-accent);
+}
+
+.summary-card-value.success {
+    color: var(--success);
+}
+
+.summary-card-sub {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 4px;
+}
+
+/* ====================================================================
+   Responsive Adjustments
+   ==================================================================== */
+@media (max-width: 768px) {
+    .partner-header {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .partner-branding {
+        align-items: flex-start;
+    }
+
+    .downloads-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .summary-cards {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 500px) {
+    .summary-cards {
+        grid-template-columns: 1fr;
+    }
+}

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; media-src 'self' https:; font-src 'self' https:; connect-src 'self';">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Financial Model | Lola Vision Systems</title>
@@ -411,30 +412,41 @@
             .pipeline-summary { grid-template-columns: 1fr; }
         }
     </style>
+    <script src="js/security.js"></script>
     <script>
-        if (sessionStorage.getItem('lvs_auth') !== 'true') {
-            window.location.href = 'index.html';
-        }
+        (function() {
+            const SESSION_TIMEOUT = 30 * 60 * 1000;
+            const timestamp = sessionStorage.getItem('lvs_session_timestamp');
+            const auth = sessionStorage.getItem('lvs_auth');
+            if (auth !== 'true') { window.location.href = 'login.html'; return; }
+            if (timestamp && (Date.now() - parseInt(timestamp, 10)) > SESSION_TIMEOUT) {
+                sessionStorage.clear(); window.location.href = 'login.html?session=expired'; return;
+            }
+            sessionStorage.setItem('lvs_session_timestamp', Date.now().toString());
+        })();
     </script>
 </head>
 <body>
     <nav class="nav">
         <div class="nav-brand">
-            <img src="assets/lvs-logo.png" alt="LVS" class="nav-logo">
+            <img src="assets/lvs-logo.webp" alt="LVS" class="nav-logo">
             <span class="nav-title">LOLA VISION <span>SYSTEMS</span></span>
+            <span class="nav-badge" style="background: var(--accent); color: white; padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 600; margin-left: 12px;">Investor Portal</span>
         </div>
-        <div class="nav-links">
-            <a href="dashboard.html" class="nav-link">Dashboard</a>
-            <a href="pipeline.html" class="nav-link">Pipeline</a>
-            <a href="roadmap.html" class="nav-link">Roadmap</a>
-            <a href="seed-round.html" class="nav-link">Seed Round</a>
-            <a href="index.html" class="nav-link" onclick="sessionStorage.removeItem('lvs_auth')">Logout</a>
-        </div>
+        <a href="login.html" class="nav-link" onclick="sessionStorage.clear()">Logout</a>
     </nav>
 
-    <div class="container">
-        <a href="dashboard.html" class="back-link">&larr; Back to Dashboard</a>
+    <!-- Tab Navigation -->
+    <div class="tab-nav" style="background: var(--panel); padding: 0 32px; border-bottom: 1px solid rgba(255,255,255,0.06); display: flex; gap: 8px;">
+        <a href="dashboard.html" class="tab-link" style="padding: 16px 20px; color: var(--muted); text-decoration: none; font-size: 14px; font-weight: 500; border-bottom: 2px solid transparent; transition: all 0.2s;">Dashboard</a>
+        <a href="pipeline.html" class="tab-link" style="padding: 16px 20px; color: var(--muted); text-decoration: none; font-size: 14px; font-weight: 500; border-bottom: 2px solid transparent; transition: all 0.2s;">Pipeline</a>
+        <a href="roadmap.html" class="tab-link" style="padding: 16px 20px; color: var(--muted); text-decoration: none; font-size: 14px; font-weight: 500; border-bottom: 2px solid transparent; transition: all 0.2s;">Roadmap</a>
+        <a href="financials.html" class="tab-link active" style="padding: 16px 20px; color: var(--gold); text-decoration: none; font-size: 14px; font-weight: 600; border-bottom: 2px solid var(--gold); transition: all 0.2s;">Financials</a>
+        <a href="seed-round.html" class="tab-link" style="padding: 16px 20px; color: var(--muted); text-decoration: none; font-size: 14px; font-weight: 500; border-bottom: 2px solid transparent; transition: all 0.2s;">Seed Round</a>
+        <a href="nsic-presentation.html" class="tab-link" style="padding: 16px 20px; color: var(--muted); text-decoration: none; font-size: 14px; font-weight: 500; border-bottom: 2px solid transparent; transition: all 0.2s;">Presentation</a>
+    </div>
 
+    <div class="container">
         <header class="header">
             <h1>Financial Model</h1>
             <div class="subtitle">Expected weighted revenue projections based on pipeline probabilities</div>
@@ -556,6 +568,15 @@
             </div>
         </div>
 
+        <!-- Dataset Section -->
+        <div class="assumptions-section" style="margin-top: 32px;">
+            <h2>Dataset</h2>
+            <p style="color: var(--muted); font-size: 13px; margin-bottom: 16px;">
+                Raw financial model data used for projections
+            </p>
+            <pre id="datasetDisplay" style="background: var(--panel-light); border-radius: 10px; padding: 20px; overflow-x: auto; font-size: 12px; line-height: 1.6; color: var(--muted); border: 1px solid rgba(255,255,255,0.06); max-height: 600px; overflow-y: auto;"></pre>
+        </div>
+
         <footer class="footer">
             <p>Lola Vision Systems | Confidential Investor Materials | January 2026</p>
         </footer>
@@ -568,6 +589,9 @@
                 const response = await fetch('data/financial-model.json');
                 if (!response.ok) throw new Error('Failed to load financial data');
                 const data = await response.json();
+
+                // Display raw dataset
+                document.getElementById('datasetDisplay').textContent = JSON.stringify(data, null, 2);
 
                 // Update last updated
                 document.getElementById('lastUpdated').textContent = 'Last updated: ' + data.lastUpdated;

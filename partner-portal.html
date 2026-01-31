@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<!--
+================================================================================
+LVS SILICON IP PARTNER PORTAL
+================================================================================
+Version: 1.0
+Last Updated: January 29, 2026
+Status: Active
+
+OVERVIEW:
+  Partner portal for Silicon IP partners (like AMD) integrating LVS chiplets.
+  Unlike customer portals (sales pipeline), this focuses on technical
+  integration, documentation, and engineering collaboration.
+
+STRUCTURE:
+  - 4 Tabs: Dashboard | Integration | Documentation | Support
+  - Partner data loaded from partner-data.js based on URL parameter
+  - Single template for all partners with data-driven customization
+
+AUTHENTICATION:
+  - Requires partner login (lvs_partner session key)
+  - 30-minute session timeout
+================================================================================
+-->
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; media-src 'self' https:; font-src 'self' https:; connect-src 'self';">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Partner Portal | Lola Vision Systems</title>
+    <link rel="stylesheet" href="css/shared-portal.css">
+    <link rel="stylesheet" href="css/partner-portal.css">
+    <script src="js/security.js"></script>
+    <script src="js/partner-data.js"></script>
+    <script>
+        // Authentication check
+        (function() {
+            const SESSION_TIMEOUT = 30 * 60 * 1000;
+            const timestamp = sessionStorage.getItem('lvs_session_timestamp');
+            const auth = sessionStorage.getItem('lvs_auth');
+            const partner = sessionStorage.getItem('lvs_partner');
+
+            // Check auth
+            if (auth !== 'true') {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            // Check session timeout
+            if (timestamp && (Date.now() - parseInt(timestamp, 10)) > SESSION_TIMEOUT) {
+                sessionStorage.clear();
+                window.location.href = 'login.html?session=expired';
+                return;
+            }
+
+            // Refresh timestamp
+            sessionStorage.setItem('lvs_session_timestamp', Date.now().toString());
+        })();
+    </script>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-brand">
+            <img src="assets/lvs-logo.webp" alt="LVS" class="nav-logo">
+            <div class="nav-title">LOLA VISION <span>SYSTEMS</span></div>
+        </div>
+        <div class="nav-user">
+            <span class="partner-nav-badge" id="partnerBadge">Silicon IP Partner</span>
+            <a href="founder-portal.html" class="nav-link" id="founderLink" style="display: none; margin-right: 16px;">Founder Portal</a>
+            <a href="login.html" class="nav-link" onclick="sessionStorage.clear()">Logout</a>
+        </div>
+    </nav>
+
+    <!-- Tab Navigation -->
+    <div class="tab-nav">
+        <button class="tab-btn active" data-tab="dashboard" onclick="switchTab('dashboard')">Dashboard</button>
+        <button class="tab-btn" data-tab="integration" onclick="switchTab('integration')">Integration</button>
+        <button class="tab-btn" data-tab="documentation" onclick="switchTab('documentation')">Documentation</button>
+        <button class="tab-btn" data-tab="support" onclick="switchTab('support')">Support</button>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+
+        <!-- ============================================================
+             DASHBOARD TAB
+             ============================================================ -->
+        <div id="dashboard" class="tab-content active">
+
+            <!-- Partner Header -->
+            <div class="partner-header">
+                <div class="partner-header-content">
+                    <h1>Welcome, <span id="partnerName">Partner</span></h1>
+                    <p id="partnerFocus">Silicon IP Integration Partnership</p>
+                </div>
+                <div class="partner-branding">
+                    <div class="partner-logo-text" id="partnerLogo">AMD</div>
+                    <span class="partnership-badge" id="partnerTier">Strategic Partner</span>
+                </div>
+            </div>
+
+            <!-- Summary Cards -->
+            <div class="summary-cards">
+                <div class="summary-card">
+                    <div class="summary-card-label">Partnership Status</div>
+                    <div class="summary-card-value success" id="partnerStatus">Active</div>
+                    <div class="summary-card-sub" id="partnerSince">Since Dec 2024</div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-card-label">Integration Progress</div>
+                    <div class="summary-card-value accent" id="progressPercent">58%</div>
+                    <div class="summary-card-sub" id="currentPhase">Phase 4 of 6</div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-card-label">Interface Standard</div>
+                    <div class="summary-card-value" id="interfaceStd">UCIe 2.0</div>
+                    <div class="summary-card-sub">Universal Chiplet Interconnect</div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-card-label">Target Product</div>
+                    <div class="summary-card-value" id="targetProduct">LVS-250</div>
+                    <div class="summary-card-sub">~230 TOPS Neural Compute</div>
+                </div>
+            </div>
+
+            <!-- Integration Progress Tracker -->
+            <div class="integration-tracker">
+                <h2>Integration Progress</h2>
+                <div class="tracker-subtitle">Currently in <span id="currentStageName">Electrical Validation</span> phase</div>
+                <div class="integration-stages" id="integrationStages" style="--progress: 58%;">
+                    <!-- Stages populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Grid: Milestones + Contact -->
+            <div class="grid">
+                <!-- Milestones Panel -->
+                <div class="panel">
+                    <h3>Key Milestones</h3>
+                    <div id="milestonesList">
+                        <!-- Milestones populated by JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Contact Panel -->
+                <div class="panel">
+                    <h3>Your LVS Contact</h3>
+                    <div class="contact-card">
+                        <h4>Partnership Lead</h4>
+                        <div class="contact-person">
+                            <div class="contact-avatar">TA</div>
+                            <div class="contact-info">
+                                <h5>Tayo Adesanya</h5>
+                                <p>CEO, Lola Vision Systems</p>
+                            </div>
+                        </div>
+                        <div class="contact-actions">
+                            <a href="mailto:tayo@lolavisionsystems.com" class="contact-btn primary">Email</a>
+                            <a href="https://wa.me/13108808174" class="contact-btn secondary" target="_blank">WhatsApp</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Notes Section -->
+            <div class="notes-section">
+                <div class="grid">
+                    <!-- Private Notes -->
+                    <div class="notes-panel">
+                        <h3>
+                            My Notes
+                            <span class="notes-badge private">Private</span>
+                        </h3>
+                        <textarea
+                            class="notes-textarea"
+                            id="privateNotes"
+                            placeholder="Add your private notes here. These are saved locally on your device and only visible to you..."
+                        ></textarea>
+                        <div class="notes-actions">
+                            <div class="notes-meta">
+                                <span id="privateNotesMeta">No notes saved</span>
+                            </div>
+                            <div class="notes-buttons">
+                                <button class="notes-btn secondary" onclick="exportNotes('private')">Export</button>
+                                <button class="notes-btn primary" onclick="saveNotes('private')">Save</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Account Notes (Placeholder) -->
+                    <div class="notes-panel">
+                        <h3>
+                            Account Notes
+                            <span class="notes-badge coming-soon">Coming Soon</span>
+                        </h3>
+                        <div class="notes-placeholder">
+                            <div class="notes-placeholder-icon">&#128101;</div>
+                            <p>Shared notes for your team</p>
+                            <p class="coming-soon-text">Team sync feature coming soon</p>
+                        </div>
+                        <textarea
+                            class="notes-textarea"
+                            id="accountNotes"
+                            placeholder="Account-wide notes will sync with your team once this feature is enabled..."
+                            disabled
+                        ></textarea>
+                        <div class="notes-actions">
+                            <div class="notes-meta">
+                                <span style="color: #f97316;">Sync not yet available</span>
+                            </div>
+                            <div class="notes-buttons">
+                                <button class="notes-btn secondary" disabled>Export</button>
+                                <button class="notes-btn primary" disabled>Save</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ============================================================
+             INTEGRATION TAB
+             ============================================================ -->
+        <div id="integration" class="tab-content">
+
+            <!-- Architecture Diagram -->
+            <div class="architecture-diagram">
+                <div class="diagram-icon">&#128204;</div>
+                <h4>UCIe 2.0 Integration Architecture</h4>
+                <p>LVS-250 Neural Compute Engine + Partner Platform</p>
+                <p style="margin-top: 16px; font-size: 11px; color: var(--muted);">
+                    Detailed architecture diagram available in Documentation tab
+                </p>
+            </div>
+
+            <!-- Integration Stages Detail -->
+            <div class="specs-panel">
+                <h3>Integration Stages <span class="spec-badge">6 Phases</span></h3>
+                <div id="stageDetails">
+                    <!-- Stage details populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Interface Specifications -->
+            <div class="specs-panel">
+                <h3>UCIe 2.0 Interface Specifications</h3>
+                <div class="spec-row">
+                    <span class="spec-label">Interface Standard</span>
+                    <span class="spec-value">UCIe 2.0 (Universal Chiplet Interconnect Express)</span>
+                </div>
+                <div class="spec-row">
+                    <span class="spec-label">Topology</span>
+                    <span class="spec-value">Point-to-point chiplet interconnect</span>
+                </div>
+                <div class="spec-row">
+                    <span class="spec-label">Data Rate</span>
+                    <span class="spec-value">32 GT/s per lane</span>
+                </div>
+                <div class="spec-row">
+                    <span class="spec-label">Lane Configuration</span>
+                    <span class="spec-value">16 lanes (configurable)</span>
+                </div>
+                <div class="spec-row">
+                    <span class="spec-label">Protocol Support</span>
+                    <span class="spec-value">PCIe 6.0 / CXL 3.0 compatible</span>
+                </div>
+                <div class="spec-row">
+                    <span class="spec-label">Power Efficiency</span>
+                    <span class="spec-value">&lt; 0.5 pJ/bit</span>
+                </div>
+            </div>
+
+            <!-- LVS-250 Specifications -->
+            <div class="specs-panel">
+                <h3>LVS-250 Chiplet Specifications</h3>
+                <div class="spec-row">
+                    <span class="spec-label">Compute Performance</span>
+                    <span class="spec-value">~230 TOPS (INT8)</span>
+                </div>
+                <div class="spec-row">
+                    <span class="spec-label">Architecture</span>
+                    <span class="spec-value">5-chiplet UCIe 2.0 package</span>
+                </div>
+                <div class="spec-row">
+                    <span class="spec-label">Package Size</span>
+                    <span class="spec-value">~35 x 35 mm</span>
+                </div>
+                <div class="spec-row">
+                    <span class="spec-label">Memory Interface</span>
+                    <span class="spec-value">LPDDR5 / LPDDR5X</span>
+                </div>
+                <div class="spec-row">
+                    <span class="spec-label">Process Node</span>
+                    <span class="spec-value">GlobalFoundries 12LP+</span>
+                </div>
+                <div class="spec-row">
+                    <span class="spec-label">Target Production</span>
+                    <span class="spec-value">Q2-Q3 2027</span>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ============================================================
+             DOCUMENTATION TAB
+             ============================================================ -->
+        <div id="documentation" class="tab-content">
+
+            <!-- Available Downloads -->
+            <div class="panel" style="margin-bottom: 24px;">
+                <h3>Design Collateral</h3>
+                <div class="downloads-grid" id="downloadsGrid">
+                    <!-- Downloads populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Documentation by Category -->
+            <div class="doc-category">
+                <h4>Product Overview</h4>
+                <div class="doc-list">
+                    <div class="doc-item">
+                        <div class="doc-item-icon">&#128196;</div>
+                        <div class="doc-item-info">
+                            <div class="doc-item-name">LVS-250 Product Brief</div>
+                            <div class="doc-item-desc">High-level product overview and key specifications</div>
+                        </div>
+                        <div class="doc-item-arrow">&#8594;</div>
+                    </div>
+                    <div class="doc-item">
+                        <div class="doc-item-icon">&#128196;</div>
+                        <div class="doc-item-info">
+                            <div class="doc-item-name">LVS Chiplet Architecture Overview</div>
+                            <div class="doc-item-desc">5-chiplet package design and UCIe connectivity</div>
+                        </div>
+                        <div class="doc-item-arrow">&#8594;</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="doc-category">
+                <h4>Technical Specifications</h4>
+                <div class="doc-list">
+                    <div class="doc-item">
+                        <div class="doc-item-icon">&#128203;</div>
+                        <div class="doc-item-info">
+                            <div class="doc-item-name">LVS-250 Chiplet Datasheet</div>
+                            <div class="doc-item-desc">Complete electrical and mechanical specifications</div>
+                        </div>
+                        <div class="doc-item-arrow">&#8594;</div>
+                    </div>
+                    <div class="doc-item">
+                        <div class="doc-item-icon">&#128203;</div>
+                        <div class="doc-item-info">
+                            <div class="doc-item-name">UCIe Interface Specification</div>
+                            <div class="doc-item-desc">Signal timing, electrical characteristics, protocol</div>
+                        </div>
+                        <div class="doc-item-arrow">&#8594;</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="doc-category">
+                <h4>Integration Guides</h4>
+                <div class="doc-list">
+                    <div class="doc-item">
+                        <div class="doc-item-icon">&#128218;</div>
+                        <div class="doc-item-info">
+                            <div class="doc-item-name">UCIe 2.0 Integration Guide</div>
+                            <div class="doc-item-desc">Step-by-step interface integration instructions</div>
+                        </div>
+                        <div class="doc-item-arrow">&#8594;</div>
+                    </div>
+                    <div class="doc-item">
+                        <div class="doc-item-icon">&#128218;</div>
+                        <div class="doc-item-info">
+                            <div class="doc-item-name">Power & Thermal Design Guide</div>
+                            <div class="doc-item-desc">Power delivery and thermal management guidelines</div>
+                        </div>
+                        <div class="doc-item-arrow">&#8594;</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="doc-category">
+                <h4>Software & SDK</h4>
+                <div class="doc-list">
+                    <div class="doc-item">
+                        <div class="doc-item-icon">&#128187;</div>
+                        <div class="doc-item-info">
+                            <div class="doc-item-name">SDK Documentation</div>
+                            <div class="doc-item-desc">Software development kit API reference</div>
+                        </div>
+                        <div class="doc-item-arrow">&#8594;</div>
+                    </div>
+                    <div class="doc-item">
+                        <div class="doc-item-icon">&#128187;</div>
+                        <div class="doc-item-info">
+                            <div class="doc-item-name">Driver Integration Guide</div>
+                            <div class="doc-item-desc">Host driver and firmware integration</div>
+                        </div>
+                        <div class="doc-item-arrow">&#8594;</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ============================================================
+             SUPPORT TAB
+             ============================================================ -->
+        <div id="support" class="tab-content">
+
+            <div class="grid">
+                <!-- Engineering Support -->
+                <div class="panel">
+                    <h3>Engineering Support</h3>
+
+                    <div class="contact-card" style="background: linear-gradient(135deg, var(--partner-accent), #c2410c); margin-bottom: 16px;">
+                        <h4>Technical Support Team</h4>
+                        <div class="contact-person">
+                            <div class="contact-avatar">ES</div>
+                            <div class="contact-info">
+                                <h5>Engineering Support</h5>
+                                <p>Integration & Technical Queries</p>
+                            </div>
+                        </div>
+                        <div class="contact-actions">
+                            <a href="mailto:engineering@lolavisionsystems.com" class="contact-btn primary">Email Engineering</a>
+                        </div>
+                    </div>
+
+                    <div class="contact-card">
+                        <h4>Partnership Support</h4>
+                        <div class="contact-person">
+                            <div class="contact-avatar">TA</div>
+                            <div class="contact-info">
+                                <h5>Tayo Adesanya</h5>
+                                <p>CEO, Lola Vision Systems</p>
+                            </div>
+                        </div>
+                        <div class="contact-actions">
+                            <a href="mailto:tayo@lolavisionsystems.com" class="contact-btn primary">Email</a>
+                            <a href="tel:+13108808174" class="contact-btn secondary">Call</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Links -->
+                <div class="panel">
+                    <h3>Quick Links</h3>
+
+                    <div class="doc-item" style="margin-bottom: 8px;">
+                        <div class="doc-item-icon">&#128231;</div>
+                        <div class="doc-item-info">
+                            <div class="doc-item-name">Email Support</div>
+                            <div class="doc-item-desc">partners@lolavisionsystems.com</div>
+                        </div>
+                    </div>
+
+                    <div class="doc-item" style="margin-bottom: 8px;">
+                        <div class="doc-item-icon">&#128222;</div>
+                        <div class="doc-item-info">
+                            <div class="doc-item-name">Phone Support</div>
+                            <div class="doc-item-desc">+1 (310) 880-8174</div>
+                        </div>
+                    </div>
+
+                    <div class="doc-item" style="margin-bottom: 8px;">
+                        <div class="doc-item-icon">&#128172;</div>
+                        <div class="doc-item-info">
+                            <div class="doc-item-name">WhatsApp</div>
+                            <div class="doc-item-desc">+1 (310) 880-8174</div>
+                        </div>
+                    </div>
+
+                    <div class="doc-item">
+                        <div class="doc-item-icon">&#127760;</div>
+                        <div class="doc-item-info">
+                            <div class="doc-item-name">Website</div>
+                            <div class="doc-item-desc">lolavisionsystems.com</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Support Hours -->
+            <div class="panel" style="margin-top: 24px;">
+                <h3>Support Information</h3>
+                <div class="spec-row">
+                    <span class="spec-label">Support Hours</span>
+                    <span class="spec-value">Monday - Friday, 9 AM - 6 PM PST</span>
+                </div>
+                <div class="spec-row">
+                    <span class="spec-label">Response Time (Strategic)</span>
+                    <span class="spec-value">Within 24 hours for technical queries</span>
+                </div>
+                <div class="spec-row">
+                    <span class="spec-label">Emergency Contact</span>
+                    <span class="spec-value">WhatsApp for urgent matters</span>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>Lola Vision Systems | Silicon IP Partner Portal | Confidential</p>
+        <p style="margin-top: 4px;">Last Updated: January 29, 2026</p>
+    </footer>
+
+    <script>
+        // ================================================================
+        // PARTNER PORTAL JAVASCRIPT
+        // ================================================================
+
+        // Tab switching
+        function switchTab(tabName) {
+            // Hide all tab content
+            document.querySelectorAll('.tab-content').forEach(el => {
+                el.classList.remove('active');
+            });
+
+            // Remove active from all tab buttons
+            document.querySelectorAll('.tab-btn').forEach(el => {
+                el.classList.remove('active');
+            });
+
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+
+            // Highlight selected button
+            document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+        }
+
+        // Initialize partner portal with data
+        function initPartnerPortal() {
+            const partner = getCurrentPartner();
+
+            if (!partner) {
+                console.error('Partner data not found');
+                // Could redirect to login or show error
+                return;
+            }
+
+            // Update page title
+            document.title = `${partner.name} Portal | Lola Vision Systems`;
+
+            // Update navigation badge
+            document.getElementById('partnerBadge').textContent = `${partner.name} Partner`;
+
+            // Update partner header
+            document.getElementById('partnerName').textContent = partner.name;
+            document.getElementById('partnerFocus').textContent = partner.partnership.focus;
+            document.getElementById('partnerLogo').textContent = partner.branding.logoText || partner.name;
+            document.getElementById('partnerTier').textContent = capitalizeFirst(partner.tier) + ' Partner';
+
+            // Update summary cards
+            document.getElementById('partnerStatus').textContent = capitalizeFirst(partner.partnership.status);
+            document.getElementById('partnerSince').textContent = 'Since ' + partner.partnership.since;
+
+            const progress = getIntegrationProgress(partner);
+            document.getElementById('progressPercent').textContent = progress + '%';
+
+            const currentStage = getCurrentStage(partner);
+            if (currentStage) {
+                document.getElementById('currentPhase').textContent = `Phase ${currentStage.id} of ${partner.integration.stages.length}`;
+                document.getElementById('currentStageName').textContent = currentStage.name;
+            }
+
+            document.getElementById('interfaceStd').textContent = partner.integration.interface;
+            document.getElementById('targetProduct').textContent = partner.partnership.products.join(', ');
+
+            // Update integration tracker
+            renderIntegrationStages(partner);
+
+            // Update milestones
+            renderMilestones(partner);
+
+            // Update downloads
+            renderDownloads(partner);
+
+            // Update stage details
+            renderStageDetails(partner);
+
+            // Set progress bar width
+            document.getElementById('integrationStages').style.setProperty('--progress', progress + '%');
+
+            // Show founder link if authorized
+            if (sessionStorage.getItem('lvs_founder_auth') === 'true' ||
+                sessionStorage.getItem('lvs_can_view_customers') === 'true') {
+                document.getElementById('founderLink').style.display = 'inline';
+            }
+
+            // Load saved notes
+            loadNotes();
+        }
+
+        // Render integration stages
+        function renderIntegrationStages(partner) {
+            const container = document.getElementById('integrationStages');
+            container.innerHTML = '';
+
+            partner.integration.stages.forEach(stage => {
+                const stageEl = document.createElement('div');
+                stageEl.className = 'integration-stage' + (stage.status === 'in-progress' ? ' active' : '');
+
+                const icon = stage.status === 'complete' ? '&#10003;' : stage.id;
+
+                stageEl.innerHTML = `
+                    <div class="stage-number ${stage.status}">${icon}</div>
+                    <div class="stage-name">${stage.name}</div>
+                    <div class="stage-date">${stage.date}</div>
+                `;
+
+                container.appendChild(stageEl);
+            });
+        }
+
+        // Render milestones
+        function renderMilestones(partner) {
+            const container = document.getElementById('milestonesList');
+            container.innerHTML = '';
+
+            partner.milestones.forEach(milestone => {
+                const milestoneEl = document.createElement('div');
+                milestoneEl.className = 'milestone';
+
+                const icon = milestone.status === 'complete' ? '&#10003;' :
+                             milestone.status === 'in-progress' ? '&#9679;' : '&#9675;';
+
+                milestoneEl.innerHTML = `
+                    <div class="milestone-icon ${milestone.status}">${icon}</div>
+                    <div class="milestone-content">
+                        <div class="milestone-title">${milestone.title}</div>
+                        <div class="milestone-date">${milestone.date}</div>
+                    </div>
+                    <span class="milestone-badge ${milestone.status}">${formatStatus(milestone.status)}</span>
+                `;
+
+                container.appendChild(milestoneEl);
+            });
+        }
+
+        // Render downloads
+        function renderDownloads(partner) {
+            const container = document.getElementById('downloadsGrid');
+            container.innerHTML = '';
+
+            partner.downloads.forEach(download => {
+                const downloadEl = document.createElement('div');
+                downloadEl.className = 'download-card' + (download.status === 'coming-soon' ? ' coming-soon' : '');
+
+                const iconClass = download.type.toLowerCase() === 'pdf' ? 'pdf' :
+                                  download.type.toLowerCase() === 'zip' ? 'zip' : 'doc';
+
+                const icon = download.type.toLowerCase() === 'pdf' ? '&#128196;' :
+                             download.type.toLowerCase() === 'zip' ? '&#128230;' : '&#128196;';
+
+                downloadEl.innerHTML = `
+                    <div class="download-icon ${iconClass}">${icon}</div>
+                    <div class="download-info">
+                        <div class="download-name">${download.name}</div>
+                        <div class="download-meta">${download.type} &bull; ${download.size || 'TBD'} &bull; v${download.version || 'TBD'}</div>
+                        <span class="download-status ${download.status}">${formatStatus(download.status)}</span>
+                    </div>
+                    <button class="download-btn" ${download.status === 'coming-soon' ? 'disabled' : ''}>
+                        ${download.status === 'coming-soon' ? '&#128338;' : '&#8595;'}
+                    </button>
+                `;
+
+                container.appendChild(downloadEl);
+            });
+        }
+
+        // Render stage details
+        function renderStageDetails(partner) {
+            const container = document.getElementById('stageDetails');
+            container.innerHTML = '';
+
+            partner.integration.stages.forEach(stage => {
+                const row = document.createElement('div');
+                row.className = 'spec-row';
+                row.style.flexDirection = 'column';
+                row.style.alignItems = 'flex-start';
+                row.style.gap = '4px';
+
+                const statusColor = stage.status === 'complete' ? 'var(--success)' :
+                                    stage.status === 'in-progress' ? 'var(--partner-accent)' : 'var(--muted)';
+
+                row.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; width: 100%;">
+                        <span class="spec-value" style="display: flex; align-items: center; gap: 8px;">
+                            <span style="color: ${statusColor};">&#9679;</span>
+                            Phase ${stage.id}: ${stage.name}
+                        </span>
+                        <span class="spec-label">${stage.date}</span>
+                    </div>
+                    <span class="spec-label" style="margin-left: 20px;">${stage.description}</span>
+                `;
+
+                container.appendChild(row);
+            });
+        }
+
+        // Helper functions
+        function capitalizeFirst(str) {
+            return str.charAt(0).toUpperCase() + str.slice(1);
+        }
+
+        function formatStatus(status) {
+            return status.split('-').map(capitalizeFirst).join(' ');
+        }
+
+        // ================================================================
+        // NOTES FUNCTIONALITY
+        // ================================================================
+
+        // Get storage key for notes (partner-specific)
+        function getNotesKey(type) {
+            const partner = getCurrentPartner();
+            const partnerId = partner ? partner.id : 'unknown';
+            return `lvs_partner_notes_${partnerId}_${type}`;
+        }
+
+        // Save notes to localStorage
+        function saveNotes(type) {
+            const textarea = document.getElementById(type + 'Notes');
+            const metaEl = document.getElementById(type + 'NotesMeta');
+
+            if (!textarea) return;
+
+            const content = textarea.value;
+            const key = getNotesKey(type);
+            const timestamp = new Date().toISOString();
+
+            const noteData = {
+                content: content,
+                savedAt: timestamp,
+                wordCount: content.trim() ? content.trim().split(/\s+/).length : 0
+            };
+
+            try {
+                localStorage.setItem(key, JSON.stringify(noteData));
+
+                // Update meta display
+                if (metaEl) {
+                    const date = new Date(timestamp);
+                    metaEl.textContent = `Saved ${date.toLocaleDateString()} at ${date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})} • ${noteData.wordCount} words`;
+                    metaEl.style.color = 'var(--success)';
+
+                    // Reset color after 2 seconds
+                    setTimeout(() => {
+                        metaEl.style.color = '';
+                    }, 2000);
+                }
+            } catch (e) {
+                console.error('Failed to save notes:', e);
+                if (metaEl) {
+                    metaEl.textContent = 'Failed to save';
+                    metaEl.style.color = 'var(--error)';
+                }
+            }
+        }
+
+        // Load notes from localStorage
+        function loadNotes() {
+            const types = ['private'];
+
+            types.forEach(type => {
+                const textarea = document.getElementById(type + 'Notes');
+                const metaEl = document.getElementById(type + 'NotesMeta');
+
+                if (!textarea) return;
+
+                const key = getNotesKey(type);
+
+                try {
+                    const stored = localStorage.getItem(key);
+
+                    if (stored) {
+                        const noteData = JSON.parse(stored);
+                        textarea.value = noteData.content || '';
+
+                        if (metaEl && noteData.savedAt) {
+                            const date = new Date(noteData.savedAt);
+                            metaEl.textContent = `Last saved ${date.toLocaleDateString()} at ${date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})} • ${noteData.wordCount || 0} words`;
+                        }
+                    }
+                } catch (e) {
+                    console.error('Failed to load notes:', e);
+                }
+            });
+        }
+
+        // Export notes as text file
+        function exportNotes(type) {
+            const textarea = document.getElementById(type + 'Notes');
+
+            if (!textarea || !textarea.value.trim()) {
+                alert('No notes to export');
+                return;
+            }
+
+            const partner = getCurrentPartner();
+            const partnerName = partner ? partner.name : 'Partner';
+            const date = new Date().toISOString().split('T')[0];
+            const filename = `LVS_${partnerName}_${type}_notes_${date}.txt`;
+
+            const content = `LVS Partner Portal - ${capitalizeFirst(type)} Notes
+Partner: ${partnerName}
+Exported: ${new Date().toLocaleString()}
+${'='.repeat(50)}
+
+${textarea.value}`;
+
+            const blob = new Blob([content], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', initPartnerPortal);
+    </script>
+</body>
+</html>

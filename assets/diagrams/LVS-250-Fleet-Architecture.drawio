@@ -1,0 +1,338 @@
+<mxfile host="app.diagrams.net" modified="2026-01-28T12:00:00.000Z" agent="Claude" version="22.1.0">
+  <diagram name="Fleet-Wide Learning Architecture" id="fleet-arch">
+    <mxGraphModel dx="1200" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <!-- Title -->
+        <mxCell id="title" value="LVS-250 Fleet-Wide Learning &amp; Distributed Autonomy" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=22;fontStyle=1;fontColor=#1a365d;" vertex="1" parent="1">
+          <mxGeometry x="200" y="20" width="700" height="40" as="geometry"/>
+        </mxCell>
+
+        <!-- Fleet Mesh Network Background -->
+        <mxCell id="mesh-bg" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f0f9ff;strokeColor=#0284c7;strokeWidth=2;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="80" width="1020" height="400" as="geometry"/>
+        </mxCell>
+        <mxCell id="mesh-label" value="Fleet Mesh Network" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=14;fontStyle=1;fontColor=#0369a1;" vertex="1" parent="1">
+          <mxGeometry x="50" y="90" width="160" height="20" as="geometry"/>
+        </mxCell>
+
+        <!-- Vehicle Node 1 -->
+        <mxCell id="vehicle1-box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1e293b;strokeColor=#475569;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="60" y="130" width="200" height="320" as="geometry"/>
+        </mxCell>
+        <mxCell id="vehicle1-label" value="Vehicle Alpha (Leader)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=13;fontStyle=1;fontColor=#f8fafc;" vertex="1" parent="1">
+          <mxGeometry x="60" y="140" width="200" height="20" as="geometry"/>
+        </mxCell>
+
+        <!-- Vehicle 1 - LVS-250 -->
+        <mxCell id="v1-lvs" value="LVS-250" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#7c3aed;strokeColor=#a78bfa;fontColor=#f5f3ff;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="80" y="170" width="160" height="40" as="geometry"/>
+        </mxCell>
+
+        <!-- Vehicle 1 - Agents -->
+        <mxCell id="v1-vision" value="Vision" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fef3c7;strokeColor=#d97706;fontColor=#92400e;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="80" y="220" width="70" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="v1-telem" value="Telemetry" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fef3c7;strokeColor=#d97706;fontColor=#92400e;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="160" y="220" width="80" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="v1-particle" value="Particle" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fef3c7;strokeColor=#d97706;fontColor=#92400e;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="80" y="260" width="70" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="v1-links" value="Links" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fef3c7;strokeColor=#d97706;fontColor=#92400e;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="160" y="260" width="80" height="30" as="geometry"/>
+        </mxCell>
+
+        <!-- Vehicle 1 - Safety/Action -->
+        <mxCell id="v1-fusion" value="Fusion Supervisor" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dcfce7;strokeColor=#16a34a;fontColor=#166534;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="80" y="300" width="160" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="v1-mission" value="Mission Advisor" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ede9fe;strokeColor=#7c3aed;fontColor=#5b21b6;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="80" y="340" width="160" height="30" as="geometry"/>
+        </mxCell>
+
+        <!-- Vehicle 1 - MRAM -->
+        <mxCell id="v1-mram" value="MRAM (Mission Logs)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#b45309;strokeColor=#fbbf24;fontColor=#fef3c7;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="80" y="380" width="160" height="30" as="geometry"/>
+        </mxCell>
+
+        <!-- Vehicle 1 - Status -->
+        <mxCell id="v1-status" value="● Active | Full Compute" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=10;fontColor=#4ade80;" vertex="1" parent="1">
+          <mxGeometry x="80" y="415" width="160" height="20" as="geometry"/>
+        </mxCell>
+
+        <!-- Vehicle Node 2 -->
+        <mxCell id="vehicle2-box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1e293b;strokeColor=#475569;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="300" y="130" width="200" height="320" as="geometry"/>
+        </mxCell>
+        <mxCell id="vehicle2-label" value="Vehicle Beta" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=13;fontStyle=1;fontColor=#f8fafc;" vertex="1" parent="1">
+          <mxGeometry x="300" y="140" width="200" height="20" as="geometry"/>
+        </mxCell>
+
+        <!-- Vehicle 2 - LVS-250 -->
+        <mxCell id="v2-lvs" value="LVS-250" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#7c3aed;strokeColor=#a78bfa;fontColor=#f5f3ff;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="320" y="170" width="160" height="40" as="geometry"/>
+        </mxCell>
+
+        <!-- Vehicle 2 - Agents -->
+        <mxCell id="v2-vision" value="Vision" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fef3c7;strokeColor=#d97706;fontColor=#92400e;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="320" y="220" width="70" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="v2-telem" value="Telemetry" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fef3c7;strokeColor=#d97706;fontColor=#92400e;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="400" y="220" width="80" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="v2-particle" value="Particle" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fef3c7;strokeColor=#d97706;fontColor=#92400e;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="320" y="260" width="70" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="v2-links" value="Links" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fef3c7;strokeColor=#d97706;fontColor=#92400e;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="400" y="260" width="80" height="30" as="geometry"/>
+        </mxCell>
+
+        <!-- Vehicle 2 - Safety/Action -->
+        <mxCell id="v2-fusion" value="Fusion Supervisor" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dcfce7;strokeColor=#16a34a;fontColor=#166534;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="320" y="300" width="160" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="v2-mission" value="Mission Advisor" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ede9fe;strokeColor=#7c3aed;fontColor=#5b21b6;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="320" y="340" width="160" height="30" as="geometry"/>
+        </mxCell>
+
+        <!-- Vehicle 2 - MRAM -->
+        <mxCell id="v2-mram" value="MRAM (Mission Logs)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#b45309;strokeColor=#fbbf24;fontColor=#fef3c7;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="320" y="380" width="160" height="30" as="geometry"/>
+        </mxCell>
+
+        <!-- Vehicle 2 - Status -->
+        <mxCell id="v2-status" value="● Active | Full Compute" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=10;fontColor=#4ade80;" vertex="1" parent="1">
+          <mxGeometry x="320" y="415" width="160" height="20" as="geometry"/>
+        </mxCell>
+
+        <!-- Vehicle Node 3 (Degraded) -->
+        <mxCell id="vehicle3-box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1e293b;strokeColor=#f59e0b;strokeWidth=2;strokeDasharray=8 4;" vertex="1" parent="1">
+          <mxGeometry x="540" y="130" width="200" height="320" as="geometry"/>
+        </mxCell>
+        <mxCell id="vehicle3-label" value="Vehicle Gamma (Degraded)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=13;fontStyle=1;fontColor=#fbbf24;" vertex="1" parent="1">
+          <mxGeometry x="540" y="140" width="200" height="20" as="geometry"/>
+        </mxCell>
+
+        <!-- Vehicle 3 - LVS-250 -->
+        <mxCell id="v3-lvs" value="LVS-250" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#7c3aed;strokeColor=#a78bfa;fontColor=#f5f3ff;fontSize=12;fontStyle=1;opacity=60;" vertex="1" parent="1">
+          <mxGeometry x="560" y="170" width="160" height="40" as="geometry"/>
+        </mxCell>
+
+        <!-- Vehicle 3 - Agents (some disabled) -->
+        <mxCell id="v3-vision" value="Vision" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fef3c7;strokeColor=#d97706;fontColor=#92400e;fontSize=10;opacity=40;" vertex="1" parent="1">
+          <mxGeometry x="560" y="220" width="70" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="v3-telem" value="Telemetry" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fef3c7;strokeColor=#d97706;fontColor=#92400e;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="640" y="220" width="80" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="v3-particle" value="Particle" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fef3c7;strokeColor=#d97706;fontColor=#92400e;fontSize=10;opacity=40;" vertex="1" parent="1">
+          <mxGeometry x="560" y="260" width="70" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="v3-links" value="Links" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fef3c7;strokeColor=#d97706;fontColor=#92400e;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="640" y="260" width="80" height="30" as="geometry"/>
+        </mxCell>
+
+        <!-- Vehicle 3 - Safety/Action -->
+        <mxCell id="v3-fusion" value="Fusion Supervisor" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dcfce7;strokeColor=#16a34a;fontColor=#166534;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="560" y="300" width="160" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="v3-mission" value="Mission Advisor (Relay)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fef3c7;strokeColor=#d97706;fontColor=#92400e;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="560" y="340" width="160" height="30" as="geometry"/>
+        </mxCell>
+
+        <!-- Vehicle 3 - MRAM -->
+        <mxCell id="v3-mram" value="MRAM (Mission Logs)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#b45309;strokeColor=#fbbf24;fontColor=#fef3c7;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="560" y="380" width="160" height="30" as="geometry"/>
+        </mxCell>
+
+        <!-- Vehicle 3 - Status -->
+        <mxCell id="v3-status" value="● Degraded | Using Fleet Compute" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=10;fontColor=#fbbf24;" vertex="1" parent="1">
+          <mxGeometry x="560" y="415" width="160" height="20" as="geometry"/>
+        </mxCell>
+
+        <!-- Command Center -->
+        <mxCell id="command-box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0f172a;strokeColor=#3b82f6;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="780" y="130" width="260" height="320" as="geometry"/>
+        </mxCell>
+        <mxCell id="command-label" value="Command / Base Station" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=13;fontStyle=1;fontColor=#60a5fa;" vertex="1" parent="1">
+          <mxGeometry x="780" y="140" width="260" height="20" as="geometry"/>
+        </mxCell>
+
+        <!-- Command - Fleet Manager -->
+        <mxCell id="cmd-fleet" value="Fleet Orchestrator" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1e40af;strokeColor=#3b82f6;fontColor=#dbeafe;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="800" y="170" width="220" height="40" as="geometry"/>
+        </mxCell>
+
+        <!-- Command - Components -->
+        <mxCell id="cmd-learning" value="Fleet Learning&#xa;Engine" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#166534;strokeColor=#4ade80;fontColor=#dcfce7;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="800" y="220" width="100" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="cmd-models" value="Model&#xa;Repository" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#7c3aed;strokeColor=#a78bfa;fontColor=#f5f3ff;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="910" y="220" width="110" height="50" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="cmd-mission" value="Mission&#xa;Planner" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0891b2;strokeColor=#22d3ee;fontColor=#ecfeff;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="800" y="280" width="100" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="cmd-monitor" value="Health&#xa;Monitor" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dc2626;strokeColor=#f87171;fontColor=#fef2f2;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="910" y="280" width="110" height="50" as="geometry"/>
+        </mxCell>
+
+        <!-- Command - Storage -->
+        <mxCell id="cmd-storage" value="Centralized Mission Data &amp; Analytics" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#b45309;strokeColor=#fbbf24;fontColor=#fef3c7;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="800" y="340" width="220" height="40" as="geometry"/>
+        </mxCell>
+
+        <!-- Command - OTA -->
+        <mxCell id="cmd-ota" value="OTA Update Server" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#475569;strokeColor=#94a3b8;fontColor=#f1f5f9;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="800" y="390" width="220" height="35" as="geometry"/>
+        </mxCell>
+
+        <!-- Mesh Links -->
+        <mxCell id="link-1-2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#0ea5e9;strokeWidth=3;curved=1;" edge="1" parent="1" source="v1-links" target="v2-links">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="link-2-3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#0ea5e9;strokeWidth=3;curved=1;" edge="1" parent="1" source="v2-links" target="v3-links">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="link-3-cmd" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#0ea5e9;strokeWidth=3;curved=1;entryX=0;entryY=0.5;" edge="1" parent="1" source="v3-links" target="cmd-fleet">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="link-1-cmd" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#0ea5e9;strokeWidth=2;curved=1;dashed=1;dashPattern=8 4;exitX=0.5;exitY=1;entryX=0;entryY=1;" edge="1" parent="1" source="v1-mram" target="cmd-storage">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="160" y="460"/>
+              <mxPoint x="780" y="460"/>
+              <mxPoint x="780" y="360"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Learning Flow Section -->
+        <mxCell id="learning-bg" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f0fdf4;strokeColor=#16a34a;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="40" y="510" width="500" height="300" as="geometry"/>
+        </mxCell>
+        <mxCell id="learning-title" value="Fleet Learning Cycle" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=14;fontStyle=1;fontColor=#166534;" vertex="1" parent="1">
+          <mxGeometry x="50" y="520" width="200" height="20" as="geometry"/>
+        </mxCell>
+
+        <!-- Learning Steps -->
+        <mxCell id="learn-1" value="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#166534;strokeColor=none;fontColor=white;fontSize=14;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="60" y="560" width="30" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="learn-1-box" value="Mission Execution&#xa;Vehicles collect sensor data and&#xa;log decisions to local MRAM" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dcfce7;strokeColor=#16a34a;fontColor=#166534;fontSize=11;align=left;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="100" y="550" width="180" height="55" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="learn-2" value="2" style="ellipse;whiteSpace=wrap;html=1;fillColor=#166534;strokeColor=none;fontColor=white;fontSize=14;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="300" y="560" width="30" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="learn-2-box" value="Data Sync&#xa;Mission logs uploaded to base&#xa;via secure data links" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dcfce7;strokeColor=#16a34a;fontColor=#166534;fontSize=11;align=left;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="340" y="550" width="180" height="55" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="learn-3" value="3" style="ellipse;whiteSpace=wrap;html=1;fillColor=#166534;strokeColor=none;fontColor=white;fontSize=14;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="60" y="630" width="30" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="learn-3-box" value="Fleet Analysis&#xa;Aggregate data from all vehicles&#xa;to identify patterns &amp; improvements" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dcfce7;strokeColor=#16a34a;fontColor=#166534;fontSize=11;align=left;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="100" y="620" width="180" height="55" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="learn-4" value="4" style="ellipse;whiteSpace=wrap;html=1;fillColor=#166534;strokeColor=none;fontColor=white;fontSize=14;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="300" y="630" width="30" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="learn-4-box" value="Model Training&#xa;Update AI models based on&#xa;fleet-wide learnings" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dcfce7;strokeColor=#16a34a;fontColor=#166534;fontSize=11;align=left;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="340" y="620" width="180" height="55" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="learn-5" value="5" style="ellipse;whiteSpace=wrap;html=1;fillColor=#166534;strokeColor=none;fontColor=white;fontSize=14;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="60" y="700" width="30" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="learn-5-box" value="OTA Deployment&#xa;Push updated models to fleet&#xa;via secure channels" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dcfce7;strokeColor=#16a34a;fontColor=#166534;fontSize=11;align=left;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="100" y="690" width="180" height="55" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="learn-6" value="6" style="ellipse;whiteSpace=wrap;html=1;fillColor=#166534;strokeColor=none;fontColor=white;fontSize=14;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="300" y="700" width="30" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="learn-6-box" value="Improved Performance&#xa;Fleet operates with enhanced&#xa;capabilities - cycle repeats" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dcfce7;strokeColor=#16a34a;fontColor=#166534;fontSize=11;align=left;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="340" y="690" width="180" height="55" as="geometry"/>
+        </mxCell>
+
+        <!-- Cycle Arrow -->
+        <mxCell id="cycle-arrow" value="" style="curved=1;endArrow=classic;html=1;strokeColor=#16a34a;strokeWidth=3;entryX=0;entryY=0.5;exitX=1;exitY=0.5;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="520" y="717" as="sourcePoint"/>
+            <mxPoint x="100" y="575" as="targetPoint"/>
+            <Array as="points">
+              <mxPoint x="530" y="770"/>
+              <mxPoint x="50" y="770"/>
+              <mxPoint x="50" y="575"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Resilience Section -->
+        <mxCell id="resilience-bg" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fef3c7;strokeColor=#d97706;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="560" y="510" width="500" height="300" as="geometry"/>
+        </mxCell>
+        <mxCell id="resilience-title" value="Graceful Degradation &amp; Resilience" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=14;fontStyle=1;fontColor=#92400e;" vertex="1" parent="1">
+          <mxGeometry x="570" y="520" width="280" height="20" as="geometry"/>
+        </mxCell>
+
+        <!-- Resilience Features -->
+        <mxCell id="res-1" value="Dynamic Role Assignment" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff7ed;strokeColor=#ea580c;fontColor=#9a3412;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="580" y="555" width="200" height="35" as="geometry"/>
+        </mxCell>
+        <mxCell id="res-1-desc" value="Compute roles dynamically reassigned based on&#xa;available power, connectivity, and capacity" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;fontSize=10;fontColor=#78350f;" vertex="1" parent="1">
+          <mxGeometry x="580" y="595" width="220" height="35" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="res-2" value="Distributed Processing" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff7ed;strokeColor=#ea580c;fontColor=#9a3412;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="820" y="555" width="200" height="35" as="geometry"/>
+        </mxCell>
+        <mxCell id="res-2-desc" value="AI inference can be offloaded to nearby&#xa;vehicles when local compute is degraded" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;fontSize=10;fontColor=#78350f;" vertex="1" parent="1">
+          <mxGeometry x="820" y="595" width="220" height="35" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="res-3" value="Mission Continuity" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff7ed;strokeColor=#ea580c;fontColor=#9a3412;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="580" y="645" width="200" height="35" as="geometry"/>
+        </mxCell>
+        <mxCell id="res-3-desc" value="Mission continues even as individual agents&#xa;degrade or vehicles drop from network" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;fontSize=10;fontColor=#78350f;" vertex="1" parent="1">
+          <mxGeometry x="580" y="685" width="220" height="35" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="res-4" value="Autonomous Recovery" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff7ed;strokeColor=#ea580c;fontColor=#9a3412;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="820" y="645" width="200" height="35" as="geometry"/>
+        </mxCell>
+        <mxCell id="res-4-desc" value="Systems self-heal when connectivity&#xa;or compute resources are restored" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;fontSize=10;fontColor=#78350f;" vertex="1" parent="1">
+          <mxGeometry x="820" y="685" width="220" height="35" as="geometry"/>
+        </mxCell>
+
+        <!-- Key Metrics -->
+        <mxCell id="metrics-box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1e293b;strokeColor=#475569;" vertex="1" parent="1">
+          <mxGeometry x="580" y="735" width="460" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="metric-1" value="Fleet Uptime&#xa;&gt;99.9%" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#166534;strokeColor=none;fontColor=#dcfce7;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="595" y="745" width="100" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="metric-2" value="Failover Time&#xa;&lt;100ms" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#0891b2;strokeColor=none;fontColor=#ecfeff;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="705" y="745" width="100" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="metric-3" value="Model Sync&#xa;Real-time" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#7c3aed;strokeColor=none;fontColor=#f5f3ff;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="815" y="745" width="100" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="metric-4" value="Mesh Hops&#xa;≤3 max" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dc2626;strokeColor=none;fontColor=#fef2f2;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="925" y="745" width="100" height="40" as="geometry"/>
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

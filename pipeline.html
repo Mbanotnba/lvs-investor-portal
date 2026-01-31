@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; media-src 'self' https:; font-src 'self' https:; connect-src 'self';">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Customer Pipeline | Lola Vision Systems</title>
@@ -214,23 +215,39 @@
             .header-stats { text-align: left; }
         }
     </style>
+    <script src="js/security.js"></script>
     <script>
-        if (sessionStorage.getItem('lvs_auth') !== 'true') {
-            window.location.href = 'index.html';
-        }
+        (function() {
+            const SESSION_TIMEOUT = 30 * 60 * 1000;
+            const timestamp = sessionStorage.getItem('lvs_session_timestamp');
+            const auth = sessionStorage.getItem('lvs_auth');
+            if (auth !== 'true') { window.location.href = 'login.html'; return; }
+            if (timestamp && (Date.now() - parseInt(timestamp, 10)) > SESSION_TIMEOUT) {
+                sessionStorage.clear(); window.location.href = 'login.html?session=expired'; return;
+            }
+            sessionStorage.setItem('lvs_session_timestamp', Date.now().toString());
+        })();
     </script>
 </head>
 <body>
     <nav class="nav">
         <div class="nav-brand">
-            <img src="assets/lvs-logo.png" alt="LVS" class="nav-logo">
+            <img src="assets/lvs-logo.webp" alt="LVS" class="nav-logo">
             <span class="nav-title">LOLA VISION <span>SYSTEMS</span></span>
+            <span style="background: var(--accent); color: white; padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 600; margin-left: 12px;">Investor Portal</span>
         </div>
-        <div class="nav-links">
-            <a href="dashboard.html" class="nav-link">&larr; Dashboard</a>
-            <a href="index.html" class="nav-link" onclick="sessionStorage.removeItem('lvs_auth')">Logout</a>
-        </div>
+        <a href="login.html" class="nav-link" onclick="sessionStorage.clear()">Logout</a>
     </nav>
+
+    <!-- Tab Navigation -->
+    <div style="background: var(--panel); padding: 0 32px; border-bottom: 1px solid rgba(255,255,255,0.06); display: flex; gap: 8px;">
+        <a href="dashboard.html" style="padding: 16px 20px; color: var(--muted); text-decoration: none; font-size: 14px; font-weight: 500; border-bottom: 2px solid transparent;">Dashboard</a>
+        <a href="pipeline.html" style="padding: 16px 20px; color: var(--gold); text-decoration: none; font-size: 14px; font-weight: 600; border-bottom: 2px solid var(--gold);">Pipeline</a>
+        <a href="roadmap.html" style="padding: 16px 20px; color: var(--muted); text-decoration: none; font-size: 14px; font-weight: 500; border-bottom: 2px solid transparent;">Roadmap</a>
+        <a href="financials.html" style="padding: 16px 20px; color: var(--muted); text-decoration: none; font-size: 14px; font-weight: 500; border-bottom: 2px solid transparent;">Financials</a>
+        <a href="seed-round.html" style="padding: 16px 20px; color: var(--muted); text-decoration: none; font-size: 14px; font-weight: 500; border-bottom: 2px solid transparent;">Seed Round</a>
+        <a href="nsic-presentation.html" style="padding: 16px 20px; color: var(--muted); text-decoration: none; font-size: 14px; font-weight: 500; border-bottom: 2px solid transparent;">Presentation</a>
+    </div>
 
     <div class="container">
         <header class="header">

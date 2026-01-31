@@ -25,394 +25,37 @@ CUSTOMIZATION POINTS:
 -->
 <html lang="en">
 <head>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; media-src 'self' https:; font-src 'self' https:; connect-src 'self';">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mach Industries Portal | Lola Vision Systems</title>
-    <style>
-        :root {
-            --bg: #0b1021;
-            --panel: #141a30;
-            --panel-light: #1a2240;
-            --accent: #7c4dff;
-            --accent-light: #9d7aff;
-            --gold: #d4af37;
-            --text: #e6e8f0;
-            --muted: #9aa3c2;
-            --success: #10b981;
-            --warn: #f97316;
-            --stalled: #eab308;
-            --info: #06b6d4;
-        }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
-            background: radial-gradient(circle at 10% 20%, rgba(124,77,255,0.15), transparent 30%),
-                        radial-gradient(circle at 90% 80%, rgba(234,179,8,0.1), transparent 25%),
-                        var(--bg);
-            color: var(--text);
-            min-height: 100vh;
-        }
-
-        /* Navigation */
-        .nav {
-            background: rgba(20, 26, 48, 0.95);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(255,255,255,0.06);
-            padding: 16px 32px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-        .nav-brand { display: flex; align-items: center; gap: 16px; }
-        .nav-logo { height: 79px; width: auto; }
-        .nav-title { font-size: 18px; font-weight: 700; color: white; }
-        .nav-title span { color: white; }
-        .nav-user { display: flex; align-items: center; gap: 12px; }
-        .customer-badge {
-            background: linear-gradient(135deg, var(--accent), var(--accent-light));
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-        }
-        .nav-link { color: var(--muted); text-decoration: none; font-size: 13px; }
-
-        /* Tab Navigation */
-        .tab-nav {
-            background: var(--panel);
-            border-bottom: 1px solid rgba(255,255,255,0.06);
-            padding: 0 32px;
-            display: flex;
-            gap: 4px;
-            overflow-x: auto;
-        }
-        .tab-btn {
-            padding: 16px 24px;
-            background: none;
-            border: none;
-            color: var(--muted);
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            border-bottom: 2px solid transparent;
-            white-space: nowrap;
-            transition: all 0.2s;
-        }
-        .tab-btn:hover { color: var(--text); }
-        .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
-        .tab-btn .badge {
-            background: var(--accent);
-            color: white;
-            font-size: 10px;
-            padding: 2px 6px;
-            border-radius: 10px;
-            margin-left: 6px;
-        }
-
-        .container { max-width: 1400px; margin: 0 auto; padding: 32px; }
-        .tab-content { display: none; }
-        .tab-content.active { display: block; }
-
-        /* Welcome Header */
-        .welcome {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 32px;
-            padding: 32px;
-            background: var(--panel);
-            border-radius: 16px;
-            border: 1px solid rgba(255,255,255,0.06);
-        }
-        .welcome-content h1 { font-size: 28px; margin-bottom: 8px; }
-        .welcome-content h1 span { color: var(--gold); }
-        .welcome-content p { color: var(--muted); font-size: 14px; }
-
-        /* Stalled Alert Banner */
-        .stalled-banner {
-            background: linear-gradient(135deg, rgba(234,179,8,0.15), rgba(234,179,8,0.05));
-            border: 1px solid rgba(234,179,8,0.3);
-            border-radius: 12px;
-            padding: 16px 20px;
-            margin-bottom: 24px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        .stalled-banner-icon {
-            font-size: 24px;
-        }
-        .stalled-banner-content {
-            flex: 1;
-        }
-        .stalled-banner-title {
-            font-size: 14px;
-            font-weight: 700;
-            color: var(--stalled);
-            margin-bottom: 4px;
-        }
-        .stalled-banner-text {
-            font-size: 13px;
-            color: var(--muted);
-        }
-
-        /* Stage Progress Tracker */
-        .stage-tracker {
-            background: var(--panel);
-            border-radius: 16px;
-            padding: 28px;
-            margin-bottom: 24px;
-            border: 1px solid rgba(255,255,255,0.06);
-        }
-        .stage-tracker h2 {
-            font-size: 16px;
-            margin-bottom: 24px;
-            color: var(--muted);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        .stages {
-            display: flex;
-            justify-content: space-between;
-            position: relative;
-        }
-        .stages::before {
-            content: '';
-            position: absolute;
-            top: 20px;
-            left: 40px;
-            right: 40px;
-            height: 4px;
-            background: var(--panel-light);
-            border-radius: 2px;
-        }
-        .stages::after {
-            content: '';
-            position: absolute;
-            top: 20px;
-            left: 40px;
-            width: 40%;
-            height: 4px;
-            background: linear-gradient(90deg, var(--success), var(--stalled));
-            border-radius: 2px;
-        }
-        .stage {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            position: relative;
-            z-index: 1;
-        }
-        .stage-dot {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-            font-weight: 700;
-            margin-bottom: 12px;
-            border: 3px solid var(--panel);
-        }
-        .stage-dot.complete { background: var(--success); color: white; }
-        .stage-dot.current { background: var(--stalled); color: white; box-shadow: 0 0 20px rgba(234,179,8,0.5); }
-        .stage-dot.upcoming { background: var(--panel-light); color: var(--muted); }
-        .stage-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted); }
-        .stage.active .stage-label { color: var(--stalled); }
-        .stage-date { font-size: 10px; color: var(--muted); margin-top: 4px; }
-
-        /* Grid Layout */
-        .grid { display: grid; grid-template-columns: 2fr 1fr; gap: 24px; }
-        @media (max-width: 1000px) { .grid { grid-template-columns: 1fr; } }
-
-        /* Panels */
-        .panel {
-            background: var(--panel);
-            border-radius: 16px;
-            padding: 24px;
-            border: 1px solid rgba(255,255,255,0.06);
-        }
-        .panel h3 {
-            font-size: 14px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--muted);
-            margin-bottom: 20px;
-            padding-bottom: 12px;
-            border-bottom: 1px solid rgba(255,255,255,0.06);
-        }
-
-        /* Milestones */
-        .milestone {
-            display: flex;
-            align-items: flex-start;
-            gap: 16px;
-            padding: 16px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.04);
-        }
-        .milestone:last-child { border-bottom: none; }
-        .milestone-icon {
-            width: 36px;
-            height: 36px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 16px;
-            flex-shrink: 0;
-        }
-        .milestone-icon.complete { background: rgba(16, 185, 129, 0.15); color: var(--success); }
-        .milestone-icon.in-progress { background: rgba(124, 77, 255, 0.15); color: var(--accent); }
-        .milestone-icon.stalled { background: rgba(234, 179, 8, 0.15); color: var(--stalled); }
-        .milestone-icon.upcoming { background: rgba(255,255,255,0.05); color: var(--muted); }
-        .milestone-content { flex: 1; }
-        .milestone-title { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
-        .milestone-date { font-size: 12px; color: var(--muted); }
-        .milestone-badge {
-            font-size: 10px;
-            padding: 4px 10px;
-            border-radius: 12px;
-            font-weight: 600;
-            text-transform: uppercase;
-        }
-        .milestone-badge.complete { background: rgba(16, 185, 129, 0.15); color: var(--success); }
-        .milestone-badge.in-progress { background: rgba(124, 77, 255, 0.15); color: var(--accent); }
-        .milestone-badge.stalled { background: rgba(234, 179, 8, 0.15); color: var(--stalled); }
-        .milestone-badge.upcoming { background: rgba(255,255,255,0.05); color: var(--muted); }
-
-        /* Contact Card */
-        .contact-card {
-            background: linear-gradient(135deg, var(--accent), #5b2da8);
-            border-radius: 14px;
-            padding: 24px;
-            margin-top: 24px;
-        }
-        .contact-card h4 { font-size: 14px; margin-bottom: 16px; opacity: 0.9; }
-        .contact-person { display: flex; align-items: center; gap: 14px; }
-        .contact-avatar {
-            width: 48px;
-            height: 48px;
-            background: rgba(255,255,255,0.2);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-            font-weight: 700;
-        }
-        .contact-info h5 { font-size: 15px; margin-bottom: 2px; }
-        .contact-info p { font-size: 12px; opacity: 0.8; }
-        .contact-actions { display: flex; gap: 10px; margin-top: 16px; }
-        .contact-btn {
-            flex: 1;
-            padding: 10px;
-            border: none;
-            border-radius: 8px;
-            font-size: 12px;
-            font-weight: 600;
-            cursor: pointer;
-        }
-        .contact-btn.primary { background: white; color: var(--accent); }
-        .contact-btn.secondary { background: rgba(255,255,255,0.15); color: white; }
-
-        /* Pending Actions */
-        .pending-action {
-            background: var(--panel-light);
-            border-radius: 12px;
-            padding: 16px;
-            margin-bottom: 12px;
-            border-left: 3px solid var(--stalled);
-        }
-        .pending-action-header {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 8px;
-        }
-        .pending-action-icon {
-            font-size: 16px;
-        }
-        .pending-action-title {
-            font-size: 14px;
-            font-weight: 600;
-        }
-        .pending-action-desc {
-            font-size: 13px;
-            color: var(--muted);
-            margin-bottom: 8px;
-        }
-        .pending-action-status {
-            display: inline-block;
-            background: rgba(234,179,8,0.15);
-            color: var(--stalled);
-            padding: 4px 10px;
-            border-radius: 12px;
-            font-size: 10px;
-            font-weight: 600;
-        }
-
-        /* Footer */
-        .footer {
-            text-align: center;
-            padding: 32px;
-            color: var(--muted);
-            font-size: 11px;
-        }
-
-        /* Coming Soon Banner */
-        .coming-soon {
-            position: fixed;
-            bottom: 24px;
-            right: 24px;
-            background: rgba(249, 115, 22, 0.9);
-            color: white;
-            padding: 12px 20px;
-            border-radius: 8px;
-            font-size: 12px;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.3);
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .tab-nav { padding: 0 16px; overflow-x: auto; }
-            .tab-btn { padding: 12px 16px; font-size: 12px; white-space: nowrap; }
-            .container { padding: 16px; }
-            .welcome { flex-direction: column; gap: 16px; }
-            .stage-tracker { padding: 20px 16px; overflow: hidden; }
-            .stages {
-                overflow-x: auto;
-                padding-bottom: 12px;
-                margin: 0 -8px;
-                padding-left: 8px;
-                padding-right: 8px;
+    <link rel="stylesheet" href="css/shared-portal.css">
+    <script src="js/security.js"></script>
+    <script>
+        (function() {
+            const SESSION_TIMEOUT = 30 * 60 * 1000;
+            const timestamp = sessionStorage.getItem('lvs_session_timestamp');
+            const auth = sessionStorage.getItem('lvs_auth');
+            if (auth !== 'true') { window.location.href = 'login.html'; return; }
+            if (timestamp && (Date.now() - parseInt(timestamp, 10)) > SESSION_TIMEOUT) {
+                sessionStorage.clear(); window.location.href = 'login.html?session=expired'; return;
             }
-            .stages::before, .stages::after { display: none; }
-            .stage { min-width: 90px; flex-shrink: 0; }
-            .stage-dot { width: 32px; height: 32px; font-size: 12px; }
-            .stage-label { font-size: 9px; }
-            .stage-date { font-size: 8px; }
-        }
-    </style>
+            sessionStorage.setItem('lvs_session_timestamp', Date.now().toString());
+        })();
+    </script>
 </head>
 <body>
     <!-- Navigation -->
     <nav class="nav">
         <div class="nav-brand">
-            <img src="assets/lvs-logo.png" alt="LVS" class="nav-logo">
+            <img src="assets/lvs-logo.webp" alt="LVS" class="nav-logo">
             <div class="nav-title">LOLA VISION <span>SYSTEMS</span></div>
         </div>
         <div class="nav-user">
+            <a href="software-platform.html" class="nav-link" style="margin-right: 16px;">Software Platform</a>
             <a href="founder-portal.html" class="nav-link" style="margin-right: 16px;">&#8592; Founder Portal</a>
             <span class="customer-badge">Customer Portal</span>
-            <a href="founder-login.html" class="nav-link">Logout</a>
+            <a href="login.html" class="nav-link" onclick="sessionStorage.clear()">Logout</a>
         </div>
     </nav>
 
@@ -596,16 +239,63 @@ CUSTOMIZATION POINTS:
                                 <span style="font-weight: 600;">Kamikaze Drones</span>
                             </div>
                             <div style="display: flex; justify-content: space-between; padding: 12px; background: rgba(255,255,255,0.03); border-radius: 8px;">
-                                <span style="color: var(--muted); font-size: 13px;">Potential Value</span>
-                                <span style="font-weight: 700; color: var(--gold);">$10M</span>
-                            </div>
-                            <div style="display: flex; justify-content: space-between; padding: 12px; background: rgba(255,255,255,0.03); border-radius: 8px;">
-                                <span style="color: var(--muted); font-size: 13px;">Probability</span>
-                                <span style="font-weight: 600;">35%</span>
-                            </div>
-                            <div style="display: flex; justify-content: space-between; padding: 12px; background: rgba(255,255,255,0.03); border-radius: 8px;">
                                 <span style="color: var(--muted); font-size: 13px;">Production Target</span>
                                 <span style="font-weight: 600;">2027+</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Notes Section -->
+            <div class="notes-section">
+                <div class="grid">
+                    <!-- Private Notes -->
+                    <div class="notes-panel">
+                        <h3>
+                            My Notes
+                            <span class="notes-badge private">Private</span>
+                        </h3>
+                        <textarea
+                            class="notes-textarea"
+                            id="privateNotes"
+                            placeholder="Add your private notes here. These are saved locally on your device and only visible to you..."
+                        ></textarea>
+                        <div class="notes-actions">
+                            <div class="notes-meta">
+                                <span id="privateNotesMeta">No notes saved</span>
+                            </div>
+                            <div class="notes-buttons">
+                                <button class="notes-btn secondary" onclick="exportNotes('private')">Export</button>
+                                <button class="notes-btn primary" onclick="saveNotes('private')">Save</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Account Notes (Placeholder) -->
+                    <div class="notes-panel">
+                        <h3>
+                            Account Notes
+                            <span class="notes-badge coming-soon">Coming Soon</span>
+                        </h3>
+                        <div class="notes-placeholder">
+                            <div class="notes-placeholder-icon">&#128101;</div>
+                            <p>Shared notes for your team</p>
+                            <p class="coming-soon-text">Team sync feature coming soon</p>
+                        </div>
+                        <textarea
+                            class="notes-textarea"
+                            id="accountNotes"
+                            placeholder="Account-wide notes will sync with your team once this feature is enabled..."
+                            disabled
+                        ></textarea>
+                        <div class="notes-actions">
+                            <div class="notes-meta">
+                                <span style="color: #f97316;">Sync not yet available</span>
+                            </div>
+                            <div class="notes-buttons">
+                                <button class="notes-btn secondary" disabled>Export</button>
+                                <button class="notes-btn primary" disabled>Save</button>
                             </div>
                         </div>
                     </div>
@@ -800,6 +490,106 @@ CUSTOMIZATION POINTS:
                 document.getElementById(btn.dataset.tab).classList.add('active');
             });
         });
+
+        // ================================================================
+        // NOTES FUNCTIONALITY
+        // ================================================================
+
+        // Get storage key for notes (customer-specific)
+        function getNotesKey(type) {
+            return `lvs_customer_notes_mach_${type}`;
+        }
+
+        // Save notes to localStorage
+        function saveNotes(type) {
+            const textarea = document.getElementById(type + 'Notes');
+            const metaEl = document.getElementById(type + 'NotesMeta');
+
+            if (!textarea) return;
+
+            const content = textarea.value;
+            const key = getNotesKey(type);
+            const timestamp = new Date().toISOString();
+
+            const noteData = {
+                content: content,
+                savedAt: timestamp,
+                wordCount: content.trim() ? content.trim().split(/\s+/).length : 0
+            };
+
+            try {
+                localStorage.setItem(key, JSON.stringify(noteData));
+
+                if (metaEl) {
+                    const date = new Date(timestamp);
+                    metaEl.textContent = `Saved ${date.toLocaleDateString()} at ${date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})} • ${noteData.wordCount} words`;
+                    metaEl.style.color = 'var(--success)';
+                    setTimeout(() => { metaEl.style.color = ''; }, 2000);
+                }
+            } catch (e) {
+                console.error('Failed to save notes:', e);
+                if (metaEl) {
+                    metaEl.textContent = 'Failed to save';
+                    metaEl.style.color = 'var(--error)';
+                }
+            }
+        }
+
+        // Load notes from localStorage
+        function loadNotes() {
+            const types = ['private'];
+            types.forEach(type => {
+                const textarea = document.getElementById(type + 'Notes');
+                const metaEl = document.getElementById(type + 'NotesMeta');
+                if (!textarea) return;
+
+                const key = getNotesKey(type);
+                try {
+                    const stored = localStorage.getItem(key);
+                    if (stored) {
+                        const noteData = JSON.parse(stored);
+                        textarea.value = noteData.content || '';
+                        if (metaEl && noteData.savedAt) {
+                            const date = new Date(noteData.savedAt);
+                            metaEl.textContent = `Last saved ${date.toLocaleDateString()} at ${date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})} • ${noteData.wordCount || 0} words`;
+                        }
+                    }
+                } catch (e) {
+                    console.error('Failed to load notes:', e);
+                }
+            });
+        }
+
+        // Export notes as text file
+        function exportNotes(type) {
+            const textarea = document.getElementById(type + 'Notes');
+            if (!textarea || !textarea.value.trim()) {
+                alert('No notes to export');
+                return;
+            }
+
+            const date = new Date().toISOString().split('T')[0];
+            const filename = `LVS_Mach_${type}_notes_${date}.txt`;
+            const content = `LVS Customer Portal - ${type.charAt(0).toUpperCase() + type.slice(1)} Notes
+Customer: Mach Industries
+Exported: ${new Date().toLocaleString()}
+${'='.repeat(50)}
+
+${textarea.value}`;
+
+            const blob = new Blob([content], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        // Load notes on page load
+        document.addEventListener('DOMContentLoaded', loadNotes);
     </script>
 </body>
 </html>

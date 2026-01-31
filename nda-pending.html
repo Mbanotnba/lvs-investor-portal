@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' http://localhost:8080 http://127.0.0.1:8080 http://api.lvs.local:8080 https://api.lolavisionsystems.com https://api.lvs.app;">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NDA Pending | Lola Vision Systems</title>
+    <script src="js/config.js"></script>
+    <script src="js/security.js"></script>
+    <script>
+        // NDA pending page - validate session and check if NDA now approved
+        LVSSecurity.initProtectedPage(null, function(userData) {
+            // If NDA is now approved, redirect to the appropriate portal
+            if (userData.nda && userData.nda.allowed) {
+                const company = sessionStorage.getItem('lvs_customer') ||
+                                sessionStorage.getItem('lvs_partner');
+                const redirectUrl = LVSSecurity.getPortalUrl(
+                    userData.user.portal_type,
+                    company,
+                    true
+                );
+                window.location.href = redirectUrl;
+            }
+        });
+    </script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #f5f5f7;
+        }
+        .container {
+            background: #12121a;
+            border-radius: 16px;
+            padding: 48px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+            border: 1px solid rgba(255,255,255,0.06);
+        }
+        .logo-icon {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 24px;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px;
+            border: 2px solid #f97316;
+        }
+        .logo-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        h1 {
+            font-size: 24px;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+        .status-badge {
+            display: inline-block;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            margin: 16px 0;
+        }
+        .status-badge.pending {
+            background: rgba(251,191,36,0.2);
+            color: #fbbf24;
+        }
+        .status-badge.expired {
+            background: rgba(239,68,68,0.2);
+            color: #ef4444;
+        }
+        .status-badge.revoked {
+            background: rgba(239,68,68,0.2);
+            color: #ef4444;
+        }
+        .message {
+            color: #9ca3af;
+            font-size: 15px;
+            line-height: 1.6;
+            margin-bottom: 32px;
+        }
+        .info-box {
+            background: rgba(255,255,255,0.03);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 24px;
+            text-align: left;
+        }
+        .info-box h4 {
+            color: #f5f5f7;
+            font-size: 13px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .info-row:last-child {
+            border-bottom: none;
+        }
+        .info-label {
+            color: #6b7280;
+            font-size: 13px;
+        }
+        .info-value {
+            color: #f5f5f7;
+            font-size: 13px;
+            font-weight: 500;
+        }
+        .contact-section {
+            background: linear-gradient(135deg, #7c4dff20, #651fff20);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 24px;
+        }
+        .contact-section h4 {
+            color: #a78bfa;
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+        .contact-section p {
+            color: #9ca3af;
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+        .contact-section a {
+            color: #7c4dff;
+            text-decoration: none;
+        }
+        .contact-section a:hover {
+            text-decoration: underline;
+        }
+        .btn {
+            display: inline-block;
+            padding: 14px 28px;
+            font-size: 15px;
+            font-weight: 600;
+            color: white;
+            background: linear-gradient(135deg, #7c4dff 0%, #651fff 100%);
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(124, 77, 255, 0.4);
+        }
+        .btn-secondary {
+            background: transparent;
+            border: 2px solid rgba(255,255,255,0.1);
+            color: #9ca3af;
+            margin-left: 12px;
+        }
+        .btn-secondary:hover {
+            border-color: rgba(255,255,255,0.2);
+            color: #f5f5f7;
+            box-shadow: none;
+        }
+        .footer {
+            margin-top: 32px;
+            font-size: 11px;
+            color: #4b5563;
+        }
+        .gold { color: #d4af37; }
+        .user-name { color: #a78bfa; font-weight: 600; }
+        .check-status {
+            margin-top: 20px;
+            padding: 12px;
+            background: rgba(16,185,129,0.1);
+            border-radius: 8px;
+            display: none;
+        }
+        .check-status.show { display: block; }
+        .check-status.success { color: #10b981; }
+        .check-status.error { color: #ef4444; background: rgba(239,68,68,0.1); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo-icon">
+            <img src="assets/lvs-logo.webp" alt="Lola Vision Systems">
+        </div>
+        <h1>LOLA VISION SYSTEMS</h1>
+
+        <div class="status-badge" id="statusBadge">NDA Pending</div>
+
+        <p class="message" id="statusMessage">
+            Your account is pending NDA approval. Once your NDA has been signed and verified, you will have full access to the portal.
+        </p>
+
+        <div class="info-box">
+            <h4>&#128100; Account Information</h4>
+            <div class="info-row">
+                <span class="info-label">Name</span>
+                <span class="info-value" id="userName">-</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Email</span>
+                <span class="info-value" id="userEmail">-</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Company</span>
+                <span class="info-value" id="userCompany">-</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Portal Type</span>
+                <span class="info-value" id="portalType">-</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">NDA Status</span>
+                <span class="info-value" id="ndaStatus">-</span>
+            </div>
+        </div>
+
+        <div class="contact-section">
+            <h4>Need Help?</h4>
+            <p>To expedite your NDA approval, please contact:</p>
+            <p><strong>Tayo Adesanya</strong>, CEO</p>
+            <p>
+                <a href="mailto:tayo@lolavisionsystems.com">tayo@lolavisionsystems.com</a>
+                &nbsp;|&nbsp;
+                <a href="https://wa.me/13108808174" target="_blank">WhatsApp</a>
+            </p>
+        </div>
+
+        <div class="check-status" id="checkStatus"></div>
+
+        <div>
+            <button class="btn" onclick="checkNdaStatus()">Check Status</button>
+            <a href="login.html" class="btn btn-secondary" onclick="sessionStorage.clear()">Logout</a>
+        </div>
+
+        <p class="footer">
+            <span class="gold">Lola Vision Systems</span> &copy; 2026<br>
+            Confidential Portal Access
+        </p>
+    </div>
+
+    <script>
+        const API_BASE_URL = LVS_CONFIG.API_BASE_URL;
+
+        // Load user info on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadUserInfo();
+        });
+
+        function loadUserInfo() {
+            const userName = sessionStorage.getItem('lvs_user_name') || '-';
+            const userEmail = sessionStorage.getItem('lvs_email') || '-';
+            const company = sessionStorage.getItem('lvs_customer') || sessionStorage.getItem('lvs_partner') || '-';
+            const portalType = sessionStorage.getItem('lvs_role') || '-';
+            const ndaStatus = sessionStorage.getItem('lvs_nda_status') || 'pending';
+
+            document.getElementById('userName').textContent = userName;
+            document.getElementById('userEmail').textContent = userEmail;
+            document.getElementById('userCompany').textContent = company.charAt(0).toUpperCase() + company.slice(1);
+            document.getElementById('portalType').textContent = portalType.charAt(0).toUpperCase() + portalType.slice(1);
+            document.getElementById('ndaStatus').textContent = formatStatus(ndaStatus);
+
+            // Update status badge and message based on status
+            const badge = document.getElementById('statusBadge');
+            const message = document.getElementById('statusMessage');
+
+            badge.className = 'status-badge ' + ndaStatus;
+
+            if (ndaStatus === 'pending') {
+                badge.textContent = 'NDA Pending';
+                message.textContent = 'Your account is pending NDA approval. Once your NDA has been signed and verified, you will have full access to the portal.';
+            } else if (ndaStatus === 'expired') {
+                badge.textContent = 'NDA Expired';
+                message.textContent = 'Your NDA has expired and needs to be renewed. Please contact LVS to renew your agreement.';
+            } else if (ndaStatus === 'revoked') {
+                badge.textContent = 'Access Revoked';
+                message.textContent = 'Your portal access has been revoked. Please contact LVS for more information.';
+            }
+        }
+
+        function formatStatus(status) {
+            const statusMap = {
+                'pending': 'Pending Approval',
+                'approved': 'Approved',
+                'expired': 'Expired',
+                'revoked': 'Revoked',
+                'not_required': 'Not Required'
+            };
+            return statusMap[status] || status;
+        }
+
+        async function checkNdaStatus() {
+            const statusEl = document.getElementById('checkStatus');
+            statusEl.className = 'check-status show';
+            statusEl.textContent = 'Checking status...';
+
+            const token = sessionStorage.getItem('lvs_token');
+            if (!token) {
+                statusEl.className = 'check-status show error';
+                statusEl.textContent = 'Session expired. Please login again.';
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/auth/validate-token`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.detail || 'Failed to check status');
+                }
+
+                const nda = data.nda || {};
+
+                if (nda.allowed) {
+                    statusEl.className = 'check-status show success';
+                    statusEl.textContent = 'Your NDA has been approved! Redirecting to portal...';
+
+                    // Update session and redirect
+                    sessionStorage.setItem('lvs_nda_status', 'approved');
+
+                    setTimeout(() => {
+                        const portalType = sessionStorage.getItem('lvs_role');
+                        const company = sessionStorage.getItem('lvs_customer') || sessionStorage.getItem('lvs_partner');
+
+                        let redirectUrl = 'dashboard.html';
+                        if (portalType === 'customer' && company) {
+                            redirectUrl = `${company}-portal.html`;
+                        } else if (portalType === 'partner' && company) {
+                            redirectUrl = `partner-portal.html?partner=${company}`;
+                        }
+
+                        window.location.href = redirectUrl;
+                    }, 2000);
+                } else {
+                    statusEl.className = 'check-status show error';
+                    statusEl.textContent = 'Your NDA is still ' + (nda.status || 'pending') + '. Please contact LVS.';
+                    sessionStorage.setItem('lvs_nda_status', nda.status || 'pending');
+                    loadUserInfo();
+                }
+            } catch (error) {
+                statusEl.className = 'check-status show error';
+                statusEl.textContent = error.message;
+            }
+        }
+    </script>
+</body>
+</html>
