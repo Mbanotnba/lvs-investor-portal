@@ -35,6 +35,10 @@ CORS_ORIGINS = [
     "https://lolavisionsystems.com",
     "https://lvs.app",
     "https://www.lvs.app",
+    # Cloud Run
+    "https://lvs-portal-657638018776.us-central1.run.app",
+    # GitHub Pages
+    "https://mbanotnba.github.io",
 ]
 
 # TOTP Settings (Google Authenticator)

@@ -1,0 +1,24 @@
+{
+  "name": "lvs-investor-portal",
+  "version": "1.0.0",
+  "description": "**Last Updated:** January 28, 2026 **Version:** 2.0 **Maintainers:** Tayo Adesanya, Randy Hollines **Status:** Active Development",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mbanotnba/lvs-investor-portal.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Mbanotnba/lvs-investor-portal/issues"
+  },
+  "homepage": "https://github.com/Mbanotnba/lvs-investor-portal#readme",
+  "devDependencies": {
+    "firebase-tools": "^15.5.1"
+  }
+}

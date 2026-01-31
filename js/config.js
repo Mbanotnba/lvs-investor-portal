@@ -37,6 +37,18 @@ const LVS_CONFIG = (function() {
             name: 'production',
             apiBase: 'https://api.lvs.app',
             portalBase: 'https://lvs.app'
+        },
+        // Cloud Run (temporary until custom domain is set up)
+        'lvs-portal-657638018776.us-central1.run.app': {
+            name: 'production',
+            apiBase: 'https://lvs-api-657638018776.us-central1.run.app',
+            portalBase: 'https://lvs-portal-657638018776.us-central1.run.app'
+        },
+        // GitHub Pages
+        'mbanotnba.github.io': {
+            name: 'production',
+            apiBase: 'https://lvs-api-657638018776.us-central1.run.app',
+            portalBase: 'https://mbanotnba.github.io/lvs-investor-portal'
         }
     };
 
