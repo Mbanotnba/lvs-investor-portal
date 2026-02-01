@@ -19,6 +19,7 @@ OVERVIEW:
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AMD Portal | Lola Vision Systems</title>
     <link rel="stylesheet" href="css/shared-portal.css">
+    <script src="js/config.js"></script>
     <script src="js/security.js"></script>
     <script>
         (function() {
@@ -43,6 +44,8 @@ OVERVIEW:
             <span class="customer-badge">AMD Partner Portal</span>
             <a href="software-platform.html" class="nav-link">Software Platform</a>
             <a href="founder-portal.html" class="nav-link" id="founderLink" style="display:none;">&larr; Founder Portal</a>
+            <span id="navGreeting" class="nav-greeting"></span>
+            <div class="nav-avatar" id="navAvatar">--</div>
             <a href="login.html" class="nav-link" onclick="sessionStorage.clear()">Logout</a>
         </div>
     </nav>
@@ -876,6 +879,19 @@ OVERVIEW:
             sessionStorage.getItem('lvs_can_view_customers') === 'true') {
             document.getElementById('founderLink').style.display = 'inline';
         }
+
+        // Initialize user greeting
+        function initUserGreeting() {
+            const firstName = sessionStorage.getItem('lvs_first_name') || 'User';
+            const fullName = sessionStorage.getItem('lvs_user_name') || 'User';
+            const initials = fullName.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+
+            document.getElementById('navGreeting').textContent = `Hi, ${firstName}!`;
+            document.getElementById('navAvatar').textContent = initials;
+        }
+
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', initUserGreeting);
     </script>
 </body>
 </html>

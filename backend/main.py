@@ -40,6 +40,8 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
 from database import init_database, seed_default_users, migrate_add_nda_columns
 from auth import router as auth_router
 from admin import router as admin_router
+from nda import router as nda_router
+from comments import router as comments_router
 
 
 @asynccontextmanager
@@ -94,6 +96,8 @@ async def global_exception_handler(request: Request, exc: Exception):
 # Include routers
 app.include_router(auth_router)
 app.include_router(admin_router)
+app.include_router(nda_router)
+app.include_router(comments_router)
 
 
 # Health check endpoint

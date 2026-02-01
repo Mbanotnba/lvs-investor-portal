@@ -17,7 +17,12 @@ SECRET_KEY = os.getenv("SECRET_KEY", secrets.token_urlsafe(32))
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
-# Database
+# Database - Turso (cloud SQLite) or local SQLite fallback
+TURSO_DATABASE_URL = os.getenv("TURSO_DATABASE_URL")  # e.g., libsql://db-name.turso.io
+TURSO_AUTH_TOKEN = os.getenv("TURSO_AUTH_TOKEN")
+USE_TURSO = bool(TURSO_DATABASE_URL and TURSO_AUTH_TOKEN)
+
+# Legacy setting (kept for compatibility)
 DATABASE_URL = os.getenv("DATABASE_URL", f"sqlite+aiosqlite:///{BASE_DIR}/lvs_portal.db")
 
 # CORS - Frontend origins allowed to access API

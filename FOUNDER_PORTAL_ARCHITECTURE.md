@@ -12,25 +12,23 @@ A unified access point for LVS founders to:
 
 ## Authentication Flow
 
-### Phase 1: Basic Auth (Current)
+### Current Implementation (Completed)
 ```
-Email + Password → Founder Dashboard
-```
-
-### Phase 2: 2FA (Planned)
-```
-Step 1: Email + Password
-Step 2: Authenticator App Code (TOTP)
+Step 1: Email Submission
     ↓
-Founder Dashboard
+Step 2: Password Verification (Argon2)
+    ↓
+Step 3: TOTP Code (Google Authenticator)
+    ↓
+JWT Token Issued → Founder Dashboard
 ```
 
-**2FA Implementation Options:**
-1. **Self-hosted:** Use `otplib` or `speakeasy` for TOTP generation/validation
-2. **Service:** Auth0, Firebase Auth, or Supabase Auth
-3. **Email whitelist:** Only @lolavisionsystems.com emails allowed
-
-**Recommended:** Start with Firebase Auth (free tier, easy 2FA)
+**Implementation Details:**
+- Self-hosted TOTP using `pyotp` library
+- Argon2 password hashing via `argon2-cffi`
+- JWT tokens with 30-minute TTL
+- Database-backed sessions with JTI tracking
+- Account lockout after 5 failed attempts
 
 ---
 
@@ -231,37 +229,43 @@ lvs-investor-portal/
 
 ## Implementation Phases
 
-### Phase 1: MVP (Now)
-- [ ] Create founder-portal.html with basic password auth
-- [ ] Create customers.json with all 20 customers
-- [ ] Build customer list view
-- [ ] Build individual customer view
-- [ ] Link to existing investor portal
+### Phase 1: MVP (Completed)
+- [x] Create founder-portal.html with full authentication
+- [x] Create customers.json with all 20+ customers
+- [x] Build customer list view with filtering
+- [x] Build individual customer view
+- [x] Link to existing investor portal
+- [x] NDA management interface
 
-### Phase 2: Team Features
-- [ ] Add team updates module
-- [ ] Activity logging
+### Phase 2: Team Features (Completed)
+- [x] Activity logging (session tracking)
+- [x] Account notes via LVSComments
 - [ ] Next actions management
 
-### Phase 3: Authentication
-- [ ] Implement 2FA with authenticator app
-- [ ] Email whitelist enforcement
-- [ ] Session management
+### Phase 3: Authentication (Completed)
+- [x] Implement 2FA with Google Authenticator (TOTP)
+- [x] Domain-based portal routing
+- [x] Session management with JTI tracking
+- [x] JWT tokens with expiration
+- [x] Cloud Armor rate limiting
 
-### Phase 4: Integrations
+### Phase 4: Integrations (Planned)
 - [ ] Slack integration
 - [ ] Email notifications
 - [ ] Calendar sync for due dates
 
 ---
 
-## Security Considerations
+## Security Considerations (Implemented)
 
-1. **No sensitive data in client-side JSON** - Use for display only
-2. **2FA required** for production deployment
-3. **Email whitelist** - Only @lolavisionsystems.com
-4. **Session timeout** - Auto-logout after 30 min inactivity
-5. **Audit log** - Track all data access
+1. **Server-side data validation** - All sensitive operations via API
+2. **2FA required** - TOTP via Google Authenticator ✓
+3. **Domain-based routing** - Portal type determined by email domain ✓
+4. **Session timeout** - 30-minute JWT expiration ✓
+5. **Audit log** - Sessions table tracks all access ✓
+6. **Rate limiting** - Cloud Armor at edge (10 req/min auth) ✓
+7. **Security headers** - HSTS, CSP, X-Frame-Options ✓
+8. **Password security** - Argon2 hashing, lockout after failures ✓
 
 ---
 

@@ -1,7 +1,7 @@
 # LVS Investor & Customer Portal System
 
-**Last Updated:** January 31, 2026
-**Version:** 3.0
+**Last Updated:** February 1, 2026
+**Version:** 3.1
 **Maintainers:** Tayo Adesanya, Randy Hollines
 **Status:** Production
 
@@ -77,11 +77,13 @@ python3 -m http.server 8000
                                                     │
                                                     ▼
                                     ┌───────────────────────────────┐
-                                    │         SQLite Database       │
+                                    │      Turso Cloud SQLite       │
+                                    │  (libsql with embedded sync)  │
                                     │  • Users & credentials        │
                                     │  • Sessions (JTI tracking)    │
                                     │  • Audit logs                 │
                                     │  • Pending auth states        │
+                                    │  • Account comments           │
                                     └───────────────────────────────┘
 ```
 
@@ -142,7 +144,8 @@ lvs-investor-portal/
 │
 ├── js/                             # Frontend JavaScript
 │   ├── config.js                   # Environment detection (dev/prod URLs)
-│   └── security.js                 # Session management, token validation
+│   ├── security.js                 # Session management, token validation
+│   └── comments.js                 # LVSComments - account notes component
 │
 ├── login.html                      # Multi-step login (email→password→2FA)
 ├── founder-portal.html             # Founder dashboard + NDA management
@@ -162,6 +165,15 @@ lvs-investor-portal/
 ---
 
 ## Recent Upgrades (January 2026)
+
+### v3.1 - Persistent Database & Account Comments
+
+| Upgrade | Before | After |
+|---------|--------|-------|
+| **Database** | Ephemeral SQLite (lost on restart) | Turso cloud SQLite with embedded sync |
+| **Account Notes** | Static placeholder | LVSComments - Slack-like persistent comments |
+| **User Greeting** | Generic welcome | Personalized (FirstName + avatar) |
+| **SDK Messaging** | Model-specific examples | "Bring Your Own Model" positioning |
 
 ### v3.0 - Security Hardening & Cloud Deployment
 
@@ -238,6 +250,10 @@ DEMO_FOUNDER_PASSWORD=   # Required if SEED_DEMO_USERS=true
 DEMO_INVESTOR_PASSWORD=  # Required if SEED_DEMO_USERS=true
 DEMO_CUSTOMER_PASSWORD=  # Required if SEED_DEMO_USERS=true
 DEMO_PARTNER_PASSWORD=   # Required if SEED_DEMO_USERS=true
+
+# Turso Database (required for production persistence)
+TURSO_DATABASE_URL=      # libsql://your-db.turso.io
+TURSO_AUTH_TOKEN=        # Turso authentication token
 ```
 
 ---
@@ -282,6 +298,8 @@ sessionStorage.getItem('lvs_token')             // JWT token
 sessionStorage.getItem('lvs_role')              // 'investor'|'customer'|'founder'|'partner'
 sessionStorage.getItem('lvs_nda_allowed')       // 'true' = NDA approved
 sessionStorage.getItem('lvs_founder_auth')      // 'true' = founder access
+sessionStorage.getItem('lvs_first_name')        // User's first name (for greeting)
+sessionStorage.getItem('lvs_company')           // User's company (for account context)
 ```
 
 ### Access Matrix
@@ -329,6 +347,22 @@ sessionStorage.getItem('lvs_founder_auth')      // 'true' = founder access
 ---
 
 ## Changelog
+
+### 2026-02-01 (v3.1) - Persistent Database & Features
+- **Turso Integration:** Cloud-hosted SQLite with embedded replica pattern
+  - Data persists across Cloud Run container restarts
+  - Added `to_db_datetime()` helper for libsql datetime compatibility
+  - Added `libsql_experimental==0.0.47` to requirements
+- **Account Comments (LVSComments):** Slack-like persistent notes
+  - Available on all customer/partner portals
+  - Synced via backend API, stored per-account
+  - Includes timestamp, user attribution, and real-time updates
+- **Personalized Greetings:** FirstName + avatar in nav across all portals
+- **SDK Messaging Refresh:** "Bring Your Own Model" positioning
+  - Emphasizes fine-tuning moat over specific model support
+  - Updated code examples to be model-agnostic
+  - Added "Your Models, Optimized" feature cards
+- **Bootstrap Password Reset:** `/admin/reset-password` endpoint for recovery
 
 ### 2026-01-31 (v3.0) - Security & Cloud
 - Deployed to Google Cloud Run (frontend + backend)

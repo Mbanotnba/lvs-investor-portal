@@ -24,13 +24,15 @@ AUTHENTICATION:
 -->
 <html lang="en">
 <head>
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; media-src 'self' https:; font-src 'self' https:; connect-src 'self';">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; media-src 'self' https:; font-src 'self' https:; connect-src 'self' https://lvs-api-657638018776.us-central1.run.app;">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Partner Portal | Lola Vision Systems</title>
     <link rel="stylesheet" href="css/shared-portal.css">
     <link rel="stylesheet" href="css/partner-portal.css">
+    <script src="js/config.js"></script>
     <script src="js/security.js"></script>
+    <script src="js/comments.js"></script>
     <script src="js/partner-data.js"></script>
     <script>
         // Authentication check
@@ -68,6 +70,8 @@ AUTHENTICATION:
         <div class="nav-user">
             <span class="partner-nav-badge" id="partnerBadge">Silicon IP Partner</span>
             <a href="founder-portal.html" class="nav-link" id="founderLink" style="display: none; margin-right: 16px;">Founder Portal</a>
+            <span id="navGreeting" class="nav-greeting"></span>
+            <div class="nav-avatar" id="navAvatar">--</div>
             <a href="login.html" class="nav-link" onclick="sessionStorage.clear()">Logout</a>
         </div>
     </nav>
@@ -188,32 +192,13 @@ AUTHENTICATION:
                         </div>
                     </div>
 
-                    <!-- Account Notes (Placeholder) -->
+                    <!-- Account Notes (Shared) -->
                     <div class="notes-panel">
                         <h3>
                             Account Notes
-                            <span class="notes-badge coming-soon">Coming Soon</span>
+                            <span class="notes-badge" style="background: rgba(16,185,129,0.2); color: #10b981;">Synced</span>
                         </h3>
-                        <div class="notes-placeholder">
-                            <div class="notes-placeholder-icon">&#128101;</div>
-                            <p>Shared notes for your team</p>
-                            <p class="coming-soon-text">Team sync feature coming soon</p>
-                        </div>
-                        <textarea
-                            class="notes-textarea"
-                            id="accountNotes"
-                            placeholder="Account-wide notes will sync with your team once this feature is enabled..."
-                            disabled
-                        ></textarea>
-                        <div class="notes-actions">
-                            <div class="notes-meta">
-                                <span style="color: #f97316;">Sync not yet available</span>
-                            </div>
-                            <div class="notes-buttons">
-                                <button class="notes-btn secondary" disabled>Export</button>
-                                <button class="notes-btn primary" disabled>Save</button>
-                            </div>
-                        </div>
+                        <div id="accountCommentsContainer"></div>
                     </div>
                 </div>
             </div>
@@ -829,8 +814,24 @@ ${textarea.value}`;
             URL.revokeObjectURL(url);
         }
 
+        // Initialize user greeting
+        function initUserGreeting() {
+            const firstName = sessionStorage.getItem('lvs_first_name') || 'User';
+            const fullName = sessionStorage.getItem('lvs_user_name') || 'User';
+            const initials = fullName.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+
+            document.getElementById('navGreeting').textContent = `Hi, ${firstName}!`;
+            document.getElementById('navAvatar').textContent = initials;
+        }
+
         // Initialize on load
-        document.addEventListener('DOMContentLoaded', initPartnerPortal);
+        document.addEventListener('DOMContentLoaded', () => {
+            initPartnerPortal();
+            initUserGreeting();
+            // Initialize shared account notes with partner ID
+            const partnerId = getPartnerFromUrl() || getPartnerFromSession() || 'partner';
+            LVSComments.init(partnerId, '#accountCommentsContainer');
+        });
     </script>
 </body>
 </html>

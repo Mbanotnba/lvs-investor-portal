@@ -10,3 +10,6 @@ python-multipart==0.0.6
 pydantic[email]==2.5.3
 qrcode[pil]==7.4.2
 aiosqlite==0.19.0
+requests==2.31.0
+google-cloud-storage==2.14.0
+libsql_experimental==0.0.47

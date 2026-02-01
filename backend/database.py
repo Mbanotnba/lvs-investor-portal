@@ -1,6 +1,6 @@
 """
 LVS Portal - Database Setup
-SQLite database with async support
+SQLite database with Turso (cloud) or local fallback
 """
 import sqlite3
 from datetime import datetime, timedelta
@@ -10,20 +10,98 @@ from pathlib import Path
 from config import (
     BASE_DIR, SEED_DEMO_USERS,
     DEMO_FOUNDER_PASSWORD, DEMO_INVESTOR_PASSWORD,
-    DEMO_CUSTOMER_PASSWORD, DEMO_PARTNER_PASSWORD
+    DEMO_CUSTOMER_PASSWORD, DEMO_PARTNER_PASSWORD,
+    TURSO_DATABASE_URL, TURSO_AUTH_TOKEN, USE_TURSO
 )
 from security import hash_password
 
+# Try to import libsql for Turso support
+try:
+    import libsql_experimental as libsql
+    LIBSQL_AVAILABLE = True
+except ImportError:
+    LIBSQL_AVAILABLE = False
+    print("Warning: libsql_experimental not installed. Using local SQLite only.")
 
 # Database file path
 DB_PATH = BASE_DIR / "lvs_portal.db"
 
+# Global connection for embedded replica (reused to maintain sync)
+_turso_conn = None
+_using_turso = False
+
+
+def to_db_datetime(dt: Optional[datetime]) -> Optional[str]:
+    """Convert datetime to ISO string for database storage.
+
+    libsql doesn't handle Python datetime objects directly,
+    so we convert to ISO format strings.
+    """
+    if dt is None:
+        return None
+    return dt.isoformat()
+
 
 def get_db_connection():
-    """Get a database connection."""
-    conn = sqlite3.connect(DB_PATH)
-    conn.row_factory = sqlite3.Row
-    return conn
+    """Get a database connection (Turso embedded replica or local SQLite)."""
+    global _turso_conn, _using_turso
+
+    if USE_TURSO and LIBSQL_AVAILABLE:
+        _using_turso = True
+        # Use embedded replica - local SQLite that syncs to Turso
+        if _turso_conn is None:
+            _turso_conn = libsql.connect(
+                str(DB_PATH),  # Local file path
+                sync_url=TURSO_DATABASE_URL,
+                auth_token=TURSO_AUTH_TOKEN
+            )
+            # Initial sync from remote
+            try:
+                _turso_conn.sync()
+            except Exception as e:
+                print(f"Turso sync warning: {e}")
+        return _turso_conn
+    else:
+        # Fallback to local SQLite
+        _using_turso = False
+        conn = sqlite3.connect(DB_PATH)
+        conn.row_factory = sqlite3.Row
+        return conn
+
+
+def sync_to_turso():
+    """Sync local changes to Turso cloud."""
+    global _turso_conn
+    if _turso_conn is not None:
+        try:
+            _turso_conn.sync()
+        except Exception as e:
+            print(f"Turso sync error: {e}")
+
+
+def row_to_dict(cursor, row):
+    """Convert a database row to a dict."""
+    if row is None:
+        return None
+    if _using_turso:
+        return dict(zip([col[0] for col in cursor.description], row))
+    else:
+        return dict(row)
+
+
+def close_connection(conn):
+    """Safely close a database connection (no-op for embedded replica)."""
+    global _turso_conn
+    if conn is _turso_conn:
+        # Don't close the embedded replica connection, just sync
+        sync_to_turso()
+    else:
+        # Close regular SQLite connections
+        try:
+            if hasattr(conn, 'close') and callable(getattr(conn, 'close', None)):
+                conn.close()
+        except Exception:
+            pass
 
 
 def init_database():
@@ -111,15 +189,52 @@ def init_database():
         )
     """)
 
+    # NDA documents table
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS nda_documents (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id INTEGER NOT NULL,
+            filename TEXT NOT NULL,
+            gcs_path TEXT NOT NULL,
+            file_size INTEGER,
+            content_type TEXT,
+            status TEXT DEFAULT 'pending' CHECK (status IN ('pending', 'approved', 'rejected')),
+            uploaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            reviewed_by INTEGER,
+            reviewed_at TIMESTAMP,
+            review_notes TEXT,
+            FOREIGN KEY (user_id) REFERENCES users(id),
+            FOREIGN KEY (reviewed_by) REFERENCES users(id)
+        )
+    """)
+
+    # Account comments/notes table (Slack-like feature)
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS account_comments (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            account_id TEXT NOT NULL,
+            user_id INTEGER NOT NULL,
+            message TEXT NOT NULL,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            edited_at TIMESTAMP,
+            is_deleted INTEGER DEFAULT 0,
+            FOREIGN KEY (user_id) REFERENCES users(id)
+        )
+    """)
+
     # Create indexes
     cursor.execute("CREATE INDEX IF NOT EXISTS idx_users_email ON users(email)")
     cursor.execute("CREATE INDEX IF NOT EXISTS idx_sessions_token_jti ON sessions(token_jti)")
     cursor.execute("CREATE INDEX IF NOT EXISTS idx_login_attempts_email ON login_attempts(email)")
     cursor.execute("CREATE INDEX IF NOT EXISTS idx_pending_auth_email ON pending_auth(email)")
     cursor.execute("CREATE INDEX IF NOT EXISTS idx_pending_auth_expires ON pending_auth(expires_at)")
+    cursor.execute("CREATE INDEX IF NOT EXISTS idx_nda_documents_user ON nda_documents(user_id)")
+    cursor.execute("CREATE INDEX IF NOT EXISTS idx_nda_documents_status ON nda_documents(status)")
+    cursor.execute("CREATE INDEX IF NOT EXISTS idx_account_comments_account ON account_comments(account_id)")
+    cursor.execute("CREATE INDEX IF NOT EXISTS idx_account_comments_created ON account_comments(created_at)")
 
     conn.commit()
-    conn.close()
+    close_connection(conn)
 
 
 # ============================================================================
@@ -145,10 +260,12 @@ def create_user(
         """, (email.lower(), password_hash, name, portal_type, company))
         conn.commit()
         return cursor.lastrowid
-    except sqlite3.IntegrityError:
-        return None  # Email already exists
+    except (sqlite3.IntegrityError, Exception) as e:
+        if "UNIQUE constraint" in str(e) or "IntegrityError" in str(type(e).__name__):
+            return None  # Email already exists
+        raise  # Re-raise unexpected errors
     finally:
-        conn.close()
+        close_connection(conn)
 
 
 def get_user_by_email(email: str) -> Optional[Dict[str, Any]]:
@@ -158,11 +275,10 @@ def get_user_by_email(email: str) -> Optional[Dict[str, Any]]:
 
     cursor.execute("SELECT * FROM users WHERE email = ? AND is_active = 1", (email.lower(),))
     row = cursor.fetchone()
-    conn.close()
+    result = row_to_dict(cursor, row) if row else None
+    close_connection(conn)
 
-    if row:
-        return dict(row)
-    return None
+    return result
 
 
 def get_user_by_id(user_id: int) -> Optional[Dict[str, Any]]:
@@ -172,11 +288,10 @@ def get_user_by_id(user_id: int) -> Optional[Dict[str, Any]]:
 
     cursor.execute("SELECT * FROM users WHERE id = ? AND is_active = 1", (user_id,))
     row = cursor.fetchone()
-    conn.close()
+    result = row_to_dict(cursor, row) if row else None
+    close_connection(conn)
 
-    if row:
-        return dict(row)
-    return None
+    return result
 
 
 def update_user_password(user_id: int, new_password: str) -> bool:
@@ -192,7 +307,7 @@ def update_user_password(user_id: int, new_password: str) -> bool:
 
     conn.commit()
     success = cursor.rowcount > 0
-    conn.close()
+    close_connection(conn)
     return success
 
 
@@ -208,7 +323,7 @@ def update_user_totp(user_id: int, totp_secret: str, enabled: bool = False) -> b
 
     conn.commit()
     success = cursor.rowcount > 0
-    conn.close()
+    close_connection(conn)
     return success
 
 
@@ -224,7 +339,7 @@ def enable_user_totp(user_id: int) -> bool:
 
     conn.commit()
     success = cursor.rowcount > 0
-    conn.close()
+    close_connection(conn)
     return success
 
 
@@ -239,7 +354,7 @@ def update_last_login(user_id: int) -> None:
     """, (user_id,))
 
     conn.commit()
-    conn.close()
+    close_connection(conn)
 
 
 def increment_failed_login(email: str) -> int:
@@ -256,7 +371,7 @@ def increment_failed_login(email: str) -> int:
     row = cursor.fetchone()
 
     conn.commit()
-    conn.close()
+    close_connection(conn)
 
     return row['failed_login_attempts'] if row else 0
 
@@ -272,7 +387,7 @@ def lock_user_account(email: str, until: datetime) -> None:
     """, (until, email.lower()))
 
     conn.commit()
-    conn.close()
+    close_connection(conn)
 
 
 def reset_failed_attempts(email: str) -> None:
@@ -286,7 +401,7 @@ def reset_failed_attempts(email: str) -> None:
     """, (email.lower(),))
 
     conn.commit()
-    conn.close()
+    close_connection(conn)
 
 
 # ============================================================================
@@ -302,11 +417,11 @@ def create_session(user_id: int, token_jti: str, expires_at: datetime,
     cursor.execute("""
         INSERT INTO sessions (user_id, token_jti, ip_address, user_agent, expires_at)
         VALUES (?, ?, ?, ?, ?)
-    """, (user_id, token_jti, ip_address, user_agent, expires_at))
+    """, (user_id, token_jti, ip_address, user_agent, to_db_datetime(expires_at)))
 
     conn.commit()
     session_id = cursor.lastrowid
-    conn.close()
+    close_connection(conn)
     return session_id
 
 
@@ -319,7 +434,7 @@ def revoke_session(token_jti: str) -> bool:
 
     conn.commit()
     success = cursor.rowcount > 0
-    conn.close()
+    close_connection(conn)
     return success
 
 
@@ -334,7 +449,7 @@ def is_session_valid(token_jti: str) -> bool:
     """, (token_jti,))
 
     row = cursor.fetchone()
-    conn.close()
+    close_connection(conn)
     return row is not None
 
 
@@ -347,7 +462,7 @@ def revoke_all_user_sessions(user_id: int) -> int:
 
     conn.commit()
     count = cursor.rowcount
-    conn.close()
+    close_connection(conn)
     return count
 
 
@@ -384,7 +499,7 @@ def create_pending_auth(
         cursor.execute("""
             INSERT INTO pending_auth (email, step, user_id, portal_info, ip_address, expires_at)
             VALUES (?, ?, ?, ?, ?, ?)
-        """, (email.lower(), step, user_id, portal_info_json, ip_address, expires_at))
+        """, (email.lower(), step, user_id, portal_info_json, ip_address, to_db_datetime(expires_at)))
 
         conn.commit()
         return True
@@ -392,7 +507,7 @@ def create_pending_auth(
         conn.rollback()
         return False
     finally:
-        conn.close()
+        close_connection(conn)
 
 
 def get_pending_auth(email: str) -> Optional[Dict[str, Any]]:
@@ -419,10 +534,10 @@ def get_pending_auth(email: str) -> Optional[Dict[str, Any]]:
     """, (email.lower(),))
 
     row = cursor.fetchone()
-    conn.close()
+    result = row_to_dict(cursor, row) if row else None
+    close_connection(conn)
 
-    if row:
-        result = dict(row)
+    if result:
         # Parse portal_info JSON
         if result.get('portal_info'):
             try:
@@ -443,7 +558,7 @@ def delete_pending_auth(email: str) -> bool:
     conn.commit()
 
     deleted = cursor.rowcount > 0
-    conn.close()
+    close_connection(conn)
     return deleted
 
 
@@ -460,7 +575,7 @@ def cleanup_expired_pending_auth() -> int:
     conn.commit()
 
     deleted = cursor.rowcount
-    conn.close()
+    close_connection(conn)
     return deleted
 
 
@@ -480,7 +595,7 @@ def log_audit(user_id: Optional[int], action: str, details: Optional[str] = None
     """, (user_id, action, details, ip_address))
 
     conn.commit()
-    conn.close()
+    close_connection(conn)
 
 
 def get_user_audit_log(user_id: int, limit: int = 50) -> List[Dict[str, Any]]:
@@ -496,9 +611,10 @@ def get_user_audit_log(user_id: int, limit: int = 50) -> List[Dict[str, Any]]:
     """, (user_id, limit))
 
     rows = cursor.fetchall()
-    conn.close()
+    result = [row_to_dict(cursor, row) for row in rows]
+    close_connection(conn)
 
-    return [dict(row) for row in rows]
+    return result
 
 
 # ============================================================================
@@ -518,11 +634,10 @@ def get_user_nda_status(user_id: int) -> Optional[Dict[str, Any]]:
     """, (user_id,))
 
     row = cursor.fetchone()
-    conn.close()
+    result = row_to_dict(cursor, row) if row else None
+    close_connection(conn)
 
-    if row:
-        return dict(row)
-    return None
+    return result
 
 
 def check_nda_access(user: Dict[str, Any]) -> Dict[str, Any]:
@@ -626,7 +741,7 @@ def update_nda_status(
 
     conn.commit()
     success = cursor.rowcount > 0
-    conn.close()
+    close_connection(conn)
     return success
 
 
@@ -654,14 +769,291 @@ def get_all_users_nda_status(portal_types: Optional[List[str]] = None) -> List[D
         cursor.execute(query + " ORDER BY u.portal_type, u.company, u.name")
 
     rows = cursor.fetchall()
-    conn.close()
+    result = [row_to_dict(cursor, row) for row in rows]
+    close_connection(conn)
 
-    return [dict(row) for row in rows]
+    return result
 
 
 def set_user_nda_pending(user_id: int) -> bool:
     """Set a user's NDA status to pending (for new customer/partner users)."""
     return update_nda_status(user_id, "pending")
+
+
+# ============================================================================
+# NDA DOCUMENT MANAGEMENT
+# ============================================================================
+
+def create_nda_document(
+    user_id: int,
+    filename: str,
+    gcs_path: str,
+    file_size: int,
+    content_type: str
+) -> Optional[int]:
+    """Create a new NDA document record."""
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    try:
+        cursor.execute("""
+            INSERT INTO nda_documents (user_id, filename, gcs_path, file_size, content_type)
+            VALUES (?, ?, ?, ?, ?)
+        """, (user_id, filename, gcs_path, file_size, content_type))
+        conn.commit()
+        doc_id = cursor.lastrowid
+
+        # Update user NDA status to pending if not already set
+        cursor.execute("""
+            UPDATE users SET nda_status = 'pending', updated_at = CURRENT_TIMESTAMP
+            WHERE id = ? AND nda_status IN ('not_required', 'pending')
+        """, (user_id,))
+        conn.commit()
+
+        return doc_id
+    except Exception as e:
+        print(f"Error creating NDA document: {e}")
+        return None
+    finally:
+        close_connection(conn)
+
+
+def get_nda_document(doc_id: int) -> Optional[Dict[str, Any]]:
+    """Get an NDA document by ID."""
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT d.*, u.email, u.name, u.company, u.portal_type,
+               r.name as reviewer_name
+        FROM nda_documents d
+        JOIN users u ON d.user_id = u.id
+        LEFT JOIN users r ON d.reviewed_by = r.id
+        WHERE d.id = ?
+    """, (doc_id,))
+
+    row = cursor.fetchone()
+    result = row_to_dict(cursor, row) if row else None
+    close_connection(conn)
+    return result
+
+
+def get_user_nda_documents(user_id: int) -> List[Dict[str, Any]]:
+    """Get all NDA documents for a user."""
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT d.*, r.name as reviewer_name
+        FROM nda_documents d
+        LEFT JOIN users r ON d.reviewed_by = r.id
+        WHERE d.user_id = ?
+        ORDER BY d.uploaded_at DESC
+    """, (user_id,))
+
+    rows = cursor.fetchall()
+    result = [row_to_dict(cursor, row) for row in rows]
+    close_connection(conn)
+    return result
+
+
+def get_pending_nda_documents() -> List[Dict[str, Any]]:
+    """Get all pending NDA documents for review."""
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT d.*, u.email, u.name, u.company, u.portal_type
+        FROM nda_documents d
+        JOIN users u ON d.user_id = u.id
+        WHERE d.status = 'pending'
+        ORDER BY d.uploaded_at ASC
+    """)
+
+    rows = cursor.fetchall()
+    result = [row_to_dict(cursor, row) for row in rows]
+    close_connection(conn)
+    return result
+
+
+def get_all_nda_documents(status: Optional[str] = None) -> List[Dict[str, Any]]:
+    """Get all NDA documents, optionally filtered by status."""
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    query = """
+        SELECT d.*, u.email, u.name, u.company, u.portal_type,
+               r.name as reviewer_name
+        FROM nda_documents d
+        JOIN users u ON d.user_id = u.id
+        LEFT JOIN users r ON d.reviewed_by = r.id
+    """
+
+    if status:
+        query += " WHERE d.status = ?"
+        cursor.execute(query + " ORDER BY d.uploaded_at DESC", (status,))
+    else:
+        cursor.execute(query + " ORDER BY d.uploaded_at DESC")
+
+    rows = cursor.fetchall()
+    result = [row_to_dict(cursor, row) for row in rows]
+    close_connection(conn)
+    return result
+
+
+def review_nda_document(
+    doc_id: int,
+    reviewer_id: int,
+    status: str,
+    notes: Optional[str] = None
+) -> bool:
+    """Review (approve/reject) an NDA document."""
+    if status not in ('approved', 'rejected'):
+        return False
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    try:
+        # Update document status
+        cursor.execute("""
+            UPDATE nda_documents
+            SET status = ?, reviewed_by = ?, reviewed_at = CURRENT_TIMESTAMP, review_notes = ?
+            WHERE id = ?
+        """, (status, reviewer_id, notes, doc_id))
+
+        # If approved, update the user's NDA status
+        if status == 'approved':
+            cursor.execute("SELECT user_id FROM nda_documents WHERE id = ?", (doc_id,))
+            row = cursor.fetchone()
+            if row:
+                user_id = row[0]
+                cursor.execute("""
+                    UPDATE users
+                    SET nda_status = 'approved',
+                        nda_approved_by = ?,
+                        nda_approved_at = CURRENT_TIMESTAMP,
+                        nda_notes = ?,
+                        updated_at = CURRENT_TIMESTAMP
+                    WHERE id = ?
+                """, (reviewer_id, notes, user_id))
+
+        conn.commit()
+        return cursor.rowcount > 0
+    except Exception as e:
+        print(f"Error reviewing NDA document: {e}")
+        return False
+    finally:
+        close_connection(conn)
+
+
+# ============================================================================
+# ACCOUNT COMMENTS (Slack-like feature)
+# ============================================================================
+
+def create_comment(
+    account_id: str,
+    user_id: int,
+    message: str
+) -> Optional[int]:
+    """Create a new comment on an account."""
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    try:
+        cursor.execute("""
+            INSERT INTO account_comments (account_id, user_id, message)
+            VALUES (?, ?, ?)
+        """, (account_id, user_id, message))
+        conn.commit()
+        return cursor.lastrowid
+    except Exception as e:
+        print(f"Error creating comment: {e}")
+        return None
+    finally:
+        close_connection(conn)
+
+
+def get_comments(account_id: str, limit: int = 100) -> List[Dict[str, Any]]:
+    """Get comments for an account with user info."""
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT c.id, c.account_id, c.message, c.created_at, c.edited_at,
+               u.id as user_id, u.name, u.email, u.company, u.portal_type
+        FROM account_comments c
+        JOIN users u ON c.user_id = u.id
+        WHERE c.account_id = ? AND c.is_deleted = 0
+        ORDER BY c.created_at ASC
+        LIMIT ?
+    """, (account_id, limit))
+
+    rows = cursor.fetchall()
+    result = [row_to_dict(cursor, row) for row in rows]
+    close_connection(conn)
+    return result
+
+
+def delete_comment(comment_id: int, user_id: int) -> bool:
+    """Soft delete a comment (only owner or founder can delete)."""
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    try:
+        # Check if user owns the comment or is a founder
+        cursor.execute("""
+            SELECT c.user_id, u.portal_type
+            FROM account_comments c
+            JOIN users u ON u.id = ?
+            WHERE c.id = ?
+        """, (user_id, comment_id))
+
+        row = cursor.fetchone()
+        if not row:
+            return False
+
+        comment_owner_id = row[0]
+        requester_portal_type = row[1]
+
+        # Allow if owner or founder
+        if comment_owner_id != user_id and requester_portal_type != 'founder':
+            return False
+
+        cursor.execute("""
+            UPDATE account_comments SET is_deleted = 1 WHERE id = ?
+        """, (comment_id,))
+
+        conn.commit()
+        return cursor.rowcount > 0
+    except Exception as e:
+        print(f"Error deleting comment: {e}")
+        return False
+    finally:
+        close_connection(conn)
+
+
+def get_user_display_name(user: Dict[str, Any]) -> str:
+    """Get formatted display name: FirstName (Company)."""
+    name = user.get('name', 'Unknown')
+    first_name = name.split()[0] if name else 'Unknown'
+
+    company = user.get('company', '')
+    portal_type = user.get('portal_type', '')
+
+    # LVS employees get (LVS)
+    if portal_type == 'founder' or company == 'lvs':
+        return f"{first_name} (LVS)"
+
+    # Others get their company name capitalized
+    if company:
+        return f"{first_name} ({company.upper()})"
+
+    # Fallback to portal type
+    if portal_type:
+        return f"{first_name} ({portal_type.capitalize()})"
+
+    return first_name
 
 
 # ============================================================================
@@ -699,7 +1091,7 @@ def migrate_add_nda_columns():
         conn.commit()
         print("Migration complete: NDA columns added.")
 
-    conn.close()
+    close_connection(conn)
 
 
 def seed_default_users():

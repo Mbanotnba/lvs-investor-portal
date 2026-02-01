@@ -25,12 +25,14 @@ CUSTOMIZATION POINTS:
 -->
 <html lang="en">
 <head>
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; media-src 'self' https:; font-src 'self' https:; connect-src 'self';">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; media-src 'self' https:; font-src 'self' https:; connect-src 'self' https://lvs-api-657638018776.us-central1.run.app;">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mach Industries Portal | Lola Vision Systems</title>
     <link rel="stylesheet" href="css/shared-portal.css">
+    <script src="js/config.js"></script>
     <script src="js/security.js"></script>
+    <script src="js/comments.js"></script>
     <script>
         (function() {
             const SESSION_TIMEOUT = 30 * 60 * 1000;
@@ -55,6 +57,8 @@ CUSTOMIZATION POINTS:
             <a href="software-platform.html" class="nav-link" style="margin-right: 16px;">Software Platform</a>
             <a href="founder-portal.html" class="nav-link" style="margin-right: 16px;">&#8592; Founder Portal</a>
             <span class="customer-badge">Customer Portal</span>
+            <span id="navGreeting" class="nav-greeting"></span>
+            <div class="nav-avatar" id="navAvatar">--</div>
             <a href="login.html" class="nav-link" onclick="sessionStorage.clear()">Logout</a>
         </div>
     </nav>
@@ -272,32 +276,13 @@ CUSTOMIZATION POINTS:
                         </div>
                     </div>
 
-                    <!-- Account Notes (Placeholder) -->
+                    <!-- Account Notes (Shared) -->
                     <div class="notes-panel">
                         <h3>
                             Account Notes
-                            <span class="notes-badge coming-soon">Coming Soon</span>
+                            <span class="notes-badge" style="background: rgba(16,185,129,0.2); color: #10b981;">Synced</span>
                         </h3>
-                        <div class="notes-placeholder">
-                            <div class="notes-placeholder-icon">&#128101;</div>
-                            <p>Shared notes for your team</p>
-                            <p class="coming-soon-text">Team sync feature coming soon</p>
-                        </div>
-                        <textarea
-                            class="notes-textarea"
-                            id="accountNotes"
-                            placeholder="Account-wide notes will sync with your team once this feature is enabled..."
-                            disabled
-                        ></textarea>
-                        <div class="notes-actions">
-                            <div class="notes-meta">
-                                <span style="color: #f97316;">Sync not yet available</span>
-                            </div>
-                            <div class="notes-buttons">
-                                <button class="notes-btn secondary" disabled>Export</button>
-                                <button class="notes-btn primary" disabled>Save</button>
-                            </div>
-                        </div>
+                        <div id="accountCommentsContainer"></div>
                     </div>
                 </div>
             </div>
@@ -374,13 +359,70 @@ CUSTOMIZATION POINTS:
         <div id="devkit" class="tab-content">
             <div class="welcome" style="margin-bottom: 24px;">
                 <div class="welcome-content">
-                    <h1>Development <span>Kit</span></h1>
-                    <p>Hardware and tools for LVS-250 integration</p>
+                    <h1>LVS-250 <span>Development Kit</span></h1>
+                    <p>Hardware platform for software development and system integration</p>
                 </div>
             </div>
+
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">&#128187;</div>
+                    <div class="feature-title">LVS-250 Evaluation Board</div>
+                    <div class="feature-desc">Full-featured development board with LVS-250 production silicon, integrated power management, and comprehensive I/O breakout.</div>
+                    <span class="feature-tag">Ships Q3 2027</span>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">&#128247;</div>
+                    <div class="feature-title">Camera Interface Module</div>
+                    <div class="feature-desc">8-channel MIPI CSI-2 daughter card with reference camera sensors. Supports 4K60 per channel, synchronized capture.</div>
+                    <span class="feature-tag">Included</span>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">&#128268;</div>
+                    <div class="feature-title">Power & Debug Module</div>
+                    <div class="feature-desc">Integrated JTAG debugger, power monitoring, thermal management. Real-time telemetry via USB-C.</div>
+                    <span class="feature-tag">Included</span>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">&#128752;</div>
+                    <div class="feature-title">RF Development Add-on</div>
+                    <div class="feature-desc">Optional RF modem evaluation board for SDR and SATCOM development. Includes antenna interfaces and spectrum analyzer hooks.</div>
+                    <span class="feature-tag">Optional Add-on</span>
+                </div>
+            </div>
+
             <div class="panel">
-                <h3>DevKit Status</h3>
-                <p style="color: var(--muted); font-size: 14px;">Development kit availability pending IRAD contract execution.</p>
+                <h3>Development Kit Contents</h3>
+                <table class="specs-table">
+                    <thead>
+                        <tr><th>Item</th><th>Quantity</th><th>Description</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>LVS-250 Eval Board</td><td>1</td><td>Main development platform with production silicon</td></tr>
+                        <tr><td>Camera Module</td><td>2</td><td>IMX577 12MP reference cameras</td></tr>
+                        <tr><td>MIPI Ribbon Cables</td><td>8</td><td>15cm flex cables for camera connection</td></tr>
+                        <tr><td>Power Supply</td><td>1</td><td>65W USB-C PD adapter</td></tr>
+                        <tr><td>Debug Cable</td><td>1</td><td>USB-C to USB-A debug/programming cable</td></tr>
+                        <tr><td>Heatsink Assembly</td><td>1</td><td>Active cooling solution with 40mm fan</td></tr>
+                        <tr><td>Quick Start Guide</td><td>1</td><td>Printed getting started documentation</td></tr>
+                        <tr><td>SD Card</td><td>1</td><td>64GB with pre-loaded SDK and examples</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="panel" style="margin-top: 24px;">
+                <h3>Development Kit Specifications</h3>
+                <div class="specs-section">
+                    <table class="specs-table">
+                        <tr><td>Board Dimensions</td><td>170 x 170mm (Mini-ITX compatible)</td></tr>
+                        <tr><td>Power Input</td><td>12-20V DC, USB-C PD</td></tr>
+                        <tr><td>Host Interface</td><td>PCIe Gen5 x8 edge connector</td></tr>
+                        <tr><td>Expansion</td><td>2x M.2 (NVMe), 1x FMC+ (FPGA add-on)</td></tr>
+                        <tr><td>Network</td><td>2x 10GbE RJ45, 1x 1GbE management</td></tr>
+                        <tr><td>Video Output</td><td>1x HDMI 2.1, 1x DisplayPort 1.4</td></tr>
+                        <tr><td>Debug</td><td>JTAG, UART console, LED indicators</td></tr>
+                    </table>
+                </div>
             </div>
         </div>
 
@@ -388,13 +430,159 @@ CUSTOMIZATION POINTS:
         <div id="sdk" class="tab-content">
             <div class="welcome" style="margin-bottom: 24px;">
                 <div class="welcome-content">
-                    <h1>Software <span>SDK</span></h1>
-                    <p>Development tools and APIs</p>
+                    <h1>LVS <span>Software Development Platform</span></h1>
+                    <p>Complete toolchain for neural network deployment, system integration, and application development</p>
                 </div>
             </div>
-            <div class="panel">
-                <h3>SDK Access</h3>
-                <p style="color: var(--muted); font-size: 14px;">SDK access will be provided upon IRAD contract execution.</p>
+
+            <!-- SDK Architecture Overview -->
+            <div class="screenshot">
+                <div class="screenshot-label">SDK Architecture Overview</div>
+                <div class="screenshot-title">LVS Software Development Platform</div>
+                <div class="screenshot-preview" style="text-align: left; padding: 30px;">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 20px;">
+                        <div style="background: rgba(124,77,255,0.2); padding: 16px; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 11px; color: var(--muted); margin-bottom: 4px;">APPLICATION LAYER</div>
+                            <div style="font-size: 13px; font-weight: 600;">Customer Applications</div>
+                        </div>
+                        <div style="background: rgba(124,77,255,0.2); padding: 16px; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 11px; color: var(--muted); margin-bottom: 4px;">REFERENCE APPS</div>
+                            <div style="font-size: 13px; font-weight: 600;">Vision Pipelines</div>
+                        </div>
+                        <div style="background: rgba(124,77,255,0.2); padding: 16px; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 11px; color: var(--muted); margin-bottom: 4px;">DEMO APPLICATIONS</div>
+                            <div style="font-size: 13px; font-weight: 600;">Object Detection</div>
+                        </div>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px;">
+                        <div style="background: rgba(212,175,55,0.2); padding: 16px; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 11px; color: var(--muted); margin-bottom: 4px;">LVS RUNTIME</div>
+                            <div style="font-size: 13px; font-weight: 600;">Neural Inference Engine</div>
+                        </div>
+                        <div style="background: rgba(212,175,55,0.2); padding: 16px; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 11px; color: var(--muted); margin-bottom: 4px;">LVS VISION</div>
+                            <div style="font-size: 13px; font-weight: 600;">Image Processing Library</div>
+                        </div>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 20px;">
+                        <div style="background: rgba(16,185,129,0.2); padding: 16px; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 11px; color: var(--muted); margin-bottom: 4px;">NPU DRIVER</div>
+                            <div style="font-size: 13px; font-weight: 600;">Kernel Module</div>
+                        </div>
+                        <div style="background: rgba(16,185,129,0.2); padding: 16px; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 11px; color: var(--muted); margin-bottom: 4px;">CAMERA DRIVER</div>
+                            <div style="font-size: 13px; font-weight: 600;">V4L2 / ISP</div>
+                        </div>
+                        <div style="background: rgba(16,185,129,0.2); padding: 16px; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 11px; color: var(--muted); margin-bottom: 4px;">SYSTEM SERVICES</div>
+                            <div style="font-size: 13px; font-weight: 600;">Power / Thermal</div>
+                        </div>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.1); padding: 16px; border-radius: 8px; text-align: center;">
+                        <div style="font-size: 11px; color: var(--muted); margin-bottom: 4px;">HARDWARE</div>
+                        <div style="font-size: 13px; font-weight: 600;">LVS-250 Neural Compute Engine</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SDK Components -->
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">&#128640;</div>
+                    <div class="feature-title">LVS Neural Compiler</div>
+                    <div class="feature-desc">Deploy any vision model—from open-source networks to your proprietary IP—optimized specifically for LVS-250 silicon. Automatic fine-tuning of layer scheduling, quantization, and memory layout delivers 3-5x performance gains over generic inference.</div>
+                    <span class="feature-tag">Your Models, Optimized</span>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">&#9881;</div>
+                    <div class="feature-title">LVS Runtime</div>
+                    <div class="feature-desc">Production-grade inference engine that maximizes throughput on LVS-250. Dynamic batching, multi-model orchestration, and zero-copy pipelines tuned for real-time vision workloads.</div>
+                    <span class="feature-tag">C++ / Python APIs</span>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">&#128248;</div>
+                    <div class="feature-title">LVS Vision Library</div>
+                    <div class="feature-desc">Hardware-accelerated preprocessing and postprocessing. Resize, warp, color convert, and filter at camera-rate speeds. Drop-in replacement for OpenCV with 10x acceleration.</div>
+                    <span class="feature-tag">10x Faster than CPU</span>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">&#128202;</div>
+                    <div class="feature-title">LVS Profiler</div>
+                    <div class="feature-desc">Understand exactly where your model spends time. Layer-by-layer analysis, memory bandwidth visualization, and optimization recommendations specific to your architecture.</div>
+                    <span class="feature-tag">GUI + CLI</span>
+                </div>
+            </div>
+
+            <!-- Value Proposition Callout -->
+            <div class="panel" style="background: linear-gradient(135deg, rgba(124,77,255,0.15), rgba(212,175,55,0.1)); border-left: 3px solid var(--accent);">
+                <h3 style="margin-bottom: 12px;">Bring Your Own Model</h3>
+                <p style="color: var(--text); font-size: 14px; line-height: 1.7; margin: 0;">
+                    The LVS compiler doesn't just run models—it <strong>fine-tunes them for our silicon</strong>. Whether you're deploying a standard detection network or proprietary computer vision IP, our toolchain automatically optimizes tensor layouts, operator fusion, and memory scheduling to extract maximum performance from the LVS-250's dual NPU architecture.
+                </p>
+            </div>
+
+            <!-- Code Sample -->
+            <div class="panel" style="margin-top: 24px;">
+                <h3>Quick Start Example</h3>
+                <div class="code-block">
+<span class="code-comment"># LVS SDK - Deploy Any Vision Model</span>
+<span class="code-keyword">import</span> lvs
+<span class="code-keyword">from</span> lvs.vision <span class="code-keyword">import</span> Camera, ImageProcessor
+<span class="code-keyword">from</span> lvs.inference <span class="code-keyword">import</span> Runtime
+
+<span class="code-comment"># Initialize runtime on LVS-250</span>
+runtime = lvs.<span class="code-function">Runtime</span>(device=<span class="code-string">"lvs250"</span>)
+
+<span class="code-comment"># Load YOUR compiled model (any ONNX, PyTorch, or TensorFlow model)</span>
+model = runtime.<span class="code-function">load_model</span>(<span class="code-string">"your_model.lvs"</span>)  <span class="code-comment"># Optimized for LVS-250</span>
+
+<span class="code-comment"># Configure camera pipeline</span>
+camera = Camera.<span class="code-function">open</span>(channel=0, resolution=(1920, 1080), fps=30)
+processor = ImageProcessor(resize=model.input_size, normalize=<span class="code-keyword">True</span>)
+
+<span class="code-comment"># Real-time inference loop</span>
+<span class="code-keyword">for</span> frame <span class="code-keyword">in</span> camera.<span class="code-function">stream</span>():
+    tensor = processor.<span class="code-function">preprocess</span>(frame)
+    results = model.<span class="code-function">infer</span>(tensor)  <span class="code-comment"># Runs on dual NPU @ 250 TOPS</span>
+    <span class="code-keyword">print</span>(f<span class="code-string">"Inference: {model.last_inference_ms:.1f}ms"</span>)
+                </div>
+            </div>
+
+            <!-- SDK Documentation -->
+            <div class="panel" style="margin-top: 24px;">
+                <h3>SDK Documentation</h3>
+                <div class="document">
+                    <div class="doc-icon">&#128218;</div>
+                    <div class="doc-info">
+                        <div class="doc-name">LVS SDK Getting Started Guide</div>
+                        <div class="doc-meta">PDF &bull; 45 pages &bull; v1.0</div>
+                    </div>
+                    <span class="doc-download">&#8594;</span>
+                </div>
+                <div class="document">
+                    <div class="doc-icon">&#128196;</div>
+                    <div class="doc-info">
+                        <div class="doc-name">LVS Runtime API Reference</div>
+                        <div class="doc-meta">HTML &bull; C++ / Python &bull; v1.0</div>
+                    </div>
+                    <span class="doc-download">&#8594;</span>
+                </div>
+                <div class="document">
+                    <div class="doc-icon">&#128202;</div>
+                    <div class="doc-info">
+                        <div class="doc-name">Model Optimization Guide</div>
+                        <div class="doc-meta">PDF &bull; Best practices for your models &bull; v1.0</div>
+                    </div>
+                    <span class="doc-download">&#8594;</span>
+                </div>
+                <div class="document">
+                    <div class="doc-icon">&#127891;</div>
+                    <div class="doc-info">
+                        <div class="doc-name">Tutorial: Custom Model Deployment</div>
+                        <div class="doc-meta">Jupyter Notebook &bull; End-to-end walkthrough</div>
+                    </div>
+                    <span class="doc-download">&#8594;</span>
+                </div>
             </div>
         </div>
 
@@ -588,8 +776,23 @@ ${textarea.value}`;
             URL.revokeObjectURL(url);
         }
 
+        // Initialize user greeting
+        function initUserGreeting() {
+            const firstName = sessionStorage.getItem('lvs_first_name') || 'User';
+            const fullName = sessionStorage.getItem('lvs_user_name') || 'User';
+            const initials = fullName.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+
+            document.getElementById('navGreeting').textContent = `Hi, ${firstName}!`;
+            document.getElementById('navAvatar').textContent = initials;
+        }
+
         // Load notes on page load
-        document.addEventListener('DOMContentLoaded', loadNotes);
+        document.addEventListener('DOMContentLoaded', () => {
+            loadNotes();
+            initUserGreeting();
+            // Initialize shared account notes
+            LVSComments.init('mach', '#accountCommentsContainer');
+        });
     </script>
 </body>
 </html>

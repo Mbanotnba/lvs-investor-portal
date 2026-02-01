@@ -95,6 +95,35 @@ const LVS_CONFIG = (function() {
                     portal: this.PORTAL_BASE_URL
                 });
             }
+        },
+
+        // Get user greeting info
+        getUserGreeting: function() {
+            const firstName = sessionStorage.getItem('lvs_first_name') || 'User';
+            const fullName = sessionStorage.getItem('lvs_user_name') || 'User';
+            const company = sessionStorage.getItem('lvs_company') || '';
+            const role = sessionStorage.getItem('lvs_role') || '';
+
+            // Get initials for avatar
+            const initials = fullName.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+
+            // Get display name format: FirstName (Company)
+            let displayCompany = 'LVS';
+            if (role === 'founder' || company === 'lvs') {
+                displayCompany = 'LVS';
+            } else if (company) {
+                displayCompany = company.toUpperCase();
+            } else if (role) {
+                displayCompany = role.charAt(0).toUpperCase() + role.slice(1);
+            }
+
+            return {
+                firstName: firstName,
+                fullName: fullName,
+                initials: initials,
+                displayName: `${firstName} (${displayCompany})`,
+                greeting: `Hi, ${firstName}!`
+            };
         }
     };
 })();

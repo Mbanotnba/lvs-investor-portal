@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' http://localhost:8080 http://127.0.0.1:8080 http://api.lvs.local:8080 https://api.lolavisionsystems.com https://api.lvs.app;">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' http://localhost:8080 http://127.0.0.1:8080 http://api.lvs.local:8080 https://api.lolavisionsystems.com https://api.lvs.app https://lvs-api-657638018776.us-central1.run.app;">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NDA Pending | Lola Vision Systems</title>
@@ -193,6 +193,96 @@
         .check-status.show { display: block; }
         .check-status.success { color: #10b981; }
         .check-status.error { color: #ef4444; background: rgba(239,68,68,0.1); }
+
+        /* Upload Section */
+        .upload-section {
+            background: linear-gradient(135deg, rgba(16,185,129,0.1), rgba(16,185,129,0.05));
+            border: 2px dashed rgba(16,185,129,0.3);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+        .upload-section:hover {
+            border-color: rgba(16,185,129,0.5);
+        }
+        .upload-section h4 {
+            color: #10b981;
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+        .upload-section p {
+            color: #9ca3af;
+            font-size: 13px;
+            margin-bottom: 16px;
+        }
+        .file-input-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+        .file-input-wrapper input[type="file"] {
+            position: absolute;
+            left: 0; top: 0;
+            opacity: 0;
+            width: 100%; height: 100%;
+            cursor: pointer;
+        }
+        .file-label {
+            display: inline-block;
+            padding: 12px 24px;
+            background: rgba(16,185,129,0.2);
+            color: #10b981;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .file-name {
+            margin-top: 12px;
+            font-size: 13px;
+            color: #10b981;
+            display: none;
+        }
+        .file-name.show { display: block; }
+        .btn-upload {
+            margin-top: 12px;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            display: none;
+        }
+        .btn-upload.show { display: inline-block; }
+        .upload-status {
+            margin-top: 12px;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 13px;
+            display: none;
+        }
+        .upload-status.show { display: block; }
+        .upload-status.success { background: rgba(16,185,129,0.2); color: #10b981; }
+        .upload-status.error { background: rgba(239,68,68,0.2); color: #ef4444; }
+        .upload-status.loading { background: rgba(59,130,246,0.2); color: #3b82f6; }
+        .uploaded-docs { margin-top: 16px; text-align: left; }
+        .uploaded-doc {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 12px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 8px;
+            margin-top: 8px;
+            font-size: 12px;
+        }
+        .uploaded-doc .doc-name { color: #f5f5f7; }
+        .uploaded-doc .doc-status {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        .doc-status.pending { background: rgba(251,191,36,0.2); color: #fbbf24; }
+        .doc-status.approved { background: rgba(16,185,129,0.2); color: #10b981; }
+        .doc-status.rejected { background: rgba(239,68,68,0.2); color: #ef4444; }
     </style>
 </head>
 <body>
@@ -232,6 +322,20 @@
             </div>
         </div>
 
+        <!-- NDA Upload Section -->
+        <div class="upload-section">
+            <h4>&#128196; Upload Your Signed NDA</h4>
+            <p>If you have a signed NDA, upload it here for verification.</p>
+            <div class="file-input-wrapper">
+                <span class="file-label">Choose PDF or Image</span>
+                <input type="file" id="ndaFile" accept=".pdf,.png,.jpg,.jpeg" onchange="handleFileSelect(this)">
+            </div>
+            <div class="file-name" id="fileName"></div>
+            <button class="btn btn-upload" id="uploadBtn" onclick="uploadNda()">Upload NDA</button>
+            <div class="upload-status" id="uploadStatus"></div>
+            <div class="uploaded-docs" id="uploadedDocs"></div>
+        </div>
+
         <div class="contact-section">
             <h4>Need Help?</h4>
             <p>To expedite your NDA approval, please contact:</p>
@@ -262,6 +366,7 @@
         // Load user info on page load
         document.addEventListener('DOMContentLoaded', function() {
             loadUserInfo();
+            loadUploadedDocs();
         });
 
         function loadUserInfo() {
@@ -304,6 +409,120 @@
                 'not_required': 'Not Required'
             };
             return statusMap[status] || status;
+        }
+
+        // File upload handling
+        let selectedFile = null;
+
+        function handleFileSelect(input) {
+            const file = input.files[0];
+            if (!file) return;
+
+            // Validate file type
+            const allowedTypes = ['application/pdf', 'image/png', 'image/jpeg'];
+            if (!allowedTypes.includes(file.type)) {
+                showUploadStatus('Please upload a PDF or image file (PNG, JPEG).', 'error');
+                input.value = '';
+                return;
+            }
+
+            // Validate file size (10MB max)
+            if (file.size > 10 * 1024 * 1024) {
+                showUploadStatus('File too large. Maximum size is 10MB.', 'error');
+                input.value = '';
+                return;
+            }
+
+            selectedFile = file;
+            document.getElementById('fileName').textContent = file.name;
+            document.getElementById('fileName').classList.add('show');
+            document.getElementById('uploadBtn').classList.add('show');
+            document.getElementById('uploadStatus').classList.remove('show');
+        }
+
+        function showUploadStatus(message, type) {
+            const statusEl = document.getElementById('uploadStatus');
+            statusEl.textContent = message;
+            statusEl.className = 'upload-status show ' + type;
+        }
+
+        async function uploadNda() {
+            if (!selectedFile) return;
+
+            const token = sessionStorage.getItem('lvs_token');
+            if (!token) {
+                showUploadStatus('Session expired. Please login again.', 'error');
+                return;
+            }
+
+            showUploadStatus('Uploading...', 'loading');
+            document.getElementById('uploadBtn').disabled = true;
+
+            try {
+                const formData = new FormData();
+                formData.append('file', selectedFile);
+
+                const response = await fetch(`${API_BASE_URL}/nda/upload`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.detail || 'Upload failed');
+                }
+
+                showUploadStatus('NDA uploaded successfully! It will be reviewed shortly.', 'success');
+
+                // Reset file input
+                selectedFile = null;
+                document.getElementById('ndaFile').value = '';
+                document.getElementById('fileName').classList.remove('show');
+                document.getElementById('uploadBtn').classList.remove('show');
+
+                // Refresh uploaded docs list
+                loadUploadedDocs();
+
+            } catch (error) {
+                showUploadStatus(error.message, 'error');
+            } finally {
+                document.getElementById('uploadBtn').disabled = false;
+            }
+        }
+
+        async function loadUploadedDocs() {
+            const token = sessionStorage.getItem('lvs_token');
+            if (!token) return;
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/nda/my-documents`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                if (!response.ok) return;
+
+                const docs = await response.json();
+                const container = document.getElementById('uploadedDocs');
+
+                if (docs.length === 0) {
+                    container.innerHTML = '';
+                    return;
+                }
+
+                container.innerHTML = '<div style="font-size: 12px; color: #6b7280; margin-bottom: 8px;">Previously Uploaded:</div>' +
+                    docs.map(doc => `
+                        <div class="uploaded-doc">
+                            <span class="doc-name">${doc.filename}</span>
+                            <span class="doc-status ${doc.status}">${doc.status.charAt(0).toUpperCase() + doc.status.slice(1)}</span>
+                        </div>
+                    `).join('');
+            } catch (error) {
+                console.error('Failed to load documents:', error);
+            }
         }
 
         async function checkNdaStatus() {

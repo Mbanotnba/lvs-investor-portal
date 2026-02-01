@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; media-src 'self' https:; font-src 'self' https:; connect-src 'self' http://localhost:8080 http://127.0.0.1:8080 http://api.lvs.local:8080 https://api.lolavisionsystems.com https://api.lvs.app;">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; media-src 'self' https:; font-src 'self' https:; connect-src 'self' http://localhost:8080 http://127.0.0.1:8080 http://api.lvs.local:8080 https://api.lolavisionsystems.com https://api.lvs.app https://lvs-api-657638018776.us-central1.run.app https://storage.googleapis.com;">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Founder Portal | Lola Vision Systems</title>
@@ -684,7 +684,8 @@
             <span class="nav-badge">Founder Access</span>
         </div>
         <div class="nav-user">
-            <div class="nav-avatar">TA</div>
+            <span id="navGreeting" style="color: #a78bfa; font-size: 13px; margin-right: 12px;"></span>
+            <div class="nav-avatar" id="navAvatar">--</div>
             <a href="#" class="nav-link" onclick="logout()">Logout</a>
         </div>
     </nav>
@@ -834,6 +835,33 @@
                         </tr>
                     </tbody>
                 </table>
+
+                <!-- Uploaded NDA Documents Section -->
+                <div class="section-header" style="margin-top: 40px;">
+                    <h2>Uploaded NDA Documents</h2>
+                    <span id="pendingDocsCount" style="background: rgba(249,115,22,0.2); color: #f97316; padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: 600; margin-left: 12px;">0 pending</span>
+                </div>
+                <p style="color: var(--muted); font-size: 13px; margin-bottom: 16px;">
+                    Review and approve NDA documents uploaded by customers and partners.
+                </p>
+
+                <table class="nda-table" id="ndaDocsTable">
+                    <thead>
+                        <tr>
+                            <th>User</th>
+                            <th>Company</th>
+                            <th>Document</th>
+                            <th>Uploaded</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ndaDocsTableBody">
+                        <tr>
+                            <td colspan="6" style="text-align: center; color: var(--muted);">Loading...</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </main>
 
@@ -901,6 +929,13 @@
             </div>
 
             <div class="detail-section">
+                <div class="detail-section-title">Notes & Comments</div>
+                <div id="customerCommentsContainer">
+                    <!-- Comments component will be loaded here -->
+                </div>
+            </div>
+
+            <div class="detail-section">
                 <div class="detail-section-title">Quick Links</div>
                 <div class="quick-links">
                     <a href="#" class="quick-link" id="viewPortalLink">
@@ -916,6 +951,8 @@
         </div>
     </div>
 
+    <script src="js/config.js"></script>
+    <script src="js/comments.js"></script>
     <script>
         let customers = [];
         let filteredCustomers = [];
@@ -1104,11 +1141,15 @@
                 portalLink.style.opacity = '0.5';
             }
 
+            // Initialize comments for this customer
+            LVSComments.init(customer.id, '#customerCommentsContainer');
+
             document.getElementById('detailPanel').classList.add('active');
         }
 
         // Close detail panel
         function closeDetail() {
+            LVSComments.stopPolling();
             document.getElementById('detailPanel').classList.remove('active');
         }
 
@@ -1183,6 +1224,7 @@
             document.getElementById('searchBox').style.display = 'none';
             document.querySelectorAll('.sidebar-item').forEach(el => el.classList.remove('active'));
             loadNdaUsers();
+            loadNdaDocs();
         }
 
         // Show customers section
@@ -1411,6 +1453,175 @@
             }
         }
 
+        // ============================================
+        // NDA DOCUMENT REVIEW FUNCTIONS
+        // ============================================
+
+        let ndaDocs = [];
+
+        async function loadNdaDocs() {
+            const token = sessionStorage.getItem('lvs_token');
+            if (!token) return;
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/nda/all`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Accept': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to load NDA documents');
+                }
+
+                ndaDocs = await response.json();
+                renderNdaDocsTable();
+
+                // Update pending count badge
+                const pendingCount = ndaDocs.filter(d => d.status === 'pending').length;
+                document.getElementById('pendingDocsCount').textContent = `${pendingCount} pending`;
+
+            } catch (error) {
+                console.error('Error loading NDA documents:', error);
+                document.getElementById('ndaDocsTableBody').innerHTML = `
+                    <tr><td colspan="6" style="text-align: center; color: var(--warn);">
+                        Failed to load documents. <a href="javascript:loadNdaDocs()" style="color: var(--accent);">Retry</a>
+                    </td></tr>`;
+            }
+        }
+
+        function renderNdaDocsTable() {
+            if (ndaDocs.length === 0) {
+                document.getElementById('ndaDocsTableBody').innerHTML = `
+                    <tr><td colspan="6" style="text-align: center; color: var(--muted);">
+                        No uploaded NDA documents
+                    </td></tr>`;
+                return;
+            }
+
+            const rows = ndaDocs.map(doc => {
+                const uploadDate = new Date(doc.uploaded_at).toLocaleDateString();
+                const fileSize = (doc.file_size / 1024).toFixed(1) + ' KB';
+
+                let actions = '';
+                if (doc.status === 'pending') {
+                    actions = `
+                        <button class="nda-btn" onclick="downloadNdaDoc(${doc.id})" style="background: rgba(59,130,246,0.2); color: #3b82f6;">View</button>
+                        <button class="nda-btn approve" onclick="approveNdaDoc(${doc.id}, '${doc.email}')">Approve</button>
+                        <button class="nda-btn revoke" onclick="rejectNdaDoc(${doc.id}, '${doc.email}')">Reject</button>
+                    `;
+                } else {
+                    actions = `
+                        <button class="nda-btn" onclick="downloadNdaDoc(${doc.id})" style="background: rgba(59,130,246,0.2); color: #3b82f6;">View</button>
+                    `;
+                }
+
+                return `
+                    <tr>
+                        <td>
+                            <div style="font-weight: 500;">${doc.name || '-'}</div>
+                            <div style="font-size: 12px; color: var(--muted);">${doc.email || '-'}</div>
+                        </td>
+                        <td>${doc.company ? doc.company.charAt(0).toUpperCase() + doc.company.slice(1) : '-'}</td>
+                        <td>
+                            <div style="font-size: 13px;">${doc.filename}</div>
+                            <div style="font-size: 11px; color: var(--muted);">${fileSize}</div>
+                        </td>
+                        <td>${uploadDate}</td>
+                        <td><span class="nda-status-badge ${doc.status}">${doc.status.charAt(0).toUpperCase() + doc.status.slice(1)}</span></td>
+                        <td>${actions}</td>
+                    </tr>
+                `;
+            }).join('');
+
+            document.getElementById('ndaDocsTableBody').innerHTML = rows;
+        }
+
+        async function downloadNdaDoc(docId) {
+            const token = sessionStorage.getItem('lvs_token');
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/nda/${docId}/download`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to get download URL');
+                }
+
+                const data = await response.json();
+                window.open(data.download_url, '_blank');
+
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
+        }
+
+        async function approveNdaDoc(docId, userEmail) {
+            if (!confirm(`Approve NDA document for ${userEmail}? This will grant them portal access.`)) {
+                return;
+            }
+
+            const notes = prompt('Add notes (optional):', '');
+            const token = sessionStorage.getItem('lvs_token');
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/nda/${docId}/review`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ status: 'approved', notes: notes })
+                });
+
+                if (!response.ok) {
+                    const data = await response.json();
+                    throw new Error(data.detail || 'Failed to approve document');
+                }
+
+                alert(`NDA approved for ${userEmail}`);
+                loadNdaDocs();
+                loadNdaUsers(); // Refresh the users table too
+
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
+        }
+
+        async function rejectNdaDoc(docId, userEmail) {
+            const reason = prompt(`Reject NDA document for ${userEmail}?\n\nProvide a reason (required):`, '');
+            if (!reason) {
+                alert('Reason is required to reject a document');
+                return;
+            }
+
+            const token = sessionStorage.getItem('lvs_token');
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/nda/${docId}/review`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ status: 'rejected', notes: reason })
+                });
+
+                if (!response.ok) {
+                    const data = await response.json();
+                    throw new Error(data.detail || 'Failed to reject document');
+                }
+
+                alert(`NDA rejected for ${userEmail}`);
+                loadNdaDocs();
+
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
+        }
+
         // Load NDA pending count on page load
         async function loadNdaPendingCount() {
             const token = sessionStorage.getItem('lvs_token');
@@ -1433,13 +1644,27 @@
             }
         }
 
+        // Set up user greeting
+        function initUserGreeting() {
+            const firstName = sessionStorage.getItem('lvs_first_name') || 'User';
+            const fullName = sessionStorage.getItem('lvs_user_name') || 'User';
+
+            // Get initials for avatar
+            const initials = fullName.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+
+            document.getElementById('navGreeting').textContent = `Hi, ${firstName}!`;
+            document.getElementById('navAvatar').textContent = initials;
+        }
+
         // Initialize when DOM is ready
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', () => {
+                initUserGreeting();
                 loadCustomers();
                 loadNdaPendingCount();
             });
         } else {
+            initUserGreeting();
             loadCustomers();
             loadNdaPendingCount();
         }

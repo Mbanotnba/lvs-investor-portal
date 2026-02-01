@@ -47,12 +47,14 @@ SEE ALSO:
 -->
 <html lang="en">
 <head>
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; media-src 'self' https:; font-src 'self' https:; connect-src 'self';">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; media-src 'self' https:; font-src 'self' https:; connect-src 'self' https://lvs-api-657638018776.us-central1.run.app;">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Terrahaptix Portal | Lola Vision Systems</title>
     <link rel="stylesheet" href="css/shared-portal.css">
+    <script src="js/config.js"></script>
     <script src="js/security.js"></script>
+    <script src="js/comments.js"></script>
     <script>
         (function() {
             const SESSION_TIMEOUT = 30 * 60 * 1000;
@@ -77,6 +79,8 @@ SEE ALSO:
             <a href="software-platform.html" class="nav-link" style="margin-right: 16px;">Software Platform</a>
             <a href="founder-portal.html" class="nav-link" style="margin-right: 16px;">&#8592; Founder Portal</a>
             <span class="customer-badge">Customer Portal</span>
+            <span id="navGreeting" class="nav-greeting"></span>
+            <div class="nav-avatar" id="navAvatar">--</div>
             <a href="login.html" class="nav-link" onclick="sessionStorage.clear()">Logout</a>
         </div>
     </nav>
@@ -296,32 +300,13 @@ SEE ALSO:
                         </div>
                     </div>
 
-                    <!-- Account Notes (Placeholder) -->
+                    <!-- Account Notes (Shared) -->
                     <div class="notes-panel">
                         <h3>
                             Account Notes
-                            <span class="notes-badge coming-soon">Coming Soon</span>
+                            <span class="notes-badge" style="background: rgba(16,185,129,0.2); color: #10b981;">Synced</span>
                         </h3>
-                        <div class="notes-placeholder">
-                            <div class="notes-placeholder-icon">&#128101;</div>
-                            <p>Shared notes for your team</p>
-                            <p class="coming-soon-text">Team sync feature coming soon</p>
-                        </div>
-                        <textarea
-                            class="notes-textarea"
-                            id="accountNotes"
-                            placeholder="Account-wide notes will sync with your team once this feature is enabled..."
-                            disabled
-                        ></textarea>
-                        <div class="notes-actions">
-                            <div class="notes-meta">
-                                <span style="color: #f97316;">Sync not yet available</span>
-                            </div>
-                            <div class="notes-buttons">
-                                <button class="notes-btn secondary" disabled>Export</button>
-                                <button class="notes-btn primary" disabled>Save</button>
-                            </div>
-                        </div>
+                        <div id="accountCommentsContainer"></div>
                     </div>
                 </div>
             </div>
@@ -799,54 +784,61 @@ SEE ALSO:
                 <div class="feature-card">
                     <div class="feature-icon">&#128640;</div>
                     <div class="feature-title">LVS Neural Compiler</div>
-                    <div class="feature-desc">Convert and optimize neural networks from PyTorch, TensorFlow, and ONNX formats. Automatic quantization, layer fusion, and memory optimization.</div>
-                    <span class="feature-tag">Supports 100+ Operators</span>
+                    <div class="feature-desc">Deploy any vision model—from open-source networks to your proprietary IP—optimized specifically for LVS-250 silicon. Automatic fine-tuning of layer scheduling, quantization, and memory layout delivers 3-5x performance gains over generic inference.</div>
+                    <span class="feature-tag">Your Models, Optimized</span>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon">&#9881;</div>
                     <div class="feature-title">LVS Runtime</div>
-                    <div class="feature-desc">High-performance inference engine with dynamic batching, multi-model scheduling, and zero-copy tensor management.</div>
+                    <div class="feature-desc">Production-grade inference engine that maximizes throughput on LVS-250. Dynamic batching, multi-model orchestration, and zero-copy pipelines tuned for real-time vision workloads.</div>
                     <span class="feature-tag">C++ / Python APIs</span>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon">&#128248;</div>
                     <div class="feature-title">LVS Vision Library</div>
-                    <div class="feature-desc">Accelerated image processing primitives: resize, warp, color convert, filtering. ISP integration for camera pipelines.</div>
-                    <span class="feature-tag">OpenCV Compatible</span>
+                    <div class="feature-desc">Hardware-accelerated preprocessing and postprocessing. Resize, warp, color convert, and filter at camera-rate speeds. Drop-in replacement for OpenCV with 10x acceleration.</div>
+                    <span class="feature-tag">10x Faster than CPU</span>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon">&#128202;</div>
                     <div class="feature-title">LVS Profiler</div>
-                    <div class="feature-desc">Real-time performance analysis with layer-by-layer timing, memory utilization, and power consumption metrics.</div>
+                    <div class="feature-desc">Understand exactly where your model spends time. Layer-by-layer analysis, memory bandwidth visualization, and optimization recommendations specific to your architecture.</div>
                     <span class="feature-tag">GUI + CLI</span>
                 </div>
             </div>
 
+            <!-- Value Proposition Callout -->
+            <div class="panel" style="background: linear-gradient(135deg, rgba(124,77,255,0.15), rgba(212,175,55,0.1)); border-left: 3px solid var(--accent);">
+                <h3 style="margin-bottom: 12px;">Bring Your Own Model</h3>
+                <p style="color: var(--text); font-size: 14px; line-height: 1.7; margin: 0;">
+                    The LVS compiler doesn't just run models—it <strong>fine-tunes them for our silicon</strong>. Whether you're deploying a standard detection network or proprietary computer vision IP, our toolchain automatically optimizes tensor layouts, operator fusion, and memory scheduling to extract maximum performance from the LVS-250's dual NPU architecture.
+                </p>
+            </div>
+
             <!-- Code Sample -->
-            <div class="panel">
+            <div class="panel" style="margin-top: 24px;">
                 <h3>Quick Start Example</h3>
                 <div class="code-block">
-<span class="code-comment"># LVS SDK - Object Detection Pipeline Example</span>
+<span class="code-comment"># LVS SDK - Deploy Any Vision Model</span>
 <span class="code-keyword">import</span> lvs
 <span class="code-keyword">from</span> lvs.vision <span class="code-keyword">import</span> Camera, ImageProcessor
-<span class="code-keyword">from</span> lvs.inference <span class="code-keyword">import</span> Runtime, Model
+<span class="code-keyword">from</span> lvs.inference <span class="code-keyword">import</span> Runtime
 
 <span class="code-comment"># Initialize runtime on LVS-250</span>
 runtime = lvs.<span class="code-function">Runtime</span>(device=<span class="code-string">"lvs250"</span>)
 
-<span class="code-comment"># Load compiled model</span>
-model = runtime.<span class="code-function">load_model</span>(<span class="code-string">"yolov8_lvs.compiled"</span>)
+<span class="code-comment"># Load YOUR compiled model (any ONNX, PyTorch, or TensorFlow model)</span>
+model = runtime.<span class="code-function">load_model</span>(<span class="code-string">"your_model.lvs"</span>)  <span class="code-comment"># Optimized for LVS-250</span>
 
 <span class="code-comment"># Configure camera pipeline</span>
 camera = Camera.<span class="code-function">open</span>(channel=0, resolution=(1920, 1080), fps=30)
-processor = ImageProcessor(resize=(640, 640), normalize=<span class="code-keyword">True</span>)
+processor = ImageProcessor(resize=model.input_size, normalize=<span class="code-keyword">True</span>)
 
-<span class="code-comment"># Inference loop</span>
+<span class="code-comment"># Real-time inference loop</span>
 <span class="code-keyword">for</span> frame <span class="code-keyword">in</span> camera.<span class="code-function">stream</span>():
     tensor = processor.<span class="code-function">preprocess</span>(frame)
-    detections = model.<span class="code-function">infer</span>(tensor)
-    <span class="code-keyword">for</span> det <span class="code-keyword">in</span> detections:
-        <span class="code-keyword">print</span>(f<span class="code-string">"Class: {det.label}, Conf: {det.confidence:.2f}"</span>)
+    results = model.<span class="code-function">infer</span>(tensor)  <span class="code-comment"># Runs on dual NPU @ 250 TOPS</span>
+    <span class="code-keyword">print</span>(f<span class="code-string">"Inference: {model.last_inference_ms:.1f}ms"</span>)
                 </div>
             </div>
 
@@ -872,16 +864,16 @@ processor = ImageProcessor(resize=(640, 640), normalize=<span class="code-keywor
                 <div class="document">
                     <div class="doc-icon">&#128202;</div>
                     <div class="doc-info">
-                        <div class="doc-name">Neural Compiler User Guide</div>
-                        <div class="doc-meta">PDF &bull; 62 pages &bull; v1.0</div>
+                        <div class="doc-name">Model Optimization Guide</div>
+                        <div class="doc-meta">PDF &bull; Best practices for your models &bull; v1.0</div>
                     </div>
                     <span class="doc-download">&#8594;</span>
                 </div>
                 <div class="document">
                     <div class="doc-icon">&#127891;</div>
                     <div class="doc-info">
-                        <div class="doc-name">Tutorial: YOLOv8 Deployment</div>
-                        <div class="doc-meta">Jupyter Notebook &bull; Step-by-step</div>
+                        <div class="doc-name">Tutorial: Custom Model Deployment</div>
+                        <div class="doc-meta">Jupyter Notebook &bull; End-to-end walkthrough</div>
                     </div>
                     <span class="doc-download">&#8594;</span>
                 </div>
@@ -1495,8 +1487,23 @@ ${textarea.value}`;
             URL.revokeObjectURL(url);
         }
 
+        // Initialize user greeting
+        function initUserGreeting() {
+            const firstName = sessionStorage.getItem('lvs_first_name') || 'User';
+            const fullName = sessionStorage.getItem('lvs_user_name') || 'User';
+            const initials = fullName.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+
+            document.getElementById('navGreeting').textContent = `Hi, ${firstName}!`;
+            document.getElementById('navAvatar').textContent = initials;
+        }
+
         // Load notes on page load
-        document.addEventListener('DOMContentLoaded', loadNotes);
+        document.addEventListener('DOMContentLoaded', () => {
+            loadNotes();
+            initUserGreeting();
+            // Initialize shared account notes
+            LVSComments.init('terrahaptix', '#accountCommentsContainer');
+        });
     </script>
 </body>
 </html>

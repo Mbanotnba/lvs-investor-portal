@@ -1,7 +1,7 @@
 # LVS Portal Technical Architecture
 
-**Document Version:** 1.0
-**Last Updated:** January 28, 2026
+**Document Version:** 2.0
+**Last Updated:** February 1, 2026
 **Audience:** Engineering Leadership, VP Software, Principal Engineers
 
 ---
@@ -10,8 +10,8 @@
 
 This document describes the technical architecture of the LVS web portal system, including the current implementation, planned improvements, and integration points with other LVS systems.
 
-**Current State:** Static HTML/CSS/JS mockups deployed on GitHub Pages
-**Target State:** Template-driven portals with centralized JSON data source
+**Current State:** Full-stack application on Google Cloud Run with Turso database
+**Target State:** Enhanced with real-time features and expanded integrations
 
 ---
 
@@ -53,9 +53,11 @@ This document describes the technical architecture of the LVS web portal system,
 
 | Layer | Technology | Notes |
 |-------|------------|-------|
-| Hosting | GitHub Pages | Free, HTTPS, CDN |
-| Frontend | Vanilla HTML/CSS/JS | No build step required |
-| Authentication | Client-side hash | Demo only, not production-ready |
+| Hosting | Google Cloud Run | Auto-scaling containers |
+| Frontend | Vanilla HTML/CSS/JS + nginx | Static files with security headers |
+| Backend | FastAPI + Python 3.11 | JWT auth, TOTP 2FA, RESTful API |
+| Database | Turso (libsql) | Cloud SQLite with embedded sync |
+| Security | Cloud Armor | Rate limiting at edge |
 | Video | HTML5 `<video>` | MP4 format, ~12MB |
 | Styling | CSS3 with variables | Dark theme, responsive |
 
@@ -224,38 +226,59 @@ Discovery  NDA    Evaluation  IRAD   Design   Production
 - Gradient fill shows progress percentage
 - Dots positioned with flexbox `justify-content: space-between`
 
-### 4. Authentication (Demo)
+### 4. Authentication (Production)
 
 **Current Flow:**
 ```
-User enters password
+Step 1: Email Submission
         │
         ▼
-simpleHash("LVS_2026") → "790995832"
+    /auth/email → Determines portal type, stores pending auth
         │
         ▼
-Compare with stored hash
+Step 2: Password Verification
         │
-        ├── Match: Set sessionStorage['lvs_auth'] = 'true'
-        │          Redirect to roadmap.html
+        ▼
+    /auth/password → Validates Argon2 hash, checks lockout
         │
-        └── No match: Show error message
+        ▼
+Step 3: 2FA Verification
+        │
+        ▼
+    /auth/2fa → Validates TOTP code (Google Authenticator)
+        │
+        ▼
+    JWT Token Issued (30 min TTL, JTI tracked in DB)
 ```
 
-**Hash Function (NOT cryptographically secure):**
+**Security Features:**
+- Argon2 password hashing (PHC winner)
+- TOTP-based 2FA (RFC 6238)
+- Database-backed sessions with JTI revocation
+- Account lockout after 5 failed attempts (15 min)
+- Cloud Armor rate limiting (10 req/min auth endpoints)
+- NDA gating for customer/partner access
+
+### 5. LVSComments (Account Notes)
+
+**Purpose:** Persistent, Slack-like notes for each customer/partner account.
+
+**Architecture:**
+```
+Frontend (js/comments.js)     Backend (/api/comments)     Database
+        │                              │                      │
+        ├── POST comment ──────────────►├── Validate token ────►│ INSERT
+        │                              │                      │
+        ├── GET comments ◄─────────────├◄─ Query by account ──│ SELECT
+        │                              │                      │
+        └── Render in container        └── Return JSON        └── Turso
+```
+
+**Usage in portals:**
 ```javascript
-function simpleHash(str) {
-    let hash = 0;
-    for (let i = 0; i < str.length; i++) {
-        const char = str.charCodeAt(i);
-        hash = ((hash << 5) - hash) + char;
-        hash = hash & hash;
-    }
-    return String(Math.abs(hash));
-}
+// Initialize with account ID
+LVSComments.init('koniku', '#accountCommentsContainer');
 ```
-
-**Security Note:** This is trivially bypassable. Production requires server-side auth.
 
 ---
 
@@ -401,22 +424,26 @@ Customers **cannot** see:
 
 ## Security Roadmap
 
-### Phase 1: Current (Demo)
+### Phase 1: Demo (Completed)
 - [x] Client-side password hash
 - [x] Session storage for state
 - [x] HTTPS via GitHub Pages
 
-### Phase 2: Basic Production
-- [ ] Move to server-hosted solution
-- [ ] Server-side password validation
-- [ ] Secure session cookies
-- [ ] Rate limiting
+### Phase 2: Production (Current - Completed)
+- [x] Server-hosted on Cloud Run
+- [x] Server-side Argon2 password validation
+- [x] JWT tokens with JTI tracking
+- [x] TOTP-based 2FA (Google Authenticator)
+- [x] Cloud Armor rate limiting
+- [x] Database-backed sessions (Turso)
+- [x] NDA gating for customer/partner access
+- [x] Security headers (HSTS, CSP, X-Frame-Options)
 
-### Phase 3: Enterprise
+### Phase 3: Enterprise (Planned)
 - [ ] SSO integration (Okta, Auth0)
-- [ ] Per-customer credentials
-- [ ] Audit logging
+- [ ] Hardware key support (WebAuthn)
 - [ ] IP allowlisting option
+- [ ] Enhanced audit logging dashboard
 
 ---
 

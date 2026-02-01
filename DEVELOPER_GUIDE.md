@@ -1,7 +1,7 @@
 # LVS Portal Developer Guide
 
 **For:** Randy Hollines, VP Software Engineering
-**Updated:** January 28, 2026
+**Updated:** February 1, 2026
 
 This guide covers everything you need to jump in and make changes to the LVS portal system.
 
@@ -59,17 +59,25 @@ This guide covers everything you need to jump in and make changes to the LVS por
 - Why: Fast iteration, no build step, easy for anyone to edit
 - Trade-off: Some code duplication across files
 
-**Hosting:** GitHub Pages
-- Auto-deploys on push to `main`
-- Free, reliable, HTTPS included
+**Backend:** FastAPI + Python 3.11
+- JWT authentication with TOTP 2FA
+- Argon2 password hashing
+- RESTful API at `/docs`
 
-**Data:** Static JSON files
-- `data/customers.json` - Customer pipeline
-- `data/financial-model.json` - Financial projections
+**Database:** Turso (libsql) - Cloud-hosted SQLite
+- Embedded replica pattern for Cloud Run
+- Persistent across container restarts
+- Requires `libsql_experimental` library
 
-**Auth:** Client-side sessionStorage
-- Demo-grade security (password hash visible in source)
-- Production would need server-side auth
+**Hosting:** Google Cloud Run
+- Frontend: nginx container serving static files
+- Backend: Python container with FastAPI
+- Cloud Armor for rate limiting
+
+**Auth:** Server-side JWT + TOTP
+- Multi-step login (email → password → 2FA)
+- Session tracking with JTI for revocation
+- NDA gating for customers/partners
 
 ---
 
@@ -155,12 +163,15 @@ sessionStorage.setItem('lvs_can_view_customers', 'true'); // for investor/founde
 | Key | Values | Purpose |
 |-----|--------|---------|
 | `lvs_auth` | 'true' | User is logged in |
-| `lvs_role` | 'investor'/'customer'/'founder' | User's role |
+| `lvs_token` | JWT string | Authentication token |
+| `lvs_role` | 'investor'/'customer'/'founder'/'partner' | User's role |
 | `lvs_can_view_customers` | 'true' | Can view all customer portals |
 | `lvs_founder_auth` | 'true' | Has founder-level access |
 | `lvs_founder_email` | email | Founder's email |
 | `lvs_customer` | 'anduril'/'koniku'/etc | Customer's company ID |
-| `lvs_team_mode` | 'true' | Team demo mode active |
+| `lvs_first_name` | string | User's first name (for greetings) |
+| `lvs_company` | string | User's company (for account context) |
+| `lvs_nda_allowed` | 'true' | NDA has been approved |
 
 ---
 
@@ -366,6 +377,51 @@ border-color: var(--accent);  /* Not #7c4dff */
 </div>
 ```
 
+### LVSComments Pattern (Account Notes)
+
+```html
+<!-- In the HTML -->
+<div class="notes-panel">
+    <h3>
+        Account Notes
+        <span class="notes-badge" style="background: rgba(16,185,129,0.2); color: #10b981;">Synced</span>
+    </h3>
+    <div id="accountCommentsContainer"></div>
+</div>
+
+<!-- In the script -->
+<script src="js/comments.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize with account ID and container selector
+    LVSComments.init('koniku', '#accountCommentsContainer');
+});
+</script>
+```
+
+### User Greeting Pattern
+
+```html
+<!-- In nav element -->
+<div class="user-greeting" style="display: flex; align-items: center; gap: 10px;">
+    <div class="nav-greeting">Welcome back,</div>
+    <div class="nav-avatar" id="userAvatar">?</div>
+    <span id="userName" style="color: var(--text); font-weight: 500;">User</span>
+</div>
+
+<!-- In script -->
+<script>
+function initUserGreeting() {
+    const firstName = sessionStorage.getItem('lvs_first_name');
+    if (firstName) {
+        document.getElementById('userName').textContent = firstName;
+        document.getElementById('userAvatar').textContent = firstName.charAt(0).toUpperCase();
+    }
+}
+document.addEventListener('DOMContentLoaded', initUserGreeting);
+</script>
+```
+
 ### Tab Navigation (customer portals)
 
 ```javascript
@@ -428,12 +484,39 @@ git push --force origin main  # Only if absolutely necessary
 
 ---
 
+## Recent Additions (February 2026)
+
+### Turso Database Integration
+The backend now uses Turso (libsql) for persistent cloud-hosted SQLite:
+```python
+# In database.py - datetime conversion for libsql
+def to_db_datetime(dt: Optional[datetime]) -> Optional[str]:
+    """Convert datetime to ISO string for database storage.
+    libsql doesn't handle Python datetime objects directly."""
+    if dt is None:
+        return None
+    return dt.isoformat()
+```
+
+### LVSComments Component
+Slack-like account notes stored persistently via API:
+- Located in `js/comments.js`
+- Backend API at `/api/comments/{account_id}`
+- Displays user, timestamp, and message
+- Requires CSP update: `connect-src 'self' https://lvs-api-657638018776.us-central1.run.app`
+
+### SDK "Bring Your Own Model" Messaging
+Updated across all customer/partner portals:
+- Emphasizes fine-tuning moat over specific model support
+- Feature cards highlight "LVS Neural Compiler" and model optimization
+- Code examples are model-agnostic (`your_model.lvs`)
+
 ## Future Improvements
 
 ### Short-term (Easy Wins)
-- [ ] Add loading spinners for JSON fetches
-- [ ] Add error handling for failed data loads
+- [x] ~~Add loading spinners for JSON fetches~~ (Added)
 - [ ] Consolidate duplicate CSS into shared stylesheet
+- [x] ~~Server-side authentication~~ (Implemented with JWT + TOTP)
 
 ### Medium-term (Recommended)
 - [ ] Move all data to JSON files (single source of truth)
@@ -441,10 +524,10 @@ git push --force origin main  # Only if absolutely necessary
 - [ ] Add unit tests for critical paths
 
 ### Long-term (Production-Ready)
-- [ ] Server-side authentication (Auth0 or custom)
-- [ ] Database backend (PostgreSQL/Supabase)
-- [ ] API layer for data operations
-- [ ] Audit logging for compliance
+- [x] ~~Server-side authentication~~ (Implemented)
+- [x] ~~Database backend~~ (Turso SQLite)
+- [x] ~~API layer for data operations~~ (FastAPI)
+- [x] ~~Audit logging for compliance~~ (Sessions table)
 - [ ] Multi-tenant customer portal system
 
 ---

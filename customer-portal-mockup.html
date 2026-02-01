@@ -52,6 +52,7 @@ SEE ALSO:
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Anduril Portal | Lola Vision Systems</title>
     <link rel="stylesheet" href="css/shared-portal.css">
+    <script src="js/config.js"></script>
 </head>
 <body>
     <!-- Navigation -->
@@ -63,6 +64,8 @@ SEE ALSO:
         <div class="nav-user">
             <a href="founder-portal.html" class="nav-link" style="margin-right: 16px;">&#8592; Founder Portal</a>
             <span class="customer-badge">Customer Portal</span>
+            <span id="navGreeting" class="nav-greeting"></span>
+            <div class="nav-avatar" id="navAvatar">--</div>
             <a href="login.html" class="nav-link" onclick="sessionStorage.clear()">Logout</a>
         </div>
     </nav>
@@ -502,6 +505,29 @@ SEE ALSO:
                     performance in a compact 35x35mm package. Purpose-built for ISR, C-UAS, and autonomous systems requiring real-time
                     perception and decision-making at the tactical edge.
                 </div>
+
+                <!-- SDK Value Proposition -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 20px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1);">
+                    <div style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(59, 130, 246, 0.05)); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 8px; padding: 16px;">
+                        <div style="font-size: 13px; font-weight: 600; color: #3b82f6; margin-bottom: 8px;">&#9889; Hardware + Software Platform</div>
+                        <div style="font-size: 13px; color: #94a3b8; line-height: 1.5;">
+                            The LVS SDK enables <strong style="color: #e2e8f0;">write-once, deploy-anywhere</strong> development.
+                            Code written for prototyping on CPU/GPU deploys directly to LVS-250 without modification.
+                        </div>
+                    </div>
+                    <div style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(16, 185, 129, 0.05)); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 8px; padding: 16px;">
+                        <div style="font-size: 13px; font-weight: 600; color: #10b981; margin-bottom: 8px;">&#128187; 60% Less Code</div>
+                        <div style="font-size: 13px; color: #94a3b8; line-height: 1.5;">
+                            Model-optimized APIs for YOLO, OpenPose, and segmentation handle all pre/post-processing.
+                            Focus on your application logic, not image manipulation.
+                        </div>
+                    </div>
+                </div>
+                <div style="text-align: center; margin-top: 16px;">
+                    <button class="contact-btn" onclick="document.querySelector('[data-tab=sdk]').click()" style="display: inline-block; width: auto; padding: 10px 24px; background: transparent; border: 1px solid rgba(59, 130, 246, 0.5); color: #3b82f6;">
+                        Explore the SDK &rarr;
+                    </button>
+                </div>
             </div>
 
             <!-- Quick Specs Summary -->
@@ -666,7 +692,123 @@ SEE ALSO:
             <div class="welcome" style="margin-bottom: 24px;">
                 <div class="welcome-content">
                     <h1>LVS <span>Software Development Platform</span></h1>
-                    <p>Complete toolchain for neural network deployment, system integration, and application development</p>
+                    <p>Write once, deploy anywhere. Model-optimized APIs that eliminate 40% of typical vision AI development effort.</p>
+                </div>
+            </div>
+
+            <!-- Executive Value Proposition -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 32px;">
+                <div style="background: linear-gradient(135deg, rgba(124,77,255,0.15), rgba(124,77,255,0.05)); border: 1px solid rgba(124,77,255,0.3); border-radius: 16px; padding: 24px;">
+                    <div style="font-size: 14px; color: var(--accent-light); font-weight: 600; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px;">For Decision Makers</div>
+                    <h3 style="font-size: 20px; margin-bottom: 12px; color: var(--text);">Accelerate Time-to-Deployment</h3>
+                    <p style="font-size: 14px; color: var(--muted); line-height: 1.6; margin-bottom: 16px;">
+                        Your existing vision AI applications run on LVS hardware with minimal code changes.
+                        No vendor lock-in, no rewrites. Move from prototype to production edge deployment
+                        in weeks, not months.
+                    </p>
+                    <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                        <span style="background: rgba(16,185,129,0.2); color: #10b981; padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;">70% Faster Integration</span>
+                        <span style="background: rgba(16,185,129,0.2); color: #10b981; padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;">Zero Lock-in</span>
+                    </div>
+                </div>
+                <div style="background: linear-gradient(135deg, rgba(212,175,55,0.15), rgba(212,175,55,0.05)); border: 1px solid rgba(212,175,55,0.3); border-radius: 16px; padding: 24px;">
+                    <div style="font-size: 14px; color: var(--gold); font-weight: 600; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px;">For Engineers</div>
+                    <h3 style="font-size: 20px; margin-bottom: 12px; color: var(--text);">We Handle the Hard Parts</h3>
+                    <p style="font-size: 14px; color: var(--muted); line-height: 1.6; margin-bottom: 16px;">
+                        About 40% of vision AI code is image pre/post-processing—resizing, normalization,
+                        color conversion, NMS, anchor decoding. Our model-optimized APIs handle all of it.
+                        You focus on your application logic.
+                    </p>
+                    <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                        <span style="background: rgba(212,175,55,0.2); color: var(--gold); padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;">YOLO Optimized</span>
+                        <span style="background: rgba(212,175,55,0.2); color: var(--gold); padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;">OpenPose Ready</span>
+                        <span style="background: rgba(212,175,55,0.2); color: var(--gold); padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;">Custom Models</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Retargetability Section -->
+            <div class="panel" style="margin-bottom: 24px; border-left: 3px solid var(--accent);">
+                <h3 style="display: flex; align-items: center; gap: 10px;">
+                    <span style="font-size: 24px;">&#128260;</span>
+                    Write Once, Deploy Anywhere
+                </h3>
+                <p style="color: var(--muted); margin: 12px 0 20px 0; font-size: 14px; line-height: 1.6;">
+                    The LVS SDK abstracts hardware complexity, enabling your application code to run across different
+                    compute targets without modification. Develop on your workstation, deploy to edge—same code, optimized execution.
+                </p>
+                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; text-align: center;">
+                    <div style="background: var(--panel-light); padding: 16px; border-radius: 8px;">
+                        <div style="font-size: 28px; margin-bottom: 8px;">&#128187;</div>
+                        <div style="font-size: 12px; color: var(--muted);">DEVELOP</div>
+                        <div style="font-size: 14px; font-weight: 600;">x86 Workstation</div>
+                    </div>
+                    <div style="background: var(--panel-light); padding: 16px; border-radius: 8px;">
+                        <div style="font-size: 28px; margin-bottom: 8px;">&#9654;</div>
+                        <div style="font-size: 12px; color: var(--muted);">SIMULATE</div>
+                        <div style="font-size: 14px; font-weight: 600;">GPU Server</div>
+                    </div>
+                    <div style="background: var(--panel-light); padding: 16px; border-radius: 8px;">
+                        <div style="font-size: 28px; margin-bottom: 8px;">&#128736;</div>
+                        <div style="font-size: 12px; color: var(--muted);">VALIDATE</div>
+                        <div style="font-size: 14px; font-weight: 600;">DevKit</div>
+                    </div>
+                    <div style="background: linear-gradient(135deg, rgba(212,175,55,0.2), rgba(124,77,255,0.2)); padding: 16px; border-radius: 8px; border: 1px solid var(--gold);">
+                        <div style="font-size: 28px; margin-bottom: 8px;">&#128640;</div>
+                        <div style="font-size: 12px; color: var(--gold);">DEPLOY</div>
+                        <div style="font-size: 14px; font-weight: 600; color: var(--gold);">LVS-250 Edge</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Model-Optimized APIs -->
+            <div class="panel" style="margin-bottom: 24px; border-left: 3px solid var(--gold);">
+                <h3 style="display: flex; align-items: center; gap: 10px;">
+                    <span style="font-size: 24px;">&#129504;</span>
+                    Model-Optimized APIs
+                </h3>
+                <p style="color: var(--muted); margin: 12px 0 20px 0; font-size: 14px; line-height: 1.6;">
+                    Each supported model family has a dedicated API that handles the complete inference pipeline—from raw pixels to actionable results.
+                    No manual tensor manipulation, no post-processing code, no edge cases to debug.
+                </p>
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;">
+                    <div style="background: var(--panel-light); padding: 20px; border-radius: 12px;">
+                        <div style="font-size: 13px; color: var(--accent-light); font-weight: 600; margin-bottom: 8px;">OBJECT DETECTION</div>
+                        <div style="font-size: 18px; font-weight: 700; margin-bottom: 12px;">YOLO Family</div>
+                        <ul style="font-size: 13px; color: var(--muted); line-height: 1.8; padding-left: 16px; margin: 0;">
+                            <li>YOLOv5, v7, v8, v9 supported</li>
+                            <li>Automatic letterboxing & scaling</li>
+                            <li>Built-in NMS & confidence filtering</li>
+                            <li>Bbox, class, confidence output</li>
+                        </ul>
+                    </div>
+                    <div style="background: var(--panel-light); padding: 20px; border-radius: 12px;">
+                        <div style="font-size: 13px; color: var(--accent-light); font-weight: 600; margin-bottom: 8px;">POSE ESTIMATION</div>
+                        <div style="font-size: 18px; font-weight: 700; margin-bottom: 12px;">OpenPose & More</div>
+                        <ul style="font-size: 13px; color: var(--muted); line-height: 1.8; padding-left: 16px; margin: 0;">
+                            <li>17/25/135 keypoint models</li>
+                            <li>Multi-person detection</li>
+                            <li>Skeleton rendering utilities</li>
+                            <li>Action recognition ready</li>
+                        </ul>
+                    </div>
+                    <div style="background: var(--panel-light); padding: 20px; border-radius: 12px;">
+                        <div style="font-size: 13px; color: var(--accent-light); font-weight: 600; margin-bottom: 8px;">SEGMENTATION</div>
+                        <div style="font-size: 18px; font-weight: 700; margin-bottom: 12px;">Instance & Semantic</div>
+                        <ul style="font-size: 13px; color: var(--muted); line-height: 1.8; padding-left: 16px; margin: 0;">
+                            <li>Mask R-CNN, SAM support</li>
+                            <li>Per-pixel class labels</li>
+                            <li>Contour extraction built-in</li>
+                            <li>Depth estimation fusion</li>
+                        </ul>
+                    </div>
+                </div>
+                <div style="margin-top: 20px; padding: 16px; background: rgba(16,185,129,0.1); border-radius: 8px; border-left: 3px solid #10b981;">
+                    <p style="font-size: 13px; color: var(--text); margin: 0;">
+                        <strong style="color: #10b981;">Developer Productivity Gain:</strong>
+                        Our model-optimized APIs eliminate ~40% of typical vision AI code—the tedious image preprocessing,
+                        tensor manipulation, and output parsing that developers usually write from scratch.
+                    </p>
                 </div>
             </div>
 
@@ -748,31 +890,102 @@ SEE ALSO:
                 </div>
             </div>
 
-            <!-- Code Sample -->
+            <!-- Code Sample - Side by Side Comparison -->
             <div class="panel">
-                <h3>Quick Start Example</h3>
-                <div class="code-block">
-<span class="code-comment"># LVS SDK - Object Detection Pipeline Example</span>
-<span class="code-keyword">import</span> lvs
-<span class="code-keyword">from</span> lvs.vision <span class="code-keyword">import</span> Camera, ImageProcessor
-<span class="code-keyword">from</span> lvs.inference <span class="code-keyword">import</span> Runtime, Model
+                <h3>The LVS Difference: Model-Optimized APIs</h3>
+                <p style="color: var(--muted); margin-bottom: 20px; font-size: 14px;">
+                    See how our YOLO-optimized API eliminates boilerplate code. Same results, 60% less code.
+                </p>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div>
+                        <div style="font-size: 12px; color: #ef4444; font-weight: 600; margin-bottom: 8px; text-transform: uppercase;">&#10060; Traditional Approach (40+ lines)</div>
+                        <div class="code-block" style="font-size: 11px; max-height: 300px; overflow-y: auto;">
+<span class="code-comment"># Manual preprocessing, inference, postprocessing</span>
+<span class="code-keyword">import</span> cv2, numpy <span class="code-keyword">as</span> np
 
-<span class="code-comment"># Initialize runtime on LVS-250</span>
-runtime = lvs.<span class="code-function">Runtime</span>(device=<span class="code-string">"lvs250"</span>)
+<span class="code-comment"># Load model manually</span>
+model = load_onnx(<span class="code-string">"yolov8.onnx"</span>)
 
-<span class="code-comment"># Load compiled model</span>
-model = runtime.<span class="code-function">load_model</span>(<span class="code-string">"yolov8_lvs.compiled"</span>)
+<span class="code-comment"># Manual letterbox resize</span>
+<span class="code-keyword">def</span> <span class="code-function">letterbox</span>(img, new_shape=(640, 640)):
+    shape = img.shape[:2]
+    r = min(new_shape[0]/shape[0], new_shape[1]/shape[1])
+    new_unpad = int(round(shape[1]*r)), int(round(shape[0]*r))
+    dw, dh = new_shape[1]-new_unpad[0], new_shape[0]-new_unpad[1]
+    dw, dh = dw/2, dh/2
+    img = cv2.<span class="code-function">resize</span>(img, new_unpad)
+    top, bottom = int(round(dh-0.1)), int(round(dh+0.1))
+    left, right = int(round(dw-0.1)), int(round(dw+0.1))
+    img = cv2.<span class="code-function">copyMakeBorder</span>(img, top, bottom, left, right, cv2.BORDER_CONSTANT)
+    <span class="code-keyword">return</span> img, r, (dw, dh)
 
-<span class="code-comment"># Configure camera pipeline</span>
-camera = Camera.<span class="code-function">open</span>(channel=0, resolution=(1920, 1080), fps=30)
-processor = ImageProcessor(resize=(640, 640), normalize=<span class="code-keyword">True</span>)
+<span class="code-comment"># Manual NMS implementation</span>
+<span class="code-keyword">def</span> <span class="code-function">nms</span>(boxes, scores, iou_thresh):
+    <span class="code-comment"># 20+ lines of NMS code...</span>
+    ...
 
-<span class="code-comment"># Inference loop</span>
+<span class="code-comment"># Preprocessing</span>
+img, ratio, pad = <span class="code-function">letterbox</span>(frame)
+img = img.transpose((2, 0, 1))[::-1]
+img = np.<span class="code-function">ascontiguousarray</span>(img)
+img = img.astype(np.float32) / 255.0
+
+<span class="code-comment"># Inference + postprocessing</span>
+output = model.<span class="code-function">run</span>(img)
+<span class="code-comment"># ... 15+ more lines of output parsing</span>
+                        </div>
+                    </div>
+                    <div>
+                        <div style="font-size: 12px; color: #10b981; font-weight: 600; margin-bottom: 8px; text-transform: uppercase;">&#10004; LVS Model-Optimized API (12 lines)</div>
+                        <div class="code-block" style="font-size: 11px;">
+<span class="code-comment"># LVS SDK - YOLO API handles everything</span>
+<span class="code-keyword">from</span> lvs.models <span class="code-keyword">import</span> YOLO
+<span class="code-keyword">from</span> lvs.vision <span class="code-keyword">import</span> Camera
+
+<span class="code-comment"># One-line model load (auto-optimized for LVS-250)</span>
+detector = YOLO.<span class="code-function">load</span>(<span class="code-string">"yolov8n"</span>)
+
+<span class="code-comment"># Camera with auto-configured pipeline</span>
+camera = Camera.<span class="code-function">open</span>(0)
+
+<span class="code-comment"># Clean inference loop - preprocessing &amp; NMS handled</span>
 <span class="code-keyword">for</span> frame <span class="code-keyword">in</span> camera.<span class="code-function">stream</span>():
-    tensor = processor.<span class="code-function">preprocess</span>(frame)
-    detections = model.<span class="code-function">infer</span>(tensor)
-    <span class="code-keyword">for</span> det <span class="code-keyword">in</span> detections:
-        <span class="code-keyword">print</span>(f<span class="code-string">"Class: {det.label}, Conf: {det.confidence:.2f}"</span>)
+    results = detector.<span class="code-function">detect</span>(frame)
+    <span class="code-keyword">for</span> obj <span class="code-keyword">in</span> results:
+        <span class="code-keyword">print</span>(f<span class="code-string">"{obj.label}: {obj.confidence:.0%}"</span>)
+        <span class="code-comment"># obj.bbox, obj.mask also available</span>
+                        </div>
+                        <div style="margin-top: 16px; padding: 12px; background: rgba(16,185,129,0.1); border-radius: 8px;">
+                            <div style="font-size: 12px; color: #10b981; font-weight: 600; margin-bottom: 4px;">What LVS Handles Automatically:</div>
+                            <div style="font-size: 11px; color: var(--muted); line-height: 1.6;">
+                                &#10004; Letterbox resizing &amp; padding<br>
+                                &#10004; Color space conversion (BGR/RGB/YUV)<br>
+                                &#10004; Tensor normalization &amp; layout<br>
+                                &#10004; Non-maximum suppression (NMS)<br>
+                                &#10004; Anchor decoding &amp; scaling<br>
+                                &#10004; Coordinate remapping to original frame
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Retargetability Code Example -->
+            <div class="panel" style="margin-top: 24px;">
+                <h3>Same Code, Any Target</h3>
+                <p style="color: var(--muted); margin-bottom: 16px; font-size: 14px;">
+                    Develop on your laptop, deploy to edge. One environment variable switches the execution target.
+                </p>
+                <div class="code-block">
+<span class="code-comment"># Your application code stays the same</span>
+<span class="code-keyword">from</span> lvs.models <span class="code-keyword">import</span> YOLO
+<span class="code-keyword">from</span> lvs.vision <span class="code-keyword">import</span> Camera
+
+detector = YOLO.<span class="code-function">load</span>(<span class="code-string">"yolov8n"</span>)  <span class="code-comment"># Auto-selects optimal backend</span>
+
+<span class="code-comment"># LVS_DEVICE=cpu     → Runs on CPU (development)</span>
+<span class="code-comment"># LVS_DEVICE=cuda    → Runs on NVIDIA GPU (simulation)</span>
+<span class="code-comment"># LVS_DEVICE=lvs250  → Runs on LVS-250 NPU (production)</span>
                 </div>
             </div>
 
@@ -1006,6 +1219,26 @@ processor = ImageProcessor(resize=(640, 640), normalize=<span class="code-keywor
                     <span style="background: rgba(124,77,255,0.2); color: var(--accent-light); padding: 6px 12px; border-radius: 20px; font-size: 12px;">Anomaly Detection</span>
                 </div>
             </div>
+
+            <!-- SDK Context for Demos -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px;">
+                <div style="background: linear-gradient(135deg, rgba(124,77,255,0.1), transparent); border: 1px solid rgba(124,77,255,0.2); border-radius: 12px; padding: 20px;">
+                    <div style="font-size: 12px; color: var(--accent-light); font-weight: 600; margin-bottom: 6px;">WHAT YOU'RE SEEING</div>
+                    <p style="font-size: 14px; color: var(--text); margin: 0; line-height: 1.6;">
+                        These demos run on the <strong>LVS SDK</strong> using our YOLO-optimized API.
+                        The same code powering these demos can run on your development machine today,
+                        then deploy to LVS-250 hardware without changes.
+                    </p>
+                </div>
+                <div style="background: linear-gradient(135deg, rgba(212,175,55,0.1), transparent); border: 1px solid rgba(212,175,55,0.2); border-radius: 12px; padding: 20px;">
+                    <div style="font-size: 12px; color: var(--gold); font-weight: 600; margin-bottom: 6px;">UNDER THE HOOD</div>
+                    <p style="font-size: 14px; color: var(--text); margin: 0; line-height: 1.6;">
+                        Multiple models run simultaneously: object detection, tracking, and classification.
+                        All pre/post-processing—letterboxing, NMS, coordinate scaling—handled automatically
+                        by our model-optimized APIs.
+                    </p>
+                </div>
+            </div>
             <div class="video-grid single-row">
                 <div class="video-card">
                     <div style="background: var(--panel-light); padding: 8px 16px; display: flex; align-items: center; gap: 8px;">
@@ -1040,6 +1273,134 @@ processor = ImageProcessor(resize=(640, 640), normalize=<span class="code-keywor
                     The LVS-250 delivers <strong>3-5x performance efficiency</strong> compared to current solutions, enabling either
                     <em>increased FPS for faster detection</em> or <em>reduced power consumption</em> for extended mission duration—a critical trade-off benefit for edge deployment.
                 </p>
+            </div>
+
+            <!-- Technical Deep Dive -->
+            <div style="margin-top: 32px; padding-top: 32px; border-top: 1px solid rgba(255,255,255,0.1);">
+                <h3 style="margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+                    <span style="font-size: 20px;">&#128295;</span>
+                    Technical Deep Dive
+                </h3>
+
+                <!-- For Technical Audiences -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+                    <div class="panel">
+                        <h4 style="color: var(--accent-light); font-size: 14px; margin-bottom: 16px;">Image Processing Pipeline (What We Handle)</h4>
+                        <div style="font-size: 13px; color: var(--muted); line-height: 1.8;">
+                            <p style="margin-bottom: 12px;">
+                                Vision AI applications spend ~40% of code on image manipulation that varies by model.
+                                The LVS SDK internalizes this complexity:
+                            </p>
+                            <table style="width: 100%; font-size: 12px; border-collapse: collapse;">
+                                <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                                    <td style="padding: 8px 0; color: var(--text);">Letterbox/Padding</td>
+                                    <td style="padding: 8px 0; text-align: right;">Aspect-ratio preserving resize</td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                                    <td style="padding: 8px 0; color: var(--text);">Color Conversion</td>
+                                    <td style="padding: 8px 0; text-align: right;">BGR↔RGB↔YUV↔NV12</td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                                    <td style="padding: 8px 0; color: var(--text);">Normalization</td>
+                                    <td style="padding: 8px 0; text-align: right;">Mean/std per model config</td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                                    <td style="padding: 8px 0; color: var(--text);">Tensor Layout</td>
+                                    <td style="padding: 8px 0; text-align: right;">NCHW↔NHWC conversion</td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                                    <td style="padding: 8px 0; color: var(--text);">Anchor Decoding</td>
+                                    <td style="padding: 8px 0; text-align: right;">Model-specific grid decode</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 8px 0; color: var(--text);">NMS</td>
+                                    <td style="padding: 8px 0; text-align: right;">IoU-based filtering</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="panel">
+                        <h4 style="color: var(--gold); font-size: 14px; margin-bottom: 16px;">Retargetability Architecture</h4>
+                        <div style="font-size: 13px; color: var(--muted); line-height: 1.8;">
+                            <p style="margin-bottom: 12px;">
+                                The LVS SDK uses a hardware abstraction layer (HAL) that maps high-level operations
+                                to optimal implementations per target:
+                            </p>
+                            <div style="background: var(--panel-light); padding: 16px; border-radius: 8px; font-family: monospace; font-size: 11px; line-height: 1.6;">
+                                <div style="color: var(--muted);">┌─────────────────────────────┐</div>
+                                <div style="color: var(--text);">│   <span style="color: var(--accent-light);">Application Code</span>          │</div>
+                                <div style="color: var(--muted);">├─────────────────────────────┤</div>
+                                <div style="color: var(--text);">│   <span style="color: var(--gold);">LVS Model APIs</span>             │</div>
+                                <div style="color: var(--text);">│   (YOLO, OpenPose, etc.)    │</div>
+                                <div style="color: var(--muted);">├─────────────────────────────┤</div>
+                                <div style="color: var(--text);">│   <span style="color: #10b981;">Hardware Abstraction</span>       │</div>
+                                <div style="color: var(--muted);">├──────┬──────┬──────┬───────┤</div>
+                                <div style="color: var(--text);">│ <span style="color: var(--muted);">CPU</span>  │ <span style="color: var(--muted);">CUDA</span> │ <span style="color: var(--muted);">TRT</span>  │ <span style="color: var(--gold);">LVS</span>   │</div>
+                                <div style="color: var(--muted);">└──────┴──────┴──────┴───────┘</div>
+                            </div>
+                            <p style="margin-top: 12px; font-size: 12px;">
+                                <strong>Zero code changes</strong> between targets. The HAL selects optimized kernels,
+                                memory layouts, and execution strategies automatically.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Supported Models Table -->
+                <div class="panel" style="margin-top: 24px;">
+                    <h4 style="color: var(--text); font-size: 14px; margin-bottom: 16px;">Supported Model Families &amp; Optimizations</h4>
+                    <div style="overflow-x: auto;">
+                        <table style="width: 100%; font-size: 12px; border-collapse: collapse;">
+                            <thead>
+                                <tr style="border-bottom: 2px solid rgba(255,255,255,0.2);">
+                                    <th style="padding: 12px 8px; text-align: left; color: var(--text);">Model Family</th>
+                                    <th style="padding: 12px 8px; text-align: left; color: var(--text);">Variants</th>
+                                    <th style="padding: 12px 8px; text-align: left; color: var(--text);">Pre-processing</th>
+                                    <th style="padding: 12px 8px; text-align: left; color: var(--text);">Post-processing</th>
+                                    <th style="padding: 12px 8px; text-align: center; color: var(--text);">API Ready</th>
+                                </tr>
+                            </thead>
+                            <tbody style="color: var(--muted);">
+                                <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                                    <td style="padding: 12px 8px; font-weight: 600; color: var(--text);">YOLO</td>
+                                    <td style="padding: 12px 8px;">v5, v7, v8, v9, v10</td>
+                                    <td style="padding: 12px 8px;">Letterbox, normalize</td>
+                                    <td style="padding: 12px 8px;">NMS, anchor decode, scale</td>
+                                    <td style="padding: 12px 8px; text-align: center; color: #10b981;">&#10004;</td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                                    <td style="padding: 12px 8px; font-weight: 600; color: var(--text);">OpenPose</td>
+                                    <td style="padding: 12px 8px;">Body-25, COCO, Hand</td>
+                                    <td style="padding: 12px 8px;">Resize, pad, normalize</td>
+                                    <td style="padding: 12px 8px;">PAF decode, keypoint link</td>
+                                    <td style="padding: 12px 8px; text-align: center; color: #10b981;">&#10004;</td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                                    <td style="padding: 12px 8px; font-weight: 600; color: var(--text);">Mask R-CNN</td>
+                                    <td style="padding: 12px 8px;">R50, R101, X101</td>
+                                    <td style="padding: 12px 8px;">Resize, normalize, pad</td>
+                                    <td style="padding: 12px 8px;">RoI align, mask decode</td>
+                                    <td style="padding: 12px 8px; text-align: center; color: #10b981;">&#10004;</td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                                    <td style="padding: 12px 8px; font-weight: 600; color: var(--text);">RT-DETR</td>
+                                    <td style="padding: 12px 8px;">L, X</td>
+                                    <td style="padding: 12px 8px;">Resize, normalize</td>
+                                    <td style="padding: 12px 8px;">Transformer decode</td>
+                                    <td style="padding: 12px 8px; text-align: center; color: #10b981;">&#10004;</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 12px 8px; font-weight: 600; color: var(--text);">Custom ONNX</td>
+                                    <td style="padding: 12px 8px;">Any</td>
+                                    <td style="padding: 12px 8px;">Configurable pipeline</td>
+                                    <td style="padding: 12px 8px;">User-defined or auto</td>
+                                    <td style="padding: 12px 8px; text-align: center; color: var(--gold);">&#128736;</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -1339,6 +1700,19 @@ processor = ImageProcessor(resize=(640, 640), normalize=<span class="code-keywor
                 marqueeContainer.scrollLeft = scrollLeft - walk;
             });
         }
+
+        // Initialize user greeting
+        function initUserGreeting() {
+            const firstName = sessionStorage.getItem('lvs_first_name') || 'User';
+            const fullName = sessionStorage.getItem('lvs_user_name') || 'User';
+            const initials = fullName.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+
+            document.getElementById('navGreeting').textContent = `Hi, ${firstName}!`;
+            document.getElementById('navAvatar').textContent = initials;
+        }
+
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', initUserGreeting);
     </script>
 </body>
 </html>

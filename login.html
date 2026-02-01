@@ -721,6 +721,8 @@
             sessionStorage.setItem('lvs_email', data.user.email);
             sessionStorage.setItem('lvs_user_id', data.user.id);
             sessionStorage.setItem('lvs_user_name', data.user.name);
+            sessionStorage.setItem('lvs_first_name', data.user.name.split(' ')[0]);
+            sessionStorage.setItem('lvs_company', data.user.company || '');
             sessionStorage.setItem('lvs_session_timestamp', Date.now().toString());
 
             // Store NDA status
