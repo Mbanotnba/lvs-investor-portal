@@ -345,7 +345,7 @@
         <!-- Step 1: Email -->
         <div class="step active" id="step1">
             <p class="description">Enter your email to continue</p>
-            <form onsubmit="return handleEmailSubmit()">
+            <form onsubmit="event.preventDefault(); handleEmailSubmit();">
                 <div class="form-group">
                     <label for="email">Email Address</label>
                     <input type="email" id="email" placeholder="you@company.com" required autofocus>
@@ -361,7 +361,7 @@
         <div class="step" id="step2">
             <div id="portalBadge" class="portal-badge investor">Investor Portal</div>
             <p class="description">Welcome, <span id="userEmailDisplay" class="user-email"></span></p>
-            <form onsubmit="return handlePasswordSubmit()">
+            <form onsubmit="event.preventDefault(); handlePasswordSubmit();">
                 <div class="form-group">
                     <label for="password">Password</label>
                     <input type="password" id="password" placeholder="Enter your password" required>
@@ -384,7 +384,7 @@
                 <p>Enter the 6-digit code from your Google Authenticator app to complete sign-in.</p>
             </div>
 
-            <form onsubmit="return handleTwoFactorSubmit()">
+            <form onsubmit="event.preventDefault(); handleTwoFactorSubmit();">
                 <div class="form-group">
                     <label>Authentication Code</label>
                     <div class="code-input-container">

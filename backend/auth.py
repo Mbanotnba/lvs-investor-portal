@@ -481,6 +481,61 @@ async def get_current_user_info(current_user: dict = Depends(get_current_user)):
     }
 
 
+@router.post("/change-password")
+async def change_password(
+    request: Request,
+    current_user: dict = Depends(get_current_user)
+):
+    """
+    Change the current user's password.
+    Requires current_password and new_password in request body.
+    """
+    from models import ChangePasswordRequest
+
+    client_ip = get_client_ip(request)
+    body = await request.json()
+
+    current_password = body.get("current_password")
+    new_password = body.get("new_password")
+
+    if not current_password or not new_password:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Both current_password and new_password are required."
+        )
+
+    if len(new_password) < 8:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="New password must be at least 8 characters."
+        )
+
+    # Verify current password
+    if not verify_password(current_password, current_user["password_hash"]):
+        log_audit(current_user["id"], "PASSWORD_CHANGE_FAILED", "Invalid current password", client_ip)
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Current password is incorrect."
+        )
+
+    # Update password
+    from database import update_user_password
+    success = update_user_password(current_user["id"], new_password)
+
+    if not success:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Failed to update password."
+        )
+
+    log_audit(current_user["id"], "PASSWORD_CHANGED", "Password changed successfully", client_ip)
+
+    return {
+        "success": True,
+        "message": "Password changed successfully."
+    }
+
+
 @router.post("/validate-token")
 async def validate_token(current_user: dict = Depends(get_current_user)):
     """Validate the current token and return user info."""
