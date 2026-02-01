@@ -1,9 +1,20 @@
 # LVS Investor & Customer Portal System
 
-**Last Updated:** January 28, 2026
-**Version:** 2.0
+**Last Updated:** January 31, 2026
+**Version:** 3.0
 **Maintainers:** Tayo Adesanya, Randy Hollines
-**Status:** Active Development
+**Status:** Production
+
+---
+
+## Live URLs
+
+| Environment | URL |
+|-------------|-----|
+| **Portal (Frontend)** | https://lvs-portal-657638018776.us-central1.run.app |
+| **API (Backend)** | https://lvs-api-657638018776.us-central1.run.app |
+| **API Docs** | https://lvs-api-657638018776.us-central1.run.app/docs |
+| **GitHub Pages** | https://mbanotnba.github.io/lvs-investor-portal/ |
 
 ---
 
@@ -14,329 +25,302 @@
 git clone https://github.com/Mbanotnba/lvs-investor-portal.git
 cd lvs-investor-portal
 
-# Serve locally (required for proper functionality)
+# Backend
+cd backend
+python -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+uvicorn main:app --reload --port 8080
+
+# Frontend (new terminal)
+cd ..
 python3 -m http.server 8000
+
 # Visit: http://localhost:8000/login.html
-
-# Or use Node.js
-npx serve .
 ```
-
-### Access
-
-Access credentials are managed internally. Contact Tayo Adesanya for access.
-
-**Live Site:** https://mbanotnba.github.io/lvs-investor-portal/
 
 ---
 
-## System Architecture Overview
+## System Architecture
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│                        LVS PORTAL SYSTEM ARCHITECTURE                        │
-├─────────────────────────────────────────────────────────────────────────────┤
-│                                                                              │
-│   ┌──────────────┐                                                          │
-│   │  login.html  │  ◄── Unified entry point with role selection             │
-│   │              │      Team Demo Mode available                            │
-│   └──────┬───────┘                                                          │
-│          │                                                                   │
-│          ├─────────────────┬─────────────────┬─────────────────┐           │
-│          ▼                 ▼                 ▼                 ▼           │
-│   ┌─────────────┐   ┌─────────────┐   ┌─────────────┐   ┌─────────────┐   │
-│   │  INVESTOR   │   │   FOUNDER   │   │  CUSTOMER   │   │   LEGACY    │   │
-│   │  dashboard  │   │   founder-  │   │  *-portal   │   │  index.html │   │
-│   │    .html    │   │  portal.html│   │    .html    │   │  (redirect) │   │
-│   └─────────────┘   └─────────────┘   └─────────────┘   └─────────────┘   │
-│          │                 │                 │                              │
-│          │                 │                 └── Customer-specific portals  │
-│          │                 │                     (Anduril, Koniku, etc.)    │
-│          │                 │                                                │
-│          │                 └── Full access to all portals                   │
-│          │                                                                   │
-│          └── Can view investor dashboard + customer portals                 │
-│                                                                              │
-├─────────────────────────────────────────────────────────────────────────────┤
-│   DATA LAYER (JSON)                                                          │
-│   ┌────────────────────┐    ┌────────────────────────┐                      │
-│   │ data/customers.json│    │ data/financial-model.json│                    │
-│   │ - 21 customers     │    │ - Revenue projections    │                    │
-│   │ - Pipeline data    │    │ - 2026/2027/2028 weighted│                    │
-│   │ - Gov engagements  │    │ - Breakdown by source    │                    │
-│   └────────────────────┘    └────────────────────────┘                      │
-│                                                                              │
+│                              INTERNET                                        │
 └─────────────────────────────────────────────────────────────────────────────┘
+                                    │
+                                    ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                         GOOGLE CLOUD ARMOR                                   │
+│  ┌─────────────────────────────────────────────────────────────────────┐    │
+│  │  Rate Limiting Policy (lvs-rate-limit-policy)                       │    │
+│  │  • /auth/* endpoints: 10 requests/min per IP                        │    │
+│  │  • All other endpoints: 100 requests/min per IP                     │    │
+│  │  • Exceeds limit → HTTP 429 (Too Many Requests)                     │    │
+│  └─────────────────────────────────────────────────────────────────────┘    │
+└─────────────────────────────────────────────────────────────────────────────┘
+                                    │
+                    ┌───────────────┴───────────────┐
+                    ▼                               ▼
+┌───────────────────────────────┐   ┌───────────────────────────────┐
+│      CLOUD RUN: Frontend      │   │      CLOUD RUN: Backend       │
+│  ┌─────────────────────────┐  │   │  ┌─────────────────────────┐  │
+│  │      nginx:alpine       │  │   │  │   Python 3.11 + FastAPI │  │
+│  │  • Static file serving  │  │   │  │   • JWT Authentication  │  │
+│  │  • Security headers     │  │   │  │   • TOTP 2FA (Google    │  │
+│  │  • SPA routing          │  │   │  │     Authenticator)      │  │
+│  └─────────────────────────┘  │   │  │   • Session management  │  │
+│                               │   │  │   • NDA gating          │  │
+│  lvs-portal-657638018776...   │   │  └─────────────────────────┘  │
+└───────────────────────────────┘   │                               │
+                                    │  lvs-api-657638018776...      │
+                                    └───────────────┬───────────────┘
+                                                    │
+                                                    ▼
+                                    ┌───────────────────────────────┐
+                                    │         SQLite Database       │
+                                    │  • Users & credentials        │
+                                    │  • Sessions (JTI tracking)    │
+                                    │  • Audit logs                 │
+                                    │  • Pending auth states        │
+                                    └───────────────────────────────┘
 ```
 
 ---
 
-## File Structure
+## Authentication Flow
+
+```
+┌──────────┐     ┌──────────┐     ┌──────────┐     ┌──────────┐
+│  Email   │────▶│ Password │────▶│   2FA    │────▶│  Token   │
+│  Step    │     │   Step   │     │   Step   │     │  Issued  │
+└──────────┘     └──────────┘     └──────────┘     └──────────┘
+     │                │                │                │
+     ▼                ▼                ▼                ▼
+ Determines      Validates        Validates        JWT + JTI
+ portal type     Argon2 hash      TOTP code        30 min TTL
+```
+
+### Security Features
+
+| Feature | Implementation |
+|---------|----------------|
+| **Password Hashing** | Argon2 (Password Hashing Competition winner) |
+| **2FA** | TOTP-based (Google Authenticator compatible) |
+| **Sessions** | Database-tracked with JTI for revocation |
+| **Rate Limiting** | Cloud Armor at edge (10 req/min for auth) |
+| **Account Lockout** | 5 failed attempts → 15 minute lockout |
+| **NDA Gating** | Customers/partners require approval |
+| **Security Headers** | HSTS, X-Frame-Options, CSP, etc. |
+
+---
+
+## User Types & Portal Access
+
+| User Type | Portal | NDA Required | Example Domain |
+|-----------|--------|--------------|----------------|
+| **Founder** | founder-portal.html | No | lolavisionsystems.com |
+| **Investor** | dashboard.html | No | Any unrecognized domain |
+| **Customer** | {company}-portal.html | Yes | koniku.co, anduril.com |
+| **Partner** | partner-portal.html | Yes | amd.com |
+
+---
+
+## Project Structure
 
 ```
 lvs-investor-portal/
 │
-├── 🔐 ACCESS CONTROL
-│   ├── login.html              # Unified login (Investor/Customer/Founder)
-│   ├── index.html              # Legacy investor login (redirects work)
-│   └── founder-login.html      # Legacy founder login
+├── backend/                        # FastAPI Backend
+│   ├── main.py                     # App entry, middleware, security headers
+│   ├── auth.py                     # Authentication routes (email/password/2fa)
+│   ├── database.py                 # SQLite operations, session management
+│   ├── security.py                 # Argon2, JWT, TOTP utilities
+│   ├── config.py                   # Environment configuration
+│   ├── models.py                   # Pydantic request/response models
+│   ├── requirements.txt            # Python dependencies
+│   └── Dockerfile                  # Backend container
 │
-├── 📊 INVESTOR PORTAL
-│   ├── dashboard.html          # Main investor dashboard (metrics, highlights)
-│   ├── pipeline.html           # Customer pipeline by tier
-│   ├── financials.html         # Financial model & projections
-│   ├── seed-round.html         # Seed round details & SAFE terms
-│   └── roadmap.html            # Production timeline
+├── js/                             # Frontend JavaScript
+│   ├── config.js                   # Environment detection (dev/prod URLs)
+│   └── security.js                 # Session management, token validation
 │
-├── 👔 FOUNDER PORTAL
-│   └── founder-portal.html     # Customer management dashboard
+├── login.html                      # Multi-step login (email→password→2FA)
+├── founder-portal.html             # Founder dashboard + NDA management
+├── dashboard.html                  # Investor dashboard
+├── nda-pending.html                # NDA pending notification page
+├── *-portal.html                   # Customer/partner specific portals
 │
-├── 🏢 CUSTOMER PORTALS
-│   ├── customer-portal-mockup.html  # Anduril Industries
-│   ├── koniku-portal.html           # Koniku (MOU Proposed)
-│   ├── glid-portal.html             # Glid Technologies
-│   ├── mach-portal.html             # Mach Industries (Stalled)
-│   └── terrahaptix-portal.html      # Terrahaptix
+├── data/                           # Static data files
+│   ├── customers.json              # Customer pipeline data
+│   └── financial-model.json        # Revenue projections
 │
-├── 📁 DATA
-│   └── data/
-│       ├── customers.json           # All customer data + gov engagements
-│       └── financial-model.json     # Revenue projections
-│
-├── 🎨 ASSETS
-│   └── assets/
-│       ├── lvs-logo.png             # Company logo
-│       ├── demos/                   # Demo videos
-│       └── testimonials/            # Testimonial videos
-│
-├── 📖 DOCUMENTATION
-│   ├── README.md                    # This file
-│   ├── ARCHITECTURE.md              # Technical deep-dive
-│   └── DEVELOPER_GUIDE.md           # How to make changes
-│
-└── 🛠️ SCRIPTS
-    └── scripts/
-        └── screenshot.sh            # Generate screenshots
+├── assets/                         # Images, videos, logos
+├── Dockerfile                      # Frontend container (nginx)
+└── README.md                       # This file
 ```
 
 ---
 
-## Access Control System
+## Recent Upgrades (January 2026)
 
-### Session Storage Keys
+### v3.0 - Security Hardening & Cloud Deployment
 
-```javascript
-// Set on login - check these to determine access level
-sessionStorage.getItem('lvs_auth')              // 'true' = logged in
-sessionStorage.getItem('lvs_role')              // 'investor' | 'customer' | 'founder'
-sessionStorage.getItem('lvs_can_view_customers') // 'true' = can browse all customer portals
-sessionStorage.getItem('lvs_founder_auth')       // 'true' = founder access
-sessionStorage.getItem('lvs_team_mode')          // 'true' = team demo mode
-sessionStorage.getItem('lvs_customer')           // Customer ID (e.g., 'anduril')
+| Upgrade | Before | After |
+|---------|--------|-------|
+| **Pending Auth** | In-memory dict (lost on restart) | SQLite table with TTL |
+| **Rate Limiting** | None | Cloud Armor (10/100 req/min) |
+| **Redirects** | Server-provided URL | Whitelist-only on frontend |
+| **Credentials** | Hardcoded in source | Environment variables |
+| **CORS Headers** | `allow_headers=["*"]` | Explicit list |
+| **Security Headers** | None | Full suite (HSTS, CSP, etc.) |
+| **Hosting** | GitHub Pages only | Cloud Run + Load Balancer |
+
+### Security Headers Added
 ```
-
-### Access Matrix
-
-| Feature | Investor | Customer | Founder |
-|---------|----------|----------|---------|
-| Investor Dashboard | ✅ | ❌ | ✅ |
-| Pipeline Details | ✅ | ❌ | ✅ |
-| Financial Model | ✅ | ❌ | ✅ |
-| Seed Round Info | ✅ | ❌ | ✅ |
-| Own Customer Portal | ✅ | ✅ | ✅ |
-| All Customer Portals | ✅ | ❌ | ✅ |
-| Founder Dashboard | ❌ | ❌ | ✅ |
-
----
-
-## Data Architecture
-
-### customers.json Structure
-
-```json
-{
-  "customers": [
-    {
-      "id": "anduril",                    // Unique identifier
-      "name": "Anduril Industries",       // Display name
-      "industry": "Defense Tech",         // Industry category
-      "tier": 1,                          // 1, 2, or 3
-      "product": "LVS-250",               // Target product
-      "currentStage": 3,                  // 1-6 engagement stage
-      "stages": [...],                    // Stage progression
-      "milestones": [...],                // Key milestones
-      "summary": {
-        "status": "IRAD Proposed",        // Current status
-        "totalValue": "$15,000,000",      // Deal value
-        "probability": "60%",             // Win probability
-        "weightedValue": "$9,000,000",    // value × probability
-        "primaryContact": "Name"          // Main contact
-      },
-      "nextActions": [...]                // Pending tasks
-    }
-  ],
-  "governmentEngagements": [
-    {
-      "id": "army-iews",
-      "name": "US Army IEW&S / C5ISR",
-      "strategy": "OEM Partner Positioning",
-      "oem_partners": [...],
-      "potentialImpact": {...}
-    }
-  ]
-}
-```
-
-### financial-model.json Structure
-
-```json
-{
-  "lastUpdated": "January 28, 2026",
-  "weightedRevenue": {
-    "2026": { "amount": "$1,200,000", "value": 1200000, "breakdown": {...} },
-    "2027": { "amount": "$12,400,000", "value": 12400000, "breakdown": {...} },
-    "2028": { "amount": "$28,000,000", "value": 28000000, "breakdown": {...} }
-  },
-  "cumulativeWeighted": {
-    "threeYear": "$41,600,000"
-  }
-}
+X-Content-Type-Options: nosniff
+X-Frame-Options: DENY
+X-XSS-Protection: 1; mode=block
+Referrer-Policy: strict-origin-when-cross-origin
+Strict-Transport-Security: max-age=31536000; includeSubDomains
+Permissions-Policy: geolocation=(), microphone=(), camera=()
 ```
 
 ---
 
-## Common Tasks
+## API Reference
 
-### Add a New Customer Portal
+### Authentication
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/auth/email` | Step 1: Submit email, get portal type |
+| POST | `/auth/password` | Step 2: Verify password |
+| POST | `/auth/2fa` | Step 3: Verify TOTP code |
+| POST | `/auth/validate-token` | Validate JWT token |
+| POST | `/auth/logout` | Revoke current session |
+| GET | `/auth/me` | Get current user info |
 
-1. **Copy template:**
-   ```bash
-   cp koniku-portal.html newcustomer-portal.html
-   ```
+### 2FA Setup
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/auth/setup-2fa` | Generate QR code for authenticator |
+| POST | `/auth/verify-2fa-setup` | Confirm 2FA setup |
 
-2. **Find & replace:**
-   - `Koniku` → `New Customer`
-   - `koniku` → `newcustomer`
-   - Update all customer-specific data (stage, value, milestones)
-
-3. **Add to customers.json:**
-   ```json
-   {
-     "id": "newcustomer",
-     "name": "New Customer Inc",
-     ...
-   }
-   ```
-
-4. **Add to founder-portal.html:**
-   ```javascript
-   const customersWithPortals = ['anduril', 'terrahaptix', 'koniku', 'glid', 'mach', 'newcustomer'];
-   ```
-   And add the portal link logic.
-
-5. **Add to login.html** (customer dropdown):
-   ```html
-   <option value="newcustomer">New Customer Inc</option>
-   ```
-
-6. **Add to dashboard.html** (Customer Portals section)
-
-### Update Pipeline Metrics
-
-1. **Edit dashboard.html** - Top metrics grid
-2. **Edit pipeline.html** - Tier tables and totals
-3. **Edit data/customers.json** - Source of truth
-
-### Update Financial Projections
-
-1. **Edit data/financial-model.json** - Update values
-2. **Dashboard auto-updates** from the card display
-3. **financials.html auto-loads** from JSON
-
-### Change Access Passwords
-
-Password management is handled internally. Contact the development team for credential updates.
+### NDA Management (Founder Only)
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/auth/nda/users` | List users with NDA status |
+| POST | `/auth/nda/approve/{id}` | Approve user's NDA |
+| POST | `/auth/nda/revoke/{id}` | Revoke user's NDA |
+| POST | `/auth/nda/extend/{id}` | Extend NDA expiration |
 
 ---
 
-## Design System
+## GCP Infrastructure
 
-### Colors (CSS Variables)
+| Resource | Name | Purpose |
+|----------|------|---------|
+| Cloud Run | lvs-portal | Frontend container (nginx) |
+| Cloud Run | lvs-api | Backend container (FastAPI) |
+| Cloud Armor | lvs-rate-limit-policy | Rate limiting at edge |
+| Backend Service | lvs-api-backend | Load balancer target |
+| Static IP | lvs-api-ip | 34.49.225.82 |
+| SSL Certificate | lvs-api-cert | For api.lolavisionsystems.com |
 
-```css
-:root {
-    --bg: #0a0a0f;           /* Page background */
-    --panel: #12121a;        /* Card background */
-    --panel-light: #1a1a24;  /* Lighter panels */
-    --text: #f5f5f7;         /* Primary text */
-    --muted: #6b7280;        /* Secondary text */
-    --accent: #7c4dff;       /* Purple - primary brand */
-    --gold: #d4af37;         /* Gold - premium/founder */
-    --success: #10b981;      /* Green - complete/good */
-    --warn: #f59e0b;         /* Orange - warning */
-}
-```
+---
 
-### Status Badge Classes
+## Environment Variables
 
-```css
-.stage-badge.negotiation  /* Green */
-.stage-badge.evaluation   /* Purple */
-.stage-badge.opportunity  /* Orange */
-.stage-badge.discovery    /* Gray */
-.stage-badge.proposed     /* Cyan */
-.stage-badge.stalled      /* Yellow */
+### Backend (.env)
+```bash
+SECRET_KEY=              # JWT signing key (auto-generated if not set)
+SEED_DEMO_USERS=false    # Set "true" to create demo users on startup
+DEMO_FOUNDER_PASSWORD=   # Required if SEED_DEMO_USERS=true
+DEMO_INVESTOR_PASSWORD=  # Required if SEED_DEMO_USERS=true
+DEMO_CUSTOMER_PASSWORD=  # Required if SEED_DEMO_USERS=true
+DEMO_PARTNER_PASSWORD=   # Required if SEED_DEMO_USERS=true
 ```
 
 ---
 
 ## Deployment
 
-### Automatic (GitHub Pages)
-
+### Deploy to Cloud Run
 ```bash
-git add -A
-git commit -m "Description of changes"
-git push origin main
-# Auto-deploys in ~1-2 minutes
+# Backend
+cd backend
+gcloud run deploy lvs-api \
+    --source . \
+    --region us-central1 \
+    --allow-unauthenticated \
+    --project=lvs-portal-prod
+
+# Frontend
+cd ..
+gcloud run deploy lvs-portal \
+    --source . \
+    --region us-central1 \
+    --allow-unauthenticated \
+    --project=lvs-portal-prod
 ```
 
-### Verify Deployment
+### Deploy to GitHub Pages
+```bash
+git add -A
+git commit -m "Description"
+git push origin main
+# Auto-deploys in ~2 minutes
+```
 
-1. Visit: https://mbanotnba.github.io/lvs-investor-portal/
-2. Hard refresh: `Cmd+Shift+R` (Mac) or `Ctrl+Shift+R` (Windows)
-3. Check GitHub Actions if issues
+---
+
+## Access Control
+
+### Session Storage Keys
+```javascript
+sessionStorage.getItem('lvs_auth')              // 'true' = logged in
+sessionStorage.getItem('lvs_token')             // JWT token
+sessionStorage.getItem('lvs_role')              // 'investor'|'customer'|'founder'|'partner'
+sessionStorage.getItem('lvs_nda_allowed')       // 'true' = NDA approved
+sessionStorage.getItem('lvs_founder_auth')      // 'true' = founder access
+```
+
+### Access Matrix
+
+| Feature | Investor | Customer | Partner | Founder |
+|---------|----------|----------|---------|---------|
+| Investor Dashboard | ✅ | ❌ | ❌ | ✅ |
+| Own Portal | N/A | ✅ | ✅ | ✅ |
+| All Customer Portals | ✅ | ❌ | ❌ | ✅ |
+| NDA Management | ❌ | ❌ | ❌ | ✅ |
 
 ---
 
 ## Troubleshooting
 
-### "Changes not showing on live site"
-- Wait 1-2 minutes for GitHub Pages rebuild
-- Hard refresh browser (`Cmd+Shift+R`)
-- Check git push succeeded: `git log --oneline -1`
-
 ### "Login not working"
-- Check sessionStorage in browser dev tools
-- Verify password hash matches in login.html
-- Clear sessionStorage: `sessionStorage.clear()`
+1. Check API is running: https://lvs-api-657638018776.us-central1.run.app/health
+2. Check browser console for CORS errors
+3. Verify user exists in database
 
-### "Customer portal not loading"
-- Check file exists and naming matches
-- Verify added to customersWithPortals array
-- Check browser console for errors
+### "2FA code rejected"
+1. Ensure phone time is synced (Settings → Date/Time → Automatic)
+2. TOTP has 30-second window with ±1 period tolerance
 
-### "Videos not playing"
-- Must serve via HTTP server (not file://)
-- Check assets/demos/ and assets/testimonials/ folders
-- Verify video format is MP4
+### "Rate limited (429)"
+- Auth endpoints: 10 requests/minute per IP
+- Wait 60 seconds and retry
+- Check if behind shared IP (office NAT)
+
+### "NDA pending"
+- Customer/partner accounts need founder approval
+- Founder: Go to founder-portal.html → NDA Management
 
 ---
 
 ## Team
 
-| Name | Role | Focus Areas |
-|------|------|-------------|
+| Name | Role | Focus |
+|------|------|-------|
 | Tayo Adesanya | Founder & CEO | Strategy, Customer Relations |
 | Randy Hollines | VP Software Engineering | Architecture, Code Quality |
 | Jordan Page | Principal Systems Engineer | Hardware Integration |
@@ -344,28 +328,26 @@ git push origin main
 
 ---
 
-## Contact & Support
-
-- **Code Issues:** Create GitHub issue or ping Randy
-- **Content Updates:** Coordinate with Tayo
-- **Deployment Help:** Check this README first
-
----
-
 ## Changelog
 
-### 2026-01-28 (v2.0)
-- Added unified login system with role selection
-- Added 5 customer portals (Anduril, Koniku, Glid, Mach, Terrahaptix)
-- Added Founder Portal with customer management
-- Added Team section to investor dashboard
-- Added Government Engagements tracking (US Army IEW&S)
-- Added Financial Model with 3-year projections
-- Added Seed Round details page
-- Implemented role-based access control
-- Added Team Demo Mode for persona switching
+### 2026-01-31 (v3.0) - Security & Cloud
+- Deployed to Google Cloud Run (frontend + backend)
+- Added Cloud Armor rate limiting (10 req/min auth, 100 req/min general)
+- Added security headers (HSTS, X-Frame-Options, CSP, etc.)
+- Implemented database-backed pending auth (replaces in-memory)
+- Added whitelist-based redirects (prevents open redirect attacks)
+- Moved demo credentials to environment variables
+- Tightened CORS to explicit headers only
+- Added comprehensive API documentation at /docs
 
-### 2026-01-27 (v1.0)
-- Initial investor portal with password protection
-- Production roadmap integration
+### 2026-01-28 (v2.0) - Portal System
+- Added unified login with multi-step auth (email → password → 2FA)
+- Added FastAPI backend with JWT + TOTP
+- Added NDA gating for customers/partners
+- Added 5 customer portals (Anduril, Koniku, Glid, Mach, Terrahaptix)
+- Added Founder Portal with customer/NDA management
+- Added session management with revocation support
+
+### 2026-01-27 (v1.0) - Initial Release
+- Static investor portal with password protection
 - GitHub Pages deployment
