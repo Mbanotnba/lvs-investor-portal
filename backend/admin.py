@@ -11,7 +11,7 @@ from pydantic import BaseModel, EmailStr
 from auth import get_current_user, require_founder, get_client_ip
 from database import (
     get_db_connection, create_user, get_user_by_email, get_user_by_id,
-    update_nda_status, log_audit
+    update_nda_status, log_audit, force_turso_resync
 )
 from security import hash_password
 from config import PORTAL_DOMAINS
@@ -177,6 +177,27 @@ async def reset_password_bootstrap(request: Request, body: ResetPasswordRequest)
     log_audit(user["id"], "PASSWORD_RESET", f"Password reset via bootstrap key", client_ip)
 
     return {"success": True, "message": f"Password reset for {body.email}"}
+
+
+@router.post("/db-sync")
+async def sync_database(
+    request: Request,
+    current_user: dict = Depends(require_founder)
+):
+    """
+    Force a sync with the Turso remote database (Founder only).
+    Use this after direct Turso CLI changes to pull updates.
+    """
+    client_ip = get_client_ip(request)
+
+    success = force_turso_resync()
+
+    log_audit(current_user["id"], "DB_SYNC", f"Manual database sync triggered", client_ip)
+
+    return {
+        "success": success,
+        "message": "Database sync completed" if success else "Sync failed or Turso not configured"
+    }
 
 
 # ============================================================================

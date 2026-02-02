@@ -71,7 +71,10 @@ BULK_RESULT=$(curl -s -X POST "$API_URL/admin/users/bulk" \
       {"email": "vincent.berry2@gmail.com", "password": "LVS2026Vincent", "name": "Vincent Berry II", "portal_type": "investor"},
       {"email": "paul@theopportunityfund.com", "password": "LVS2026Paul", "name": "Paul Judge", "portal_type": "investor"},
       {"email": "nancy@theopportunityfund.com", "password": "LVS2026Nancy", "name": "Nancy Torres", "portal_type": "investor"},
-      {"email": "chad@theopportunityfund.com", "password": "LVS2026Chad", "name": "Chad Harris", "portal_type": "investor"}
+      {"email": "chad@theopportunityfund.com", "password": "LVS2026Chad", "name": "Chad Harris", "portal_type": "investor"},
+      {"email": "apickard@mfvpartners.com", "password": "LVS2026Aaron", "name": "Aaron Pickard", "portal_type": "investor", "company": "MFV Partners"},
+      {"email": "karthee@mfvpartners.com", "password": "LVS2026Karthee", "name": "Karthee Madasamy", "portal_type": "investor", "company": "MFV Partners"},
+      {"email": "natalie.warther@raymondjames.com", "password": "LVS2026Natalie", "name": "Natalie Warther", "portal_type": "investor", "company": "Raymond James"}
     ]
   }')
 
@@ -100,8 +103,11 @@ echo "    joshua@lolavisionsystems.com   / LVS2026Joshua"
 echo "    jordan@lolavisionsystems.com   / LVS2026Jordan"
 echo ""
 echo "  Investors:"
-echo "    vincent.berry2@gmail.com       / LVS2026Vincent"
-echo "    paul@theopportunityfund.com    / LVS2026Paul"
-echo "    nancy@theopportunityfund.com   / LVS2026Nancy"
-echo "    chad@theopportunityfund.com    / LVS2026Chad"
+echo "    vincent.berry2@gmail.com           / LVS2026Vincent"
+echo "    paul@theopportunityfund.com        / LVS2026Paul"
+echo "    nancy@theopportunityfund.com       / LVS2026Nancy"
+echo "    chad@theopportunityfund.com        / LVS2026Chad"
+echo "    apickard@mfvpartners.com           / LVS2026Aaron"
+echo "    karthee@mfvpartners.com            / LVS2026Karthee"
+echo "    natalie.warther@raymondjames.com   / LVS2026Natalie"
 echo ""

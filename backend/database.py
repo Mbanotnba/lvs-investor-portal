@@ -70,13 +70,26 @@ def get_db_connection():
 
 
 def sync_to_turso():
-    """Sync local changes to Turso cloud."""
+    """Sync local changes to Turso cloud (bidirectional)."""
     global _turso_conn
     if _turso_conn is not None:
         try:
             _turso_conn.sync()
         except Exception as e:
             print(f"Turso sync error: {e}")
+
+
+def force_turso_resync():
+    """Force a fresh sync from Turso remote. Call this to pull remote changes."""
+    global _turso_conn
+    if USE_TURSO and LIBSQL_AVAILABLE and _turso_conn is not None:
+        try:
+            _turso_conn.sync()
+            return True
+        except Exception as e:
+            print(f"Turso resync error: {e}")
+            return False
+    return False
 
 
 def row_to_dict(cursor, row):
