@@ -33,6 +33,7 @@ CUSTOMIZATION POINTS:
     <script src="js/config.js"></script>
     <script src="js/security.js"></script>
     <script src="js/comments.js"></script>
+    <script src="js/shared-tabs.js"></script>
     <script>
         (function() {
             const SESSION_TIMEOUT = 30 * 60 * 1000;
@@ -291,302 +292,20 @@ CUSTOMIZATION POINTS:
         </div>
 
         <!-- ==================== PRODUCT TAB ==================== -->
-        <div id="product" class="tab-content">
-            <div class="welcome" style="margin-bottom: 24px;">
-                <div class="welcome-content">
-                    <h1>LVS-250 <span>Overview</span></h1>
-                    <p>High-performance edge AI processor optimized for defense applications</p>
-                </div>
-            </div>
-            <div class="panel">
-                <h3>Product Details</h3>
-                <p style="color: var(--muted); font-size: 14px; line-height: 1.7;">
-                    The LVS-250 is designed for autonomous systems requiring real-time AI inference at the edge.
-                    With ultra-low power consumption and high compute density, it's ideal for kamikaze drone applications
-                    where SWaP (Size, Weight, and Power) constraints are critical.
-                </p>
-                <div style="margin-top: 24px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;">
-                    <div style="background: var(--panel-light); padding: 20px; border-radius: 12px; text-align: center;">
-                        <div style="font-size: 28px; font-weight: 800; color: var(--accent);">50+</div>
-                        <div style="font-size: 12px; color: var(--muted); margin-top: 4px;">TOPS Performance</div>
-                    </div>
-                    <div style="background: var(--panel-light); padding: 20px; border-radius: 12px; text-align: center;">
-                        <div style="font-size: 28px; font-weight: 800; color: var(--gold);">&lt;5W</div>
-                        <div style="font-size: 12px; color: var(--muted); margin-top: 4px;">Power Consumption</div>
-                    </div>
-                    <div style="background: var(--panel-light); padding: 20px; border-radius: 12px; text-align: center;">
-                        <div style="font-size: 28px; font-weight: 800; color: var(--success);">12nm</div>
-                        <div style="font-size: 12px; color: var(--muted); margin-top: 4px;">Process Node</div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <!-- Content loaded from js/shared-tabs.js -->
+        <div id="product" class="tab-content"></div>
 
         <!-- ==================== SPECS TAB ==================== -->
-        <div id="specs" class="tab-content">
-            <div class="welcome" style="margin-bottom: 24px;">
-                <div class="welcome-content">
-                    <h1>Technical <span>Specifications</span></h1>
-                    <p>Detailed specifications for the LVS-250 processor</p>
-                </div>
-            </div>
-            <div class="panel">
-                <h3>Core Specifications</h3>
-                <table style="width: 100%; border-collapse: collapse;">
-                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.06);">
-                        <td style="padding: 14px 16px; color: var(--muted);">Process Technology</td>
-                        <td style="padding: 14px 16px; font-weight: 600;">GlobalFoundries 12nm</td>
-                    </tr>
-                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.06);">
-                        <td style="padding: 14px 16px; color: var(--muted);">Peak Performance</td>
-                        <td style="padding: 14px 16px; font-weight: 600;">50+ TOPS (INT8)</td>
-                    </tr>
-                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.06);">
-                        <td style="padding: 14px 16px; color: var(--muted);">Power Consumption</td>
-                        <td style="padding: 14px 16px; font-weight: 600;">&lt;5W typical</td>
-                    </tr>
-                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.06);">
-                        <td style="padding: 14px 16px; color: var(--muted);">Memory Interface</td>
-                        <td style="padding: 14px 16px; font-weight: 600;">LPDDR4x</td>
-                    </tr>
-                    <tr>
-                        <td style="padding: 14px 16px; color: var(--muted);">Operating Temperature</td>
-                        <td style="padding: 14px 16px; font-weight: 600;">-40C to +85C</td>
-                    </tr>
-                </table>
-            </div>
-        </div>
+        <!-- Content loaded from js/shared-tabs.js -->
+        <div id="specs" class="tab-content"></div>
 
         <!-- ==================== DEVKIT TAB ==================== -->
-        <div id="devkit" class="tab-content">
-            <div class="welcome" style="margin-bottom: 24px;">
-                <div class="welcome-content">
-                    <h1>LVS-250 <span>Development Kit</span></h1>
-                    <p>Hardware platform for software development and system integration</p>
-                </div>
-            </div>
-
-            <div class="feature-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">&#128187;</div>
-                    <div class="feature-title">LVS-250 Evaluation Board</div>
-                    <div class="feature-desc">Full-featured development board with LVS-250 production silicon, integrated power management, and comprehensive I/O breakout.</div>
-                    <span class="feature-tag">Ships Q3 2027</span>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">&#128247;</div>
-                    <div class="feature-title">Camera Interface Module</div>
-                    <div class="feature-desc">8-channel MIPI CSI-2 daughter card with reference camera sensors. Supports 4K60 per channel, synchronized capture.</div>
-                    <span class="feature-tag">Included</span>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">&#128268;</div>
-                    <div class="feature-title">Power & Debug Module</div>
-                    <div class="feature-desc">Integrated JTAG debugger, power monitoring, thermal management. Real-time telemetry via USB-C.</div>
-                    <span class="feature-tag">Included</span>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">&#128752;</div>
-                    <div class="feature-title">RF Development Add-on</div>
-                    <div class="feature-desc">Optional RF modem evaluation board for SDR and SATCOM development. Includes antenna interfaces and spectrum analyzer hooks.</div>
-                    <span class="feature-tag">Optional Add-on</span>
-                </div>
-            </div>
-
-            <div class="panel">
-                <h3>Development Kit Contents</h3>
-                <table class="specs-table">
-                    <thead>
-                        <tr><th>Item</th><th>Quantity</th><th>Description</th></tr>
-                    </thead>
-                    <tbody>
-                        <tr><td>LVS-250 Eval Board</td><td>1</td><td>Main development platform with production silicon</td></tr>
-                        <tr><td>Camera Module</td><td>2</td><td>IMX577 12MP reference cameras</td></tr>
-                        <tr><td>MIPI Ribbon Cables</td><td>8</td><td>15cm flex cables for camera connection</td></tr>
-                        <tr><td>Power Supply</td><td>1</td><td>65W USB-C PD adapter</td></tr>
-                        <tr><td>Debug Cable</td><td>1</td><td>USB-C to USB-A debug/programming cable</td></tr>
-                        <tr><td>Heatsink Assembly</td><td>1</td><td>Active cooling solution with 40mm fan</td></tr>
-                        <tr><td>Quick Start Guide</td><td>1</td><td>Printed getting started documentation</td></tr>
-                        <tr><td>SD Card</td><td>1</td><td>64GB with pre-loaded SDK and examples</td></tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <div class="panel" style="margin-top: 24px;">
-                <h3>Development Kit Specifications</h3>
-                <div class="specs-section">
-                    <table class="specs-table">
-                        <tr><td>Board Dimensions</td><td>170 x 170mm (Mini-ITX compatible)</td></tr>
-                        <tr><td>Power Input</td><td>12-20V DC, USB-C PD</td></tr>
-                        <tr><td>Host Interface</td><td>PCIe Gen5 x8 edge connector</td></tr>
-                        <tr><td>Expansion</td><td>2x M.2 (NVMe), 1x FMC+ (FPGA add-on)</td></tr>
-                        <tr><td>Network</td><td>2x 10GbE RJ45, 1x 1GbE management</td></tr>
-                        <tr><td>Video Output</td><td>1x HDMI 2.1, 1x DisplayPort 1.4</td></tr>
-                        <tr><td>Debug</td><td>JTAG, UART console, LED indicators</td></tr>
-                    </table>
-                </div>
-            </div>
-        </div>
+        <!-- Content loaded from js/shared-tabs.js -->
+        <div id="devkit" class="tab-content"></div>
 
         <!-- ==================== SDK TAB ==================== -->
-        <div id="sdk" class="tab-content">
-            <div class="welcome" style="margin-bottom: 24px;">
-                <div class="welcome-content">
-                    <h1>LVS <span>Software Development Platform</span></h1>
-                    <p>Complete toolchain for neural network deployment, system integration, and application development</p>
-                </div>
-            </div>
-
-            <!-- SDK Architecture Overview -->
-            <div class="screenshot">
-                <div class="screenshot-label">SDK Architecture Overview</div>
-                <div class="screenshot-title">LVS Software Development Platform</div>
-                <div class="screenshot-preview" style="text-align: left; padding: 30px;">
-                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 20px;">
-                        <div style="background: rgba(124,77,255,0.2); padding: 16px; border-radius: 8px; text-align: center;">
-                            <div style="font-size: 11px; color: var(--muted); margin-bottom: 4px;">APPLICATION LAYER</div>
-                            <div style="font-size: 13px; font-weight: 600;">Customer Applications</div>
-                        </div>
-                        <div style="background: rgba(124,77,255,0.2); padding: 16px; border-radius: 8px; text-align: center;">
-                            <div style="font-size: 11px; color: var(--muted); margin-bottom: 4px;">REFERENCE APPS</div>
-                            <div style="font-size: 13px; font-weight: 600;">Vision Pipelines</div>
-                        </div>
-                        <div style="background: rgba(124,77,255,0.2); padding: 16px; border-radius: 8px; text-align: center;">
-                            <div style="font-size: 11px; color: var(--muted); margin-bottom: 4px;">DEMO APPLICATIONS</div>
-                            <div style="font-size: 13px; font-weight: 600;">Object Detection</div>
-                        </div>
-                    </div>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px;">
-                        <div style="background: rgba(212,175,55,0.2); padding: 16px; border-radius: 8px; text-align: center;">
-                            <div style="font-size: 11px; color: var(--muted); margin-bottom: 4px;">LVS RUNTIME</div>
-                            <div style="font-size: 13px; font-weight: 600;">Neural Inference Engine</div>
-                        </div>
-                        <div style="background: rgba(212,175,55,0.2); padding: 16px; border-radius: 8px; text-align: center;">
-                            <div style="font-size: 11px; color: var(--muted); margin-bottom: 4px;">LVS VISION</div>
-                            <div style="font-size: 13px; font-weight: 600;">Image Processing Library</div>
-                        </div>
-                    </div>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 20px;">
-                        <div style="background: rgba(16,185,129,0.2); padding: 16px; border-radius: 8px; text-align: center;">
-                            <div style="font-size: 11px; color: var(--muted); margin-bottom: 4px;">NPU DRIVER</div>
-                            <div style="font-size: 13px; font-weight: 600;">Kernel Module</div>
-                        </div>
-                        <div style="background: rgba(16,185,129,0.2); padding: 16px; border-radius: 8px; text-align: center;">
-                            <div style="font-size: 11px; color: var(--muted); margin-bottom: 4px;">CAMERA DRIVER</div>
-                            <div style="font-size: 13px; font-weight: 600;">V4L2 / ISP</div>
-                        </div>
-                        <div style="background: rgba(16,185,129,0.2); padding: 16px; border-radius: 8px; text-align: center;">
-                            <div style="font-size: 11px; color: var(--muted); margin-bottom: 4px;">SYSTEM SERVICES</div>
-                            <div style="font-size: 13px; font-weight: 600;">Power / Thermal</div>
-                        </div>
-                    </div>
-                    <div style="background: rgba(255,255,255,0.1); padding: 16px; border-radius: 8px; text-align: center;">
-                        <div style="font-size: 11px; color: var(--muted); margin-bottom: 4px;">HARDWARE</div>
-                        <div style="font-size: 13px; font-weight: 600;">LVS-250 Neural Compute Engine</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- SDK Components -->
-            <div class="feature-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">&#128640;</div>
-                    <div class="feature-title">LVS Neural Compiler</div>
-                    <div class="feature-desc">Deploy any vision model—from open-source networks to your proprietary IP—optimized specifically for LVS-250 silicon. Automatic fine-tuning of layer scheduling, quantization, and memory layout delivers 3-5x performance gains over generic inference.</div>
-                    <span class="feature-tag">Your Models, Optimized</span>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">&#9881;</div>
-                    <div class="feature-title">LVS Runtime</div>
-                    <div class="feature-desc">Production-grade inference engine that maximizes throughput on LVS-250. Dynamic batching, multi-model orchestration, and zero-copy pipelines tuned for real-time vision workloads.</div>
-                    <span class="feature-tag">C++ / Python APIs</span>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">&#128248;</div>
-                    <div class="feature-title">LVS Vision Library</div>
-                    <div class="feature-desc">Hardware-accelerated preprocessing and postprocessing. Resize, warp, color convert, and filter at camera-rate speeds. Drop-in replacement for OpenCV with 10x acceleration.</div>
-                    <span class="feature-tag">10x Faster than CPU</span>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">&#128202;</div>
-                    <div class="feature-title">LVS Profiler</div>
-                    <div class="feature-desc">Understand exactly where your model spends time. Layer-by-layer analysis, memory bandwidth visualization, and optimization recommendations specific to your architecture.</div>
-                    <span class="feature-tag">GUI + CLI</span>
-                </div>
-            </div>
-
-            <!-- Value Proposition Callout -->
-            <div class="panel" style="background: linear-gradient(135deg, rgba(124,77,255,0.15), rgba(212,175,55,0.1)); border-left: 3px solid var(--accent);">
-                <h3 style="margin-bottom: 12px;">Bring Your Own Model</h3>
-                <p style="color: var(--text); font-size: 14px; line-height: 1.7; margin: 0;">
-                    The LVS compiler doesn't just run models—it <strong>fine-tunes them for our silicon</strong>. Whether you're deploying a standard detection network or proprietary computer vision IP, our toolchain automatically optimizes tensor layouts, operator fusion, and memory scheduling to extract maximum performance from the LVS-250's dual NPU architecture.
-                </p>
-            </div>
-
-            <!-- Code Sample -->
-            <div class="panel" style="margin-top: 24px;">
-                <h3>Quick Start Example</h3>
-                <div class="code-block">
-<span class="code-comment"># LVS SDK - Deploy Any Vision Model</span>
-<span class="code-keyword">import</span> lvs
-<span class="code-keyword">from</span> lvs.vision <span class="code-keyword">import</span> Camera, ImageProcessor
-<span class="code-keyword">from</span> lvs.inference <span class="code-keyword">import</span> Runtime
-
-<span class="code-comment"># Initialize runtime on LVS-250</span>
-runtime = lvs.<span class="code-function">Runtime</span>(device=<span class="code-string">"lvs250"</span>)
-
-<span class="code-comment"># Load YOUR compiled model (any ONNX, PyTorch, or TensorFlow model)</span>
-model = runtime.<span class="code-function">load_model</span>(<span class="code-string">"your_model.lvs"</span>)  <span class="code-comment"># Optimized for LVS-250</span>
-
-<span class="code-comment"># Configure camera pipeline</span>
-camera = Camera.<span class="code-function">open</span>(channel=0, resolution=(1920, 1080), fps=30)
-processor = ImageProcessor(resize=model.input_size, normalize=<span class="code-keyword">True</span>)
-
-<span class="code-comment"># Real-time inference loop</span>
-<span class="code-keyword">for</span> frame <span class="code-keyword">in</span> camera.<span class="code-function">stream</span>():
-    tensor = processor.<span class="code-function">preprocess</span>(frame)
-    results = model.<span class="code-function">infer</span>(tensor)  <span class="code-comment"># Runs on dual NPU @ 250 TOPS</span>
-    <span class="code-keyword">print</span>(f<span class="code-string">"Inference: {model.last_inference_ms:.1f}ms"</span>)
-                </div>
-            </div>
-
-            <!-- SDK Documentation -->
-            <div class="panel" style="margin-top: 24px;">
-                <h3>SDK Documentation</h3>
-                <div class="document">
-                    <div class="doc-icon">&#128218;</div>
-                    <div class="doc-info">
-                        <div class="doc-name">LVS SDK Getting Started Guide</div>
-                        <div class="doc-meta">PDF &bull; 45 pages &bull; v1.0</div>
-                    </div>
-                    <span class="doc-download">&#8594;</span>
-                </div>
-                <div class="document">
-                    <div class="doc-icon">&#128196;</div>
-                    <div class="doc-info">
-                        <div class="doc-name">LVS Runtime API Reference</div>
-                        <div class="doc-meta">HTML &bull; C++ / Python &bull; v1.0</div>
-                    </div>
-                    <span class="doc-download">&#8594;</span>
-                </div>
-                <div class="document">
-                    <div class="doc-icon">&#128202;</div>
-                    <div class="doc-info">
-                        <div class="doc-name">Model Optimization Guide</div>
-                        <div class="doc-meta">PDF &bull; Best practices for your models &bull; v1.0</div>
-                    </div>
-                    <span class="doc-download">&#8594;</span>
-                </div>
-                <div class="document">
-                    <div class="doc-icon">&#127891;</div>
-                    <div class="doc-info">
-                        <div class="doc-name">Tutorial: Custom Model Deployment</div>
-                        <div class="doc-meta">Jupyter Notebook &bull; End-to-end walkthrough</div>
-                    </div>
-                    <span class="doc-download">&#8594;</span>
-                </div>
-            </div>
-        </div>
+        <!-- Content loaded from js/shared-tabs.js -->
+        <div id="sdk" class="tab-content"></div>
 
         <!-- ==================== DOCUMENTS TAB ==================== -->
         <div id="documents" class="tab-content">
@@ -618,181 +337,16 @@ processor = ImageProcessor(resize=model.input_size, normalize=<span class="code-
         </div>
 
         <!-- ==================== SUPPORT TAB ==================== -->
-        <div id="support" class="tab-content">
-            <div class="welcome" style="margin-bottom: 24px;">
-                <div class="welcome-content">
-                    <h1>Technical <span>Support</span></h1>
-                    <p>Get help from the Lola Vision Systems team</p>
-                </div>
-            </div>
-            <div class="grid">
-                <div class="panel">
-                    <h3>Support Channels</h3>
-                    <p style="color: var(--muted); font-size: 14px; margin-bottom: 16px;">
-                        For questions about the IRAD proposal or partnership status, please contact your LVS representative.
-                    </p>
-                    <div style="background: var(--panel-light); padding: 16px; border-radius: 10px;">
-                        <div style="font-size: 13px; font-weight: 600; margin-bottom: 8px;">Email Support</div>
-                        <div style="font-size: 14px; color: var(--accent);">partners@lolavisionsystems.com</div>
-                    </div>
-                </div>
-                <div class="panel">
-                    <h3>Your LVS Contact</h3>
-                    <div class="contact-card">
-                        <h4>Dedicated Support</h4>
-                        <div class="contact-person">
-                            <div class="contact-avatar">TA</div>
-                            <div class="contact-info">
-                                <h5>Tayo Adesanya</h5>
-                                <p>CEO &bull; Lola Vision Systems</p>
-                            </div>
-                        </div>
-                        <div class="contact-actions" style="flex-direction: column; gap: 8px;">
-                            <div style="display: flex; gap: 8px;">
-                                <a href="https://wa.me/16304792126" target="_blank" class="contact-btn primary" style="text-decoration: none; text-align: center;">WhatsApp</a>
-                                <a href="sms:+16304792126" class="contact-btn secondary" style="text-decoration: none; text-align: center;">iMessage</a>
-                            </div>
-                            <a href="mailto:tayo@lolavisionsystems.com" class="contact-btn secondary" style="text-decoration: none; text-align: center; width: 100%;">Email</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <!-- Content loaded from js/shared-tabs.js -->
+        <div id="support" class="tab-content"></div>
 
         <!-- ==================== DEMOS TAB ==================== -->
-        <div id="demos" class="tab-content">
-            <div class="video-section-header">
-                <h2>Real-Time Object Detection, Recognition &amp; Tracking</h2>
-                <p>LVS Software running multiple fine-tuned vision models in parallel, capturing mission-critical details in real-time.</p>
-                <div style="margin-top: 16px; display: flex; flex-wrap: wrap; gap: 8px;">
-                    <span style="background: rgba(124,77,255,0.2); color: var(--accent-light); padding: 6px 12px; border-radius: 20px; font-size: 12px;">Vehicle Detection</span>
-                    <span style="background: rgba(124,77,255,0.2); color: var(--accent-light); padding: 6px 12px; border-radius: 20px; font-size: 12px;">Personnel Tracking</span>
-                    <span style="background: rgba(124,77,255,0.2); color: var(--accent-light); padding: 6px 12px; border-radius: 20px; font-size: 12px;">Threat Classification</span>
-                    <span style="background: rgba(124,77,255,0.2); color: var(--accent-light); padding: 6px 12px; border-radius: 20px; font-size: 12px;">Perimeter Monitoring</span>
-                    <span style="background: rgba(124,77,255,0.2); color: var(--accent-light); padding: 6px 12px; border-radius: 20px; font-size: 12px;">Anomaly Detection</span>
-                </div>
-            </div>
-            <div class="video-grid single-row">
-                <div class="video-card">
-                    <div style="background: var(--panel-light); padding: 8px 16px; display: flex; align-items: center; gap: 8px;">
-                        <span style="font-size: 16px;">&#9728;</span>
-                        <span style="font-weight: 600; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px;">Day-Time Detection</span>
-                    </div>
-                    <video class="demo-video" autoplay muted loop playsinline>
-                        <source src="assets/demos/demo-1.mp4" type="video/mp4">
-                    </video>
-                    <div class="video-card-info">
-                        <div class="video-card-title">Visible Spectrum Analysis</div>
-                        <div class="video-card-desc">High-accuracy object detection and tracking in daylight conditions</div>
-                    </div>
-                </div>
-                <div class="video-card">
-                    <div style="background: var(--panel-light); padding: 8px 16px; display: flex; align-items: center; gap: 8px;">
-                        <span style="font-size: 16px;">&#9789;</span>
-                        <span style="font-weight: 600; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px;">Night-Time Detection</span>
-                    </div>
-                    <video class="demo-video" autoplay muted loop playsinline>
-                        <source src="assets/demos/demo-2.mp4" type="video/mp4">
-                    </video>
-                    <div class="video-card-info">
-                        <div class="video-card-title">Low-Light &amp; IR Analysis</div>
-                        <div class="video-card-desc">Thermal and infrared detection for 24/7 operational capability</div>
-                    </div>
-                </div>
-            </div>
-            <div style="margin-top: 24px; padding: 16px 20px; background: linear-gradient(135deg, rgba(124,77,255,0.1), rgba(212,175,55,0.1)); border-radius: 12px; border-left: 3px solid var(--gold);">
-                <p style="font-size: 13px; color: var(--text); margin: 0;">
-                    <strong style="color: var(--gold);">LVS-250 Performance Note:</strong>
-                    The LVS-250 delivers <strong>3-5x performance efficiency</strong> compared to current solutions, enabling either
-                    <em>increased FPS for faster detection</em> or <em>reduced power consumption</em> for extended mission duration—a critical trade-off benefit for edge deployment.
-                </p>
-            </div>
-        </div>
+        <!-- Content loaded from js/shared-tabs.js -->
+        <div id="demos" class="tab-content"></div>
 
         <!-- ==================== TESTIMONIALS TAB ==================== -->
-        <div id="testimonials" class="tab-content">
-            <div class="video-section-header">
-                <h2>Expert Testimonials</h2>
-                <p>Industry leaders share their perspective on edge AI and the LVS platform.</p>
-            </div>
-            <div class="video-grid testimonials-grid">
-                <div class="video-card">
-                    <video class="testimonial-video" preload="metadata" muted playsinline>
-                        <source src="assets/testimonials/JamesUrgencyforChips.mp4" type="video/mp4">
-                    </video>
-                    <div class="video-card-info">
-                        <div class="video-card-title">The Urgency for Domestic Chips</div>
-                        <div class="video-card-speaker">
-                            <div class="speaker-avatar">JS</div>
-                            <div class="speaker-info">
-                                <div class="speaker-name">James Stewart</div>
-                                <div class="speaker-title">Industry Expert</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="video-card">
-                    <video class="testimonial-video" preload="metadata" muted playsinline>
-                        <source src="assets/testimonials/JamesEWexplanation.mp4" type="video/mp4">
-                    </video>
-                    <div class="video-card-info">
-                        <div class="video-card-title">Electronic Warfare Explained</div>
-                        <div class="video-card-speaker">
-                            <div class="speaker-avatar">JS</div>
-                            <div class="speaker-info">
-                                <div class="speaker-name">James Stewart</div>
-                                <div class="speaker-title">Industry Expert</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="video-card">
-                    <video class="testimonial-video" preload="metadata" muted playsinline>
-                        <source src="assets/testimonials/RandyChipletConfiguration.mp4" type="video/mp4">
-                    </video>
-                    <div class="video-card-info">
-                        <div class="video-card-title">Chiplet Configuration Benefits</div>
-                        <div class="video-card-speaker">
-                            <div class="speaker-avatar">RH</div>
-                            <div class="speaker-info">
-                                <div class="speaker-name">Randy Hollines</div>
-                                <div class="speaker-title">Industry Expert</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="video-card">
-                    <video class="testimonial-video" preload="metadata" muted playsinline>
-                        <source src="assets/testimonials/MaynardHwEdgeAISecurityPriorities.mp4" type="video/mp4">
-                    </video>
-                    <div class="video-card-info">
-                        <div class="video-card-title">Edge AI Security Priorities</div>
-                        <div class="video-card-speaker">
-                            <div class="speaker-avatar">MH</div>
-                            <div class="speaker-info">
-                                <div class="speaker-name">Maynard Holliday</div>
-                                <div class="speaker-title">Industry Expert</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="video-card">
-                    <video class="testimonial-video" preload="metadata" muted playsinline>
-                        <source src="assets/testimonials/MaynardChineseThreat.mp4" type="video/mp4">
-                    </video>
-                    <div class="video-card-info">
-                        <div class="video-card-title">Addressing the China Challenge</div>
-                        <div class="video-card-speaker">
-                            <div class="speaker-avatar">MH</div>
-                            <div class="speaker-info">
-                                <div class="speaker-name">Maynard Holliday</div>
-                                <div class="speaker-title">Industry Expert</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <!-- Content loaded from js/shared-tabs.js -->
+        <div id="testimonials" class="tab-content"></div>
 
         <footer class="footer">
             <p>Lola Vision Systems &bull; Customer Portal &bull; Confidential</p>
@@ -1011,6 +565,8 @@ ${textarea.value}`;
 
         // Load notes on page load
         document.addEventListener('DOMContentLoaded', () => {
+            // Initialize shared tabs (Product, Specs, DevKit, SDK, Support, Demos, Testimonials)
+            LVSSharedTabs.init();
             loadNotes();
             initUserGreeting();
             // Initialize shared account notes

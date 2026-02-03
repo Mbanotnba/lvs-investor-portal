@@ -33,6 +33,7 @@ AUTHENTICATION:
     <script src="js/config.js"></script>
     <script src="js/security.js"></script>
     <script src="js/comments.js"></script>
+    <script src="js/shared-tabs.js"></script>
     <script src="js/partner-data.js"></script>
     <script>
         // Authentication check
@@ -826,6 +827,8 @@ ${textarea.value}`;
 
         // Initialize on load
         document.addEventListener('DOMContentLoaded', () => {
+            // Initialize shared tabs (Product, Specs, DevKit, SDK, Support, Demos, Testimonials)
+            LVSSharedTabs.init();
             initPartnerPortal();
             initUserGreeting();
             // Initialize shared account notes with partner ID

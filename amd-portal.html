@@ -891,7 +891,11 @@ OVERVIEW:
         }
 
         // Initialize on load
-        document.addEventListener('DOMContentLoaded', initUserGreeting);
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialize shared tabs (Product, Specs, DevKit, SDK, Support, Demos, Testimonials)
+            LVSSharedTabs.init();
+            initUserGreeting();
+        });
     </script>
 </body>
 </html>
