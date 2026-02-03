@@ -76,6 +76,14 @@ BULK_RESULT=$(curl -s -X POST "$API_URL/admin/users/bulk" \
       {"email": "karthee@mfvpartners.com", "password": "LVS2026Karthee", "name": "Karthee Madasamy", "portal_type": "investor", "company": "MFV Partners"},
       {"email": "natalie.warther@raymondjames.com", "password": "LVS2026Natalie", "name": "Natalie Warther", "portal_type": "investor", "company": "Raymond James"},
       {"email": "sistel@cerberus.com", "password": "LVS2026Sarah", "name": "Sarah Istel", "portal_type": "investor", "company": "Cerberus Ventures"},
+      {"email": "andrew.cote00@gmail.com", "password": "LVS2026Andrew", "name": "Andrew Cote", "portal_type": "investor"},
+      {"email": "strategictechnologiesai@gmail.com", "password": "LVS2026Maynard", "name": "Maynard Holliday", "portal_type": "investor"},
+      {"email": "Roberts.Jamie2014@gmail.com", "password": "LVS2026Jamie", "name": "Jamie Roberts", "portal_type": "investor"},
+      {"email": "Fmarshalllowery@gmail.com", "password": "LVS2026Fred", "name": "Fred Lowrey", "portal_type": "investor"},
+      {"email": "jg@equityspacealliance.com", "password": "LVS2026Janeya", "name": "Janeya Griffin", "portal_type": "investor", "company": "Equity Space Alliance"},
+      {"email": "seema@dcstartupweek.org", "password": "LVS2026Seema", "name": "Seema Alexander", "portal_type": "investor", "company": "DC Startup Week"},
+      {"email": "rock@rocktechconsultants.com", "password": "LVS2026Walter", "name": "Walter McMillian", "portal_type": "investor", "company": "Rock Tech Consultants"},
+      {"email": "melissa@1863ventures.net", "password": "LVS2026Melissa", "name": "Melissa Bradley", "portal_type": "investor", "company": "1863 Ventures"},
       {"email": "roberthochstedler@machindustries.com", "password": "LVS2026Robert", "name": "Robert Hochstedler", "portal_type": "customer", "company": "Mach Industries"},
       {"email": "caffouda@anduril.com", "password": "LVS2026Chaffra", "name": "Chaffra Affouda", "portal_type": "customer", "company": "Anduril"},
       {"email": "kevin@glidtech.us", "password": "LVS2026Kevin", "name": "Kevin Damoa", "portal_type": "customer", "company": "Glid Technologies"},
@@ -118,6 +126,14 @@ echo "    apickard@mfvpartners.com           / LVS2026Aaron"
 echo "    karthee@mfvpartners.com            / LVS2026Karthee"
 echo "    natalie.warther@raymondjames.com   / LVS2026Natalie"
 echo "    sistel@cerberus.com                / LVS2026Sarah"
+echo "    andrew.cote00@gmail.com            / LVS2026Andrew"
+echo "    strategictechnologiesai@gmail.com  / LVS2026Maynard  (Advisor)"
+echo "    Roberts.Jamie2014@gmail.com        / LVS2026Jamie"
+echo "    Fmarshalllowery@gmail.com          / LVS2026Fred"
+echo "    jg@equityspacealliance.com         / LVS2026Janeya   (Equity Space Alliance)"
+echo "    seema@dcstartupweek.org            / LVS2026Seema    (DC Startup Week)"
+echo "    rock@rocktechconsultants.com       / LVS2026Walter   (Rock Tech Consultants)"
+echo "    melissa@1863ventures.net           / LVS2026Melissa  (1863 Ventures)"
 echo ""
 echo "  Customers:"
 echo "    roberthochstedler@machindustries.com / LVS2026Robert  (Mach Industries)"
