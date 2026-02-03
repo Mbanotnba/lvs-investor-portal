@@ -77,7 +77,11 @@ BULK_RESULT=$(curl -s -X POST "$API_URL/admin/users/bulk" \
       {"email": "natalie.warther@raymondjames.com", "password": "LVS2026Natalie", "name": "Natalie Warther", "portal_type": "investor", "company": "Raymond James"},
       {"email": "sistel@cerberus.com", "password": "LVS2026Sarah", "name": "Sarah Istel", "portal_type": "investor", "company": "Cerberus Ventures"},
       {"email": "roberthochstedler@machindustries.com", "password": "LVS2026Robert", "name": "Robert Hochstedler", "portal_type": "customer", "company": "Mach Industries"},
-      {"email": "caffouda@anduril.com", "password": "LVS2026Chaffra", "name": "Chaffra Affouda", "portal_type": "customer", "company": "Anduril"}
+      {"email": "caffouda@anduril.com", "password": "LVS2026Chaffra", "name": "Chaffra Affouda", "portal_type": "customer", "company": "Anduril"},
+      {"email": "kevin@glidtech.us", "password": "LVS2026Kevin", "name": "Kevin Damoa", "portal_type": "customer", "company": "Glid Technologies"},
+      {"email": "maxwell@terrahaptix.com", "password": "LVS2026Maxwell", "name": "Maxwell Maduka", "portal_type": "customer", "company": "Terrahaptix"},
+      {"email": "sebastian@koniku.com", "password": "LVS2026Jos", "name": "Jos Sebastian", "portal_type": "customer", "company": "Koniku"},
+      {"email": "agabi@koniku.com", "password": "LVS2026Osh", "name": "Osh Agabi", "portal_type": "customer", "company": "Koniku"}
     ]
   }')
 
@@ -118,4 +122,8 @@ echo ""
 echo "  Customers:"
 echo "    roberthochstedler@machindustries.com / LVS2026Robert  (Mach Industries)"
 echo "    caffouda@anduril.com                  / LVS2026Chaffra (Anduril)"
+echo "    kevin@glidtech.us                     / LVS2026Kevin   (Glid Technologies)"
+echo "    maxwell@terrahaptix.com               / LVS2026Maxwell (Terrahaptix)"
+echo "    sebastian@koniku.com                  / LVS2026Jos     (Koniku)"
+echo "    agabi@koniku.com                      / LVS2026Osh     (Koniku)"
 echo ""
