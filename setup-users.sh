@@ -74,7 +74,10 @@ BULK_RESULT=$(curl -s -X POST "$API_URL/admin/users/bulk" \
       {"email": "chad@theopportunityfund.com", "password": "LVS2026Chad", "name": "Chad Harris", "portal_type": "investor"},
       {"email": "apickard@mfvpartners.com", "password": "LVS2026Aaron", "name": "Aaron Pickard", "portal_type": "investor", "company": "MFV Partners"},
       {"email": "karthee@mfvpartners.com", "password": "LVS2026Karthee", "name": "Karthee Madasamy", "portal_type": "investor", "company": "MFV Partners"},
-      {"email": "natalie.warther@raymondjames.com", "password": "LVS2026Natalie", "name": "Natalie Warther", "portal_type": "investor", "company": "Raymond James"}
+      {"email": "natalie.warther@raymondjames.com", "password": "LVS2026Natalie", "name": "Natalie Warther", "portal_type": "investor", "company": "Raymond James"},
+      {"email": "sistel@cerberus.com", "password": "LVS2026Sarah", "name": "Sarah Istel", "portal_type": "investor", "company": "Cerberus Ventures"},
+      {"email": "roberthochstedler@machindustries.com", "password": "LVS2026Robert", "name": "Robert Hochstedler", "portal_type": "customer", "company": "Mach Industries"},
+      {"email": "caffouda@anduril.com", "password": "LVS2026Chaffra", "name": "Chaffra Affouda", "portal_type": "customer", "company": "Anduril"}
     ]
   }')
 
@@ -110,4 +113,9 @@ echo "    chad@theopportunityfund.com        / LVS2026Chad"
 echo "    apickard@mfvpartners.com           / LVS2026Aaron"
 echo "    karthee@mfvpartners.com            / LVS2026Karthee"
 echo "    natalie.warther@raymondjames.com   / LVS2026Natalie"
+echo "    sistel@cerberus.com                / LVS2026Sarah"
+echo ""
+echo "  Customers:"
+echo "    roberthochstedler@machindustries.com / LVS2026Robert  (Mach Industries)"
+echo "    caffouda@anduril.com                  / LVS2026Chaffra (Anduril)"
 echo ""

@@ -10,7 +10,7 @@ from pydantic import BaseModel, EmailStr
 
 from auth import get_current_user, require_founder, get_client_ip
 from database import (
-    get_db_connection, create_user, get_user_by_email, get_user_by_id,
+    get_db_connection, close_connection, row_to_dict, create_user, get_user_by_email, get_user_by_id,
     update_nda_status, log_audit, force_turso_resync
 )
 from security import hash_password
@@ -172,7 +172,7 @@ async def reset_password_bootstrap(request: Request, body: ResetPasswordRequest)
         (hash_password(body.new_password), body.email.lower())
     )
     conn.commit()
-    conn.close()
+    close_connection(conn)
 
     log_audit(user["id"], "PASSWORD_RESET", f"Password reset via bootstrap key", client_ip)
 
@@ -324,9 +324,10 @@ async def list_users(
 
     query += " ORDER BY created_at DESC"
 
-    cursor.execute(query, params)
-    rows = cursor.fetchall()
-    conn.close()
+    cursor.execute(query, tuple(params))
+    raw_rows = cursor.fetchall()
+    rows = [row_to_dict(cursor, row) for row in raw_rows]
+    close_connection(conn)
 
     log_audit(current_user["id"], "USERS_LISTED", f"Listed {len(rows)} users", client_ip)
 
@@ -433,7 +434,7 @@ async def update_user(
         """, params)
         conn.commit()
 
-    conn.close()
+    close_connection(conn)
 
     log_audit(
         current_user["id"],
@@ -493,7 +494,7 @@ async def delete_user(
     """, (user_id,))
 
     conn.commit()
-    conn.close()
+    close_connection(conn)
 
     log_audit(
         current_user["id"],
