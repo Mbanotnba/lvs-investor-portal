@@ -47,15 +47,17 @@ SEE ALSO:
 -->
 <html lang="en">
 <head>
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; media-src 'self' https:; font-src 'self' https:; connect-src 'self' https://lvs-api-657638018776.us-central1.run.app;">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; media-src 'self' https:; font-src 'self' https:; connect-src 'self' https://lvs-api-657638018776.us-central1.run.app; frame-src https://docs.google.com;">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Koniku Portal | Lola Vision Systems</title>
     <link rel="stylesheet" href="css/shared-portal.css">
     <script src="js/config.js"></script>
     <script src="js/security.js"></script>
+    <script src="js/account-settings.js"></script>
     <script src="js/comments.js"></script>
     <script src="js/shared-tabs.js"></script>
+    <script src="js/nda-gate.js"></script>
     <script>
         (function() {
             const SESSION_TIMEOUT = 30 * 60 * 1000;
@@ -90,13 +92,13 @@ SEE ALSO:
     <div class="tab-nav">
         <button class="tab-btn active" data-tab="dashboard">Dashboard</button>
         <button class="tab-btn" data-tab="product">Product<span class="badge">LVS-250</span></button>
-        <button class="tab-btn" data-tab="specs">Specifications</button>
-        <button class="tab-btn" data-tab="devkit">Development Kit</button>
-        <button class="tab-btn" data-tab="sdk">Software SDK</button>
-        <button class="tab-btn" data-tab="documents">Documents</button>
-        <button class="tab-btn" data-tab="support">Support</button>
+        <button class="tab-btn" data-tab="specs">Specs</button>
+        <button class="tab-btn" data-tab="software-platform">Software Platform</button>
+        <button class="tab-btn" data-tab="devkit">Dev Kit</button>
         <button class="tab-btn" data-tab="demos">Demos</button>
         <button class="tab-btn" data-tab="testimonials">Testimonials</button>
+        <button class="tab-btn" data-tab="documents">Documents</button>
+        <button class="tab-btn" data-tab="support">Support</button>
     </div>
 
     <div class="container">
@@ -325,6 +327,27 @@ SEE ALSO:
                         <div id="accountCommentsContainer"></div>
                     </div>
                 </div>
+            </div>
+
+            <!-- Customer Requirements Survey -->
+            <div class="panel" style="border-left: 3px solid #06b6d4; margin-top: 24px;">
+                <h3 style="display: flex; align-items: center; gap: 10px;">
+                    <span style="font-size: 20px;">&#128203;</span> Requirements Survey
+                    <span style="background: rgba(6,182,212,0.2); color: #06b6d4; padding: 4px 10px; border-radius: 10px; font-size: 10px; font-weight: 600; margin-left: auto;">CUSTOMER FEEDBACK</span>
+                </h3>
+                <p style="color: var(--muted); font-size: 13px; margin-top: 8px; margin-bottom: 20px;">
+                    Help us understand your mission requirements so we can tailor the LVS solution to your needs.
+                </p>
+                <iframe
+                    src="https://docs.google.com/forms/d/e/1FAIpQLSdDf1Ma_mO-4EBN_ZtDOznk2eHhBiX2ujCnh-wF9Oi0qfIygQ/viewform?embedded=true"
+                    width="100%"
+                    height="4600"
+                    frameborder="0"
+                    marginheight="0"
+                    marginwidth="0"
+                    style="border-radius: 12px; background: var(--panel-light);">
+                    Loading...
+                </iframe>
             </div>
 
             <!-- Supported By Marquee -->
@@ -736,165 +759,9 @@ SEE ALSO:
             </div>
         </div>
 
-        <!-- ==================== SDK TAB ==================== -->
-        <div id="sdk" class="tab-content">
-            <div class="welcome" style="margin-bottom: 24px;">
-                <div class="welcome-content">
-                    <h1>LVS <span>Software Development Platform</span></h1>
-                    <p>Complete toolchain for neural network deployment, system integration, and application development</p>
-                </div>
-            </div>
-
-            <!-- SDK Architecture Overview -->
-            <div class="screenshot">
-                <div class="screenshot-label">SDK Architecture Overview</div>
-                <div class="screenshot-title">LVS Software Development Platform</div>
-                <div class="screenshot-preview" style="text-align: left; padding: 30px;">
-                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 20px;">
-                        <div style="background: rgba(124,77,255,0.2); padding: 16px; border-radius: 8px; text-align: center;">
-                            <div style="font-size: 11px; color: var(--muted); margin-bottom: 4px;">APPLICATION LAYER</div>
-                            <div style="font-size: 13px; font-weight: 600;">Customer Applications</div>
-                        </div>
-                        <div style="background: rgba(124,77,255,0.2); padding: 16px; border-radius: 8px; text-align: center;">
-                            <div style="font-size: 11px; color: var(--muted); margin-bottom: 4px;">REFERENCE APPS</div>
-                            <div style="font-size: 13px; font-weight: 600;">Vision Pipelines</div>
-                        </div>
-                        <div style="background: rgba(124,77,255,0.2); padding: 16px; border-radius: 8px; text-align: center;">
-                            <div style="font-size: 11px; color: var(--muted); margin-bottom: 4px;">DEMO APPLICATIONS</div>
-                            <div style="font-size: 13px; font-weight: 600;">Object Detection</div>
-                        </div>
-                    </div>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px;">
-                        <div style="background: rgba(212,175,55,0.2); padding: 16px; border-radius: 8px; text-align: center;">
-                            <div style="font-size: 11px; color: var(--muted); margin-bottom: 4px;">LVS RUNTIME</div>
-                            <div style="font-size: 13px; font-weight: 600;">Neural Inference Engine</div>
-                        </div>
-                        <div style="background: rgba(212,175,55,0.2); padding: 16px; border-radius: 8px; text-align: center;">
-                            <div style="font-size: 11px; color: var(--muted); margin-bottom: 4px;">LVS VISION</div>
-                            <div style="font-size: 13px; font-weight: 600;">Image Processing Library</div>
-                        </div>
-                    </div>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 20px;">
-                        <div style="background: rgba(16,185,129,0.2); padding: 16px; border-radius: 8px; text-align: center;">
-                            <div style="font-size: 11px; color: var(--muted); margin-bottom: 4px;">NPU DRIVER</div>
-                            <div style="font-size: 13px; font-weight: 600;">Kernel Module</div>
-                        </div>
-                        <div style="background: rgba(16,185,129,0.2); padding: 16px; border-radius: 8px; text-align: center;">
-                            <div style="font-size: 11px; color: var(--muted); margin-bottom: 4px;">CAMERA DRIVER</div>
-                            <div style="font-size: 13px; font-weight: 600;">V4L2 / ISP</div>
-                        </div>
-                        <div style="background: rgba(16,185,129,0.2); padding: 16px; border-radius: 8px; text-align: center;">
-                            <div style="font-size: 11px; color: var(--muted); margin-bottom: 4px;">SYSTEM SERVICES</div>
-                            <div style="font-size: 13px; font-weight: 600;">Power / Thermal</div>
-                        </div>
-                    </div>
-                    <div style="background: rgba(255,255,255,0.1); padding: 16px; border-radius: 8px; text-align: center;">
-                        <div style="font-size: 11px; color: var(--muted); margin-bottom: 4px;">HARDWARE</div>
-                        <div style="font-size: 13px; font-weight: 600;">LVS-250 Neural Compute Engine</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- SDK Components -->
-            <div class="feature-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">&#128640;</div>
-                    <div class="feature-title">LVS Neural Compiler</div>
-                    <div class="feature-desc">Deploy any vision model—from open-source networks to your proprietary IP—optimized specifically for LVS-250 silicon. Automatic fine-tuning of layer scheduling, quantization, and memory layout delivers 3-5x performance gains over generic inference.</div>
-                    <span class="feature-tag">Your Models, Optimized</span>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">&#9881;</div>
-                    <div class="feature-title">LVS Runtime</div>
-                    <div class="feature-desc">Production-grade inference engine that maximizes throughput on LVS-250. Dynamic batching, multi-model orchestration, and zero-copy pipelines tuned for real-time vision workloads.</div>
-                    <span class="feature-tag">C++ / Python APIs</span>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">&#128248;</div>
-                    <div class="feature-title">LVS Vision Library</div>
-                    <div class="feature-desc">Hardware-accelerated preprocessing and postprocessing. Resize, warp, color convert, and filter at camera-rate speeds. Drop-in replacement for OpenCV with 10x acceleration.</div>
-                    <span class="feature-tag">10x Faster than CPU</span>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">&#128202;</div>
-                    <div class="feature-title">LVS Profiler</div>
-                    <div class="feature-desc">Understand exactly where your model spends time. Layer-by-layer analysis, memory bandwidth visualization, and optimization recommendations specific to your architecture.</div>
-                    <span class="feature-tag">GUI + CLI</span>
-                </div>
-            </div>
-
-            <!-- Value Proposition Callout -->
-            <div class="panel" style="background: linear-gradient(135deg, rgba(124,77,255,0.15), rgba(212,175,55,0.1)); border-left: 3px solid var(--accent);">
-                <h3 style="margin-bottom: 12px;">Bring Your Own Model</h3>
-                <p style="color: var(--text); font-size: 14px; line-height: 1.7; margin: 0;">
-                    The LVS compiler doesn't just run models—it <strong>fine-tunes them for our silicon</strong>. Whether you're deploying a standard detection network or proprietary computer vision IP, our toolchain automatically optimizes tensor layouts, operator fusion, and memory scheduling to extract maximum performance from the LVS-250's dual NPU architecture.
-                </p>
-            </div>
-
-            <!-- Code Sample -->
-            <div class="panel" style="margin-top: 24px;">
-                <h3>Quick Start Example</h3>
-                <div class="code-block">
-<span class="code-comment"># LVS SDK - Deploy Any Vision Model</span>
-<span class="code-keyword">import</span> lvs
-<span class="code-keyword">from</span> lvs.vision <span class="code-keyword">import</span> Camera, ImageProcessor
-<span class="code-keyword">from</span> lvs.inference <span class="code-keyword">import</span> Runtime
-
-<span class="code-comment"># Initialize runtime on LVS-250</span>
-runtime = lvs.<span class="code-function">Runtime</span>(device=<span class="code-string">"lvs250"</span>)
-
-<span class="code-comment"># Load YOUR compiled model (any ONNX, PyTorch, or TensorFlow model)</span>
-model = runtime.<span class="code-function">load_model</span>(<span class="code-string">"your_model.lvs"</span>)  <span class="code-comment"># Optimized for LVS-250</span>
-
-<span class="code-comment"># Configure camera pipeline</span>
-camera = Camera.<span class="code-function">open</span>(channel=0, resolution=(1920, 1080), fps=30)
-processor = ImageProcessor(resize=model.input_size, normalize=<span class="code-keyword">True</span>)
-
-<span class="code-comment"># Real-time inference loop</span>
-<span class="code-keyword">for</span> frame <span class="code-keyword">in</span> camera.<span class="code-function">stream</span>():
-    tensor = processor.<span class="code-function">preprocess</span>(frame)
-    results = model.<span class="code-function">infer</span>(tensor)  <span class="code-comment"># Runs on dual NPU @ 250 TOPS</span>
-    <span class="code-keyword">print</span>(f<span class="code-string">"Inference: {model.last_inference_ms:.1f}ms"</span>)
-                </div>
-            </div>
-
-            <!-- SDK Documentation -->
-            <div class="panel" style="margin-top: 24px;">
-                <h3>SDK Documentation</h3>
-                <div class="document">
-                    <div class="doc-icon">&#128218;</div>
-                    <div class="doc-info">
-                        <div class="doc-name">LVS SDK Getting Started Guide</div>
-                        <div class="doc-meta">PDF &bull; 45 pages &bull; v1.0</div>
-                    </div>
-                    <span class="doc-download">&#8594;</span>
-                </div>
-                <div class="document">
-                    <div class="doc-icon">&#128196;</div>
-                    <div class="doc-info">
-                        <div class="doc-name">LVS Runtime API Reference</div>
-                        <div class="doc-meta">HTML &bull; C++ / Python &bull; v1.0</div>
-                    </div>
-                    <span class="doc-download">&#8594;</span>
-                </div>
-                <div class="document">
-                    <div class="doc-icon">&#128202;</div>
-                    <div class="doc-info">
-                        <div class="doc-name">Model Optimization Guide</div>
-                        <div class="doc-meta">PDF &bull; Best practices for your models &bull; v1.0</div>
-                    </div>
-                    <span class="doc-download">&#8594;</span>
-                </div>
-                <div class="document">
-                    <div class="doc-icon">&#127891;</div>
-                    <div class="doc-info">
-                        <div class="doc-name">Tutorial: Custom Model Deployment</div>
-                        <div class="doc-meta">Jupyter Notebook &bull; End-to-end walkthrough</div>
-                    </div>
-                    <span class="doc-download">&#8594;</span>
-                </div>
-            </div>
-        </div>
+        <!-- ==================== SOFTWARE PLATFORM TAB ==================== -->
+        <!-- Content loaded from js/shared-tabs.js -->
+        <div id="software-platform" class="tab-content"></div>
 
         <!-- ==================== DOCUMENTS TAB ==================== -->
         <div id="documents" class="tab-content">
@@ -907,6 +774,14 @@ processor = ImageProcessor(resize=model.input_size, normalize=<span class="code-
 
             <div class="grid">
                 <div>
+                    <!-- Dynamic NDA Documents -->
+                    <div class="panel" id="ndaDocsPanel" style="display: none;">
+                        <h3>Your Executed NDAs</h3>
+                        <div id="ndaDocsList">
+                            <div style="color: var(--muted); font-size: 13px;">Loading...</div>
+                        </div>
+                    </div>
+
                     <div class="panel">
                         <h3>Commercial Documents</h3>
                         <div class="document">
@@ -1526,12 +1401,70 @@ ${textarea.value}`;
             document.getElementById('navAvatar').textContent = initials;
         }
 
+        // Load NDA documents for this customer
+        async function loadNdaDocuments() {
+            const token = sessionStorage.getItem('lvs_token');
+            if (!token) return;
+
+            try {
+                const response = await fetch(`${typeof LVS_CONFIG !== 'undefined' ? LVS_CONFIG.API_BASE_URL : 'http://localhost:8080'}/nda/my-documents`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Accept': 'application/json'
+                    }
+                });
+
+                if (!response.ok) return;
+
+                const docs = await response.json();
+                const approvedDocs = docs.filter(d => d.status === 'approved');
+
+                if (approvedDocs.length > 0) {
+                    const panel = document.getElementById('ndaDocsPanel');
+                    const list = document.getElementById('ndaDocsList');
+                    if (panel && list) {
+                        panel.style.display = 'block';
+                        list.innerHTML = approvedDocs.map(doc => `
+                            <div class="document" style="cursor: pointer;" onclick="downloadNdaDoc(${doc.id})">
+                                <div class="doc-icon">&#128196;</div>
+                                <div class="doc-info">
+                                    <div class="doc-name">${doc.filename}</div>
+                                    <div class="doc-meta">NDA &bull; ${new Date(doc.uploaded_at).toLocaleDateString()}</div>
+                                </div>
+                                <span class="doc-download">&#8594;</span>
+                            </div>
+                        `).join('');
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading NDA documents:', error);
+            }
+        }
+
+        async function downloadNdaDoc(docId) {
+            const token = sessionStorage.getItem('lvs_token');
+            try {
+                const response = await fetch(`${typeof LVS_CONFIG !== 'undefined' ? LVS_CONFIG.API_BASE_URL : 'http://localhost:8080'}/nda/${docId}/download`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (response.ok) {
+                    const data = await response.json();
+                    window.open(data.download_url, '_blank');
+                }
+            } catch (error) {
+                console.error('Error downloading NDA:', error);
+            }
+        }
+
         // Load notes on page load
         document.addEventListener('DOMContentLoaded', () => {
             // Initialize shared tabs (Product, Specs, DevKit, SDK, Support, Demos, Testimonials)
             LVSSharedTabs.init();
+            // Initialize NDA gating
+            LVSNDAGate.init('koniku');
             loadNotes();
             initUserGreeting();
+            loadNdaDocuments();
             // Initialize shared account notes
             LVSComments.init('koniku', '#accountCommentsContainer');
         });

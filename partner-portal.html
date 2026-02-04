@@ -32,6 +32,7 @@ AUTHENTICATION:
     <link rel="stylesheet" href="css/partner-portal.css">
     <script src="js/config.js"></script>
     <script src="js/security.js"></script>
+    <script src="js/account-settings.js"></script>
     <script src="js/comments.js"></script>
     <script src="js/shared-tabs.js"></script>
     <script src="js/partner-data.js"></script>
@@ -80,8 +81,14 @@ AUTHENTICATION:
     <!-- Tab Navigation -->
     <div class="tab-nav">
         <button class="tab-btn active" data-tab="dashboard" onclick="switchTab('dashboard')">Dashboard</button>
-        <button class="tab-btn" data-tab="integration" onclick="switchTab('integration')">Integration</button>
-        <button class="tab-btn" data-tab="documentation" onclick="switchTab('documentation')">Documentation</button>
+        <button class="tab-btn" data-tab="product" onclick="switchTab('product')">Product<span class="badge">LVS-250</span></button>
+        <button class="tab-btn" data-tab="specs" onclick="switchTab('specs')">Specs</button>
+        <button class="tab-btn" data-tab="integration" onclick="switchTab('integration')">Integration<span class="badge" style="background: linear-gradient(135deg, #ed8936, #c05621);">Partner</span></button>
+        <button class="tab-btn" data-tab="software-platform" onclick="switchTab('software-platform')">Software Platform</button>
+        <button class="tab-btn" data-tab="devkit" onclick="switchTab('devkit')">Dev Kit</button>
+        <button class="tab-btn" data-tab="demos" onclick="switchTab('demos')">Demos</button>
+        <button class="tab-btn" data-tab="testimonials" onclick="switchTab('testimonials')">Testimonials</button>
+        <button class="tab-btn" data-tab="documents" onclick="switchTab('documents')">Documents</button>
         <button class="tab-btn" data-tab="support" onclick="switchTab('support')">Support</button>
     </div>
 
@@ -207,90 +214,55 @@ AUTHENTICATION:
         </div>
 
         <!-- ============================================================
-             INTEGRATION TAB
+             PRODUCT TAB
              ============================================================ -->
-        <div id="integration" class="tab-content">
-
-            <!-- Architecture Diagram -->
-            <div class="architecture-diagram">
-                <div class="diagram-icon">&#128204;</div>
-                <h4>UCIe 2.0 Integration Architecture</h4>
-                <p>LVS-250 Neural Compute Engine + Partner Platform</p>
-                <p style="margin-top: 16px; font-size: 11px; color: var(--muted);">
-                    Detailed architecture diagram available in Documentation tab
-                </p>
-            </div>
-
-            <!-- Integration Stages Detail -->
-            <div class="specs-panel">
-                <h3>Integration Stages <span class="spec-badge">6 Phases</span></h3>
-                <div id="stageDetails">
-                    <!-- Stage details populated by JavaScript -->
-                </div>
-            </div>
-
-            <!-- Interface Specifications -->
-            <div class="specs-panel">
-                <h3>UCIe 2.0 Interface Specifications</h3>
-                <div class="spec-row">
-                    <span class="spec-label">Interface Standard</span>
-                    <span class="spec-value">UCIe 2.0 (Universal Chiplet Interconnect Express)</span>
-                </div>
-                <div class="spec-row">
-                    <span class="spec-label">Topology</span>
-                    <span class="spec-value">Point-to-point chiplet interconnect</span>
-                </div>
-                <div class="spec-row">
-                    <span class="spec-label">Data Rate</span>
-                    <span class="spec-value">32 GT/s per lane</span>
-                </div>
-                <div class="spec-row">
-                    <span class="spec-label">Lane Configuration</span>
-                    <span class="spec-value">16 lanes (configurable)</span>
-                </div>
-                <div class="spec-row">
-                    <span class="spec-label">Protocol Support</span>
-                    <span class="spec-value">PCIe 6.0 / CXL 3.0 compatible</span>
-                </div>
-                <div class="spec-row">
-                    <span class="spec-label">Power Efficiency</span>
-                    <span class="spec-value">&lt; 0.5 pJ/bit</span>
-                </div>
-            </div>
-
-            <!-- LVS-250 Specifications -->
-            <div class="specs-panel">
-                <h3>LVS-250 Chiplet Specifications</h3>
-                <div class="spec-row">
-                    <span class="spec-label">Compute Performance</span>
-                    <span class="spec-value">~230 TOPS (INT8)</span>
-                </div>
-                <div class="spec-row">
-                    <span class="spec-label">Architecture</span>
-                    <span class="spec-value">5-chiplet UCIe 2.0 package</span>
-                </div>
-                <div class="spec-row">
-                    <span class="spec-label">Package Size</span>
-                    <span class="spec-value">~35 x 35 mm</span>
-                </div>
-                <div class="spec-row">
-                    <span class="spec-label">Memory Interface</span>
-                    <span class="spec-value">LPDDR5 / LPDDR5X</span>
-                </div>
-                <div class="spec-row">
-                    <span class="spec-label">Process Node</span>
-                    <span class="spec-value">GlobalFoundries 12LP+</span>
-                </div>
-                <div class="spec-row">
-                    <span class="spec-label">Target Production</span>
-                    <span class="spec-value">Q2-Q3 2027</span>
-                </div>
-            </div>
-
-        </div>
+        <!-- Content loaded from js/shared-tabs.js -->
+        <div id="product" class="tab-content"></div>
 
         <!-- ============================================================
-             DOCUMENTATION TAB
+             SPECS TAB
+             ============================================================ -->
+        <!-- Content loaded from js/shared-tabs.js -->
+        <div id="specs" class="tab-content"></div>
+
+        <!-- ============================================================
+             INTEGRATION TAB
+             ============================================================ -->
+        <!-- Content loaded from js/shared-tabs.js - partner-specific -->
+        <div id="integration" class="tab-content"></div>
+
+        <!-- ============================================================
+             SOFTWARE PLATFORM TAB
+             ============================================================ -->
+        <!-- Content loaded from js/shared-tabs.js -->
+        <div id="software-platform" class="tab-content"></div>
+
+        <!-- ============================================================
+             DEV KIT TAB
+             ============================================================ -->
+        <!-- Content loaded from js/shared-tabs.js -->
+        <div id="devkit" class="tab-content"></div>
+
+        <!-- ============================================================
+             DEMOS TAB
+             ============================================================ -->
+        <!-- Content loaded from js/shared-tabs.js -->
+        <div id="demos" class="tab-content"></div>
+
+        <!-- ============================================================
+             TESTIMONIALS TAB
+             ============================================================ -->
+        <!-- Content loaded from js/shared-tabs.js -->
+        <div id="testimonials" class="tab-content"></div>
+
+        <!-- ============================================================
+             DOCUMENTS TAB
+             ============================================================ -->
+        <!-- Content loaded from js/shared-tabs.js -->
+        <div id="documents" class="tab-content"></div>
+
+        <!-- ============================================================
+             DOCUMENTATION TAB (keeping partner-specific content)
              ============================================================ -->
         <div id="documentation" class="tab-content">
 

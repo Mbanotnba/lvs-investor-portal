@@ -21,6 +21,8 @@ OVERVIEW:
     <link rel="stylesheet" href="css/shared-portal.css">
     <script src="js/config.js"></script>
     <script src="js/security.js"></script>
+    <script src="js/account-settings.js"></script>
+    <script src="js/shared-tabs.js"></script>
     <script>
         (function() {
             const SESSION_TIMEOUT = 30 * 60 * 1000;
@@ -52,12 +54,14 @@ OVERVIEW:
 
     <div class="tab-nav">
         <button class="tab-btn active" data-tab="dashboard">Dashboard</button>
-        <button class="tab-btn" data-tab="product">Product <span class="badge">LVS-250</span></button>
-        <button class="tab-btn" data-tab="integration">Integration</button>
-        <button class="tab-btn" data-tab="specs">Specifications</button>
+        <button class="tab-btn" data-tab="product">Product<span class="badge">LVS-250</span></button>
+        <button class="tab-btn" data-tab="specs">Specs</button>
+        <button class="tab-btn" data-tab="integration">Integration<span class="badge" style="background: linear-gradient(135deg, #ed8936, #c05621);">Partner</span></button>
+        <button class="tab-btn" data-tab="software-platform">Software Platform</button>
+        <button class="tab-btn" data-tab="devkit">Dev Kit</button>
         <button class="tab-btn" data-tab="demos">Demos</button>
         <button class="tab-btn" data-tab="testimonials">Testimonials</button>
-        <button class="tab-btn" data-tab="docs">Documents</button>
+        <button class="tab-btn" data-tab="documents">Documents</button>
         <button class="tab-btn" data-tab="support">Support</button>
     </div>
 
@@ -633,7 +637,7 @@ OVERVIEW:
         </div>
 
         <!-- Documents Tab -->
-        <div id="docs" class="tab-content">
+        <div id="documents" class="tab-content">
             <div class="panel">
                 <h3>Partnership Documents</h3>
                 <div class="document">

@@ -21,20 +21,35 @@
             width: 8.5in;
             min-height: 11in;
             margin: 20px auto;
-            padding: 1in;
+            padding: 0.75in 1in 1in 1in;
             background: white;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .company-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #ccc;
+            margin-bottom: 40px;
+        }
+        .company-header .company-name {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 10pt;
+            font-weight: bold;
+            color: #7D2248;
+            letter-spacing: 0.5px;
         }
         .header {
             text-align: center;
             margin-bottom: 40px;
             padding-bottom: 20px;
-            border-bottom: 2px solid #1a365d;
+            border-bottom: 2px solid #7D2248;
         }
         .header h1 {
             font-size: 18pt;
             font-weight: bold;
-            color: #1a365d;
+            color: #7D2248;
             margin-bottom: 8px;
             letter-spacing: 1px;
         }
@@ -61,9 +76,9 @@
             margin-bottom: 8px;
         }
         .commitment-box {
-            background: #f7fafc;
+            background: #faf7f8;
             border: 1px solid #e2e8f0;
-            border-left: 4px solid #1a365d;
+            border-left: 4px solid #7D2248;
             padding: 16px 20px;
             margin: 16px 0;
         }
@@ -103,7 +118,7 @@
             position: fixed;
             top: 20px;
             right: 20px;
-            background: #1a365d;
+            background: #7D2248;
             color: white;
             border: none;
             padding: 12px 24px;
@@ -112,7 +127,7 @@
             cursor: pointer;
         }
         .print-btn:hover {
-            background: #2d4a7c;
+            background: #9B2C5A;
         }
     </style>
 </head>
@@ -120,6 +135,11 @@
     <button class="print-btn no-print" onclick="window.print()">Print / Save as PDF</button>
 
     <div class="page">
+        <div class="company-header">
+            <span class="company-name">LOLA VISION SYSTEMS INC.</span>
+            <span class="company-name">KONIKU INC.</span>
+        </div>
+
         <div class="header">
             <h1>LETTER OF INTENT</h1>
             <p>Non-Binding Expression of Commercial Intent</p>
@@ -131,9 +151,9 @@
 
         <div class="parties">
             <p><strong>Between:</strong></p>
-            <p><strong>Koniku, Inc.</strong> ("Koniku"), a Delaware corporation</p>
+            <p><strong>Koniku Inc.</strong> ("Koniku"), a California C Corporation</p>
             <p><strong>and</strong></p>
-            <p><strong>Lola Vision Systems, Inc.</strong> ("LVS"), a Delaware corporation</p>
+            <p><strong>Lola Vision Systems, Inc.</strong> ("LVS"), a Delaware C Corporation</p>
         </div>
 
         <div class="section">
@@ -168,17 +188,17 @@
 
         <div class="signatures">
             <div class="sig-block">
-                <p><strong>KONIKU, INC.</strong></p>
+                <p><strong>KONIKU INC.</strong></p>
                 <div class="sig-line"></div>
-                <p class="sig-label">Oshiorenoya Agabi, CEO</p>
+                <p class="sig-label">Osh Agabi, Chief Executive Officer</p>
                 <div style="height: 20px;"></div>
                 <div class="sig-line" style="width: 60%;"></div>
                 <p class="sig-label">Date</p>
             </div>
             <div class="sig-block">
-                <p><strong>LOLA VISION SYSTEMS, INC.</strong></p>
+                <p><strong>LOLA VISION SYSTEMS INC.</strong></p>
                 <div class="sig-line"></div>
-                <p class="sig-label">Tayo Adesanya, CEO</p>
+                <p class="sig-label">Tayo Adesanya, Founder and Chief Executive Officer</p>
                 <div style="height: 20px;"></div>
                 <div class="sig-line" style="width: 60%;"></div>
                 <p class="sig-label">Date</p>
@@ -186,7 +206,7 @@
         </div>
 
         <div class="footer">
-            <p>This Letter of Intent consists of one (1) page and constitutes the entire understanding between the parties regarding the subject matter hereof.</p>
+            <p>Letter of Intent - Confidential - January 2026</p>
         </div>
     </div>
 </body>

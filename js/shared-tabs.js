@@ -375,9 +375,9 @@ const LVSSharedTabs = {
     },
 
     /**
-     * Generate SDK Tab HTML
+     * Generate Software Platform Tab HTML (formerly SDK)
      */
-    getSDKTab() {
+    getSoftwarePlatformTab() {
         return `
             <div class="welcome" style="margin-bottom: 24px;">
                 <div class="welcome-content">
@@ -533,6 +533,173 @@ processor = ImageProcessor(resize=model.input_size, normalize=<span class="code-
                         <div class="doc-meta">Jupyter Notebook &bull; End-to-end walkthrough</div>
                     </div>
                     <span class="doc-download">&#8594;</span>
+                </div>
+            </div>
+        `;
+    },
+
+    /**
+     * Alias for backwards compatibility
+     */
+    getSDKTab() {
+        return this.getSoftwarePlatformTab();
+    },
+
+    /**
+     * Generate Documents Tab HTML
+     */
+    getDocumentsTab() {
+        return `
+            <div class="welcome" style="margin-bottom: 24px;">
+                <div class="welcome-content">
+                    <h1>Partner <span>Documents</span></h1>
+                    <p>Agreements, proposals, and technical documentation</p>
+                </div>
+            </div>
+            <div class="panel">
+                <h3>Technical Documentation</h3>
+                <div style="display: flex; align-items: center; gap: 14px; padding: 14px; background: var(--panel-light); border-radius: 10px; margin-bottom: 10px;">
+                    <div style="width: 40px; height: 40px; background: rgba(124, 77, 255, 0.15); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: var(--accent);">&#128196;</div>
+                    <div style="flex: 1;">
+                        <div style="font-size: 13px; font-weight: 600;">LVS-250 Product Brief</div>
+                        <div style="font-size: 11px; color: var(--muted);">High-level product overview</div>
+                    </div>
+                    <span style="color: var(--accent); font-size: 12px;">&#8594;</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 14px; padding: 14px; background: var(--panel-light); border-radius: 10px; margin-bottom: 10px;">
+                    <div style="width: 40px; height: 40px; background: rgba(124, 77, 255, 0.15); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: var(--accent);">&#128203;</div>
+                    <div style="flex: 1;">
+                        <div style="font-size: 13px; font-weight: 600;">Technical Specifications</div>
+                        <div style="font-size: 11px; color: var(--muted);">Detailed hardware specifications</div>
+                    </div>
+                    <span style="color: var(--accent); font-size: 12px;">&#8594;</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 14px; padding: 14px; background: var(--panel-light); border-radius: 10px; margin-bottom: 10px;">
+                    <div style="width: 40px; height: 40px; background: rgba(124, 77, 255, 0.15); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: var(--accent);">&#128218;</div>
+                    <div style="flex: 1;">
+                        <div style="font-size: 13px; font-weight: 600;">SDK Documentation</div>
+                        <div style="font-size: 11px; color: var(--muted);">Software development kit guide</div>
+                    </div>
+                    <span style="color: var(--accent); font-size: 12px;">&#8594;</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 14px; padding: 14px; background: var(--panel-light); border-radius: 10px;">
+                    <div style="width: 40px; height: 40px; background: rgba(124, 77, 255, 0.15); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: var(--accent);">&#128187;</div>
+                    <div style="flex: 1;">
+                        <div style="font-size: 13px; font-weight: 600;">API Reference</div>
+                        <div style="font-size: 11px; color: var(--muted);">Runtime API documentation</div>
+                    </div>
+                    <span style="color: var(--accent); font-size: 12px;">&#8594;</span>
+                </div>
+            </div>
+            <div class="panel" style="margin-top: 24px;">
+                <h3>Partnership Documents</h3>
+                <p style="color: var(--muted); font-size: 13px; margin-bottom: 16px;">Contact your LVS representative for access to partnership-specific documents.</p>
+                <div style="background: linear-gradient(135deg, rgba(124,77,255,0.1), rgba(212,175,55,0.1)); padding: 16px; border-radius: 10px; border-left: 3px solid var(--gold);">
+                    <div style="font-size: 13px; color: var(--text);">
+                        <strong style="color: var(--gold);">Need additional documents?</strong><br>
+                        Contact <a href="mailto:partners@lolavisionsystems.com" style="color: var(--accent);">partners@lolavisionsystems.com</a>
+                    </div>
+                </div>
+            </div>
+        `;
+    },
+
+    /**
+     * Generate Integration Tab HTML (for partners)
+     */
+    getIntegrationTab() {
+        return `
+            <div class="welcome" style="margin-bottom: 24px;">
+                <div class="welcome-content">
+                    <h1>Partner <span>Integration</span></h1>
+                    <p>UCIe 2.0 chiplet integration guide for silicon partners</p>
+                </div>
+                <div style="background: linear-gradient(135deg, #ed8936, #c05621); padding: 12px 20px; border-radius: 10px; display: flex; align-items: center; gap: 10px;">
+                    <span style="font-size: 20px;">&#128204;</span>
+                    <span style="font-size: 14px; font-weight: 600; color: white;">Partner Integration</span>
+                </div>
+            </div>
+
+            <!-- Architecture Diagram -->
+            <div class="panel" style="background: linear-gradient(135deg, rgba(124,77,255,0.1), rgba(237,137,54,0.1)); border: 1px solid rgba(237,137,54,0.3);">
+                <h3 style="display: flex; align-items: center; gap: 10px;">
+                    <span style="font-size: 18px;">&#128204;</span>
+                    UCIe 2.0 Integration Architecture
+                </h3>
+                <p style="color: var(--muted); font-size: 14px; margin-bottom: 20px;">LVS-250 Neural Compute Engine + Partner Platform</p>
+
+                <div style="display: grid; grid-template-columns: 1fr auto 1fr; gap: 16px; align-items: center; margin-bottom: 20px;">
+                    <div style="background: rgba(124,77,255,0.2); padding: 20px; border-radius: 12px; text-align: center; border: 1px solid rgba(124,77,255,0.3);">
+                        <div style="font-size: 13px; color: var(--muted); margin-bottom: 4px;">LVS-250</div>
+                        <div style="font-size: 16px; font-weight: 700; color: var(--accent);">Neural Compute</div>
+                        <div style="font-size: 11px; color: var(--muted); margin-top: 4px;">5-Chiplet Package</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="font-size: 24px; color: var(--gold);">&#8596;</div>
+                        <div style="font-size: 10px; color: var(--gold); font-weight: 600;">UCIe 2.0</div>
+                    </div>
+                    <div style="background: rgba(237,137,54,0.2); padding: 20px; border-radius: 12px; text-align: center; border: 1px solid rgba(237,137,54,0.3);">
+                        <div style="font-size: 13px; color: var(--muted); margin-bottom: 4px;">Partner</div>
+                        <div style="font-size: 16px; font-weight: 700; color: #ed8936;">Platform</div>
+                        <div style="font-size: 11px; color: var(--muted); margin-top: 4px;">Host Integration</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Interface Specifications -->
+            <div class="panel" style="margin-top: 24px;">
+                <h3>UCIe 2.0 Interface Specifications</h3>
+                <table style="width: 100%; border-collapse: collapse;">
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.06);">
+                        <td style="padding: 14px 16px; color: var(--muted); width: 40%;">Interface Standard</td>
+                        <td style="padding: 14px 16px; font-weight: 600;">UCIe 2.0 (Universal Chiplet Interconnect Express)</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.06);">
+                        <td style="padding: 14px 16px; color: var(--muted);">Topology</td>
+                        <td style="padding: 14px 16px; font-weight: 600;">Point-to-point chiplet interconnect</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.06);">
+                        <td style="padding: 14px 16px; color: var(--muted);">Data Rate</td>
+                        <td style="padding: 14px 16px; font-weight: 600;">32 GT/s per lane</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.06);">
+                        <td style="padding: 14px 16px; color: var(--muted);">Lane Configuration</td>
+                        <td style="padding: 14px 16px; font-weight: 600;">16 lanes (configurable)</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.06);">
+                        <td style="padding: 14px 16px; color: var(--muted);">Protocol Support</td>
+                        <td style="padding: 14px 16px; font-weight: 600;">PCIe 6.0 / CXL 3.0 compatible</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.06);">
+                        <td style="padding: 14px 16px; color: var(--muted);">Power Efficiency</td>
+                        <td style="padding: 14px 16px; font-weight: 600;">&lt; 0.5 pJ/bit</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 14px 16px; color: var(--muted);">Aggregate Bandwidth</td>
+                        <td style="padding: 14px 16px; font-weight: 600;">${this.specs.interconnectBandwidth}</td>
+                    </tr>
+                </table>
+            </div>
+
+            <!-- Integration Phases -->
+            <div class="panel" style="margin-top: 24px;">
+                <h3>Integration Process</h3>
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;">
+                    <div style="background: var(--panel-light); padding: 20px; border-radius: 12px; text-align: center;">
+                        <div style="font-size: 28px; font-weight: 800; color: var(--accent);">1</div>
+                        <div style="font-size: 13px; font-weight: 600; margin-top: 8px;">Specification Review</div>
+                        <div style="font-size: 11px; color: var(--muted); margin-top: 4px;">Interface compatibility</div>
+                    </div>
+                    <div style="background: var(--panel-light); padding: 20px; border-radius: 12px; text-align: center;">
+                        <div style="font-size: 28px; font-weight: 800; color: var(--gold);">2</div>
+                        <div style="font-size: 13px; font-weight: 600; margin-top: 8px;">Electrical Validation</div>
+                        <div style="font-size: 11px; color: var(--muted); margin-top: 4px;">Signal integrity testing</div>
+                    </div>
+                    <div style="background: var(--panel-light); padding: 20px; border-radius: 12px; text-align: center;">
+                        <div style="font-size: 28px; font-weight: 800; color: var(--success);">3</div>
+                        <div style="font-size: 13px; font-weight: 600; margin-top: 8px;">System Integration</div>
+                        <div style="font-size: 11px; color: var(--muted); margin-top: 4px;">Platform bring-up</div>
+                    </div>
                 </div>
             </div>
         `;
@@ -745,10 +912,13 @@ processor = ImageProcessor(resize=model.input_size, normalize=<span class="code-
             'product': this.getProductTab(),
             'specs': this.getSpecsTab(),
             'devkit': this.getDevKitTab(),
-            'sdk': this.getSDKTab(),
+            'sdk': this.getSoftwarePlatformTab(),
+            'software-platform': this.getSoftwarePlatformTab(),
             'support': this.getSupportTab(),
             'demos': this.getDemosTab(),
-            'testimonials': this.getTestimonialsTab()
+            'testimonials': this.getTestimonialsTab(),
+            'documents': this.getDocumentsTab(),
+            'integration': this.getIntegrationTab()
         };
 
         for (const [tabId, content] of Object.entries(tabMappings)) {

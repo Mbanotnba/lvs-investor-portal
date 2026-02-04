@@ -1095,3 +1095,202 @@ body {
     font-size: 11px;
     color: #f97316;
 }
+
+/* ====================================================================
+   NDA GATE OVERLAY
+   Shows when customer has not completed NDA
+   ==================================================================== */
+.nda-gate-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(11, 16, 33, 0.95);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    border-radius: 16px;
+    min-height: 400px;
+}
+
+.nda-gate-content {
+    text-align: center;
+    padding: 48px;
+    max-width: 480px;
+}
+
+.nda-gate-icon {
+    font-size: 64px;
+    margin-bottom: 24px;
+    opacity: 0.8;
+}
+
+.nda-gate-content h3 {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--gold);
+    margin-bottom: 16px;
+}
+
+.nda-gate-content p {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.6;
+    margin-bottom: 8px;
+}
+
+.nda-gate-contact {
+    margin-top: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    align-items: center;
+}
+
+.nda-gate-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    background: linear-gradient(135deg, var(--accent), #5b21b6);
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.nda-gate-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(124, 77, 255, 0.3);
+}
+
+.nda-gate-btn.secondary {
+    background: var(--panel-light);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.nda-gate-btn.secondary:hover {
+    background: var(--panel);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+.nda-gate-btn span {
+    font-size: 16px;
+}
+
+/* NDA Management Tab Styles (Founder Portal) */
+.nda-management-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.nda-management-table th,
+.nda-management-table td {
+    padding: 16px;
+    text-align: left;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.nda-management-table th {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--muted);
+    font-weight: 600;
+}
+
+.nda-management-table tr:hover {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.nda-status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.nda-status-badge.approved {
+    background: rgba(16, 185, 129, 0.2);
+    color: #10b981;
+}
+
+.nda-status-badge.pending {
+    background: rgba(249, 115, 22, 0.2);
+    color: #f97316;
+}
+
+.nda-status-badge.not_required {
+    background: rgba(107, 114, 128, 0.2);
+    color: #9ca3af;
+}
+
+.nda-upload-zone {
+    border: 2px dashed rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 32px;
+    text-align: center;
+    transition: all 0.2s;
+    cursor: pointer;
+}
+
+.nda-upload-zone:hover,
+.nda-upload-zone.drag-over {
+    border-color: var(--accent);
+    background: rgba(124, 77, 255, 0.05);
+}
+
+.nda-upload-zone input[type="file"] {
+    display: none;
+}
+
+.nda-upload-icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+    opacity: 0.6;
+}
+
+.nda-upload-text {
+    font-size: 14px;
+    color: var(--muted);
+}
+
+.nda-upload-text strong {
+    color: var(--accent);
+}
+
+.nda-action-btn {
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.nda-action-btn.upload {
+    background: var(--accent);
+    color: white;
+}
+
+.nda-action-btn.upload:hover {
+    background: var(--accent-light);
+}
+
+.nda-action-btn.view {
+    background: rgba(16, 185, 129, 0.2);
+    color: #10b981;
+}
+
+.nda-action-btn.view:hover {
+    background: rgba(16, 185, 129, 0.3);
+}

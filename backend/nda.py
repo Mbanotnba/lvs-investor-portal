@@ -372,6 +372,123 @@ class BulkImportRequest(BaseModel):
     notes: Optional[str] = None
 
 
+@router.post("/admin-upload", response_model=NDADocumentResponse)
+async def admin_upload_nda(
+    request: Request,
+    file: UploadFile = File(...),
+    user_email: str = Form(...),
+    auto_approve: bool = Form(True),
+    notes: str = Form(None),
+    current_user: dict = Depends(require_founder)
+):
+    """
+    Upload an NDA document for a specific user (Founder only).
+    Used when founders have executed NDAs to upload for customers.
+    """
+    client_ip = get_client_ip(request)
+
+    # Find user by email
+    from database import get_user_by_email
+    user = get_user_by_email(user_email)
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"User not found: {user_email}"
+        )
+
+    # Validate file type
+    allowed_types = ["application/pdf", "image/png", "image/jpeg"]
+    if file.content_type not in allowed_types:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid file type. Please upload a PDF or image (PNG, JPEG)."
+        )
+
+    # Validate file size (max 10MB)
+    max_size = 10 * 1024 * 1024
+    contents = await file.read()
+    if len(contents) > max_size:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="File too large. Maximum size is 10MB."
+        )
+
+    if bucket is None:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="File storage not available. Please try again later."
+        )
+
+    # Generate unique filename
+    timestamp = datetime.utcnow().strftime("%Y%m%d_%H%M%S")
+    safe_filename = file.filename.replace(" ", "_").replace("/", "_")
+    gcs_path = f"ndas/{user['id']}/{timestamp}_{safe_filename}"
+
+    try:
+        # Upload to GCS
+        blob = bucket.blob(gcs_path)
+        blob.upload_from_string(contents, content_type=file.content_type)
+
+        # Create database record
+        doc_id = create_nda_document(
+            user_id=user["id"],
+            filename=file.filename,
+            gcs_path=gcs_path,
+            file_size=len(contents),
+            content_type=file.content_type
+        )
+
+        if not doc_id:
+            blob.delete()
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="Failed to save document record."
+            )
+
+        # Auto-approve if requested (default: True for admin uploads)
+        if auto_approve:
+            review_nda_document(
+                doc_id=doc_id,
+                reviewer_id=current_user["id"],
+                status="approved",
+                notes=notes or "Uploaded by founder"
+            )
+
+        log_audit(
+            current_user["id"],
+            "NDA_ADMIN_UPLOADED",
+            f"Uploaded NDA for {user_email}: {file.filename}",
+            client_ip
+        )
+
+        doc = get_nda_document(doc_id)
+        return NDADocumentResponse(
+            id=doc["id"],
+            user_id=doc["user_id"],
+            filename=doc["filename"],
+            file_size=doc["file_size"],
+            content_type=doc["content_type"],
+            status=doc["status"],
+            uploaded_at=str(doc["uploaded_at"]),
+            email=doc.get("email"),
+            name=doc.get("name"),
+            company=doc.get("company"),
+            portal_type=doc.get("portal_type"),
+            reviewer_name=doc.get("reviewer_name"),
+            reviewed_at=str(doc["reviewed_at"]) if doc.get("reviewed_at") else None,
+            review_notes=doc.get("review_notes")
+        )
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        print(f"Admin upload error: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Failed to upload document."
+        )
+
+
 @router.post("/import", response_model=NDADocumentResponse)
 async def import_nda(
     request: Request,

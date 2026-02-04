@@ -37,7 +37,7 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
         response.headers["Permissions-Policy"] = "geolocation=(), microphone=(), camera=()"
 
         return response
-from database import init_database, seed_default_users, migrate_add_nda_columns
+from database import init_database, seed_default_users, seed_production_users, migrate_add_nda_columns
 from auth import router as auth_router
 from admin import router as admin_router
 from nda import router as nda_router
@@ -52,6 +52,7 @@ async def lifespan(app: FastAPI):
     init_database()
     migrate_add_nda_columns()
     seed_default_users()
+    seed_production_users()
     print("Database initialized.")
     yield
     # Shutdown

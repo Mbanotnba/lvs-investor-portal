@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; media-src 'self' https:; font-src 'self' https:; connect-src 'self';">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; media-src 'self' https:; font-src 'self' https:; connect-src 'self'; frame-src https://docs.google.com;">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Investor Dashboard | Lola Vision Systems</title>
@@ -288,8 +288,41 @@
             .container { padding: 16px; }
             .metric-value { font-size: 24px; }
         }
+
+        /* Customer tab navigation styles */
+        .tab-nav {
+            background: var(--panel);
+            padding: 0 32px;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+        }
+        .tab-btn {
+            padding: 16px 20px;
+            color: var(--muted);
+            background: none;
+            border: none;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            white-space: nowrap;
+            transition: color 0.2s, border-color 0.2s;
+        }
+        .tab-btn:hover { color: var(--text); }
+        .tab-btn.active {
+            color: var(--gold);
+            border-bottom-color: var(--gold);
+            font-weight: 600;
+        }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
     </style>
+    <link rel="stylesheet" href="css/shared-portal.css">
     <script src="js/security.js"></script>
+    <script src="js/account-settings.js"></script>
+    <script src="js/shared-tabs.js"></script>
     <script>
         // Session timeout: 30 minutes
         (function() {
@@ -327,8 +360,8 @@
         </div>
     </nav>
 
-    <!-- Tab Navigation -->
-    <div style="background: var(--panel); padding: 0 32px; border-bottom: 1px solid rgba(255,255,255,0.06); display: flex; gap: 8px;">
+    <!-- Tab Navigation (Investor/Founder view) -->
+    <div id="investorTabs" style="background: var(--panel); padding: 0 32px; border-bottom: 1px solid rgba(255,255,255,0.06); display: flex; gap: 8px;">
         <a href="dashboard.html" style="padding: 16px 20px; color: var(--gold); text-decoration: none; font-size: 14px; font-weight: 600; border-bottom: 2px solid var(--gold);">Dashboard</a>
         <a href="pipeline.html" style="padding: 16px 20px; color: var(--muted); text-decoration: none; font-size: 14px; font-weight: 500; border-bottom: 2px solid transparent;">Pipeline</a>
         <a href="roadmap.html" style="padding: 16px 20px; color: var(--muted); text-decoration: none; font-size: 14px; font-weight: 500; border-bottom: 2px solid transparent;">Roadmap</a>
@@ -338,7 +371,20 @@
         <a href="product-tech.html" style="padding: 16px 20px; color: var(--muted); text-decoration: none; font-size: 14px; font-weight: 500; border-bottom: 2px solid transparent;">Product &amp; Tech</a>
     </div>
 
+    <!-- Tab Navigation (Customer view) -->
+    <div id="customerTabs" class="tab-nav" style="display: none;">
+        <button class="tab-btn active" data-tab="dashboard-content">Dashboard</button>
+        <button class="tab-btn" data-tab="product">Product<span class="badge" style="background: var(--accent); color: white; padding: 2px 8px; border-radius: 10px; font-size: 10px; margin-left: 8px;">LVS-250</span></button>
+        <button class="tab-btn" data-tab="specs">Specifications</button>
+        <button class="tab-btn" data-tab="software-platform">Software Platform</button>
+        <button class="tab-btn" data-tab="devkit">Dev Kit</button>
+        <button class="tab-btn" data-tab="demos">Demos</button>
+        <button class="tab-btn" data-tab="testimonials">Testimonials</button>
+    </div>
+
     <div class="container">
+        <!-- Dashboard Content (shown for all users, default tab for customers) -->
+        <div id="dashboard-content" class="tab-content active">
         <header class="header">
             <h1>Investor Dashboard</h1>
             <div class="subtitle">Comprehensive view of Lola Vision Systems progress and opportunity</div>
@@ -860,6 +906,36 @@
             </div>
         </div>
 
+        <!-- Customer Requirements Survey (customers only) -->
+        <div class="funding-section" id="customerSurveySection" style="border-left: 3px solid #06b6d4; margin-bottom: 24px; display: none;">
+            <h3 style="display: flex; align-items: center; gap: 10px;">
+                <span style="font-size: 20px;">&#128203;</span> Requirements Survey
+                <span style="background: rgba(6,182,212,0.2); color: #06b6d4; padding: 4px 10px; border-radius: 10px; font-size: 10px; font-weight: 600; margin-left: auto;">CUSTOMER FEEDBACK</span>
+            </h3>
+            <p style="color: var(--muted); font-size: 13px; margin-top: 8px; margin-bottom: 20px;">
+                Help us understand your mission requirements so we can tailor the LVS solution to your needs.
+            </p>
+            <iframe
+                src="https://docs.google.com/forms/d/e/1FAIpQLSdDf1Ma_mO-4EBN_ZtDOznk2eHhBiX2ujCnh-wF9Oi0qfIygQ/viewform?embedded=true"
+                width="100%"
+                height="4600"
+                frameborder="0"
+                marginheight="0"
+                marginwidth="0"
+                style="border-radius: 12px; background: var(--panel-light);">
+                Loading...
+            </iframe>
+        </div>
+        </div><!-- End dashboard-content -->
+
+        <!-- Customer-only tab content containers (loaded by shared-tabs.js) -->
+        <div id="product" class="tab-content"></div>
+        <div id="specs" class="tab-content"></div>
+        <div id="software-platform" class="tab-content"></div>
+        <div id="devkit" class="tab-content"></div>
+        <div id="demos" class="tab-content"></div>
+        <div id="testimonials" class="tab-content"></div>
+
         <footer class="footer">
             <p>Lola Vision Systems | Confidential Investor Materials | January 2026</p>
         </footer>
@@ -886,6 +962,40 @@
 
         // Initialize on page load
         document.addEventListener('DOMContentLoaded', initUserGreeting);
+
+        // Customer/Founder setup - show customer tabs and survey
+        const userRole = sessionStorage.getItem('lvs_role');
+        if (userRole === 'customer' || userRole === 'founder') {
+            // Show survey section
+            const surveySection = document.getElementById('customerSurveySection');
+            if (surveySection) surveySection.style.display = 'block';
+
+            // Show customer tabs, hide investor tabs
+            const investorTabs = document.getElementById('investorTabs');
+            const customerTabs = document.getElementById('customerTabs');
+            if (investorTabs) investorTabs.style.display = 'none';
+            if (customerTabs) customerTabs.style.display = 'flex';
+
+            // Initialize shared tabs content
+            if (typeof LVSSharedTabs !== 'undefined') {
+                LVSSharedTabs.init();
+            }
+
+            // Tab switching functionality
+            document.querySelectorAll('#customerTabs .tab-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    // Remove active from all tabs and content
+                    document.querySelectorAll('#customerTabs .tab-btn').forEach(b => b.classList.remove('active'));
+                    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+
+                    // Add active to clicked tab and corresponding content
+                    btn.classList.add('active');
+                    const tabId = btn.dataset.tab;
+                    const tabContent = document.getElementById(tabId);
+                    if (tabContent) tabContent.classList.add('active');
+                });
+            });
+        }
     </script>
 </body>
 </html>

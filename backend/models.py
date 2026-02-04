@@ -96,6 +96,46 @@ class Verify2FASetupRequest(BaseModel):
         return v
 
 
+class ForgotPasswordRequest(BaseModel):
+    """Request password reset email."""
+    email: EmailStr
+
+
+class VerifyResetTokenRequest(BaseModel):
+    """Verify password reset token (from email link)."""
+    token: str = Field(..., min_length=32)
+
+
+class VerifyResetCodeRequest(BaseModel):
+    """Verify password reset code (manual entry)."""
+    email: EmailStr
+    code: str = Field(..., min_length=6, max_length=6)
+
+    @field_validator('code')
+    @classmethod
+    def validate_code(cls, v):
+        if not v.isdigit():
+            raise ValueError('Code must contain only digits')
+        return v
+
+
+class ResetPasswordRequest(BaseModel):
+    """Reset password with token."""
+    token: str = Field(..., min_length=32)
+    new_password: str = Field(..., min_length=MIN_PASSWORD_LENGTH)
+
+    @field_validator('new_password')
+    @classmethod
+    def validate_password(cls, v):
+        if not re.search(r'[A-Z]', v):
+            raise ValueError('Password must contain at least one uppercase letter')
+        if not re.search(r'[a-z]', v):
+            raise ValueError('Password must contain at least one lowercase letter')
+        if not re.search(r'\d', v):
+            raise ValueError('Password must contain at least one digit')
+        return v
+
+
 # ============================================================================
 # RESPONSE MODELS
 # ============================================================================

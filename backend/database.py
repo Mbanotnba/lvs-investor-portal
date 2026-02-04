@@ -11,7 +11,8 @@ from config import (
     BASE_DIR, SEED_DEMO_USERS,
     DEMO_FOUNDER_PASSWORD, DEMO_INVESTOR_PASSWORD,
     DEMO_CUSTOMER_PASSWORD, DEMO_PARTNER_PASSWORD,
-    TURSO_DATABASE_URL, TURSO_AUTH_TOKEN, USE_TURSO
+    TURSO_DATABASE_URL, TURSO_AUTH_TOKEN, USE_TURSO,
+    USER_PASSWORD_PREFIX
 )
 from security import hash_password
 
@@ -235,6 +236,22 @@ def init_database():
         )
     """)
 
+    # Password reset tokens table
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS password_reset_tokens (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id INTEGER NOT NULL,
+            email TEXT NOT NULL,
+            token TEXT UNIQUE NOT NULL,
+            code TEXT NOT NULL,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            expires_at TIMESTAMP NOT NULL,
+            used INTEGER DEFAULT 0,
+            ip_address TEXT,
+            FOREIGN KEY (user_id) REFERENCES users(id)
+        )
+    """)
+
     # Create indexes
     cursor.execute("CREATE INDEX IF NOT EXISTS idx_users_email ON users(email)")
     cursor.execute("CREATE INDEX IF NOT EXISTS idx_sessions_token_jti ON sessions(token_jti)")
@@ -245,6 +262,9 @@ def init_database():
     cursor.execute("CREATE INDEX IF NOT EXISTS idx_nda_documents_status ON nda_documents(status)")
     cursor.execute("CREATE INDEX IF NOT EXISTS idx_account_comments_account ON account_comments(account_id)")
     cursor.execute("CREATE INDEX IF NOT EXISTS idx_account_comments_created ON account_comments(created_at)")
+    cursor.execute("CREATE INDEX IF NOT EXISTS idx_password_reset_token ON password_reset_tokens(token)")
+    cursor.execute("CREATE INDEX IF NOT EXISTS idx_password_reset_email ON password_reset_tokens(email)")
+    cursor.execute("CREATE INDEX IF NOT EXISTS idx_password_reset_expires ON password_reset_tokens(expires_at)")
 
     conn.commit()
     close_connection(conn)
@@ -587,6 +607,148 @@ def cleanup_expired_pending_auth() -> int:
     cursor.execute("DELETE FROM pending_auth WHERE expires_at <= CURRENT_TIMESTAMP")
     conn.commit()
 
+    deleted = cursor.rowcount
+    close_connection(conn)
+    return deleted
+
+
+# ============================================================================
+# PASSWORD RESET TOKEN OPERATIONS
+# ============================================================================
+
+import secrets
+
+def create_password_reset_token(
+    user_id: int,
+    email: str,
+    ip_address: Optional[str] = None,
+    expires_minutes: int = 15
+) -> Optional[Dict[str, str]]:
+    """Create a password reset token and 6-digit code.
+
+    Returns dict with 'token' and 'code' if successful, None otherwise.
+    Automatically invalidates any existing tokens for this user.
+    """
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    try:
+        # Invalidate any existing tokens for this user
+        cursor.execute("""
+            UPDATE password_reset_tokens SET used = 1
+            WHERE user_id = ? AND used = 0
+        """, (user_id,))
+
+        # Generate secure token and 6-digit code
+        token = secrets.token_urlsafe(32)
+        code = ''.join([str(secrets.randbelow(10)) for _ in range(6)])
+        expires_at = datetime.utcnow() + timedelta(minutes=expires_minutes)
+
+        cursor.execute("""
+            INSERT INTO password_reset_tokens (user_id, email, token, code, expires_at, ip_address)
+            VALUES (?, ?, ?, ?, ?, ?)
+        """, (user_id, email.lower(), token, code, to_db_datetime(expires_at), ip_address))
+
+        conn.commit()
+        return {'token': token, 'code': code}
+    except Exception as e:
+        print(f"Error creating password reset token: {e}")
+        conn.rollback()
+        return None
+    finally:
+        close_connection(conn)
+
+
+def verify_password_reset_token(token: str) -> Optional[Dict[str, Any]]:
+    """Verify a password reset token is valid (not used, not expired).
+
+    Returns the token record if valid, None otherwise.
+    """
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT id, user_id, email, token, code, created_at, expires_at, ip_address
+        FROM password_reset_tokens
+        WHERE token = ? AND used = 0 AND expires_at > CURRENT_TIMESTAMP
+    """, (token,))
+
+    row = cursor.fetchone()
+    result = row_to_dict(cursor, row) if row else None
+    close_connection(conn)
+    return result
+
+
+def verify_password_reset_code(email: str, code: str) -> Optional[Dict[str, Any]]:
+    """Verify a password reset code is valid for the given email.
+
+    Returns the token record if valid, None otherwise.
+    """
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT id, user_id, email, token, code, created_at, expires_at, ip_address
+        FROM password_reset_tokens
+        WHERE email = ? AND code = ? AND used = 0 AND expires_at > CURRENT_TIMESTAMP
+    """, (email.lower(), code))
+
+    row = cursor.fetchone()
+    result = row_to_dict(cursor, row) if row else None
+    close_connection(conn)
+    return result
+
+
+def mark_password_reset_used(token_id: int) -> bool:
+    """Mark a password reset token as used."""
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        UPDATE password_reset_tokens SET used = 1
+        WHERE id = ?
+    """, (token_id,))
+
+    conn.commit()
+    success = cursor.rowcount > 0
+    close_connection(conn)
+    return success
+
+
+def get_recent_password_reset_requests(email: str, minutes: int = 60) -> int:
+    """Count recent password reset requests for rate limiting.
+
+    Returns the number of requests in the last N minutes.
+    """
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    since = datetime.utcnow() - timedelta(minutes=minutes)
+    cursor.execute("""
+        SELECT COUNT(*) as count FROM password_reset_tokens
+        WHERE email = ? AND created_at > ?
+    """, (email.lower(), to_db_datetime(since)))
+
+    row = cursor.fetchone()
+    count = row[0] if row else 0
+    close_connection(conn)
+    return count
+
+
+def cleanup_expired_password_reset_tokens() -> int:
+    """Clean up expired password reset tokens.
+
+    Returns the number of records deleted.
+    """
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        DELETE FROM password_reset_tokens
+        WHERE expires_at <= CURRENT_TIMESTAMP OR used = 1
+    """)
+
+    conn.commit()
     deleted = cursor.rowcount
     close_connection(conn)
     return deleted
@@ -1173,6 +1335,30 @@ def seed_default_users():
             "company": "terrahaptix",
             "nda_status": "approved"
         },
+        {
+            "email": "demo@glidtech.com",
+            "password": DEMO_CUSTOMER_PASSWORD,
+            "name": "Glid Demo",
+            "portal_type": "customer",
+            "company": "glid",
+            "nda_status": "approved"
+        },
+        {
+            "email": "demo@anduril.com",
+            "password": DEMO_CUSTOMER_PASSWORD,
+            "name": "Anduril Demo",
+            "portal_type": "customer",
+            "company": "anduril",
+            "nda_status": "approved"
+        },
+        {
+            "email": "demo@machindustries.com",
+            "password": DEMO_CUSTOMER_PASSWORD,
+            "name": "Mach Demo",
+            "portal_type": "customer",
+            "company": "mach",
+            "nda_status": "approved"
+        },
         # Partner (NDA required - set to approved for demo)
         {
             "email": "demo@amd.com",
@@ -1202,6 +1388,92 @@ def seed_default_users():
             print(f"Created user: {user_data['email']} (NDA: {user_data.get('nda_status', 'pending')})")
 
 
+def seed_production_users():
+    """
+    Seed production user accounts (founders, investors, customers).
+
+    Runs automatically on startup if USER_PASSWORD_PREFIX is set.
+    Passwords follow pattern: {PREFIX}{FirstName}
+    Example: If prefix is "LVS2026", Kevin's password is "LVS2026Kevin"
+
+    Users are only created if they don't already exist (safe to run multiple times).
+    """
+    if not USER_PASSWORD_PREFIX:
+        print("Production user seeding DISABLED. Set USER_PASSWORD_PREFIX to enable.")
+        return
+
+    prefix = USER_PASSWORD_PREFIX
+
+    # All production users - organized by role
+    production_users = [
+        # ===== FOUNDERS =====
+        {"email": "tayo@lolavisionsystems.com", "name": "Tayo Adesanya", "portal_type": "founder", "company": "lvs", "nda_status": "not_required", "password_suffix": "Founder2026"},
+        {"email": "randy@lolavisionsystems.com", "name": "Randy Hollines", "portal_type": "founder", "company": "lvs", "nda_status": "not_required"},
+        {"email": "joshua@lolavisionsystems.com", "name": "Joshua Bush", "portal_type": "founder", "company": "lvs", "nda_status": "not_required"},
+        {"email": "jordan@lolavisionsystems.com", "name": "Jordan Page", "portal_type": "founder", "company": "lvs", "nda_status": "not_required"},
+
+        # ===== INVESTORS =====
+        {"email": "vincent.berry2@gmail.com", "name": "Vincent Berry II", "portal_type": "investor", "company": None, "nda_status": "not_required"},
+        {"email": "paul@theopportunityfund.com", "name": "Paul Judge", "portal_type": "investor", "company": "The Opportunity Fund", "nda_status": "not_required"},
+        {"email": "nancy@theopportunityfund.com", "name": "Nancy Torres", "portal_type": "investor", "company": "The Opportunity Fund", "nda_status": "not_required"},
+        {"email": "chad@theopportunityfund.com", "name": "Chad Harris", "portal_type": "investor", "company": "The Opportunity Fund", "nda_status": "not_required"},
+        {"email": "apickard@mfvpartners.com", "name": "Aaron Pickard", "portal_type": "investor", "company": "MFV Partners", "nda_status": "not_required"},
+        {"email": "karthee@mfvpartners.com", "name": "Karthee Madasamy", "portal_type": "investor", "company": "MFV Partners", "nda_status": "not_required"},
+        {"email": "natalie.warther@raymondjames.com", "name": "Natalie Warther", "portal_type": "investor", "company": "Raymond James", "nda_status": "not_required"},
+        {"email": "sistel@cerberus.com", "name": "Sarah Istel", "portal_type": "investor", "company": "Cerberus Ventures", "nda_status": "not_required"},
+        {"email": "andrew.cote00@gmail.com", "name": "Andrew Cote", "portal_type": "investor", "company": None, "nda_status": "not_required"},
+        {"email": "strategictechnologiesai@gmail.com", "name": "Maynard Holliday", "portal_type": "investor", "company": None, "nda_status": "not_required"},
+        {"email": "Roberts.Jamie2014@gmail.com", "name": "Jamie Roberts", "portal_type": "investor", "company": None, "nda_status": "not_required"},
+        {"email": "Fmarshalllowery@gmail.com", "name": "Fred Lowrey", "portal_type": "investor", "company": None, "nda_status": "not_required"},
+        {"email": "jg@equityspacealliance.com", "name": "Janeya Griffin", "portal_type": "investor", "company": "Equity Space Alliance", "nda_status": "not_required"},
+        {"email": "seema@dcstartupweek.org", "name": "Seema Alexander", "portal_type": "investor", "company": "DC Startup Week", "nda_status": "not_required"},
+        {"email": "rock@rocktechconsultants.com", "name": "Walter McMillian", "portal_type": "investor", "company": "Rock Tech Consultants", "nda_status": "not_required"},
+        {"email": "melissa@1863ventures.net", "name": "Melissa Bradley", "portal_type": "investor", "company": "1863 Ventures", "nda_status": "not_required"},
+
+        # ===== CUSTOMERS =====
+        {"email": "caffouda@anduril.com", "name": "Chaffra Affouda", "portal_type": "customer", "company": "anduril", "nda_status": "approved"},
+        {"email": "kevin@glidtech.us", "name": "Kevin Damoa", "portal_type": "customer", "company": "glid", "nda_status": "approved"},
+        {"email": "maxwell@terrahaptix.com", "name": "Maxwell Maduka", "portal_type": "customer", "company": "terrahaptix", "nda_status": "approved"},
+        {"email": "sebastian@koniku.com", "name": "Jos Sebastian", "portal_type": "customer", "company": "koniku", "nda_status": "approved"},
+        {"email": "agabi@koniku.com", "name": "Osh Agabi", "portal_type": "customer", "company": "koniku", "nda_status": "approved"},
+        {"email": "roberthochstedler@machindustries.com", "name": "Robert Hochstedler", "portal_type": "customer", "company": "mach", "nda_status": "approved"},
+    ]
+
+    print(f"Seeding production users (USER_PASSWORD_PREFIX is set)...")
+    created_count = 0
+    skipped_count = 0
+
+    for user_data in production_users:
+        existing = get_user_by_email(user_data["email"])
+        if existing:
+            skipped_count += 1
+            continue
+
+        # Generate password: use custom suffix or {prefix}{FirstName}
+        if "password_suffix" in user_data:
+            password = user_data["password_suffix"]
+        else:
+            first_name = user_data["name"].split()[0]
+            password = f"{prefix}{first_name}"
+
+        user_id = create_user(
+            email=user_data["email"],
+            password=password,
+            name=user_data["name"],
+            portal_type=user_data["portal_type"],
+            company=user_data["company"]
+        )
+
+        if user_id and user_data.get("nda_status"):
+            update_nda_status(user_id, user_data["nda_status"])
+
+        if user_id:
+            created_count += 1
+            print(f"  Created: {user_data['email']}")
+
+    print(f"Production users: {created_count} created, {skipped_count} already existed")
+
+
 if __name__ == "__main__":
     print("Initializing database...")
     init_database()
@@ -1211,4 +1483,6 @@ if __name__ == "__main__":
         print(f"  Removed {deleted} expired pending auth records")
     print("Seeding default users...")
     seed_default_users()
+    print("Seeding production users...")
+    seed_production_users()
     print("Done!")

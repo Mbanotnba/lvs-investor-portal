@@ -73,6 +73,7 @@ PORTAL_DOMAINS = {
 
     # Partner domains
     'amd.com': {'type': 'partner', 'company': 'amd', 'name': 'AMD'},
+    'firstgenesis.com': {'type': 'partner', 'company': 'firstgenesis', 'name': 'First Genesis'},
 
     # Founder domain
     'lolavisionsystems.com': {'type': 'founder', 'company': 'lvs', 'name': 'Lola Vision Systems'},
@@ -92,7 +93,8 @@ PORTAL_URLS = {
         'seasats': 'dashboard.html',
     },
     'partner': {
-        'amd': 'partner-portal.html?partner=amd',
+        'amd': 'amd-portal.html',
+        'firstgenesis': 'firstgenesis-portal.html',
     }
 }
 
@@ -110,3 +112,20 @@ DEMO_FOUNDER_PASSWORD = os.getenv("DEMO_FOUNDER_PASSWORD")
 DEMO_INVESTOR_PASSWORD = os.getenv("DEMO_INVESTOR_PASSWORD")
 DEMO_CUSTOMER_PASSWORD = os.getenv("DEMO_CUSTOMER_PASSWORD")
 DEMO_PARTNER_PASSWORD = os.getenv("DEMO_PARTNER_PASSWORD")
+
+# Production user password prefix - passwords are {PREFIX}{FirstName}
+# e.g., if prefix is "LVS2026", Kevin's password is "LVS2026Kevin"
+USER_PASSWORD_PREFIX = os.getenv("USER_PASSWORD_PREFIX", "")
+
+# ============================================================================
+# EMAIL SERVICE (SendGrid)
+# ============================================================================
+
+SENDGRID_API_KEY = os.getenv("SENDGRID_API_KEY")
+SENDGRID_FROM_EMAIL = os.getenv("SENDGRID_FROM_EMAIL", "noreply@lolavisionsystems.com")
+SENDGRID_FROM_NAME = os.getenv("SENDGRID_FROM_NAME", "Lola Vision Systems")
+PORTAL_URL = os.getenv("PORTAL_URL", "https://lvs-portal-657638018776.us-central1.run.app")
+
+# Password reset settings
+PASSWORD_RESET_EXPIRE_MINUTES = 15
+PASSWORD_RESET_RATE_LIMIT = 3  # Max requests per hour per email

@@ -671,6 +671,7 @@
     </style>
     <script src="js/config.js"></script>
     <script src="js/security.js"></script>
+    <script src="js/account-settings.js"></script>
     <script>
         // Validate founder access - always force server validation for sensitive portal
         LVSSecurity.initProtectedPage('founder', null, { force: true });
@@ -846,6 +847,45 @@
                     </tbody>
                 </table>
 
+                <!-- Upload NDA for Customer Section -->
+                <div class="section-header" style="margin-top: 40px;">
+                    <h2>Upload NDA Document</h2>
+                </div>
+                <p style="color: var(--muted); font-size: 13px; margin-bottom: 16px;">
+                    Upload an executed NDA for a customer. The document will be auto-approved and visible in their Documents tab.
+                </p>
+
+                <div class="nda-upload-container" style="display: flex; gap: 20px; align-items: flex-start; margin-bottom: 30px;">
+                    <div style="flex: 1;">
+                        <label style="display: block; margin-bottom: 8px; font-size: 13px; color: var(--muted);">Select Customer</label>
+                        <select id="ndaUploadCustomer" style="width: 100%; padding: 12px; background: var(--panel-light); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 14px;">
+                            <option value="">-- Select customer --</option>
+                        </select>
+                    </div>
+                    <div style="flex: 2;">
+                        <label style="display: block; margin-bottom: 8px; font-size: 13px; color: var(--muted);">NDA Document (PDF)</label>
+                        <div id="ndaDropZone" class="nda-drop-zone" style="border: 2px dashed var(--border); border-radius: 12px; padding: 30px; text-align: center; cursor: pointer; transition: all 0.2s;">
+                            <div style="font-size: 32px; margin-bottom: 8px;">📄</div>
+                            <div style="font-size: 14px; color: var(--text);">Drop NDA file here or click to browse</div>
+                            <div style="font-size: 12px; color: var(--muted); margin-top: 4px;">PDF, PNG, JPEG (max 10MB)</div>
+                            <input type="file" id="ndaFileInput" accept=".pdf,.png,.jpg,.jpeg" style="display: none;">
+                        </div>
+                        <div id="ndaFilePreview" style="display: none; margin-top: 12px; padding: 12px; background: var(--panel-light); border-radius: 8px; display: flex; align-items: center; gap: 12px;">
+                            <span style="font-size: 24px;">📎</span>
+                            <div style="flex: 1;">
+                                <div id="ndaFileName" style="font-size: 14px; font-weight: 500;"></div>
+                                <div id="ndaFileSize" style="font-size: 12px; color: var(--muted);"></div>
+                            </div>
+                            <button onclick="clearNdaFile()" style="background: rgba(239,68,68,0.2); color: #ef4444; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 12px;">Remove</button>
+                        </div>
+                    </div>
+                    <div style="padding-top: 26px;">
+                        <button id="ndaUploadBtn" onclick="uploadNdaForCustomer()" disabled style="background: rgba(34,197,94,0.2); color: #22c55e; border: none; padding: 12px 24px; border-radius: 8px; cursor: not-allowed; font-size: 14px; font-weight: 500; opacity: 0.5; transition: all 0.2s;">
+                            Upload NDA
+                        </button>
+                    </div>
+                </div>
+
                 <!-- Uploaded NDA Documents Section -->
                 <div class="section-header" style="margin-top: 40px;">
                     <h2>Uploaded NDA Documents</h2>
@@ -853,7 +893,6 @@
                 </div>
                 <p style="color: var(--muted); font-size: 13px; margin-bottom: 16px;">
                     Review and approve NDA documents uploaded by customers and partners.
-                </p>
 
                 <table class="nda-table" id="ndaDocsTable">
                     <thead>
@@ -1235,6 +1274,7 @@
             document.querySelectorAll('.sidebar-item').forEach(el => el.classList.remove('active'));
             loadNdaUsers();
             loadNdaDocs();
+            initNdaUploadUI();
         }
 
         // Show customers section
@@ -1281,6 +1321,7 @@
                 document.getElementById('ndaPendingCount').textContent = data.summary?.pending || 0;
 
                 renderNdaTable();
+                populateCustomerDropdown();
             } catch (error) {
                 console.error('Error loading NDA users:', error);
                 document.getElementById('ndaTableBody').innerHTML = `
@@ -1629,6 +1670,171 @@
 
             } catch (error) {
                 alert('Error: ' + error.message);
+            }
+        }
+
+        // ============================================
+        // NDA UPLOAD FUNCTIONS (Founder uploads for customers)
+        // ============================================
+
+        let selectedNdaFile = null;
+
+        function initNdaUploadUI() {
+            const dropZone = document.getElementById('ndaDropZone');
+            const fileInput = document.getElementById('ndaFileInput');
+
+            if (!dropZone || !fileInput) return;
+
+            // Click to browse
+            dropZone.addEventListener('click', () => fileInput.click());
+
+            // File selected via input
+            fileInput.addEventListener('change', (e) => {
+                if (e.target.files.length > 0) {
+                    handleNdaFileSelect(e.target.files[0]);
+                }
+            });
+
+            // Drag events
+            dropZone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                dropZone.style.borderColor = 'var(--accent)';
+                dropZone.style.background = 'rgba(139,92,246,0.1)';
+            });
+
+            dropZone.addEventListener('dragleave', (e) => {
+                e.preventDefault();
+                dropZone.style.borderColor = 'var(--border)';
+                dropZone.style.background = 'transparent';
+            });
+
+            dropZone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dropZone.style.borderColor = 'var(--border)';
+                dropZone.style.background = 'transparent';
+                if (e.dataTransfer.files.length > 0) {
+                    handleNdaFileSelect(e.dataTransfer.files[0]);
+                }
+            });
+
+            // Populate customer dropdown
+            populateCustomerDropdown();
+        }
+
+        function handleNdaFileSelect(file) {
+            const allowedTypes = ['application/pdf', 'image/png', 'image/jpeg'];
+            if (!allowedTypes.includes(file.type)) {
+                alert('Invalid file type. Please upload a PDF, PNG, or JPEG.');
+                return;
+            }
+
+            if (file.size > 10 * 1024 * 1024) {
+                alert('File too large. Maximum size is 10MB.');
+                return;
+            }
+
+            selectedNdaFile = file;
+            document.getElementById('ndaFileName').textContent = file.name;
+            document.getElementById('ndaFileSize').textContent = (file.size / 1024).toFixed(1) + ' KB';
+            document.getElementById('ndaFilePreview').style.display = 'flex';
+            document.getElementById('ndaDropZone').style.display = 'none';
+            updateNdaUploadButton();
+        }
+
+        function clearNdaFile() {
+            selectedNdaFile = null;
+            document.getElementById('ndaFileInput').value = '';
+            document.getElementById('ndaFilePreview').style.display = 'none';
+            document.getElementById('ndaDropZone').style.display = 'block';
+            updateNdaUploadButton();
+        }
+
+        function updateNdaUploadButton() {
+            const btn = document.getElementById('ndaUploadBtn');
+            const customerSelect = document.getElementById('ndaUploadCustomer');
+            const canUpload = selectedNdaFile && customerSelect.value;
+
+            if (canUpload) {
+                btn.disabled = false;
+                btn.style.cursor = 'pointer';
+                btn.style.opacity = '1';
+            } else {
+                btn.disabled = true;
+                btn.style.cursor = 'not-allowed';
+                btn.style.opacity = '0.5';
+            }
+        }
+
+        function populateCustomerDropdown() {
+            const select = document.getElementById('ndaUploadCustomer');
+            if (!select) return;
+
+            // Get customer users from the NDA users list
+            const customerUsers = ndaUsers.filter(u => u.portal_type === 'customer');
+
+            select.innerHTML = '<option value="">-- Select customer --</option>';
+            customerUsers.forEach(user => {
+                const option = document.createElement('option');
+                option.value = user.email;
+                option.textContent = `${user.name} (${user.company || 'Unknown'})`;
+                select.appendChild(option);
+            });
+
+            select.addEventListener('change', updateNdaUploadButton);
+        }
+
+        async function uploadNdaForCustomer() {
+            if (!selectedNdaFile) {
+                alert('Please select a file to upload');
+                return;
+            }
+
+            const customerEmail = document.getElementById('ndaUploadCustomer').value;
+            if (!customerEmail) {
+                alert('Please select a customer');
+                return;
+            }
+
+            const btn = document.getElementById('ndaUploadBtn');
+            const originalText = btn.textContent;
+            btn.textContent = 'Uploading...';
+            btn.disabled = true;
+
+            const token = sessionStorage.getItem('lvs_token');
+            const formData = new FormData();
+            formData.append('file', selectedNdaFile);
+            formData.append('user_email', customerEmail);
+            formData.append('auto_approve', 'true');
+            formData.append('notes', 'Uploaded by founder');
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/nda/admin-upload`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: formData
+                });
+
+                if (!response.ok) {
+                    const data = await response.json();
+                    throw new Error(data.detail || 'Failed to upload NDA');
+                }
+
+                const doc = await response.json();
+                alert(`NDA uploaded successfully for ${customerEmail}`);
+
+                // Clear form and refresh lists
+                clearNdaFile();
+                document.getElementById('ndaUploadCustomer').value = '';
+                loadNdaDocs();
+                loadNdaUsers();
+
+            } catch (error) {
+                alert('Error: ' + error.message);
+            } finally {
+                btn.textContent = originalText;
+                updateNdaUploadButton();
             }
         }
 

@@ -25,15 +25,17 @@ CUSTOMIZATION POINTS:
 -->
 <html lang="en">
 <head>
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; media-src 'self' https:; font-src 'self' https:; connect-src 'self' https://lvs-api-657638018776.us-central1.run.app;">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; media-src 'self' https:; font-src 'self' https:; connect-src 'self' https://lvs-api-657638018776.us-central1.run.app; frame-src https://docs.google.com;">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mach Industries Portal | Lola Vision Systems</title>
     <link rel="stylesheet" href="css/shared-portal.css">
     <script src="js/config.js"></script>
     <script src="js/security.js"></script>
+    <script src="js/account-settings.js"></script>
     <script src="js/comments.js"></script>
     <script src="js/shared-tabs.js"></script>
+    <script src="js/nda-gate.js"></script>
     <script>
         (function() {
             const SESSION_TIMEOUT = 30 * 60 * 1000;
@@ -68,13 +70,13 @@ CUSTOMIZATION POINTS:
     <div class="tab-nav">
         <button class="tab-btn active" data-tab="dashboard">Dashboard</button>
         <button class="tab-btn" data-tab="product">Product<span class="badge">LVS-250</span></button>
-        <button class="tab-btn" data-tab="specs">Specifications</button>
-        <button class="tab-btn" data-tab="devkit">Development Kit</button>
-        <button class="tab-btn" data-tab="sdk">Software SDK</button>
-        <button class="tab-btn" data-tab="documents">Documents</button>
-        <button class="tab-btn" data-tab="support">Support</button>
+        <button class="tab-btn" data-tab="specs">Specs</button>
+        <button class="tab-btn" data-tab="software-platform">Software Platform</button>
+        <button class="tab-btn" data-tab="devkit">Dev Kit</button>
         <button class="tab-btn" data-tab="demos">Demos</button>
         <button class="tab-btn" data-tab="testimonials">Testimonials</button>
+        <button class="tab-btn" data-tab="documents">Documents</button>
+        <button class="tab-btn" data-tab="support">Support</button>
     </div>
 
     <div class="container">
@@ -254,6 +256,27 @@ CUSTOMIZATION POINTS:
                 </div>
             </div>
 
+            <!-- Customer Requirements Survey -->
+            <div class="panel" style="border-left: 3px solid #06b6d4; margin-top: 24px;">
+                <h3 style="display: flex; align-items: center; gap: 10px;">
+                    <span style="font-size: 20px;">&#128203;</span> Requirements Survey
+                    <span style="background: rgba(6,182,212,0.2); color: #06b6d4; padding: 4px 10px; border-radius: 10px; font-size: 10px; font-weight: 600; margin-left: auto;">CUSTOMER FEEDBACK</span>
+                </h3>
+                <p style="color: var(--muted); font-size: 13px; margin-top: 8px; margin-bottom: 20px;">
+                    Help us understand your mission requirements so we can tailor the LVS solution to your needs.
+                </p>
+                <iframe
+                    src="https://docs.google.com/forms/d/e/1FAIpQLSdDf1Ma_mO-4EBN_ZtDOznk2eHhBiX2ujCnh-wF9Oi0qfIygQ/viewform?embedded=true"
+                    width="100%"
+                    height="4600"
+                    frameborder="0"
+                    marginheight="0"
+                    marginwidth="0"
+                    style="border-radius: 12px; background: var(--panel-light);">
+                    Loading...
+                </iframe>
+            </div>
+
             <!-- Notes Section -->
             <div class="notes-section">
                 <div class="grid">
@@ -303,9 +326,9 @@ CUSTOMIZATION POINTS:
         <!-- Content loaded from js/shared-tabs.js -->
         <div id="devkit" class="tab-content"></div>
 
-        <!-- ==================== SDK TAB ==================== -->
+        <!-- ==================== SOFTWARE PLATFORM TAB ==================== -->
         <!-- Content loaded from js/shared-tabs.js -->
-        <div id="sdk" class="tab-content"></div>
+        <div id="software-platform" class="tab-content"></div>
 
         <!-- ==================== DOCUMENTS TAB ==================== -->
         <div id="documents" class="tab-content">
@@ -315,6 +338,14 @@ CUSTOMIZATION POINTS:
                     <p>Agreements, proposals, and technical documentation</p>
                 </div>
             </div>
+            <!-- Dynamic NDA Documents -->
+            <div class="panel" id="ndaDocsPanel" style="display: none; margin-bottom: 24px;">
+                <h3>Your Executed NDAs</h3>
+                <div id="ndaDocsList">
+                    <div style="color: var(--muted); font-size: 13px;">Loading...</div>
+                </div>
+            </div>
+
             <div class="panel">
                 <h3>Available Documents</h3>
                 <div style="display: flex; align-items: center; gap: 14px; padding: 14px; background: var(--panel-light); border-radius: 10px; margin-bottom: 10px;">
@@ -488,6 +519,61 @@ ${textarea.value}`;
             document.getElementById('navAvatar').textContent = initials;
         }
 
+        // Load NDA documents for this customer
+        async function loadNdaDocuments() {
+            const token = sessionStorage.getItem('lvs_token');
+            if (!token) return;
+
+            try {
+                const response = await fetch(`${typeof LVS_CONFIG !== 'undefined' ? LVS_CONFIG.API_BASE_URL : 'http://localhost:8080'}/nda/my-documents`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Accept': 'application/json'
+                    }
+                });
+
+                if (!response.ok) return;
+
+                const docs = await response.json();
+                const approvedDocs = docs.filter(d => d.status === 'approved');
+
+                if (approvedDocs.length > 0) {
+                    const panel = document.getElementById('ndaDocsPanel');
+                    const list = document.getElementById('ndaDocsList');
+                    if (panel && list) {
+                        panel.style.display = 'block';
+                        list.innerHTML = approvedDocs.map(doc => `
+                            <div style="display: flex; align-items: center; gap: 14px; padding: 14px; background: var(--panel-light); border-radius: 10px; margin-bottom: 10px; cursor: pointer;" onclick="downloadNdaDoc(${doc.id})">
+                                <div style="width: 40px; height: 40px; background: rgba(16, 185, 129, 0.15); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: var(--success);">&#128196;</div>
+                                <div style="flex: 1;">
+                                    <div style="font-size: 13px; font-weight: 600;">${doc.filename}</div>
+                                    <div style="font-size: 11px; color: var(--muted);">Uploaded ${new Date(doc.uploaded_at).toLocaleDateString()}</div>
+                                </div>
+                                <span style="color: var(--success); font-size: 12px;">&#10003; Approved</span>
+                            </div>
+                        `).join('');
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading NDA documents:', error);
+            }
+        }
+
+        async function downloadNdaDoc(docId) {
+            const token = sessionStorage.getItem('lvs_token');
+            try {
+                const response = await fetch(`${typeof LVS_CONFIG !== 'undefined' ? LVS_CONFIG.API_BASE_URL : 'http://localhost:8080'}/nda/${docId}/download`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (response.ok) {
+                    const data = await response.json();
+                    window.open(data.download_url, '_blank');
+                }
+            } catch (error) {
+                console.error('Error downloading NDA:', error);
+            }
+        }
+
         // Demo & Testimonial Videos
         const isMobile = window.innerWidth <= 768;
 
@@ -567,8 +653,11 @@ ${textarea.value}`;
         document.addEventListener('DOMContentLoaded', () => {
             // Initialize shared tabs (Product, Specs, DevKit, SDK, Support, Demos, Testimonials)
             LVSSharedTabs.init();
+            // Initialize NDA gating
+            LVSNDAGate.init('mach');
             loadNotes();
             initUserGreeting();
+            loadNdaDocuments();
             // Initialize shared account notes
             LVSComments.init('mach', '#accountCommentsContainer');
         });

@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LVS Customer Requirements Survey | Reference Document</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0a0a0f;
+            color: #f5f5f7;
+            line-height: 1.6;
+            padding: 40px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        h1 { font-size: 28px; margin-bottom: 8px; color: #d4af37; }
+        h2 { font-size: 20px; margin: 32px 0 16px; color: #7c4dff; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 8px; }
+        h3 { font-size: 16px; margin: 24px 0 12px; color: #06b6d4; }
+        .subtitle { color: #6b7280; font-size: 14px; margin-bottom: 24px; }
+        .meta { background: #12121a; padding: 16px; border-radius: 12px; margin-bottom: 32px; border: 1px solid rgba(255,255,255,0.06); }
+        .meta-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.06); }
+        .meta-item:last-child { border-bottom: none; }
+        .meta-label { color: #6b7280; font-size: 12px; text-transform: uppercase; }
+        .meta-value { color: #10b981; font-weight: 600; }
+        .question { background: #12121a; padding: 20px; border-radius: 12px; margin-bottom: 16px; border-left: 3px solid #7c4dff; }
+        .question-id { font-size: 11px; color: #6b7280; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+        .question-text { font-size: 15px; font-weight: 600; margin-bottom: 12px; }
+        .question-type { font-size: 12px; color: #06b6d4; margin-bottom: 12px; }
+        .options { list-style: none; padding-left: 0; }
+        .options li { padding: 6px 0; padding-left: 20px; position: relative; color: #a1a1aa; font-size: 14px; }
+        .options li::before { content: ""; position: absolute; left: 0; top: 12px; width: 12px; height: 12px; border: 2px solid #6b7280; border-radius: 3px; }
+        .options.radio li::before { border-radius: 50%; }
+        .grid-table { width: 100%; border-collapse: collapse; margin-top: 12px; font-size: 13px; }
+        .grid-table th, .grid-table td { padding: 8px; text-align: left; border: 1px solid rgba(255,255,255,0.1); }
+        .grid-table th { background: rgba(124,77,255,0.1); color: #a78bfa; }
+        .purpose { font-size: 12px; color: #6b7280; font-style: italic; margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.06); }
+        .form-link { background: linear-gradient(135deg, #7c4dff, #5b21b6); color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; display: inline-block; margin-top: 24px; font-weight: 600; }
+        .form-link:hover { opacity: 0.9; }
+        .section { margin-bottom: 40px; }
+    </style>
+</head>
+<body>
+    <h1>LVS Customer Requirements Survey</h1>
+    <p class="subtitle">Focus Customer UAS Survey - Reference Document</p>
+
+    <div class="meta">
+        <div class="meta-item">
+            <span class="meta-label">Total Questions</span>
+            <span class="meta-value">12</span>
+        </div>
+        <div class="meta-item">
+            <span class="meta-label">Estimated Time</span>
+            <span class="meta-value">3-4 minutes</span>
+        </div>
+        <div class="meta-item">
+            <span class="meta-label">Target Audience</span>
+            <span class="meta-value">Focus Customers (Tier 1)</span>
+        </div>
+        <div class="meta-item">
+            <span class="meta-label">Google Form ID</span>
+            <span class="meta-value">1FAIpQLSdDf1Ma_mO-4EBN_ZtDOznk2eHhBiX2ujCnh-wF9Oi0qfIygQ</span>
+        </div>
+        <div class="meta-item">
+            <span class="meta-label">Last Updated</span>
+            <span class="meta-value">February 2026</span>
+        </div>
+    </div>
+
+    <a href="https://docs.google.com/forms/d/e/1FAIpQLSdDf1Ma_mO-4EBN_ZtDOznk2eHhBiX2ujCnh-wF9Oi0qfIygQ/viewform" target="_blank" class="form-link">Open Google Form</a>
+
+    <div class="section">
+        <h2>Survey Questions</h2>
+
+        <div class="question">
+            <div class="question-id">Q1 - CTX-1</div>
+            <div class="question-text">Company / Program Name</div>
+            <div class="question-type">Short answer (required)</div>
+            <div class="purpose">Purpose: Identify respondent for requirement traceability</div>
+        </div>
+
+        <div class="question">
+            <div class="question-id">Q2 - OPS-1</div>
+            <div class="question-text">What is your primary mission? (Select up to 2)</div>
+            <div class="question-type">Checkboxes (required, max 2)</div>
+            <ul class="options">
+                <li>Inspection</li>
+                <li>Mapping / Survey</li>
+                <li>Search & Rescue</li>
+                <li>ISR / Reconnaissance</li>
+                <li>Perimeter Security</li>
+                <li>Delivery / Logistics</li>
+                <li>Agriculture</li>
+                <li>Indoor Inventory / Warehouse</li>
+                <li>Other</li>
+            </ul>
+        </div>
+
+        <div class="question">
+            <div class="question-id">Q3 - OPS-3</div>
+            <div class="question-text">What operating conditions must the system handle? (Select all that apply)</div>
+            <div class="question-type">Checkboxes (required)</div>
+            <ul class="options">
+                <li>Indoor</li>
+                <li>Outdoor</li>
+                <li>Low-light / Night</li>
+                <li>Dust / Sand</li>
+                <li>Rain / Wet conditions</li>
+                <li>Fog / Smoke / Obscurants</li>
+                <li>High temperature (>40C)</li>
+                <li>Motion blur / Vibration</li>
+            </ul>
+        </div>
+
+        <div class="question">
+            <div class="question-id">Q4 - F-1</div>
+            <div class="question-text">What level of autonomy do you need?</div>
+            <div class="question-type">Multiple choice (required)</div>
+            <ul class="options radio">
+                <li>Assist only (human in the loop for all decisions)</li>
+                <li>Supervised autonomy (human monitors, system acts)</li>
+                <li>High autonomy (minimal human intervention)</li>
+            </ul>
+        </div>
+
+        <div class="question">
+            <div class="question-id">Q5 - F-2</div>
+            <div class="question-text">Which capabilities are most important? (Select your top 3)</div>
+            <div class="question-type">Checkboxes (required, select 3)</div>
+            <ul class="options">
+                <li>Obstacle avoidance</li>
+                <li>Object detection & tracking</li>
+                <li>Route planning / Waypoint navigation</li>
+                <li>Precision landing</li>
+                <li>Environmental sensing / Alerts</li>
+                <li>RF link monitoring / Adaptive behavior</li>
+                <li>Perimeter patrol / Area scan</li>
+            </ul>
+        </div>
+
+        <div class="question">
+            <div class="question-id">Q5b - F-2 Follow-up</div>
+            <div class="question-text">List your top 3 capabilities in priority order</div>
+            <div class="question-type">Short answer (required)</div>
+            <div class="purpose">Example: "1. Obstacle avoidance, 2. Detection, 3. Precision landing"</div>
+        </div>
+
+        <div class="question">
+            <div class="question-id">Q6 - P-1, P-2</div>
+            <div class="question-text">What are your performance requirements?</div>
+            <div class="question-type">Multiple choice grid (required)</div>
+            <table class="grid-table">
+                <thead>
+                    <tr>
+                        <th>Requirement</th>
+                        <th>Option 1</th>
+                        <th>Option 2</th>
+                        <th>Option 3</th>
+                        <th>Option 4</th>
+                        <th>Unknown</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>End-to-end latency (sensor to output)</td>
+                        <td>&lt;25ms</td>
+                        <td>25-50ms</td>
+                        <td>50-100ms</td>
+                        <td>&gt;100ms</td>
+                        <td>Unknown</td>
+                    </tr>
+                    <tr>
+                        <td>Obstacle avoidance update rate</td>
+                        <td>10 Hz</td>
+                        <td>20-30 Hz</td>
+                        <td>50+ Hz</td>
+                        <td>-</td>
+                        <td>Unknown</td>
+                    </tr>
+                    <tr>
+                        <td>Detection/tracking output rate</td>
+                        <td>10 Hz</td>
+                        <td>30 Hz</td>
+                        <td>60 Hz</td>
+                        <td>-</td>
+                        <td>Unknown</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="question">
+            <div class="question-id">Q7a - I-1</div>
+            <div class="question-text">What autopilot stack do you use?</div>
+            <div class="question-type">Multiple choice (required)</div>
+            <ul class="options radio">
+                <li>PX4</li>
+                <li>ArduPilot</li>
+                <li>Proprietary / Custom</li>
+                <li>Unknown / TBD</li>
+            </ul>
+        </div>
+
+        <div class="question">
+            <div class="question-id">Q7b - I-2</div>
+            <div class="question-text">Preferred integration approach? (Select all that apply)</div>
+            <div class="question-type">Checkboxes (required)</div>
+            <ul class="options">
+                <li>ROS2 topics/services</li>
+                <li>MAVLink</li>
+                <li>SDK / Library</li>
+                <li>REST / gRPC API</li>
+                <li>Log / File export only</li>
+            </ul>
+        </div>
+
+        <div class="question">
+            <div class="question-id">Q8 - SAF-1</div>
+            <div class="question-text">Which safety features are required? (Select all that apply)</div>
+            <div class="question-type">Checkboxes (required)</div>
+            <ul class="options">
+                <li>Geofencing</li>
+                <li>Collision avoidance (enforced)</li>
+                <li>Safe land on failure</li>
+                <li>Return-to-home on failure</li>
+                <li>Human override always available</li>
+                <li>Keep-out / No-go zones</li>
+            </ul>
+        </div>
+
+        <div class="question">
+            <div class="question-id">Q9 - SEC-1</div>
+            <div class="question-text">Which security controls are required? (Select all that apply)</div>
+            <div class="question-type">Checkboxes (required)</div>
+            <ul class="options">
+                <li>Secure boot</li>
+                <li>Signed software updates</li>
+                <li>Encryption at rest</li>
+                <li>Encryption in transit</li>
+                <li>Audit logging</li>
+                <li>Role-based access control</li>
+            </ul>
+        </div>
+
+        <div class="question">
+            <div class="question-id">Q10 - V-1</div>
+            <div class="question-text">What evidence do you need to consider a pilot successful? (Select all that apply)</div>
+            <div class="question-type">Checkboxes (required)</div>
+            <ul class="options">
+                <li>Live demo in representative environment</li>
+                <li>Flight logs with playback</li>
+                <li>Performance report (latency, power, accuracy)</li>
+                <li>Integration test in your stack</li>
+                <li>Security review / compliance report</li>
+                <li>Hardware-in-the-loop (HIL) testing</li>
+            </ul>
+        </div>
+
+        <div class="question">
+            <div class="question-id">Q11 - GEN-4</div>
+            <div class="question-text">If we could deliver ONE capability in the pilot that creates immediate value for you, what would it be?</div>
+            <div class="question-type">Paragraph (required)</div>
+            <div class="purpose">Purpose: Identify customer's #1 priority for pilot configuration</div>
+        </div>
+
+        <div class="question">
+            <div class="question-id">Q12 - GEN-5</div>
+            <div class="question-text">Any questions, concerns, or requirements we haven't covered?</div>
+            <div class="question-type">Paragraph (optional)</div>
+            <div class="purpose">Purpose: Capture edge cases and customer-specific needs</div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Category Coverage</h2>
+        <table class="grid-table">
+            <thead>
+                <tr>
+                    <th>Category</th>
+                    <th>Questions</th>
+                    <th>IDs</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>Context/Identity</td><td>Q1</td><td>CTX-1</td></tr>
+                <tr><td>Mission Profile</td><td>Q2</td><td>OPS-1</td></tr>
+                <tr><td>Operating Environment</td><td>Q3</td><td>OPS-3</td></tr>
+                <tr><td>Autonomy Level</td><td>Q4</td><td>F-1</td></tr>
+                <tr><td>Core Capabilities</td><td>Q5, Q5b</td><td>F-2</td></tr>
+                <tr><td>Performance</td><td>Q6</td><td>P-1, P-2</td></tr>
+                <tr><td>Integration</td><td>Q7a, Q7b</td><td>I-1, I-2</td></tr>
+                <tr><td>Safety</td><td>Q8</td><td>SAF-1</td></tr>
+                <tr><td>Security</td><td>Q9</td><td>SEC-1</td></tr>
+                <tr><td>Success Criteria</td><td>Q10</td><td>V-1</td></tr>
+                <tr><td>Open Commentary</td><td>Q11, Q12</td><td>GEN-4, GEN-5</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="section">
+        <h2>Dashboard Integration</h2>
+        <p style="color: #6b7280; margin-bottom: 16px;">The survey is embedded in <code style="background: #1a1a24; padding: 2px 6px; border-radius: 4px;">dashboard.html</code> and visible only to users with <code style="background: #1a1a24; padding: 2px 6px; border-radius: 4px;">lvs_role === 'customer'</code>.</p>
+        <div class="meta">
+            <div class="meta-item">
+                <span class="meta-label">Section ID</span>
+                <span class="meta-value">#customerSurveySection</span>
+            </div>
+            <div class="meta-item">
+                <span class="meta-label">Visibility</span>
+                <span class="meta-value">Customer role only</span>
+            </div>
+            <div class="meta-item">
+                <span class="meta-label">CSP Directive</span>
+                <span class="meta-value">frame-src https://docs.google.com</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Customer Accounts</h2>
+        <table class="grid-table">
+            <thead>
+                <tr>
+                    <th>Company</th>
+                    <th>Contact</th>
+                    <th>Email</th>
+                    <th>Portal</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>Anduril</td><td>Chaffra Affouda</td><td>caffouda@anduril.com</td><td>customer-portal-mockup.html</td></tr>
+                <tr><td>Glid Technologies</td><td>Kevin Damoa</td><td>kevin@glidtech.us</td><td>glid-portal.html</td></tr>
+                <tr><td>Terrahaptix</td><td>Maxwell Maduka</td><td>maxwell@terrahaptix.com</td><td>terrahaptix-portal.html</td></tr>
+                <tr><td>Koniku</td><td>Osh Agabi</td><td>agabi@koniku.com</td><td>koniku-portal.html</td></tr>
+                <tr><td>Koniku</td><td>Jos Sebastian</td><td>sebastian@koniku.com</td><td>koniku-portal.html</td></tr>
+                <tr><td>Mach Industries</td><td>Robert Hochstedler</td><td>roberthochstedler@machindustries.com</td><td>mach-portal.html</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <footer style="margin-top: 48px; padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.1); text-align: center; color: #6b7280; font-size: 12px;">
+        Lola Vision Systems | Internal Reference Document | February 2026
+    </footer>
+</body>
+</html>

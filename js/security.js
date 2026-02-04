@@ -50,7 +50,8 @@
                 seasats: 'dashboard.html'
             },
             partner: {
-                amd: 'partner-portal.html?partner=amd'
+                amd: 'amd-portal.html',
+                firstgenesis: 'firstgenesis-portal.html'
             },
             nda_pending: 'nda-pending.html'
         }

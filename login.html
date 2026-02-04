@@ -305,6 +305,116 @@
             color: #fbbf24;
         }
 
+        /* Forgot password link */
+        .forgot-link {
+            display: block;
+            text-align: center;
+            margin-top: 16px;
+            color: #6b7280;
+            font-size: 13px;
+            text-decoration: none;
+            transition: color 0.2s;
+            cursor: pointer;
+        }
+        .forgot-link:hover {
+            color: #7c4dff;
+        }
+
+        /* Password strength indicator */
+        .password-strength {
+            margin-top: 8px;
+            font-size: 11px;
+        }
+        .password-strength .strength-bar {
+            height: 4px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 2px;
+            margin-bottom: 4px;
+            overflow: hidden;
+        }
+        .password-strength .strength-fill {
+            height: 100%;
+            width: 0%;
+            transition: all 0.3s;
+            border-radius: 2px;
+        }
+        .password-strength .strength-fill.weak { width: 25%; background: #ef4444; }
+        .password-strength .strength-fill.fair { width: 50%; background: #f59e0b; }
+        .password-strength .strength-fill.good { width: 75%; background: #10b981; }
+        .password-strength .strength-fill.strong { width: 100%; background: #7c4dff; }
+        .password-strength .strength-text {
+            color: #6b7280;
+        }
+        .password-strength .strength-text.weak { color: #ef4444; }
+        .password-strength .strength-text.fair { color: #f59e0b; }
+        .password-strength .strength-text.good { color: #10b981; }
+        .password-strength .strength-text.strong { color: #7c4dff; }
+
+        /* Password requirements list */
+        .password-requirements {
+            margin-top: 12px;
+            padding: 12px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 8px;
+            text-align: left;
+        }
+        .password-requirements p {
+            font-size: 11px;
+            color: #6b7280;
+            margin-bottom: 8px;
+        }
+        .password-requirements ul {
+            list-style: none;
+            font-size: 11px;
+        }
+        .password-requirements li {
+            padding: 2px 0;
+            color: #6b7280;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .password-requirements li.met {
+            color: #10b981;
+        }
+        .password-requirements li .check {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+        }
+        .password-requirements li.met .check {
+            background: #10b981;
+            color: white;
+        }
+
+        /* Reset info box */
+        .reset-info {
+            background: rgba(124,77,255,0.1);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 20px;
+            text-align: left;
+            border-left: 3px solid #7c4dff;
+        }
+        .reset-info h4 {
+            color: #f5f5f7;
+            font-size: 13px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .reset-info p {
+            color: #9ca3af;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
         /* Mobile */
         @media (max-width: 480px) {
             .login-container {
@@ -372,6 +482,7 @@
                 </button>
                 <button type="button" class="btn-secondary" onclick="goToStep(1)">Back</button>
             </form>
+            <a class="forgot-link" onclick="goToForgotPassword()">Forgot password?</a>
         </div>
 
         <!-- Step 3: 2FA -->
@@ -401,6 +512,97 @@
                     <div class="spinner" id="twofaSpinner" style="display: none;"></div>
                 </button>
                 <button type="button" class="btn-secondary" onclick="goToStep(2)">Back</button>
+            </form>
+        </div>
+
+        <!-- Step 4: Forgot Password - Enter Email -->
+        <div class="step" id="step4">
+            <p class="description">Reset your password</p>
+
+            <div class="reset-info">
+                <h4>&#128274; Password Reset</h4>
+                <p>Enter your email address and we'll send you a verification code to reset your password.</p>
+            </div>
+
+            <form onsubmit="event.preventDefault(); handleForgotPasswordSubmit();">
+                <div class="form-group">
+                    <label for="resetEmail">Email Address</label>
+                    <input type="email" id="resetEmail" placeholder="you@company.com" required>
+                </div>
+                <button type="submit" id="forgotBtn">
+                    <span id="forgotBtnText">Send Reset Code</span>
+                    <div class="spinner" id="forgotSpinner" style="display: none;"></div>
+                </button>
+                <button type="button" class="btn-secondary" onclick="goToStep(1)">Back to Login</button>
+            </form>
+        </div>
+
+        <!-- Step 5: Enter Reset Code -->
+        <div class="step" id="step5">
+            <p class="description">Verify your identity</p>
+
+            <div class="reset-info">
+                <h4>&#128231; Check Your Email</h4>
+                <p>We sent a 6-digit code to <span id="resetEmailDisplay" class="user-email"></span>. Enter it below to continue.</p>
+            </div>
+
+            <form onsubmit="event.preventDefault(); handleResetCodeSubmit();">
+                <div class="form-group">
+                    <label>Verification Code</label>
+                    <div class="code-input-container">
+                        <input type="text" class="code-input" maxlength="1" id="reset1" oninput="handleResetCodeInput(this, 'reset2')" onkeydown="handleResetCodeKeydown(event, this, null, 'reset2')">
+                        <input type="text" class="code-input" maxlength="1" id="reset2" oninput="handleResetCodeInput(this, 'reset3')" onkeydown="handleResetCodeKeydown(event, this, 'reset1', 'reset3')">
+                        <input type="text" class="code-input" maxlength="1" id="reset3" oninput="handleResetCodeInput(this, 'reset4')" onkeydown="handleResetCodeKeydown(event, this, 'reset2', 'reset4')">
+                        <input type="text" class="code-input" maxlength="1" id="reset4" oninput="handleResetCodeInput(this, 'reset5')" onkeydown="handleResetCodeKeydown(event, this, 'reset3', 'reset5')">
+                        <input type="text" class="code-input" maxlength="1" id="reset5" oninput="handleResetCodeInput(this, 'reset6')" onkeydown="handleResetCodeKeydown(event, this, 'reset4', 'reset6')">
+                        <input type="text" class="code-input" maxlength="1" id="reset6" oninput="handleResetCodeInput(this, null)" onkeydown="handleResetCodeKeydown(event, this, 'reset5', null)">
+                    </div>
+                </div>
+                <button type="submit" id="resetCodeBtn">
+                    <span id="resetCodeBtnText">Verify Code</span>
+                    <div class="spinner" id="resetCodeSpinner" style="display: none;"></div>
+                </button>
+                <button type="button" class="btn-secondary" onclick="goToStep(4)">Back</button>
+            </form>
+            <a class="forgot-link" onclick="handleForgotPasswordSubmit()">Resend code</a>
+        </div>
+
+        <!-- Step 6: Set New Password -->
+        <div class="step" id="step6">
+            <p class="description">Create new password</p>
+
+            <div class="reset-info">
+                <h4>&#128273; New Password</h4>
+                <p>Create a strong password that you haven't used before.</p>
+            </div>
+
+            <form onsubmit="event.preventDefault(); handleNewPasswordSubmit();">
+                <div class="form-group">
+                    <label for="newPassword">New Password</label>
+                    <input type="password" id="newPassword" placeholder="Enter new password" required oninput="checkPasswordStrength()">
+                    <div class="password-strength" id="passwordStrength" style="display: none;">
+                        <div class="strength-bar"><div class="strength-fill" id="strengthFill"></div></div>
+                        <span class="strength-text" id="strengthText"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <input type="password" id="confirmPassword" placeholder="Confirm new password" required>
+                </div>
+                <div class="password-requirements" id="passwordReqs">
+                    <p>Password must contain:</p>
+                    <ul>
+                        <li id="reqLength"><span class="check">-</span> At least 8 characters</li>
+                        <li id="reqUpper"><span class="check">-</span> One uppercase letter</li>
+                        <li id="reqLower"><span class="check">-</span> One lowercase letter</li>
+                        <li id="reqNumber"><span class="check">-</span> One number</li>
+                    </ul>
+                </div>
+                <button type="submit" id="newPasswordBtn">
+                    <span id="newPasswordBtnText">Reset Password</span>
+                    <div class="spinner" id="newPasswordSpinner" style="display: none;"></div>
+                </button>
+                <button type="button" class="btn-secondary" onclick="goToStep(1)">Cancel</button>
             </form>
         </div>
 
@@ -457,12 +659,16 @@
 
         // Update step indicator
         function updateStepIndicator(step) {
+            // For password reset flow (steps 4-6), map to dots 1-3
+            const isResetFlow = step >= 4;
+            const displayStep = isResetFlow ? step - 3 : step;
+
             for (let i = 1; i <= 3; i++) {
                 const dot = document.getElementById('dot' + i);
                 dot.classList.remove('active', 'complete');
-                if (i < step) {
+                if (i < displayStep) {
                     dot.classList.add('complete');
-                } else if (i === step) {
+                } else if (i === displayStep) {
                     dot.classList.add('active');
                 }
             }
@@ -481,6 +687,9 @@
                 if (step === 1) document.getElementById('email').focus();
                 if (step === 2) document.getElementById('password').focus();
                 if (step === 3) document.getElementById('code1').focus();
+                if (step === 4) document.getElementById('resetEmail').focus();
+                if (step === 5) document.getElementById('reset1').focus();
+                if (step === 6) document.getElementById('newPassword').focus();
             }, 100);
         }
 
@@ -758,14 +967,330 @@
             }, 1000);
         }
 
+        // ============================================================================
+        // PASSWORD RESET FLOW
+        // ============================================================================
+
+        let resetEmail = '';
+        let resetToken = '';
+
+        // Go to forgot password step
+        function goToForgotPassword() {
+            // Pre-fill with current email if available
+            if (userEmail) {
+                document.getElementById('resetEmail').value = userEmail;
+            }
+            goToStep(4);
+        }
+
+        // Step 4: Handle forgot password email submission
+        async function handleForgotPasswordSubmit() {
+            clearMessages();
+            resetEmail = document.getElementById('resetEmail').value.trim().toLowerCase();
+
+            if (!resetEmail || !resetEmail.includes('@')) {
+                showError('Please enter a valid email address.');
+                return false;
+            }
+
+            setButtonLoading('forgotBtn', true);
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/auth/forgot-password`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({ email: resetEmail })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.detail || 'Failed to process request');
+                }
+
+                // Show success and move to code entry
+                document.getElementById('resetEmailDisplay').textContent = resetEmail;
+                showSuccess(data.message);
+                setTimeout(() => {
+                    goToStep(5);
+                }, 1500);
+
+            } catch (error) {
+                showError(error.message);
+            } finally {
+                setButtonLoading('forgotBtn', false);
+            }
+
+            return false;
+        }
+
+        // Handle reset code input (similar to 2FA)
+        function handleResetCodeInput(current, nextId) {
+            current.value = current.value.replace(/\D/g, '');
+            if (current.value.length === 1 && nextId) {
+                document.getElementById(nextId).focus();
+            }
+
+            // Check if all codes are filled
+            let fullCode = '';
+            for (let i = 1; i <= 6; i++) {
+                fullCode += document.getElementById('reset' + i).value;
+            }
+
+            // Auto-submit when 6 digits entered
+            if (fullCode.length === 6) {
+                setTimeout(() => handleResetCodeSubmit(), 100);
+            }
+        }
+
+        function handleResetCodeKeydown(event, current, prevId, nextId) {
+            if (event.key === 'Backspace' && current.value === '' && prevId) {
+                document.getElementById(prevId).focus();
+            }
+        }
+
+        // Step 5: Handle reset code verification
+        async function handleResetCodeSubmit() {
+            clearMessages();
+
+            let code = '';
+            for (let i = 1; i <= 6; i++) {
+                code += document.getElementById('reset' + i).value;
+            }
+
+            if (code.length !== 6) {
+                showError('Please enter the complete 6-digit code.');
+                return false;
+            }
+
+            setButtonLoading('resetCodeBtn', true);
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/auth/verify-reset-code`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email: resetEmail,
+                        code: code
+                    })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.detail || 'Invalid verification code');
+                }
+
+                // Store token and move to password reset
+                resetToken = data.token;
+                showSuccess('Code verified! Please set your new password.');
+                setTimeout(() => {
+                    goToStep(6);
+                }, 1000);
+
+            } catch (error) {
+                showError(error.message);
+                // Clear code inputs
+                for (let i = 1; i <= 6; i++) {
+                    document.getElementById('reset' + i).value = '';
+                }
+                document.getElementById('reset1').focus();
+            } finally {
+                setButtonLoading('resetCodeBtn', false);
+            }
+
+            return false;
+        }
+
+        // Check password strength and update UI
+        function checkPasswordStrength() {
+            const password = document.getElementById('newPassword').value;
+            const strengthDiv = document.getElementById('passwordStrength');
+            const strengthFill = document.getElementById('strengthFill');
+            const strengthText = document.getElementById('strengthText');
+
+            // Update requirements
+            const hasLength = password.length >= 8;
+            const hasUpper = /[A-Z]/.test(password);
+            const hasLower = /[a-z]/.test(password);
+            const hasNumber = /\d/.test(password);
+
+            updateRequirement('reqLength', hasLength);
+            updateRequirement('reqUpper', hasUpper);
+            updateRequirement('reqLower', hasLower);
+            updateRequirement('reqNumber', hasNumber);
+
+            // Calculate strength
+            let strength = 0;
+            if (hasLength) strength++;
+            if (hasUpper) strength++;
+            if (hasLower) strength++;
+            if (hasNumber) strength++;
+
+            // Show strength indicator
+            if (password.length > 0) {
+                strengthDiv.style.display = 'block';
+                const levels = ['weak', 'weak', 'fair', 'good', 'strong'];
+                const labels = ['Very Weak', 'Weak', 'Fair', 'Good', 'Strong'];
+
+                strengthFill.className = 'strength-fill ' + levels[strength];
+                strengthText.className = 'strength-text ' + levels[strength];
+                strengthText.textContent = labels[strength];
+            } else {
+                strengthDiv.style.display = 'none';
+            }
+        }
+
+        function updateRequirement(id, met) {
+            const el = document.getElementById(id);
+            if (met) {
+                el.classList.add('met');
+                el.querySelector('.check').textContent = '\u2713';
+            } else {
+                el.classList.remove('met');
+                el.querySelector('.check').textContent = '-';
+            }
+        }
+
+        // Step 6: Handle new password submission
+        async function handleNewPasswordSubmit() {
+            clearMessages();
+
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+
+            // Validate password requirements
+            if (newPassword.length < 8) {
+                showError('Password must be at least 8 characters.');
+                return false;
+            }
+            if (!/[A-Z]/.test(newPassword)) {
+                showError('Password must contain at least one uppercase letter.');
+                return false;
+            }
+            if (!/[a-z]/.test(newPassword)) {
+                showError('Password must contain at least one lowercase letter.');
+                return false;
+            }
+            if (!/\d/.test(newPassword)) {
+                showError('Password must contain at least one number.');
+                return false;
+            }
+            if (newPassword !== confirmPassword) {
+                showError('Passwords do not match.');
+                return false;
+            }
+
+            setButtonLoading('newPasswordBtn', true);
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/auth/reset-password`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        token: resetToken,
+                        new_password: newPassword
+                    })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.detail || 'Failed to reset password');
+                }
+
+                // Success! Clear token and redirect to login
+                resetToken = '';
+                showSuccess(data.message);
+
+                setTimeout(() => {
+                    // Clear the form and go to step 1
+                    document.getElementById('newPassword').value = '';
+                    document.getElementById('confirmPassword').value = '';
+                    document.getElementById('resetEmail').value = '';
+                    for (let i = 1; i <= 6; i++) {
+                        document.getElementById('reset' + i).value = '';
+                    }
+                    goToStep(1);
+                    showSuccess('Password reset successful! Please log in with your new password.');
+                }, 1500);
+
+            } catch (error) {
+                showError(error.message);
+            } finally {
+                setButtonLoading('newPasswordBtn', false);
+            }
+
+            return false;
+        }
+
+        // Handle reset token from URL (for email link clicks)
+        async function handleResetTokenFromUrl() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const token = urlParams.get('reset_token');
+
+            if (!token) return false;
+
+            // Clear the URL parameter
+            window.history.replaceState({}, document.title, window.location.pathname);
+
+            // Verify the token
+            try {
+                const response = await fetch(`${API_BASE_URL}/auth/verify-reset-token`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({ token: token })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    showError(data.detail || 'This password reset link is invalid or has expired.');
+                    return false;
+                }
+
+                // Valid token - go directly to password reset step
+                resetToken = token;
+                resetEmail = data.email;
+                showSuccess('Token verified! Please set your new password.');
+                goToStep(6);
+                return true;
+
+            } catch (error) {
+                showError('Failed to verify reset link. Please try again.');
+                return false;
+            }
+        }
+
+        // ============================================================================
+        // INITIALIZATION
+        // ============================================================================
+
         // Clear errors on input
         document.querySelectorAll('input').forEach(el => {
             el.addEventListener('input', clearMessages);
         });
 
         // Initialize
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', async () => {
             checkConnection();
+
+            // Check for reset token in URL first
+            const hasResetToken = await handleResetTokenFromUrl();
+            if (hasResetToken) return;
+
             document.getElementById('email').focus();
 
             // Check if already authenticated

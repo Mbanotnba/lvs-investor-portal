@@ -12,7 +12,9 @@ from models import (
     EmailRequest, PasswordRequest, TwoFactorRequest,
     PortalInfoResponse, AuthStepResponse, TokenResponse,
     Setup2FARequest, Setup2FAResponse, Verify2FASetupRequest,
-    SuccessResponse, ErrorResponse
+    SuccessResponse, ErrorResponse,
+    ForgotPasswordRequest, VerifyResetTokenRequest,
+    VerifyResetCodeRequest, ResetPasswordRequest
 )
 from security import (
     verify_password, create_access_token, decode_access_token,
@@ -23,14 +25,18 @@ from database import (
     get_user_by_email, get_user_by_id, update_last_login,
     increment_failed_login, lock_user_account, reset_failed_attempts,
     update_user_totp, enable_user_totp, create_session, is_session_valid,
-    revoke_session, log_audit, check_nda_access, update_nda_status,
-    get_all_users_nda_status,
+    revoke_session, revoke_all_user_sessions, log_audit, check_nda_access,
+    update_nda_status, get_all_users_nda_status, update_user_password,
     create_pending_auth, get_pending_auth, delete_pending_auth,
-    cleanup_expired_pending_auth
+    cleanup_expired_pending_auth,
+    create_password_reset_token, verify_password_reset_token,
+    verify_password_reset_code, mark_password_reset_used,
+    get_recent_password_reset_requests
 )
 from config import (
     PORTAL_DOMAINS, PORTAL_URLS, ACCESS_TOKEN_EXPIRE_MINUTES,
-    MAX_LOGIN_ATTEMPTS, LOCKOUT_DURATION_MINUTES
+    MAX_LOGIN_ATTEMPTS, LOCKOUT_DURATION_MINUTES,
+    PASSWORD_RESET_EXPIRE_MINUTES, PASSWORD_RESET_RATE_LIMIT
 )
 
 router = APIRouter(prefix="/auth", tags=["Authentication"])
@@ -534,6 +540,220 @@ async def change_password(
         "success": True,
         "message": "Password changed successfully."
     }
+
+
+# ============================================================================
+# PASSWORD RESET FLOW
+# ============================================================================
+
+@router.post("/forgot-password", response_model=SuccessResponse)
+async def forgot_password(request: Request, body: ForgotPasswordRequest):
+    """
+    Request a password reset email.
+    Sends email with reset link and 6-digit code.
+    Rate limited to prevent abuse.
+    """
+    email = body.email.lower()
+    client_ip = get_client_ip(request)
+
+    # Rate limiting: Check recent requests for this email
+    recent_requests = get_recent_password_reset_requests(email, minutes=60)
+    if recent_requests >= PASSWORD_RESET_RATE_LIMIT:
+        log_audit(None, "PASSWORD_RESET_RATE_LIMITED", f"Rate limit exceeded: {email}", client_ip)
+        # Don't reveal rate limiting to prevent enumeration
+        return SuccessResponse(
+            success=True,
+            message="If an account exists with this email, you will receive a password reset link shortly."
+        )
+
+    # Check if user exists
+    user = get_user_by_email(email)
+    if not user:
+        # Don't reveal if user exists - return same message
+        log_audit(None, "PASSWORD_RESET_UNKNOWN_EMAIL", f"Unknown email: {email}", client_ip)
+        return SuccessResponse(
+            success=True,
+            message="If an account exists with this email, you will receive a password reset link shortly."
+        )
+
+    # Check if account is active
+    if not user.get("is_active", True):
+        log_audit(user["id"], "PASSWORD_RESET_INACTIVE", "Inactive account", client_ip)
+        return SuccessResponse(
+            success=True,
+            message="If an account exists with this email, you will receive a password reset link shortly."
+        )
+
+    # Create password reset token
+    reset_data = create_password_reset_token(
+        user_id=user["id"],
+        email=email,
+        ip_address=client_ip,
+        expires_minutes=PASSWORD_RESET_EXPIRE_MINUTES
+    )
+
+    if not reset_data:
+        log_audit(user["id"], "PASSWORD_RESET_FAILED", "Failed to create reset token", client_ip)
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Failed to process password reset request. Please try again."
+        )
+
+    # Send password reset email
+    try:
+        from email_service import send_password_reset_email, is_email_configured
+
+        if is_email_configured():
+            email_sent = send_password_reset_email(
+                to_email=email,
+                user_name=user["name"],
+                reset_token=reset_data["token"],
+                reset_code=reset_data["code"]
+            )
+            if email_sent:
+                log_audit(user["id"], "PASSWORD_RESET_EMAIL_SENT", f"Reset email sent", client_ip)
+            else:
+                log_audit(user["id"], "PASSWORD_RESET_EMAIL_FAILED", f"Email send failed", client_ip)
+        else:
+            # Email not configured - log for debugging
+            log_audit(user["id"], "PASSWORD_RESET_NO_EMAIL", f"Email not configured, token: {reset_data['token'][:8]}...", client_ip)
+            print(f"DEBUG: Password reset for {email} - Code: {reset_data['code']}, Token: {reset_data['token'][:16]}...")
+
+    except Exception as e:
+        log_audit(user["id"], "PASSWORD_RESET_EMAIL_ERROR", f"Email error: {str(e)}", client_ip)
+        print(f"Email send error: {e}")
+
+    return SuccessResponse(
+        success=True,
+        message="If an account exists with this email, you will receive a password reset link shortly."
+    )
+
+
+@router.post("/verify-reset-token")
+async def verify_reset_token(request: Request, body: VerifyResetTokenRequest):
+    """
+    Verify a password reset token from email link.
+    Returns user email if valid.
+    """
+    token = body.token
+    client_ip = get_client_ip(request)
+
+    # Verify token
+    token_data = verify_password_reset_token(token)
+    if not token_data:
+        log_audit(None, "RESET_TOKEN_INVALID", f"Invalid/expired token", client_ip)
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="This password reset link is invalid or has expired. Please request a new one."
+        )
+
+    log_audit(token_data["user_id"], "RESET_TOKEN_VERIFIED", "Token verified", client_ip)
+
+    return {
+        "success": True,
+        "email": token_data["email"],
+        "message": "Token verified. You can now reset your password."
+    }
+
+
+@router.post("/verify-reset-code")
+async def verify_reset_code(request: Request, body: VerifyResetCodeRequest):
+    """
+    Verify a 6-digit password reset code.
+    Returns reset token for password change if valid.
+    """
+    email = body.email.lower()
+    code = body.code
+    client_ip = get_client_ip(request)
+
+    # Verify code
+    token_data = verify_password_reset_code(email, code)
+    if not token_data:
+        log_audit(None, "RESET_CODE_INVALID", f"Invalid code for: {email}", client_ip)
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid or expired verification code. Please try again or request a new code."
+        )
+
+    log_audit(token_data["user_id"], "RESET_CODE_VERIFIED", "Code verified", client_ip)
+
+    return {
+        "success": True,
+        "token": token_data["token"],
+        "email": token_data["email"],
+        "message": "Code verified. You can now reset your password."
+    }
+
+
+@router.post("/reset-password", response_model=SuccessResponse)
+async def reset_password(request: Request, body: ResetPasswordRequest):
+    """
+    Reset password using verified token.
+    Invalidates all existing sessions for security.
+    """
+    token = body.token
+    new_password = body.new_password
+    client_ip = get_client_ip(request)
+
+    # Verify token is still valid
+    token_data = verify_password_reset_token(token)
+    if not token_data:
+        log_audit(None, "RESET_PASSWORD_INVALID_TOKEN", "Invalid/expired token", client_ip)
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="This password reset link is invalid or has expired. Please request a new one."
+        )
+
+    user_id = token_data["user_id"]
+    email = token_data["email"]
+
+    # Get user to verify they still exist
+    user = get_user_by_id(user_id)
+    if not user:
+        log_audit(user_id, "RESET_PASSWORD_USER_NOT_FOUND", "User not found", client_ip)
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Unable to reset password. Please contact support."
+        )
+
+    # Update password
+    success = update_user_password(user_id, new_password)
+    if not success:
+        log_audit(user_id, "RESET_PASSWORD_FAILED", "Failed to update password", client_ip)
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Failed to reset password. Please try again."
+        )
+
+    # Mark token as used
+    mark_password_reset_used(token_data["id"])
+
+    # Invalidate all existing sessions for security
+    revoked_count = revoke_all_user_sessions(user_id)
+    log_audit(user_id, "SESSIONS_REVOKED", f"Revoked {revoked_count} sessions after password reset", client_ip)
+
+    # Reset failed login attempts
+    reset_failed_attempts(email)
+
+    log_audit(user_id, "PASSWORD_RESET_SUCCESS", "Password reset completed", client_ip)
+
+    # Send password changed notification
+    try:
+        from email_service import send_password_changed_notification, is_email_configured
+
+        if is_email_configured():
+            send_password_changed_notification(
+                to_email=email,
+                user_name=user["name"],
+                ip_address=client_ip
+            )
+    except Exception as e:
+        print(f"Failed to send password change notification: {e}")
+
+    return SuccessResponse(
+        success=True,
+        message="Your password has been reset successfully. Please log in with your new password."
+    )
 
 
 @router.post("/validate-token")
