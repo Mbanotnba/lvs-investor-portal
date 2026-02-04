@@ -138,6 +138,31 @@ const LVSSharedTabs = {
                     <span style="font-size: 12px; font-weight: 600; color: var(--accent);">${this.specs.interconnectBandwidth}</span>
                 </div>
             </div>
+
+            <!-- Demo Video Section -->
+            <div class="panel" style="margin-top: 24px;">
+                <h3 style="margin-bottom: 16px;">LVS-250 in Action</h3>
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px;">
+                    <div style="background: var(--panel-light); border-radius: 12px; overflow: hidden;">
+                        <video class="demo-video" autoplay muted loop playsinline style="width: 100%; display: block; aspect-ratio: 16/9; object-fit: cover;">
+                            <source src="assets/demos/demo-1.mp4" type="video/mp4">
+                        </video>
+                        <div style="padding: 12px 16px;">
+                            <div style="font-size: 14px; font-weight: 600;">Visible Spectrum Analysis</div>
+                            <div style="font-size: 12px; color: var(--muted); margin-top: 4px;">High-accuracy object detection and tracking in daylight conditions</div>
+                        </div>
+                    </div>
+                    <div style="background: var(--panel-light); border-radius: 12px; overflow: hidden;">
+                        <video class="demo-video" autoplay muted loop playsinline style="width: 100%; display: block; aspect-ratio: 16/9; object-fit: cover;">
+                            <source src="assets/demos/demo-2.mp4" type="video/mp4">
+                        </video>
+                        <div style="padding: 12px 16px;">
+                            <div style="font-size: 14px; font-weight: 600;">Low-Light &amp; IR Analysis</div>
+                            <div style="font-size: 12px; color: var(--muted); margin-top: 4px;">Thermal and infrared detection for 24/7 operational capability</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         `;
     },
 
