@@ -49,6 +49,17 @@ const LVS_CONFIG = (function() {
             name: 'production',
             apiBase: 'https://lvs-api-657638018776.us-central1.run.app',
             portalBase: 'https://mbanotnba.github.io/lvs-investor-portal'
+        },
+        // Firebase Hosting
+        'lvs-portal-prod.web.app': {
+            name: 'production',
+            apiBase: 'https://lvs-api-657638018776.us-central1.run.app',
+            portalBase: 'https://lvs-portal-prod.web.app'
+        },
+        'lvs-portal-prod.firebaseapp.com': {
+            name: 'production',
+            apiBase: 'https://lvs-api-657638018776.us-central1.run.app',
+            portalBase: 'https://lvs-portal-prod.firebaseapp.com'
         }
     };
 
