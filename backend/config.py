@@ -44,6 +44,9 @@ CORS_ORIGINS = [
     "https://lvs-portal-657638018776.us-central1.run.app",
     # GitHub Pages
     "https://mbanotnba.github.io",
+    # Firebase Hosting
+    "https://lvs-portal-prod.web.app",
+    "https://lvs-portal-prod.firebaseapp.com",
 ]
 
 # TOTP Settings (Google Authenticator)
@@ -64,6 +67,7 @@ PORTAL_DOMAINS = {
     'koniku.com': {'type': 'customer', 'company': 'koniku', 'name': 'Koniku'},
     'anduril.com': {'type': 'customer', 'company': 'anduril', 'name': 'Anduril Industries'},
     'glidtech.com': {'type': 'customer', 'company': 'glid', 'name': 'Glid Technologies'},
+    'glidtech.us': {'type': 'customer', 'company': 'glid', 'name': 'Glid Technologies'},
     'glid.io': {'type': 'customer', 'company': 'glid', 'name': 'Glid Technologies'},
     'machindustries.com': {'type': 'customer', 'company': 'mach', 'name': 'Mach Industries'},
     'mach.industries': {'type': 'customer', 'company': 'mach', 'name': 'Mach Industries'},
@@ -73,7 +77,7 @@ PORTAL_DOMAINS = {
 
     # Partner domains
     'amd.com': {'type': 'partner', 'company': 'amd', 'name': 'AMD'},
-    'firstgenesis.com': {'type': 'partner', 'company': 'firstgenesis', 'name': 'First Genesis'},
+    'firstgenesis.com': {'type': 'customer', 'company': 'firstgenesis', 'name': 'First Genesis'},
 
     # Founder domain
     'lolavisionsystems.com': {'type': 'founder', 'company': 'lvs', 'name': 'Lola Vision Systems'},
@@ -89,6 +93,7 @@ PORTAL_URLS = {
         'glid': 'glid-portal.html',
         'mach': 'mach-portal.html',
         'terrahaptix': 'terrahaptix-portal.html',
+        'firstgenesis': 'firstgenesis-portal.html',
         'revenant': 'dashboard.html',
         'seasats': 'dashboard.html',
     },

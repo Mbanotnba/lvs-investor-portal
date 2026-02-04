@@ -1,0 +1,19 @@
+# Don't copy local database to container
+lvs_portal.db
+*.db
+
+# Don't copy local env file (use Cloud Run env vars instead)
+.env
+
+# Python cache
+__pycache__
+*.pyc
+*.pyo
+
+# IDE
+.vscode
+.idea
+
+# Git
+.git
+.gitignore

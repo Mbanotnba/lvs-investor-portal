@@ -1441,12 +1441,32 @@ def seed_production_users():
 
     print(f"Seeding production users (USER_PASSWORD_PREFIX is set)...")
     created_count = 0
+    updated_count = 0
     skipped_count = 0
 
     for user_data in production_users:
         existing = get_user_by_email(user_data["email"])
         if existing:
-            skipped_count += 1
+            # Check if user needs updating (wrong portal_type or company)
+            needs_update = (
+                existing.get("portal_type") != user_data["portal_type"] or
+                existing.get("company") != user_data["company"]
+            )
+            if needs_update:
+                conn = get_db_connection()
+                cursor = conn.cursor()
+                cursor.execute(
+                    "UPDATE users SET portal_type = ?, company = ?, name = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?",
+                    (user_data["portal_type"], user_data["company"], user_data["name"], existing["id"])
+                )
+                conn.commit()
+                close_connection(conn)
+                if user_data.get("nda_status"):
+                    update_nda_status(existing["id"], user_data["nda_status"])
+                updated_count += 1
+                print(f"  Updated: {user_data['email']} -> {user_data['portal_type']}/{user_data['company']}")
+            else:
+                skipped_count += 1
             continue
 
         # Generate password: use custom suffix or {prefix}{FirstName}
@@ -1471,7 +1491,7 @@ def seed_production_users():
             created_count += 1
             print(f"  Created: {user_data['email']}")
 
-    print(f"Production users: {created_count} created, {skipped_count} already existed")
+    print(f"Production users: {created_count} created, {updated_count} updated, {skipped_count} unchanged")
 
 
 if __name__ == "__main__":
