@@ -9,31 +9,33 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
         }
         .login-container {
-            background: white;
+            background: #12121a;
             border-radius: 16px;
             padding: 48px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
             text-align: center;
             max-width: 420px;
             width: 90%;
+            border: 1px solid rgba(255,255,255,0.06);
         }
         .logo-icon {
-            width: 120px;
-            height: 120px;
+            width: 100px;
+            height: 100px;
             margin: 0 auto 24px;
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
             border-radius: 16px;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 16px;
+            padding: 12px;
+            border: 2px solid #7c4dff;
         }
         .logo-icon img {
             width: 100%;
@@ -42,7 +44,7 @@
         }
         h1 {
             font-size: 22px;
-            color: #1a1a2e;
+            color: #f5f5f7;
             margin-bottom: 8px;
             font-weight: 700;
         }
@@ -53,9 +55,9 @@
             font-weight: 600;
         }
         .description {
-            color: #666;
-            font-size: 13px;
-            margin-bottom: 24px;
+            color: #6b7280;
+            font-size: 12px;
+            margin-bottom: 32px;
         }
 
         /* Form */
@@ -67,7 +69,7 @@
             display: block;
             font-size: 11px;
             font-weight: 600;
-            color: #666;
+            color: #6b7280;
             text-transform: uppercase;
             letter-spacing: 0.5px;
             margin-bottom: 6px;
@@ -78,10 +80,10 @@
             width: 100%;
             padding: 14px 16px;
             font-size: 15px;
-            background: #f8f9fa;
-            border: 2px solid #e0e0e0;
+            background: #1a1a24;
+            border: 2px solid rgba(255,255,255,0.1);
             border-radius: 10px;
-            color: #1a1a2e;
+            color: #f5f5f7;
             transition: border-color 0.2s, box-shadow 0.2s;
         }
         input:focus {
@@ -90,7 +92,7 @@
             box-shadow: 0 0 0 3px rgba(124,77,255,0.1);
         }
         input::placeholder {
-            color: #999;
+            color: #4b5563;
         }
         input:disabled {
             opacity: 0.6;
@@ -130,27 +132,27 @@
             padding: 12px;
             font-size: 14px;
             font-weight: 600;
-            color: #666;
+            color: #9ca3af;
             background: transparent;
-            border: 2px solid #e0e0e0;
+            border: 2px solid rgba(255,255,255,0.1);
             border-radius: 10px;
             cursor: pointer;
             transition: all 0.2s;
             margin-top: 12px;
         }
         .btn-secondary:hover {
-            border-color: #7c4dff;
-            color: #7c4dff;
+            border-color: rgba(255,255,255,0.2);
+            color: #f5f5f7;
         }
 
         .error {
-            color: #e53935;
+            color: #ef4444;
             font-size: 12px;
             margin-top: 12px;
             display: none;
             text-align: center;
             padding: 10px;
-            background: rgba(229,57,53,0.1);
+            background: rgba(239,68,68,0.1);
             border-radius: 8px;
         }
         .success {
@@ -168,6 +170,29 @@
         .step { display: none; }
         .step.active { display: block; }
 
+        /* Step indicator */
+        .step-indicator {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+        .step-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            transition: all 0.3s;
+        }
+        .step-dot.active {
+            background: #7c4dff;
+            width: 24px;
+            border-radius: 4px;
+        }
+        .step-dot.complete {
+            background: #10b981;
+        }
+
         /* Portal type badge */
         .portal-badge {
             display: inline-block;
@@ -177,14 +202,14 @@
             font-weight: 600;
             margin-bottom: 16px;
         }
-        .portal-badge.investor { background: rgba(124,77,255,0.15); color: #7c4dff; }
-        .portal-badge.customer { background: rgba(16,185,129,0.15); color: #10b981; }
-        .portal-badge.partner { background: rgba(249,115,22,0.15); color: #f97316; }
-        .portal-badge.founder { background: rgba(212,175,55,0.15); color: #b8860b; }
+        .portal-badge.investor { background: rgba(124,77,255,0.2); color: #a78bfa; }
+        .portal-badge.customer { background: rgba(16,185,129,0.2); color: #34d399; }
+        .portal-badge.partner { background: rgba(249,115,22,0.2); color: #fb923c; }
+        .portal-badge.founder { background: rgba(212,175,55,0.2); color: #d4af37; }
 
         /* User info */
         .user-email {
-            color: #7c4dff;
+            color: #a78bfa;
             font-weight: 600;
             word-break: break-all;
         }
@@ -207,7 +232,7 @@
             display: flex;
             align-items: center;
             margin: 24px 0;
-            color: #999;
+            color: #4b5563;
             font-size: 12px;
         }
         .divider::before,
@@ -215,7 +240,7 @@
             content: '';
             flex: 1;
             height: 1px;
-            background: #e0e0e0;
+            background: rgba(255,255,255,0.1);
         }
         .divider::before { margin-right: 12px; }
         .divider::after { margin-left: 12px; }
@@ -255,7 +280,7 @@
             display: block;
             text-align: center;
             margin-top: 16px;
-            color: #999;
+            color: #6b7280;
             font-size: 13px;
             text-decoration: none;
             transition: color 0.2s;
@@ -268,9 +293,31 @@
         .footer {
             margin-top: 24px;
             font-size: 11px;
-            color: #999;
+            color: #4b5563;
         }
         .gold { color: #d4af37; }
+
+        /* 2FA info box */
+        .info-box {
+            background: rgba(255,255,255,0.03);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        .info-box h4 {
+            color: #f5f5f7;
+            font-size: 13px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .info-box p {
+            color: #6b7280;
+            font-size: 12px;
+            line-height: 1.5;
+        }
 
         /* Mobile */
         @media (max-width: 480px) {
@@ -279,8 +326,8 @@
                 margin: 16px;
             }
             .logo-icon {
-                width: 100px;
-                height: 100px;
+                width: 80px;
+                height: 80px;
             }
             h1 { font-size: 18px; }
         }
@@ -293,6 +340,13 @@
         </div>
         <h1>LOLA VISION SYSTEMS</h1>
         <p class="subtitle">Secure Access Portal</p>
+
+        <!-- Step Indicator -->
+        <div class="step-indicator">
+            <div class="step-dot active" id="dot1"></div>
+            <div class="step-dot" id="dot2"></div>
+            <div class="step-dot" id="dot3"></div>
+        </div>
 
         <!-- Step 1: Email -->
         <div class="step active" id="step1">
@@ -338,7 +392,12 @@
         <div class="step" id="step3">
             <div id="portalBadge2" class="portal-badge investor">Investor Portal</div>
             <p class="description">Two-factor authentication</p>
-            <p style="color: #666; font-size: 12px; margin-bottom: 20px;">Enter the 6-digit code from your authenticator app</p>
+
+            <div class="info-box">
+                <h4>&#128274; Verification Required</h4>
+                <p>Enter the 6-digit code from your authenticator app.</p>
+            </div>
+
             <form onsubmit="event.preventDefault(); handleTwoFactorSubmit();">
                 <div class="form-group">
                     <label>Authentication Code</label>
@@ -355,7 +414,12 @@
         <!-- Step 4: Forgot Password -->
         <div class="step" id="step4">
             <p class="description">Reset your password</p>
-            <p style="color: #666; font-size: 12px; margin-bottom: 20px;">Enter your email and we'll send you a reset code</p>
+
+            <div class="info-box">
+                <h4>&#128274; Password Reset</h4>
+                <p>Enter your email and we'll send you a verification code.</p>
+            </div>
+
             <form onsubmit="event.preventDefault(); handleForgotPasswordSubmit();">
                 <div class="form-group">
                     <label for="resetEmail">Email Address</label>
@@ -372,7 +436,12 @@
         <!-- Step 5: Enter Reset Code -->
         <div class="step" id="step5">
             <p class="description">Enter verification code</p>
-            <p style="color: #666; font-size: 12px; margin-bottom: 20px;">Check your email for the 6-digit code</p>
+
+            <div class="info-box">
+                <h4>&#128231; Check Your Email</h4>
+                <p>We sent a 6-digit code to your email address.</p>
+            </div>
+
             <form onsubmit="event.preventDefault(); handleResetCodeSubmit();">
                 <div class="form-group">
                     <label>Verification Code</label>
@@ -389,6 +458,12 @@
         <!-- Step 6: New Password -->
         <div class="step" id="step6">
             <p class="description">Create new password</p>
+
+            <div class="info-box">
+                <h4>&#128273; New Password</h4>
+                <p>Create a strong password (min 8 chars, uppercase, lowercase, number).</p>
+            </div>
+
             <form onsubmit="event.preventDefault(); handleNewPasswordSubmit();">
                 <div class="form-group">
                     <label for="newPassword">New Password</label>
@@ -398,9 +473,6 @@
                     <label for="confirmPassword">Confirm Password</label>
                     <input type="password" id="confirmPassword" placeholder="Confirm new password" required>
                 </div>
-                <p style="font-size: 11px; color: #999; margin-bottom: 16px; text-align: left;">
-                    Min 8 chars, with uppercase, lowercase, and number
-                </p>
                 <button type="submit" id="newPasswordBtn">
                     <span id="newPasswordBtnText">Reset Password</span>
                     <div class="spinner" id="newPasswordSpinner" style="display: none;"></div>
@@ -435,11 +507,28 @@
             window.location.href = 'nsic-presentation.html';
         }
 
+        // Update step indicator
+        function updateStepIndicator(step) {
+            const isResetFlow = step >= 4;
+            const displayStep = isResetFlow ? step - 3 : step;
+
+            for (let i = 1; i <= 3; i++) {
+                const dot = document.getElementById('dot' + i);
+                dot.classList.remove('active', 'complete');
+                if (i < displayStep) {
+                    dot.classList.add('complete');
+                } else if (i === displayStep) {
+                    dot.classList.add('active');
+                }
+            }
+        }
+
         // Go to specific step
         function goToStep(step) {
             document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
             document.getElementById('step' + step).classList.add('active');
             currentStep = step;
+            updateStepIndicator(step);
             clearMessages();
 
             setTimeout(() => {
