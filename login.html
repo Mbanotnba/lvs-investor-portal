@@ -9,33 +9,31 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 100%);
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
         }
         .login-container {
-            background: #12121a;
+            background: white;
             border-radius: 16px;
             padding: 48px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
             text-align: center;
             max-width: 420px;
             width: 90%;
-            border: 1px solid rgba(255,255,255,0.06);
         }
         .logo-icon {
-            width: 100px;
-            height: 100px;
+            width: 120px;
+            height: 120px;
             margin: 0 auto 24px;
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
             border-radius: 16px;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 12px;
-            border: 2px solid #7c4dff;
+            padding: 16px;
         }
         .logo-icon img {
             width: 100%;
@@ -44,7 +42,7 @@
         }
         h1 {
             font-size: 22px;
-            color: #f5f5f7;
+            color: #1a1a2e;
             margin-bottom: 8px;
             font-weight: 700;
         }
@@ -55,9 +53,9 @@
             font-weight: 600;
         }
         .description {
-            color: #6b7280;
-            font-size: 12px;
-            margin-bottom: 32px;
+            color: #666;
+            font-size: 13px;
+            margin-bottom: 24px;
         }
 
         /* Form */
@@ -69,7 +67,7 @@
             display: block;
             font-size: 11px;
             font-weight: 600;
-            color: #6b7280;
+            color: #666;
             text-transform: uppercase;
             letter-spacing: 0.5px;
             margin-bottom: 6px;
@@ -80,10 +78,10 @@
             width: 100%;
             padding: 14px 16px;
             font-size: 15px;
-            background: #1a1a24;
-            border: 2px solid rgba(255,255,255,0.1);
+            background: #f8f9fa;
+            border: 2px solid #e0e0e0;
             border-radius: 10px;
-            color: #f5f5f7;
+            color: #1a1a2e;
             transition: border-color 0.2s, box-shadow 0.2s;
         }
         input:focus {
@@ -92,35 +90,11 @@
             box-shadow: 0 0 0 3px rgba(124,77,255,0.1);
         }
         input::placeholder {
-            color: #4b5563;
+            color: #999;
         }
         input:disabled {
             opacity: 0.6;
             cursor: not-allowed;
-        }
-
-        /* 2FA Code Input */
-        .code-input-container {
-            display: flex;
-            gap: 8px;
-            justify-content: center;
-        }
-        .code-input {
-            width: 45px;
-            height: 56px;
-            text-align: center;
-            font-size: 24px;
-            font-weight: 700;
-            background: #1a1a24;
-            border: 2px solid rgba(255,255,255,0.1);
-            border-radius: 10px;
-            color: #f5f5f7;
-            transition: border-color 0.2s, box-shadow 0.2s;
-        }
-        .code-input:focus {
-            outline: none;
-            border-color: #7c4dff;
-            box-shadow: 0 0 0 3px rgba(124,77,255,0.1);
         }
 
         button[type="submit"], .btn-primary {
@@ -156,27 +130,27 @@
             padding: 12px;
             font-size: 14px;
             font-weight: 600;
-            color: #9ca3af;
+            color: #666;
             background: transparent;
-            border: 2px solid rgba(255,255,255,0.1);
+            border: 2px solid #e0e0e0;
             border-radius: 10px;
             cursor: pointer;
             transition: all 0.2s;
             margin-top: 12px;
         }
         .btn-secondary:hover {
-            border-color: rgba(255,255,255,0.2);
-            color: #f5f5f7;
+            border-color: #7c4dff;
+            color: #7c4dff;
         }
 
         .error {
-            color: #ef4444;
+            color: #e53935;
             font-size: 12px;
             margin-top: 12px;
             display: none;
             text-align: center;
             padding: 10px;
-            background: rgba(239,68,68,0.1);
+            background: rgba(229,57,53,0.1);
             border-radius: 8px;
         }
         .success {
@@ -191,35 +165,8 @@
         }
 
         /* Steps */
-        .step {
-            display: none;
-        }
-        .step.active {
-            display: block;
-        }
-
-        /* Step indicator */
-        .step-indicator {
-            display: flex;
-            justify-content: center;
-            gap: 8px;
-            margin-bottom: 24px;
-        }
-        .step-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.2);
-            transition: all 0.3s;
-        }
-        .step-dot.active {
-            background: #7c4dff;
-            width: 24px;
-            border-radius: 4px;
-        }
-        .step-dot.complete {
-            background: #10b981;
-        }
+        .step { display: none; }
+        .step.active { display: block; }
 
         /* Portal type badge */
         .portal-badge {
@@ -230,43 +177,14 @@
             font-weight: 600;
             margin-bottom: 16px;
         }
-        .portal-badge.investor { background: rgba(124,77,255,0.2); color: #a78bfa; }
-        .portal-badge.customer { background: rgba(16,185,129,0.2); color: #34d399; }
-        .portal-badge.partner { background: rgba(249,115,22,0.2); color: #fb923c; }
-        .portal-badge.founder { background: rgba(212,175,55,0.2); color: #d4af37; }
+        .portal-badge.investor { background: rgba(124,77,255,0.15); color: #7c4dff; }
+        .portal-badge.customer { background: rgba(16,185,129,0.15); color: #10b981; }
+        .portal-badge.partner { background: rgba(249,115,22,0.15); color: #f97316; }
+        .portal-badge.founder { background: rgba(212,175,55,0.15); color: #b8860b; }
 
-        /* 2FA info */
-        .twofa-info {
-            background: rgba(255,255,255,0.03);
-            border-radius: 12px;
-            padding: 16px;
-            margin-bottom: 20px;
-            text-align: left;
-        }
-        .twofa-info h4 {
-            color: #f5f5f7;
-            font-size: 13px;
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .twofa-info p {
-            color: #6b7280;
-            font-size: 12px;
-            line-height: 1.5;
-        }
-
-        .footer {
-            margin-top: 24px;
-            font-size: 11px;
-            color: #4b5563;
-        }
-        .gold { color: #d4af37; }
-
-        /* User info display */
+        /* User info */
         .user-email {
-            color: #a78bfa;
+            color: #7c4dff;
             font-weight: 600;
             word-break: break-all;
         }
@@ -284,25 +202,52 @@
             to { transform: rotate(360deg); }
         }
 
-        /* Connection status */
-        .connection-status {
-            font-size: 10px;
-            padding: 4px 10px;
+        /* Divider */
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 24px 0;
+            color: #999;
+            font-size: 12px;
+        }
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: #e0e0e0;
+        }
+        .divider::before { margin-right: 12px; }
+        .divider::after { margin-left: 12px; }
+
+        /* Presentation button */
+        .presentation-btn {
+            width: 100%;
+            padding: 14px;
+            font-size: 15px;
+            font-weight: 600;
+            color: white;
+            background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);
+            border: none;
             border-radius: 10px;
-            margin-bottom: 16px;
-            display: inline-block;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
-        .connection-status.connected {
-            background: rgba(16,185,129,0.2);
-            color: #10b981;
+        .presentation-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(6, 182, 212, 0.4);
         }
-        .connection-status.disconnected {
-            background: rgba(239,68,68,0.2);
-            color: #ef4444;
+        .presentation-btn span {
+            font-size: 18px;
         }
-        .connection-status.checking {
-            background: rgba(251,191,36,0.2);
-            color: #fbbf24;
+        .no-password {
+            font-size: 11px;
+            color: #06b6d4;
+            margin-top: 8px;
         }
 
         /* Forgot password link */
@@ -310,7 +255,7 @@
             display: block;
             text-align: center;
             margin-top: 16px;
-            color: #6b7280;
+            color: #999;
             font-size: 13px;
             text-decoration: none;
             transition: color 0.2s;
@@ -320,100 +265,12 @@
             color: #7c4dff;
         }
 
-        /* Password strength indicator */
-        .password-strength {
-            margin-top: 8px;
+        .footer {
+            margin-top: 24px;
             font-size: 11px;
+            color: #999;
         }
-        .password-strength .strength-bar {
-            height: 4px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 2px;
-            margin-bottom: 4px;
-            overflow: hidden;
-        }
-        .password-strength .strength-fill {
-            height: 100%;
-            width: 0%;
-            transition: all 0.3s;
-            border-radius: 2px;
-        }
-        .password-strength .strength-fill.weak { width: 25%; background: #ef4444; }
-        .password-strength .strength-fill.fair { width: 50%; background: #f59e0b; }
-        .password-strength .strength-fill.good { width: 75%; background: #10b981; }
-        .password-strength .strength-fill.strong { width: 100%; background: #7c4dff; }
-        .password-strength .strength-text {
-            color: #6b7280;
-        }
-        .password-strength .strength-text.weak { color: #ef4444; }
-        .password-strength .strength-text.fair { color: #f59e0b; }
-        .password-strength .strength-text.good { color: #10b981; }
-        .password-strength .strength-text.strong { color: #7c4dff; }
-
-        /* Password requirements list */
-        .password-requirements {
-            margin-top: 12px;
-            padding: 12px;
-            background: rgba(255,255,255,0.03);
-            border-radius: 8px;
-            text-align: left;
-        }
-        .password-requirements p {
-            font-size: 11px;
-            color: #6b7280;
-            margin-bottom: 8px;
-        }
-        .password-requirements ul {
-            list-style: none;
-            font-size: 11px;
-        }
-        .password-requirements li {
-            padding: 2px 0;
-            color: #6b7280;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .password-requirements li.met {
-            color: #10b981;
-        }
-        .password-requirements li .check {
-            width: 14px;
-            height: 14px;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 10px;
-        }
-        .password-requirements li.met .check {
-            background: #10b981;
-            color: white;
-        }
-
-        /* Reset info box */
-        .reset-info {
-            background: rgba(124,77,255,0.1);
-            border-radius: 12px;
-            padding: 16px;
-            margin-bottom: 20px;
-            text-align: left;
-            border-left: 3px solid #7c4dff;
-        }
-        .reset-info h4 {
-            color: #f5f5f7;
-            font-size: 13px;
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .reset-info p {
-            color: #9ca3af;
-            font-size: 12px;
-            line-height: 1.5;
-        }
+        .gold { color: #d4af37; }
 
         /* Mobile */
         @media (max-width: 480px) {
@@ -422,15 +279,10 @@
                 margin: 16px;
             }
             .logo-icon {
-                width: 80px;
-                height: 80px;
+                width: 100px;
+                height: 100px;
             }
             h1 { font-size: 18px; }
-            .code-input {
-                width: 40px;
-                height: 50px;
-                font-size: 20px;
-            }
         }
     </style>
 </head>
@@ -441,16 +293,6 @@
         </div>
         <h1>LOLA VISION SYSTEMS</h1>
         <p class="subtitle">Secure Access Portal</p>
-
-        <!-- Connection Status -->
-        <div class="connection-status checking" id="connectionStatus">Connecting...</div>
-
-        <!-- Step Indicator -->
-        <div class="step-indicator">
-            <div class="step-dot active" id="dot1"></div>
-            <div class="step-dot" id="dot2"></div>
-            <div class="step-dot" id="dot3"></div>
-        </div>
 
         <!-- Step 1: Email -->
         <div class="step active" id="step1">
@@ -465,6 +307,13 @@
                     <div class="spinner" id="emailSpinner" style="display: none;"></div>
                 </button>
             </form>
+
+            <div class="divider">or</div>
+
+            <button class="presentation-btn" onclick="goToPresentation()">
+                <span>&#128202;</span> View Presentation
+            </button>
+            <p class="no-password">No password required</p>
         </div>
 
         <!-- Step 2: Password -->
@@ -489,23 +338,11 @@
         <div class="step" id="step3">
             <div id="portalBadge2" class="portal-badge investor">Investor Portal</div>
             <p class="description">Two-factor authentication</p>
-
-            <div class="twofa-info">
-                <h4>&#128274; Verification Required</h4>
-                <p>Enter the 6-digit code from your Google Authenticator app to complete sign-in.</p>
-            </div>
-
+            <p style="color: #666; font-size: 12px; margin-bottom: 20px;">Enter the 6-digit code from your authenticator app</p>
             <form onsubmit="event.preventDefault(); handleTwoFactorSubmit();">
                 <div class="form-group">
                     <label>Authentication Code</label>
-                    <div class="code-input-container">
-                        <input type="text" class="code-input" maxlength="1" id="code1" oninput="handleCodeInput(this, 'code2')" onkeydown="handleCodeKeydown(event, this, null, 'code2')">
-                        <input type="text" class="code-input" maxlength="1" id="code2" oninput="handleCodeInput(this, 'code3')" onkeydown="handleCodeKeydown(event, this, 'code1', 'code3')">
-                        <input type="text" class="code-input" maxlength="1" id="code3" oninput="handleCodeInput(this, 'code4')" onkeydown="handleCodeKeydown(event, this, 'code2', 'code4')">
-                        <input type="text" class="code-input" maxlength="1" id="code4" oninput="handleCodeInput(this, 'code5')" onkeydown="handleCodeKeydown(event, this, 'code3', 'code5')">
-                        <input type="text" class="code-input" maxlength="1" id="code5" oninput="handleCodeInput(this, 'code6')" onkeydown="handleCodeKeydown(event, this, 'code4', 'code6')">
-                        <input type="text" class="code-input" maxlength="1" id="code6" oninput="handleCodeInput(this, null)" onkeydown="handleCodeKeydown(event, this, 'code5', null)">
-                    </div>
+                    <input type="text" id="twofaCode" placeholder="000000" maxlength="6" style="text-align: center; font-size: 24px; letter-spacing: 8px; font-weight: 700;">
                 </div>
                 <button type="submit" id="twofaBtn">
                     <span id="twofaBtnText">Verify & Sign In</span>
@@ -515,15 +352,10 @@
             </form>
         </div>
 
-        <!-- Step 4: Forgot Password - Enter Email -->
+        <!-- Step 4: Forgot Password -->
         <div class="step" id="step4">
             <p class="description">Reset your password</p>
-
-            <div class="reset-info">
-                <h4>&#128274; Password Reset</h4>
-                <p>Enter your email address and we'll send you a verification code to reset your password.</p>
-            </div>
-
+            <p style="color: #666; font-size: 12px; margin-bottom: 20px;">Enter your email and we'll send you a reset code</p>
             <form onsubmit="event.preventDefault(); handleForgotPasswordSubmit();">
                 <div class="form-group">
                     <label for="resetEmail">Email Address</label>
@@ -539,24 +371,12 @@
 
         <!-- Step 5: Enter Reset Code -->
         <div class="step" id="step5">
-            <p class="description">Verify your identity</p>
-
-            <div class="reset-info">
-                <h4>&#128231; Check Your Email</h4>
-                <p>We sent a 6-digit code to <span id="resetEmailDisplay" class="user-email"></span>. Enter it below to continue.</p>
-            </div>
-
+            <p class="description">Enter verification code</p>
+            <p style="color: #666; font-size: 12px; margin-bottom: 20px;">Check your email for the 6-digit code</p>
             <form onsubmit="event.preventDefault(); handleResetCodeSubmit();">
                 <div class="form-group">
                     <label>Verification Code</label>
-                    <div class="code-input-container">
-                        <input type="text" class="code-input" maxlength="1" id="reset1" oninput="handleResetCodeInput(this, 'reset2')" onkeydown="handleResetCodeKeydown(event, this, null, 'reset2')">
-                        <input type="text" class="code-input" maxlength="1" id="reset2" oninput="handleResetCodeInput(this, 'reset3')" onkeydown="handleResetCodeKeydown(event, this, 'reset1', 'reset3')">
-                        <input type="text" class="code-input" maxlength="1" id="reset3" oninput="handleResetCodeInput(this, 'reset4')" onkeydown="handleResetCodeKeydown(event, this, 'reset2', 'reset4')">
-                        <input type="text" class="code-input" maxlength="1" id="reset4" oninput="handleResetCodeInput(this, 'reset5')" onkeydown="handleResetCodeKeydown(event, this, 'reset3', 'reset5')">
-                        <input type="text" class="code-input" maxlength="1" id="reset5" oninput="handleResetCodeInput(this, 'reset6')" onkeydown="handleResetCodeKeydown(event, this, 'reset4', 'reset6')">
-                        <input type="text" class="code-input" maxlength="1" id="reset6" oninput="handleResetCodeInput(this, null)" onkeydown="handleResetCodeKeydown(event, this, 'reset5', null)">
-                    </div>
+                    <input type="text" id="resetCode" placeholder="000000" maxlength="6" style="text-align: center; font-size: 24px; letter-spacing: 8px; font-weight: 700;">
                 </div>
                 <button type="submit" id="resetCodeBtn">
                     <span id="resetCodeBtnText">Verify Code</span>
@@ -564,40 +384,23 @@
                 </button>
                 <button type="button" class="btn-secondary" onclick="goToStep(4)">Back</button>
             </form>
-            <a class="forgot-link" onclick="handleForgotPasswordSubmit()">Resend code</a>
         </div>
 
-        <!-- Step 6: Set New Password -->
+        <!-- Step 6: New Password -->
         <div class="step" id="step6">
             <p class="description">Create new password</p>
-
-            <div class="reset-info">
-                <h4>&#128273; New Password</h4>
-                <p>Create a strong password that you haven't used before.</p>
-            </div>
-
             <form onsubmit="event.preventDefault(); handleNewPasswordSubmit();">
                 <div class="form-group">
                     <label for="newPassword">New Password</label>
-                    <input type="password" id="newPassword" placeholder="Enter new password" required oninput="checkPasswordStrength()">
-                    <div class="password-strength" id="passwordStrength" style="display: none;">
-                        <div class="strength-bar"><div class="strength-fill" id="strengthFill"></div></div>
-                        <span class="strength-text" id="strengthText"></span>
-                    </div>
+                    <input type="password" id="newPassword" placeholder="Enter new password" required>
                 </div>
                 <div class="form-group">
                     <label for="confirmPassword">Confirm Password</label>
                     <input type="password" id="confirmPassword" placeholder="Confirm new password" required>
                 </div>
-                <div class="password-requirements" id="passwordReqs">
-                    <p>Password must contain:</p>
-                    <ul>
-                        <li id="reqLength"><span class="check">-</span> At least 8 characters</li>
-                        <li id="reqUpper"><span class="check">-</span> One uppercase letter</li>
-                        <li id="reqLower"><span class="check">-</span> One lowercase letter</li>
-                        <li id="reqNumber"><span class="check">-</span> One number</li>
-                    </ul>
-                </div>
+                <p style="font-size: 11px; color: #999; margin-bottom: 16px; text-align: left;">
+                    Min 8 chars, with uppercase, lowercase, and number
+                </p>
                 <button type="submit" id="newPasswordBtn">
                     <span id="newPasswordBtnText">Reset Password</span>
                     <div class="spinner" id="newPasswordSpinner" style="display: none;"></div>
@@ -618,60 +421,18 @@
     <script src="js/config.js"></script>
     <script src="js/security.js"></script>
     <script>
-        // API Configuration (from config.js)
         const API_BASE_URL = LVS_CONFIG.API_BASE_URL;
 
-        // Portal URLs come from LVSSecurity.CONFIG.VALID_PORTALS (single source of truth)
-        // Use LVSSecurity.getPortalUrl() for safe redirects
-
-        // State
         let currentStep = 1;
         let userEmail = '';
         let portalInfo = null;
+        let resetEmail = '';
+        let resetToken = '';
 
-        // Check API connection on load
-        async function checkConnection() {
-            const statusEl = document.getElementById('connectionStatus');
-            statusEl.className = 'connection-status checking';
-            statusEl.textContent = 'Connecting...';
-
-            try {
-                const response = await fetch(`${API_BASE_URL}/health`, {
-                    method: 'GET',
-                    headers: { 'Accept': 'application/json' }
-                });
-
-                if (response.ok) {
-                    statusEl.className = 'connection-status connected';
-                    statusEl.textContent = 'Secure Connection';
-                    setTimeout(() => {
-                        statusEl.style.display = 'none';
-                    }, 2000);
-                } else {
-                    throw new Error('API not responding');
-                }
-            } catch (error) {
-                statusEl.className = 'connection-status disconnected';
-                statusEl.textContent = 'Backend Offline - Start server on port 8080';
-                console.error('API connection failed:', error);
-            }
-        }
-
-        // Update step indicator
-        function updateStepIndicator(step) {
-            // For password reset flow (steps 4-6), map to dots 1-3
-            const isResetFlow = step >= 4;
-            const displayStep = isResetFlow ? step - 3 : step;
-
-            for (let i = 1; i <= 3; i++) {
-                const dot = document.getElementById('dot' + i);
-                dot.classList.remove('active', 'complete');
-                if (i < displayStep) {
-                    dot.classList.add('complete');
-                } else if (i === displayStep) {
-                    dot.classList.add('active');
-                }
-            }
+        // Go to presentation without password
+        function goToPresentation() {
+            sessionStorage.setItem('lvs_presentation_access', 'true');
+            window.location.href = 'nsic-presentation.html';
         }
 
         // Go to specific step
@@ -679,27 +440,23 @@
             document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
             document.getElementById('step' + step).classList.add('active');
             currentStep = step;
-            updateStepIndicator(step);
             clearMessages();
 
-            // Focus appropriate input
             setTimeout(() => {
                 if (step === 1) document.getElementById('email').focus();
                 if (step === 2) document.getElementById('password').focus();
-                if (step === 3) document.getElementById('code1').focus();
+                if (step === 3) document.getElementById('twofaCode').focus();
                 if (step === 4) document.getElementById('resetEmail').focus();
-                if (step === 5) document.getElementById('reset1').focus();
+                if (step === 5) document.getElementById('resetCode').focus();
                 if (step === 6) document.getElementById('newPassword').focus();
             }, 100);
         }
 
-        // Clear error/success messages
         function clearMessages() {
             document.getElementById('error').style.display = 'none';
             document.getElementById('success').style.display = 'none';
         }
 
-        // Show error
         function showError(message) {
             const el = document.getElementById('error');
             el.textContent = message;
@@ -707,7 +464,6 @@
             document.getElementById('success').style.display = 'none';
         }
 
-        // Show success
         function showSuccess(message) {
             const el = document.getElementById('success');
             el.textContent = message;
@@ -715,25 +471,23 @@
             document.getElementById('error').style.display = 'none';
         }
 
-        // Set button loading state
         function setButtonLoading(btnId, loading) {
             const btn = document.getElementById(btnId);
             const text = document.getElementById(btnId + 'Text');
             const spinner = document.getElementById(btnId.replace('Btn', 'Spinner'));
-
             btn.disabled = loading;
             text.style.display = loading ? 'none' : 'inline';
             if (spinner) spinner.style.display = loading ? 'block' : 'none';
         }
 
-        // Step 1: Handle email submission
+        // Step 1: Email
         async function handleEmailSubmit() {
             clearMessages();
             userEmail = document.getElementById('email').value.trim().toLowerCase();
 
             if (!userEmail || !userEmail.includes('@')) {
                 showError('Please enter a valid email address.');
-                return false;
+                return;
             }
 
             setButtonLoading('emailBtn', true);
@@ -741,63 +495,44 @@
             try {
                 const response = await fetch(`${API_BASE_URL}/auth/email`, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
-                    },
+                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
                     body: JSON.stringify({ email: userEmail })
                 });
 
                 const data = await response.json();
+                if (!response.ok) throw new Error(data.detail || 'Failed to verify email');
 
-                if (!response.ok) {
-                    throw new Error(data.detail || 'Failed to verify email');
-                }
-
-                // Store portal info
                 portalInfo = data.portal_info;
-
-                // Update UI for step 2
                 document.getElementById('userEmailDisplay').textContent = userEmail;
 
                 const badge = document.getElementById('portalBadge');
                 const badge2 = document.getElementById('portalBadge2');
-
                 badge.className = 'portal-badge ' + portalInfo.portal_type;
                 badge2.className = 'portal-badge ' + portalInfo.portal_type;
 
-                let badgeText = '';
-                if (portalInfo.portal_type === 'customer') {
-                    badgeText = (portalInfo.company_name || 'Customer') + ' Portal';
-                } else if (portalInfo.portal_type === 'partner') {
-                    badgeText = (portalInfo.company_name || 'Partner') + ' Portal';
-                } else if (portalInfo.portal_type === 'founder') {
-                    badgeText = 'Founder Portal';
-                } else {
-                    badgeText = 'Investor Portal';
-                }
+                let badgeText = portalInfo.portal_type === 'customer' ? (portalInfo.company_name || 'Customer') + ' Portal'
+                    : portalInfo.portal_type === 'partner' ? (portalInfo.company_name || 'Partner') + ' Portal'
+                    : portalInfo.portal_type === 'founder' ? 'Founder Portal'
+                    : 'Investor Portal';
                 badge.textContent = badgeText;
                 badge2.textContent = badgeText;
 
                 goToStep(2);
-
             } catch (error) {
                 showError(error.message);
             } finally {
                 setButtonLoading('emailBtn', false);
             }
-
-            return false;
         }
 
-        // Step 2: Handle password submission
+        // Step 2: Password
         async function handlePasswordSubmit() {
             clearMessages();
             const password = document.getElementById('password').value;
 
             if (!password) {
                 showError('Please enter your password.');
-                return false;
+                return;
             }
 
             setButtonLoading('passwordBtn', true);
@@ -805,80 +540,34 @@
             try {
                 const response = await fetch(`${API_BASE_URL}/auth/password`, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        email: userEmail,
-                        password: password
-                    })
+                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                    body: JSON.stringify({ email: userEmail, password: password })
                 });
 
                 const data = await response.json();
+                if (!response.ok) throw new Error(data.detail || 'Invalid credentials');
 
-                if (!response.ok) {
-                    throw new Error(data.detail || 'Invalid credentials');
-                }
-
-                // Check if 2FA is required
                 if (data.next_step === '2fa') {
                     portalInfo = data.portal_info;
                     goToStep(3);
                 } else {
-                    // Login complete - we have a token
                     completeLogin(data);
                 }
-
             } catch (error) {
                 showError(error.message);
             } finally {
                 setButtonLoading('passwordBtn', false);
             }
-
-            return false;
         }
 
-        // Handle 2FA code input
-        function handleCodeInput(current, nextId) {
-            // Only allow digits
-            current.value = current.value.replace(/\D/g, '');
-
-            if (current.value.length === 1 && nextId) {
-                document.getElementById(nextId).focus();
-            }
-
-            // Check if all codes are filled
-            let fullCode = '';
-            for (let i = 1; i <= 6; i++) {
-                fullCode += document.getElementById('code' + i).value;
-            }
-
-            // Auto-submit when 6 digits entered
-            if (fullCode.length === 6) {
-                setTimeout(() => handleTwoFactorSubmit(), 100);
-            }
-        }
-
-        // Handle backspace in code inputs
-        function handleCodeKeydown(event, current, prevId, nextId) {
-            if (event.key === 'Backspace' && current.value === '' && prevId) {
-                document.getElementById(prevId).focus();
-            }
-        }
-
-        // Step 3: Handle 2FA submission
+        // Step 3: 2FA
         async function handleTwoFactorSubmit() {
             clearMessages();
-
-            let code = '';
-            for (let i = 1; i <= 6; i++) {
-                code += document.getElementById('code' + i).value;
-            }
+            const code = document.getElementById('twofaCode').value.replace(/\D/g, '');
 
             if (code.length !== 6) {
-                showError('Please enter the complete 6-digit code.');
-                return false;
+                showError('Please enter the 6-digit code.');
+                return;
             }
 
             setButtonLoading('twofaBtn', true);
@@ -886,44 +575,26 @@
             try {
                 const response = await fetch(`${API_BASE_URL}/auth/2fa`, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        email: userEmail,
-                        code: code
-                    })
+                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                    body: JSON.stringify({ email: userEmail, code: code })
                 });
 
                 const data = await response.json();
+                if (!response.ok) throw new Error(data.detail || 'Invalid code');
 
-                if (!response.ok) {
-                    throw new Error(data.detail || 'Invalid verification code');
-                }
-
-                // Login complete
                 completeLogin(data);
-
             } catch (error) {
                 showError(error.message);
-                // Clear code inputs
-                for (let i = 1; i <= 6; i++) {
-                    document.getElementById('code' + i).value = '';
-                }
-                document.getElementById('code1').focus();
+                document.getElementById('twofaCode').value = '';
             } finally {
                 setButtonLoading('twofaBtn', false);
             }
-
-            return false;
         }
 
-        // Complete login and redirect
+        // Complete login
         function completeLogin(data) {
-            showSuccess('Authentication successful. Redirecting...');
+            showSuccess('Success! Redirecting...');
 
-            // Store session data
             sessionStorage.setItem('lvs_auth', 'true');
             sessionStorage.setItem('lvs_token', data.access_token);
             sessionStorage.setItem('lvs_role', data.portal_type);
@@ -934,13 +605,11 @@
             sessionStorage.setItem('lvs_company', data.user.company || '');
             sessionStorage.setItem('lvs_session_timestamp', Date.now().toString());
 
-            // Store NDA status
             if (data.nda) {
                 sessionStorage.setItem('lvs_nda_status', data.nda.status);
                 sessionStorage.setItem('lvs_nda_allowed', data.nda.allowed ? 'true' : 'false');
             }
 
-            // Set additional flags based on portal type
             if (data.portal_type === 'founder') {
                 sessionStorage.setItem('lvs_founder_auth', 'true');
                 sessionStorage.setItem('lvs_can_view_customers', 'true');
@@ -951,46 +620,25 @@
                 sessionStorage.setItem('lvs_customer', data.user.company);
             } else if (data.portal_type === 'partner') {
                 sessionStorage.setItem('lvs_partner', data.user.company);
-                sessionStorage.setItem('lvs_partner_tier', 'strategic');
             }
 
-            // Redirect to portal using whitelist - ignore server's portal_url
-            // This prevents open redirect attacks where server could be compromised
-            const redirectUrl = LVSSecurity.getPortalUrl(
-                data.portal_type,
-                data.user.company,
-                data.nda?.allowed
-            );
-
-            setTimeout(() => {
-                window.location.href = redirectUrl;
-            }, 1000);
+            const redirectUrl = LVSSecurity.getPortalUrl(data.portal_type, data.user.company, data.nda?.allowed);
+            setTimeout(() => { window.location.href = redirectUrl; }, 1000);
         }
 
-        // ============================================================================
-        // PASSWORD RESET FLOW
-        // ============================================================================
-
-        let resetEmail = '';
-        let resetToken = '';
-
-        // Go to forgot password step
+        // Forgot password flow
         function goToForgotPassword() {
-            // Pre-fill with current email if available
-            if (userEmail) {
-                document.getElementById('resetEmail').value = userEmail;
-            }
+            if (userEmail) document.getElementById('resetEmail').value = userEmail;
             goToStep(4);
         }
 
-        // Step 4: Handle forgot password email submission
         async function handleForgotPasswordSubmit() {
             clearMessages();
             resetEmail = document.getElementById('resetEmail').value.trim().toLowerCase();
 
             if (!resetEmail || !resetEmail.includes('@')) {
                 showError('Please enter a valid email address.');
-                return false;
+                return;
             }
 
             setButtonLoading('forgotBtn', true);
@@ -998,72 +646,29 @@
             try {
                 const response = await fetch(`${API_BASE_URL}/auth/forgot-password`, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
-                    },
+                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
                     body: JSON.stringify({ email: resetEmail })
                 });
 
                 const data = await response.json();
+                if (!response.ok) throw new Error(data.detail || 'Failed to process request');
 
-                if (!response.ok) {
-                    throw new Error(data.detail || 'Failed to process request');
-                }
-
-                // Show success and move to code entry
-                document.getElementById('resetEmailDisplay').textContent = resetEmail;
                 showSuccess(data.message);
-                setTimeout(() => {
-                    goToStep(5);
-                }, 1500);
-
+                setTimeout(() => goToStep(5), 1500);
             } catch (error) {
                 showError(error.message);
             } finally {
                 setButtonLoading('forgotBtn', false);
             }
-
-            return false;
         }
 
-        // Handle reset code input (similar to 2FA)
-        function handleResetCodeInput(current, nextId) {
-            current.value = current.value.replace(/\D/g, '');
-            if (current.value.length === 1 && nextId) {
-                document.getElementById(nextId).focus();
-            }
-
-            // Check if all codes are filled
-            let fullCode = '';
-            for (let i = 1; i <= 6; i++) {
-                fullCode += document.getElementById('reset' + i).value;
-            }
-
-            // Auto-submit when 6 digits entered
-            if (fullCode.length === 6) {
-                setTimeout(() => handleResetCodeSubmit(), 100);
-            }
-        }
-
-        function handleResetCodeKeydown(event, current, prevId, nextId) {
-            if (event.key === 'Backspace' && current.value === '' && prevId) {
-                document.getElementById(prevId).focus();
-            }
-        }
-
-        // Step 5: Handle reset code verification
         async function handleResetCodeSubmit() {
             clearMessages();
-
-            let code = '';
-            for (let i = 1; i <= 6; i++) {
-                code += document.getElementById('reset' + i).value;
-            }
+            const code = document.getElementById('resetCode').value.replace(/\D/g, '');
 
             if (code.length !== 6) {
-                showError('Please enter the complete 6-digit code.');
-                return false;
+                showError('Please enter the 6-digit code.');
+                return;
             }
 
             setButtonLoading('resetCodeBtn', true);
@@ -1071,212 +676,60 @@
             try {
                 const response = await fetch(`${API_BASE_URL}/auth/verify-reset-code`, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        email: resetEmail,
-                        code: code
-                    })
+                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                    body: JSON.stringify({ email: resetEmail, code: code })
                 });
 
                 const data = await response.json();
+                if (!response.ok) throw new Error(data.detail || 'Invalid code');
 
-                if (!response.ok) {
-                    throw new Error(data.detail || 'Invalid verification code');
-                }
-
-                // Store token and move to password reset
                 resetToken = data.token;
-                showSuccess('Code verified! Please set your new password.');
-                setTimeout(() => {
-                    goToStep(6);
-                }, 1000);
-
+                showSuccess('Code verified!');
+                setTimeout(() => goToStep(6), 1000);
             } catch (error) {
                 showError(error.message);
-                // Clear code inputs
-                for (let i = 1; i <= 6; i++) {
-                    document.getElementById('reset' + i).value = '';
-                }
-                document.getElementById('reset1').focus();
+                document.getElementById('resetCode').value = '';
             } finally {
                 setButtonLoading('resetCodeBtn', false);
             }
-
-            return false;
         }
 
-        // Check password strength and update UI
-        function checkPasswordStrength() {
-            const password = document.getElementById('newPassword').value;
-            const strengthDiv = document.getElementById('passwordStrength');
-            const strengthFill = document.getElementById('strengthFill');
-            const strengthText = document.getElementById('strengthText');
-
-            // Update requirements
-            const hasLength = password.length >= 8;
-            const hasUpper = /[A-Z]/.test(password);
-            const hasLower = /[a-z]/.test(password);
-            const hasNumber = /\d/.test(password);
-
-            updateRequirement('reqLength', hasLength);
-            updateRequirement('reqUpper', hasUpper);
-            updateRequirement('reqLower', hasLower);
-            updateRequirement('reqNumber', hasNumber);
-
-            // Calculate strength
-            let strength = 0;
-            if (hasLength) strength++;
-            if (hasUpper) strength++;
-            if (hasLower) strength++;
-            if (hasNumber) strength++;
-
-            // Show strength indicator
-            if (password.length > 0) {
-                strengthDiv.style.display = 'block';
-                const levels = ['weak', 'weak', 'fair', 'good', 'strong'];
-                const labels = ['Very Weak', 'Weak', 'Fair', 'Good', 'Strong'];
-
-                strengthFill.className = 'strength-fill ' + levels[strength];
-                strengthText.className = 'strength-text ' + levels[strength];
-                strengthText.textContent = labels[strength];
-            } else {
-                strengthDiv.style.display = 'none';
-            }
-        }
-
-        function updateRequirement(id, met) {
-            const el = document.getElementById(id);
-            if (met) {
-                el.classList.add('met');
-                el.querySelector('.check').textContent = '\u2713';
-            } else {
-                el.classList.remove('met');
-                el.querySelector('.check').textContent = '-';
-            }
-        }
-
-        // Step 6: Handle new password submission
         async function handleNewPasswordSubmit() {
             clearMessages();
-
             const newPassword = document.getElementById('newPassword').value;
             const confirmPassword = document.getElementById('confirmPassword').value;
 
-            // Validate password requirements
-            if (newPassword.length < 8) {
-                showError('Password must be at least 8 characters.');
-                return false;
-            }
-            if (!/[A-Z]/.test(newPassword)) {
-                showError('Password must contain at least one uppercase letter.');
-                return false;
-            }
-            if (!/[a-z]/.test(newPassword)) {
-                showError('Password must contain at least one lowercase letter.');
-                return false;
-            }
-            if (!/\d/.test(newPassword)) {
-                showError('Password must contain at least one number.');
-                return false;
-            }
-            if (newPassword !== confirmPassword) {
-                showError('Passwords do not match.');
-                return false;
-            }
+            if (newPassword.length < 8) { showError('Password must be at least 8 characters.'); return; }
+            if (!/[A-Z]/.test(newPassword)) { showError('Password must contain an uppercase letter.'); return; }
+            if (!/[a-z]/.test(newPassword)) { showError('Password must contain a lowercase letter.'); return; }
+            if (!/\d/.test(newPassword)) { showError('Password must contain a number.'); return; }
+            if (newPassword !== confirmPassword) { showError('Passwords do not match.'); return; }
 
             setButtonLoading('newPasswordBtn', true);
 
             try {
                 const response = await fetch(`${API_BASE_URL}/auth/reset-password`, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        token: resetToken,
-                        new_password: newPassword
-                    })
+                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                    body: JSON.stringify({ token: resetToken, new_password: newPassword })
                 });
 
                 const data = await response.json();
+                if (!response.ok) throw new Error(data.detail || 'Failed to reset password');
 
-                if (!response.ok) {
-                    throw new Error(data.detail || 'Failed to reset password');
-                }
-
-                // Success! Clear token and redirect to login
                 resetToken = '';
-                showSuccess(data.message);
-
+                showSuccess('Password reset successful!');
                 setTimeout(() => {
-                    // Clear the form and go to step 1
                     document.getElementById('newPassword').value = '';
                     document.getElementById('confirmPassword').value = '';
-                    document.getElementById('resetEmail').value = '';
-                    for (let i = 1; i <= 6; i++) {
-                        document.getElementById('reset' + i).value = '';
-                    }
                     goToStep(1);
-                    showSuccess('Password reset successful! Please log in with your new password.');
                 }, 1500);
-
             } catch (error) {
                 showError(error.message);
             } finally {
                 setButtonLoading('newPasswordBtn', false);
             }
-
-            return false;
         }
-
-        // Handle reset token from URL (for email link clicks)
-        async function handleResetTokenFromUrl() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const token = urlParams.get('reset_token');
-
-            if (!token) return false;
-
-            // Clear the URL parameter
-            window.history.replaceState({}, document.title, window.location.pathname);
-
-            // Verify the token
-            try {
-                const response = await fetch(`${API_BASE_URL}/auth/verify-reset-token`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
-                    },
-                    body: JSON.stringify({ token: token })
-                });
-
-                const data = await response.json();
-
-                if (!response.ok) {
-                    showError(data.detail || 'This password reset link is invalid or has expired.');
-                    return false;
-                }
-
-                // Valid token - go directly to password reset step
-                resetToken = token;
-                resetEmail = data.email;
-                showSuccess('Token verified! Please set your new password.');
-                goToStep(6);
-                return true;
-
-            } catch (error) {
-                showError('Failed to verify reset link. Please try again.');
-                return false;
-            }
-        }
-
-        // ============================================================================
-        // INITIALIZATION
-        // ============================================================================
 
         // Clear errors on input
         document.querySelectorAll('input').forEach(el => {
@@ -1284,43 +737,25 @@
         });
 
         // Initialize
-        document.addEventListener('DOMContentLoaded', async () => {
-            checkConnection();
-
-            // Check for reset token in URL first
-            const hasResetToken = await handleResetTokenFromUrl();
-            if (hasResetToken) return;
-
+        document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('email').focus();
 
             // Check if already authenticated
             const token = sessionStorage.getItem('lvs_token');
             const role = sessionStorage.getItem('lvs_role');
             if (token && role) {
-                // Validate token with API
                 fetch(`${API_BASE_URL}/auth/validate-token`, {
                     method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
+                    headers: { 'Authorization': `Bearer ${token}` }
                 }).then(response => {
-                    if (response.ok) {
-                        return response.json();
-                    } else {
-                        // Token invalid, clear session
-                        sessionStorage.clear();
-                        throw new Error('Invalid token');
-                    }
+                    if (response.ok) return response.json();
+                    sessionStorage.clear();
+                    throw new Error('Invalid token');
                 }).then(data => {
-                    // Use whitelist-based redirect with server-validated portal_type
-                    const company = sessionStorage.getItem('lvs_customer') ||
-                                    sessionStorage.getItem('lvs_partner');
-                    const ndaAllowed = data.nda?.allowed !== false;
-                    const redirectUrl = LVSSecurity.getPortalUrl(data.user.portal_type, company, ndaAllowed);
+                    const company = sessionStorage.getItem('lvs_customer') || sessionStorage.getItem('lvs_partner');
+                    const redirectUrl = LVSSecurity.getPortalUrl(data.user.portal_type, company, data.nda?.allowed !== false);
                     window.location.href = redirectUrl;
-                }).catch(() => {
-                    // API error or invalid token, stay on login
-                });
+                }).catch(() => {});
             }
         });
     </script>
