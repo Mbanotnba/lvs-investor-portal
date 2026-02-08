@@ -1276,13 +1276,14 @@ processor = ImageProcessor(resize=model.input_size, normalize=<span class="code-
         return `
             <div class="video-section-header">
                 <h2>Expert Testimonials</h2>
-                <p>Industry leaders share their perspective on edge AI and the LVS platform.</p>
+                <p>Industry leaders share their perspective on edge AI and the LVS platform. Hover to preview, click to play full video.</p>
             </div>
             <div class="video-grid testimonials-grid">
                 <div class="video-card">
-                    <video class="testimonial-video" preload="metadata" muted playsinline>
+                    <video class="testimonial-video" preload="auto" muted playsinline poster="assets/testimonials/JamesUrgencyforChips-poster.jpg">
                         <source src="assets/testimonials/JamesUrgencyforChips.mp4" type="video/mp4">
                     </video>
+                    <div class="play-overlay"><span>&#9658;</span></div>
                     <div class="video-card-info">
                         <div class="video-card-title">The Urgency for Domestic Chips</div>
                         <div class="video-card-speaker">
@@ -1295,9 +1296,10 @@ processor = ImageProcessor(resize=model.input_size, normalize=<span class="code-
                     </div>
                 </div>
                 <div class="video-card">
-                    <video class="testimonial-video" preload="metadata" muted playsinline>
+                    <video class="testimonial-video" preload="auto" muted playsinline poster="assets/testimonials/JamesEWexplanation-poster.jpg">
                         <source src="assets/testimonials/JamesEWexplanation.mp4" type="video/mp4">
                     </video>
+                    <div class="play-overlay"><span>&#9658;</span></div>
                     <div class="video-card-info">
                         <div class="video-card-title">Electronic Warfare Explained</div>
                         <div class="video-card-speaker">
@@ -1310,9 +1312,10 @@ processor = ImageProcessor(resize=model.input_size, normalize=<span class="code-
                     </div>
                 </div>
                 <div class="video-card">
-                    <video class="testimonial-video" preload="metadata" muted playsinline>
+                    <video class="testimonial-video" preload="auto" muted playsinline poster="assets/testimonials/RandyChipletConfiguration-poster.jpg">
                         <source src="assets/testimonials/RandyChipletConfiguration.mp4" type="video/mp4">
                     </video>
+                    <div class="play-overlay"><span>&#9658;</span></div>
                     <div class="video-card-info">
                         <div class="video-card-title">Chiplet Configuration Benefits</div>
                         <div class="video-card-speaker">
@@ -1325,9 +1328,10 @@ processor = ImageProcessor(resize=model.input_size, normalize=<span class="code-
                     </div>
                 </div>
                 <div class="video-card">
-                    <video class="testimonial-video" preload="metadata" muted playsinline>
+                    <video class="testimonial-video" preload="auto" muted playsinline poster="assets/testimonials/MaynardHwEdgeAISecurityPriorities-poster.jpg">
                         <source src="assets/testimonials/MaynardHwEdgeAISecurityPriorities.mp4" type="video/mp4">
                     </video>
+                    <div class="play-overlay"><span>&#9658;</span></div>
                     <div class="video-card-info">
                         <div class="video-card-title">Edge AI Security Priorities</div>
                         <div class="video-card-speaker">
@@ -1340,9 +1344,10 @@ processor = ImageProcessor(resize=model.input_size, normalize=<span class="code-
                     </div>
                 </div>
                 <div class="video-card">
-                    <video class="testimonial-video" preload="metadata" muted playsinline>
+                    <video class="testimonial-video" preload="auto" muted playsinline poster="assets/testimonials/MaynardChineseThreat-poster.jpg">
                         <source src="assets/testimonials/MaynardChineseThreat.mp4" type="video/mp4">
                     </video>
+                    <div class="play-overlay"><span>&#9658;</span></div>
                     <div class="video-card-info">
                         <div class="video-card-title">Addressing the China Challenge</div>
                         <div class="video-card-speaker">
