@@ -13,13 +13,13 @@ const LVS_CONFIG = (function() {
         // Local development
         localhost: {
             name: 'development',
-            apiBase: 'http://localhost:8080',
-            portalBase: 'http://localhost:8000'
+            apiBase: 'http://localhost:8000',
+            portalBase: 'http://localhost:3000'
         },
         '127.0.0.1': {
             name: 'development',
-            apiBase: 'http://127.0.0.1:8080',
-            portalBase: 'http://127.0.0.1:8000'
+            apiBase: 'http://127.0.0.1:8000',
+            portalBase: 'http://127.0.0.1:3000'
         },
         // Local domain (requires /etc/hosts entry)
         'lvs.local': {
