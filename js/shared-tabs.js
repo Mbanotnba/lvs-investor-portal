@@ -332,6 +332,94 @@ const LVSSharedTabs = {
                     </p>
                 </div>
             </div>
+
+            <!-- Software-to-Hardware Mapping -->
+            <div class="panel" style="margin-top: 24px; border-left: 3px solid var(--gold);">
+                <h3 style="display: flex; align-items: center; gap: 10px;">
+                    <span style="font-size: 24px;">&#128187;</span>
+                    Software-to-Hardware Mapping
+                </h3>
+                <p style="color: var(--muted); margin: 12px 0 20px 0; font-size: 14px; line-height: 1.6;">
+                    How software agents leverage the LVS-250 UCIe 2.0 chiplet architecture for optimal performance and efficiency.
+                </p>
+
+                <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-bottom: 20px;">
+                    <div style="background: linear-gradient(135deg, rgba(59,130,246,0.15), rgba(59,130,246,0.05)); border: 1px solid rgba(59,130,246,0.3); border-radius: 12px; padding: 16px; text-align: center;">
+                        <div style="font-size: 13px; font-weight: 700; color: #3b82f6; margin-bottom: 8px;">Interface Chiplet</div>
+                        <div style="font-size: 11px; color: var(--muted); line-height: 1.5;">High-speed I/O, RF Front-end, PCIe Gen5, CXL 2.0</div>
+                    </div>
+                    <div style="background: linear-gradient(135deg, rgba(124,77,255,0.15), rgba(124,77,255,0.05)); border: 1px solid rgba(124,77,255,0.3); border-radius: 12px; padding: 16px; text-align: center;">
+                        <div style="font-size: 13px; font-weight: 700; color: var(--accent); margin-bottom: 8px;">Dual NPU</div>
+                        <div style="font-size: 11px; color: var(--muted); line-height: 1.5;">~230 TOPS Combined, Vision Processing, Neural Inference</div>
+                    </div>
+                    <div style="background: linear-gradient(135deg, rgba(16,185,129,0.15), rgba(16,185,129,0.05)); border: 1px solid rgba(16,185,129,0.3); border-radius: 12px; padding: 16px; text-align: center;">
+                        <div style="font-size: 13px; font-weight: 700; color: #10b981; margin-bottom: 8px;">Vector DSP</div>
+                        <div style="font-size: 11px; color: var(--muted); line-height: 1.5;">Signal Processing, Sensor Fusion, Feature Extraction</div>
+                    </div>
+                    <div style="background: linear-gradient(135deg, rgba(212,175,55,0.15), rgba(212,175,55,0.05)); border: 1px solid rgba(212,175,55,0.3); border-radius: 12px; padding: 16px; text-align: center;">
+                        <div style="font-size: 13px; font-weight: 700; color: var(--gold); margin-bottom: 8px;">RISC-V Cluster</div>
+                        <div style="font-size: 11px; color: var(--muted); line-height: 1.5;">Decision Logic, Agent Orchestration, Safety Supervisor</div>
+                    </div>
+                    <div style="background: linear-gradient(135deg, rgba(236,72,153,0.15), rgba(236,72,153,0.05)); border: 1px solid rgba(236,72,153,0.3); border-radius: 12px; padding: 16px; text-align: center;">
+                        <div style="font-size: 13px; font-weight: 700; color: #ec4899; margin-bottom: 8px;">MRAM Subsystem</div>
+                        <div style="font-size: 11px; color: var(--muted); line-height: 1.5;">Persistent Logging, Model Storage, State Preservation</div>
+                    </div>
+                </div>
+
+                <h4 style="font-size: 14px; font-weight: 600; margin-bottom: 16px; color: var(--text);">Information Flow Pipeline</h4>
+                <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; background: var(--panel-light); padding: 16px; border-radius: 12px; flex-wrap: wrap;">
+                    <div style="text-align: center; flex: 1; min-width: 80px;">
+                        <div style="background: rgba(59,130,246,0.2); width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 6px; font-size: 12px; font-weight: 700; color: #3b82f6;">1</div>
+                        <div style="font-size: 11px; font-weight: 600; color: var(--text);">RF Acquisition</div>
+                        <div style="font-size: 10px; color: var(--muted);">Interface Chiplet</div>
+                    </div>
+                    <div style="color: var(--muted); font-size: 16px;">→</div>
+                    <div style="text-align: center; flex: 1; min-width: 80px;">
+                        <div style="background: rgba(16,185,129,0.2); width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 6px; font-size: 12px; font-weight: 700; color: #10b981;">2</div>
+                        <div style="font-size: 11px; font-weight: 600; color: var(--text);">Signal Processing</div>
+                        <div style="font-size: 10px; color: var(--muted);">Vector DSP</div>
+                    </div>
+                    <div style="color: var(--muted); font-size: 16px;">→</div>
+                    <div style="text-align: center; flex: 1; min-width: 80px;">
+                        <div style="background: rgba(124,77,255,0.2); width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 6px; font-size: 12px; font-weight: 700; color: var(--accent);">3</div>
+                        <div style="font-size: 11px; font-weight: 600; color: var(--text);">Threat Classification</div>
+                        <div style="font-size: 10px; color: var(--muted);">Dual NPU (~230 TOPS)</div>
+                    </div>
+                    <div style="color: var(--muted); font-size: 16px;">→</div>
+                    <div style="text-align: center; flex: 1; min-width: 80px;">
+                        <div style="background: rgba(212,175,55,0.2); width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 6px; font-size: 12px; font-weight: 700; color: var(--gold);">4</div>
+                        <div style="font-size: 11px; font-weight: 600; color: var(--text);">Autonomous Decision</div>
+                        <div style="font-size: 10px; color: var(--muted);">RISC-V CPU Cluster</div>
+                    </div>
+                    <div style="color: var(--muted); font-size: 16px;">→</div>
+                    <div style="text-align: center; flex: 1; min-width: 80px;">
+                        <div style="background: rgba(236,72,153,0.2); width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 6px; font-size: 12px; font-weight: 700; color: #ec4899;">5</div>
+                        <div style="font-size: 11px; font-weight: 600; color: var(--text);">Persistent Logging</div>
+                        <div style="font-size: 10px; color: var(--muted);">MRAM Subsystem</div>
+                    </div>
+                    <div style="color: var(--muted); font-size: 16px;">→</div>
+                    <div style="text-align: center; flex: 1; min-width: 80px;">
+                        <div style="background: rgba(6,182,212,0.2); width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 6px; font-size: 12px; font-weight: 700; color: #06b6d4;">6</div>
+                        <div style="font-size: 11px; font-weight: 600; color: var(--text);">Fleet Learning</div>
+                        <div style="font-size: 10px; color: var(--muted);">Secure Data Links</div>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 16px;">
+                    <div style="background: var(--panel-light); padding: 14px; border-radius: 10px;">
+                        <div style="font-size: 12px; font-weight: 600; color: var(--text); margin-bottom: 6px;">&#128230; Package Specs</div>
+                        <div style="font-size: 11px; color: var(--muted); line-height: 1.5;">35x35mm on GF 12LP. 5 UCIe 2.0 chiplets with 672 GB/s interconnect. &lt;25W TDP.</div>
+                    </div>
+                    <div style="background: var(--panel-light); padding: 14px; border-radius: 10px;">
+                        <div style="font-size: 12px; font-weight: 600; color: var(--text); margin-bottom: 6px;">&#127909; Vision Pipeline</div>
+                        <div style="font-size: 11px; color: var(--muted); line-height: 1.5;">4K@60fps processing through dedicated NPU cores. Detection, segmentation, pose run in parallel.</div>
+                    </div>
+                    <div style="background: var(--panel-light); padding: 14px; border-radius: 10px;">
+                        <div style="font-size: 12px; font-weight: 600; color: var(--text); margin-bottom: 6px;">&#127777; Environmental</div>
+                        <div style="font-size: 11px; color: var(--muted); line-height: 1.5;">-40°C to +105°C operating range. Hardware root of trust with secure boot.</div>
+                    </div>
+                </div>
+            </div>
         `;
     },
 
