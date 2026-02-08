@@ -22,11 +22,13 @@ const LVSSharedTabs = {
         // Compute Performance
         npuPerformance: "~230 TOPS (INT8) / ~115 TFLOPS (FP16)",
         npuArchitecture: "Dual NPU with 64K MAC Array each",
-        combinedTops: "250 TOPS",
-        powerEfficiency: "~50 TOPS/W",
+        combinedTops: "~230 TOPS",
+        powerEfficiency: "~30 TOPS/W",
 
         // CPU Complex
         cpuCores: "8-core ARM Cortex-A78AE @ 2.0GHz",
+        riscvCores: "RISC-V real-time cores for deterministic autonomy tasks",
+        autonomyStack: "Linux-based OS of choice on RISC-V for deterministic control",
         vdsp: "Quad-core Vector DSP",
 
         // Memory System
@@ -40,12 +42,12 @@ const LVSSharedTabs = {
 
         // Power Budget Breakdown
         powerBreakdown: {
-            cpu: { typical: "8-12W", peak: "14-18W", notes: "8x A78AE @ 2GHz" },
-            npu: { typical: "4-5W", peak: "8-10W", notes: "Dual NPU @ 50 TOPS/W" },
+            cpu: { typical: "8-12W", peak: "14-18W", notes: "ARM A78AE + RISC-V cores" },
+            npu: { typical: "6-8W", peak: "10-12W", notes: "Dual NPU @ ~30 TOPS/W" },
             memory: { typical: "1-2W", peak: "3W", notes: "LPDDR5 PHY + Controller" },
             vdsp: { typical: "1-2W", peak: "3W", notes: "Quad-core Vector DSP" },
-            rf: { typical: "0.2-0.5W", peak: "1W", notes: "Multi-band SDR modem" },
-            security: { typical: "0.5-1W", peak: "1.5W", notes: "tRoot HSM + crypto" },
+            rf: { typical: "0.2-0.5W", peak: "1W", notes: "Wideband SDR + LPI/LPD" },
+            security: { typical: "0.5-1W", peak: "1.5W", notes: "tRoot HSM + PQC crypto" },
             interconnect: { typical: "1-2W", peak: "3W", notes: "UCIe 2.0 fabric" },
             misc: { typical: "0.5W", peak: "1W", notes: "MRAM + peripherals" }
         },
@@ -54,7 +56,8 @@ const LVSSharedTabs = {
         pcie: "Gen5 x8 (host) / Gen6 & CXL 3.0 compatible",
         cameraInterfaces: "8x MIPI CSI-2 (4-lane each)",
         usb: "USB4",
-        rf: "Multi-band SDR, SATCOM ready",
+        rf: "Wideband RF modem, multi-band SDR, SATCOM ready",
+        rfCovert: "LPI/LPD covert communications support",
         debug: "JTAG, UART console",
 
         // Operating Conditions
@@ -64,6 +67,12 @@ const LVSSharedTabs = {
 
         // Security
         security: "tRoot HSM with secure boot, crypto acceleration",
+        encryption: "Post-quantum encryption (PQC) ready",
+
+        // Fleet Intelligence
+        fleetIntel: "Multi-platform coordination & distributed sensor fusion",
+        meshNetwork: "Ad-hoc mesh networking for swarm operations",
+        collaborativeAI: "Edge-to-edge AI model sharing & collaborative inference",
 
         // Timeline
         productionTarget: "Q3 2027"
@@ -73,10 +82,10 @@ const LVSSharedTabs = {
     // CHIPLET ARCHITECTURE
     // ==========================================================================
     chiplets: [
-        { name: "Neural Compute Chiplet", components: "NPU + CPU + VDSP", color: "#7c4dff" },
-        { name: "Secure Interface Chiplet", components: "tRoot HSM + secure I/O", color: "#10b981" },
-        { name: "RF Modem Chiplet", components: "Multi-band SDR, SATCOM ready", color: "#f59e0b" },
-        { name: "Beamformer Chiplet", components: "RF processing", color: "#06b6d4" },
+        { name: "Neural Compute Chiplet", components: "NPU + ARM + RISC-V + VDSP", color: "#7c4dff" },
+        { name: "Secure Interface Chiplet", components: "tRoot HSM + PQC encryption", color: "#10b981" },
+        { name: "RF Modem Chiplet", components: "Wideband SDR, LPI/LPD, SATCOM", color: "#f59e0b" },
+        { name: "Beamformer Chiplet", components: "RF processing, EW support", color: "#06b6d4" },
         { name: "MRAM Chiplet", components: "Non-volatile storage", color: "#ec4899" }
     ],
 
@@ -89,37 +98,118 @@ const LVSSharedTabs = {
      */
     getProductTab() {
         return `
-            <div class="welcome" style="margin-bottom: 24px;">
-                <div class="welcome-content">
-                    <h1>LVS-250 <span>Overview</span></h1>
-                    <p>High-performance edge AI processor optimized for defense and autonomous systems</p>
+            <!-- Hero Video -->
+            <div class="hero-video-container" style="position: relative; width: 100%; max-height: 400px; overflow: hidden; border-radius: 16px; margin-bottom: 24px;">
+                <video id="heroVideo" class="hero-video" autoplay muted loop playsinline style="width: 100%; display: block; object-fit: cover;">
+                    <source src="assets/lvs-chiplet-hero.mp4" type="video/mp4">
+                </video>
+                <div class="video-controls" style="position: absolute; bottom: 16px; right: 16px;">
+                    <button id="muteBtn" class="video-btn muted" title="Unmute" style="background: rgba(0,0,0,0.6); border: none; color: white; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-size: 16px;">
+                        &#128263;
+                    </button>
+                </div>
+                <div class="video-overlay" style="position: absolute; bottom: 0; left: 0; right: 0; padding: 24px; background: linear-gradient(transparent, rgba(0,0,0,0.8));">
+                    <h2 style="font-size: 32px; font-weight: 800; margin-bottom: 4px;">LVS-250</h2>
+                    <p style="font-size: 16px; color: var(--muted);">Next-Generation Neural Compute Engine</p>
                 </div>
             </div>
-            <div class="panel">
-                <h3>Product Overview</h3>
-                <p style="color: var(--muted); font-size: 14px; line-height: 1.7;">
-                    The LVS-250 is a 5-chiplet edge AI processor designed for autonomous systems requiring real-time AI inference.
-                    Built on GlobalFoundries 12LP+ with UCIe 2.0 interconnect, it delivers 250 TOPS performance in under 25W typical power,
-                    making it ideal for SWaP-constrained defense applications including drones, ground vehicles, and perimeter security.
-                </p>
-                <div style="margin-top: 24px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;">
-                    <div style="background: var(--panel-light); padding: 20px; border-radius: 12px; text-align: center;">
-                        <div style="font-size: 28px; font-weight: 800; color: var(--accent);">250</div>
-                        <div style="font-size: 12px; color: var(--muted); margin-top: 4px;">TOPS Performance</div>
+
+            <!-- Executive Summary -->
+            <div class="exec-summary" style="background: var(--panel); border: 1px solid rgba(255,255,255,0.06); border-radius: 16px; padding: 24px; margin-bottom: 24px;">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 16px; margin-bottom: 20px;">
+                    <div>
+                        <div style="font-size: 24px; font-weight: 800; color: var(--accent);">LVS-250</div>
+                        <div style="font-size: 14px; color: var(--muted);">Production Neural Compute Engine for Defense & Aerospace</div>
                     </div>
-                    <div style="background: var(--panel-light); padding: 20px; border-radius: 12px; text-align: center;">
-                        <div style="font-size: 28px; font-weight: 800; color: var(--gold);"><25W</div>
-                        <div style="font-size: 12px; color: var(--muted); margin-top: 4px;">Typical Power</div>
-                    </div>
-                    <div style="background: var(--panel-light); padding: 20px; border-radius: 12px; text-align: center;">
-                        <div style="font-size: 28px; font-weight: 800; color: var(--success);">5</div>
-                        <div style="font-size: 12px; color: var(--muted); margin-top: 4px;">UCIe 2.0 Chiplets</div>
-                    </div>
-                    <div style="background: var(--panel-light); padding: 20px; border-radius: 12px; text-align: center;">
-                        <div style="font-size: 28px; font-weight: 800; color: #06b6d4;">12nm</div>
-                        <div style="font-size: 12px; color: var(--muted); margin-top: 4px;">GF 12LP+ Process</div>
+                    <div style="display: flex; gap: 8px;">
+                        <span style="background: rgba(124,77,255,0.2); color: var(--accent); padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;">GF 12LP+</span>
+                        <span style="background: rgba(212,175,55,0.2); color: var(--gold); padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;">Production 2027</span>
                     </div>
                 </div>
+
+                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 20px;">
+                    <div style="text-align: center;">
+                        <div style="font-size: 28px; font-weight: 800; color: var(--accent);">~230</div>
+                        <div style="font-size: 12px; color: var(--muted);">TOPS Performance</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="font-size: 28px; font-weight: 800; color: var(--gold);">35x35</div>
+                        <div style="font-size: 12px; color: var(--muted);">Package (mm)</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="font-size: 28px; font-weight: 800; color: var(--success);">5</div>
+                        <div style="font-size: 12px; color: var(--muted);">UCIe 2.0 Chiplets</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="font-size: 28px; font-weight: 800; color: #06b6d4;"><25W</div>
+                        <div style="font-size: 12px; color: var(--muted);">TDP Target</div>
+                    </div>
+                </div>
+
+                <p style="font-size: 14px; color: var(--muted); line-height: 1.7; margin-bottom: 20px;">
+                    The LVS-250 is a production-grade neural compute engine designed for edge AI inference in defense and aerospace applications.
+                    Featuring a 5-chiplet UCIe 2.0 architecture with integrated LPDDR5 memory, the LVS-250 delivers ~230 TOPS of inference
+                    performance in a compact 35x35mm package. Autonomy stacks run on Linux-based OS of choice on RISC-V cores for deterministic
+                    real-time control. Integrated wideband RF modem supports LPI/LPD covert communications with post-quantum encryption.
+                    Purpose-built for ISR, C-UAS, and autonomous systems requiring real-time perception and decision-making at the tactical edge.
+                </p>
+
+                <!-- SDK Value Proposition -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1);">
+                    <div style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(59, 130, 246, 0.05)); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 8px; padding: 16px;">
+                        <div style="font-size: 13px; font-weight: 600; color: #3b82f6; margin-bottom: 8px;">&#9889; Hardware + Software Platform</div>
+                        <div style="font-size: 13px; color: #94a3b8; line-height: 1.5;">
+                            The LVS SDK enables <strong style="color: #e2e8f0;">write-once, deploy-anywhere</strong> development.
+                            Code written for prototyping on CPU/GPU deploys directly to LVS-250 without modification.
+                        </div>
+                    </div>
+                    <div style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(16, 185, 129, 0.05)); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 8px; padding: 16px;">
+                        <div style="font-size: 13px; font-weight: 600; color: #10b981; margin-bottom: 8px;">&#128187; 60% Less Code</div>
+                        <div style="font-size: 13px; color: #94a3b8; line-height: 1.5;">
+                            Model-optimized APIs for YOLO, OpenPose, and segmentation handle all pre/post-processing.
+                            Focus on your application logic, not image manipulation.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Specs Summary -->
+            <div class="panel">
+                <h3>Key Specifications</h3>
+                <table style="width: 100%; border-collapse: collapse; margin-top: 16px;">
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.06);">
+                        <td style="padding: 12px 0; color: var(--muted);">Performance</td>
+                        <td style="padding: 12px 0; font-weight: 600;">~230 TOPS (INT8), ~115 TFLOPS (FP16)</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.06);">
+                        <td style="padding: 12px 0; color: var(--muted);">Architecture</td>
+                        <td style="padding: 12px 0; font-weight: 600;">5-Chiplet UCIe 2.0 (Neural + Secure + RF + Beam + MRAM)</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.06);">
+                        <td style="padding: 12px 0; color: var(--muted);">Compute</td>
+                        <td style="padding: 12px 0; font-weight: 600;">64K MAC NPU + ARM A78AE + RISC-V RT + Quad-core VDSP</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.06);">
+                        <td style="padding: 12px 0; color: var(--muted);">Autonomy</td>
+                        <td style="padding: 12px 0; font-weight: 600;">Linux-based OS on RISC-V for deterministic control</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.06);">
+                        <td style="padding: 12px 0; color: var(--muted);">Memory</td>
+                        <td style="padding: 12px 0; font-weight: 600;">LPDDR5 up to 32GB @ 102.4 GB/s</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.06);">
+                        <td style="padding: 12px 0; color: var(--muted);">RF Modem</td>
+                        <td style="padding: 12px 0; font-weight: 600;">Wideband SDR, LPI/LPD covert comms, SATCOM</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.06);">
+                        <td style="padding: 12px 0; color: var(--muted);">Package</td>
+                        <td style="padding: 12px 0; font-weight: 600;">35 x 35mm BGA, <25W TDP</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 12px 0; color: var(--muted);">Security</td>
+                        <td style="padding: 12px 0; font-weight: 600;">tRoot HSM, secure boot, post-quantum encryption</td>
+                    </tr>
+                </table>
             </div>
 
             <!-- Chiplet Architecture -->
@@ -142,6 +232,30 @@ const LVSSharedTabs = {
             <!-- Demo Video Section -->
             <div class="panel" style="margin-top: 24px;">
                 <h3 style="margin-bottom: 16px;">LVS-250 in Action</h3>
+
+                <!-- Performance Stats Banner -->
+                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; padding: 16px; background: linear-gradient(135deg, rgba(124,77,255,0.1), rgba(16,185,129,0.1)); border-radius: 12px; border: 1px solid rgba(124,77,255,0.2);">
+                    <div style="text-align: center;">
+                        <div style="font-size: 22px; font-weight: 800; color: var(--accent);">~230</div>
+                        <div style="font-size: 11px; color: var(--muted);">TOPS</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="font-size: 22px; font-weight: 800; color: var(--success);">25-30W</div>
+                        <div style="font-size: 11px; color: var(--muted);">Power Draw</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="font-size: 22px; font-weight: 800; color: var(--gold);">3+</div>
+                        <div style="font-size: 11px; color: var(--muted);">AI Models</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="font-size: 22px; font-weight: 800; color: #06b6d4;">Real-Time</div>
+                        <div style="font-size: 11px; color: var(--muted);">Inference</div>
+                    </div>
+                </div>
+                <p style="font-size: 13px; color: var(--muted); margin-bottom: 16px; line-height: 1.6;">
+                    Running <strong style="color: var(--text);">multiple AI vision models simultaneously</strong>—object detection, tracking, and classification—while maintaining real-time performance at ~25-30W. The LVS-250 delivers edge AI inference at unprecedented efficiency.
+                </p>
+
                 <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px;">
                     <div style="background: var(--panel-light); border-radius: 12px; overflow: hidden;">
                         <video class="demo-video" autoplay muted loop playsinline style="width: 100%; display: block; aspect-ratio: 16/9; object-fit: cover;">
@@ -161,6 +275,61 @@ const LVSSharedTabs = {
                             <div style="font-size: 12px; color: var(--muted); margin-top: 4px;">Thermal and infrared detection for 24/7 operational capability</div>
                         </div>
                     </div>
+                </div>
+            </div>
+
+            <!-- Fleet Intelligence Section -->
+            <div class="panel" style="margin-top: 24px; border-left: 3px solid #06b6d4;">
+                <h3 style="display: flex; align-items: center; gap: 10px;">
+                    <span style="font-size: 24px;">&#127760;</span>
+                    Fleet Intelligence
+                </h3>
+                <p style="color: var(--muted); margin: 12px 0 20px 0; font-size: 14px; line-height: 1.6;">
+                    The LVS-250 is designed for coordinated multi-platform operations. Each node operates autonomously while contributing to shared fleet awareness—enabling swarm coordination, distributed sensor fusion, and collaborative decision-making across air, ground, and maritime assets.
+                </p>
+
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 20px;">
+                    <div style="background: linear-gradient(135deg, rgba(6,182,212,0.15), rgba(6,182,212,0.05)); border: 1px solid rgba(6,182,212,0.3); border-radius: 12px; padding: 20px; text-align: center;">
+                        <div style="font-size: 32px; margin-bottom: 8px;">&#128225;</div>
+                        <div style="font-size: 14px; font-weight: 700; color: #06b6d4; margin-bottom: 6px;">Mesh Networking</div>
+                        <div style="font-size: 12px; color: var(--muted); line-height: 1.5;">Ad-hoc mesh formation for swarm operations with automatic node discovery and routing</div>
+                    </div>
+                    <div style="background: linear-gradient(135deg, rgba(124,77,255,0.15), rgba(124,77,255,0.05)); border: 1px solid rgba(124,77,255,0.3); border-radius: 12px; padding: 20px; text-align: center;">
+                        <div style="font-size: 32px; margin-bottom: 8px;">&#129302;</div>
+                        <div style="font-size: 14px; font-weight: 700; color: var(--accent); margin-bottom: 6px;">Distributed Fusion</div>
+                        <div style="font-size: 12px; color: var(--muted); line-height: 1.5;">Multi-platform sensor fusion combining vision, RF, and positioning data across the fleet</div>
+                    </div>
+                    <div style="background: linear-gradient(135deg, rgba(16,185,129,0.15), rgba(16,185,129,0.05)); border: 1px solid rgba(16,185,129,0.3); border-radius: 12px; padding: 20px; text-align: center;">
+                        <div style="font-size: 32px; margin-bottom: 8px;">&#129504;</div>
+                        <div style="font-size: 14px; font-weight: 700; color: #10b981; margin-bottom: 6px;">Collaborative AI</div>
+                        <div style="font-size: 12px; color: var(--muted); line-height: 1.5;">Edge-to-edge model sharing and collaborative inference for enhanced situational awareness</div>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                    <div style="background: var(--panel-light); padding: 16px; border-radius: 10px;">
+                        <div style="font-size: 13px; font-weight: 600; margin-bottom: 8px; color: var(--text);">&#127919; Swarm Coordination</div>
+                        <ul style="font-size: 12px; color: var(--muted); line-height: 1.8; padding-left: 16px; margin: 0;">
+                            <li>Autonomous task allocation across platforms</li>
+                            <li>Dynamic formation control and path planning</li>
+                            <li>Resilient operation with node loss tolerance</li>
+                        </ul>
+                    </div>
+                    <div style="background: var(--panel-light); padding: 16px; border-radius: 10px;">
+                        <div style="font-size: 13px; font-weight: 600; margin-bottom: 8px; color: var(--text);">&#128274; Secure Fleet Comms</div>
+                        <ul style="font-size: 12px; color: var(--muted); line-height: 1.8; padding-left: 16px; margin: 0;">
+                            <li>Post-quantum encrypted fleet messaging</li>
+                            <li>LPI/LPD waveforms for covert coordination</li>
+                            <li>Zero-trust node authentication</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div style="margin-top: 16px; padding: 14px 16px; background: linear-gradient(135deg, rgba(6,182,212,0.1), rgba(124,77,255,0.1)); border-radius: 8px; border-left: 3px solid #06b6d4;">
+                    <p style="font-size: 13px; color: var(--text); margin: 0;">
+                        <strong style="color: #06b6d4;">Multi-Domain Ready:</strong>
+                        Fleet intelligence capabilities span UAVs, UGVs, USVs, and fixed installations—enabling heterogeneous swarm operations with unified command and control.
+                    </p>
                 </div>
             </div>
         `;
@@ -200,6 +369,14 @@ const LVSSharedTabs = {
                     <tr style="border-bottom: 1px solid rgba(255,255,255,0.06);">
                         <td style="padding: 14px 16px; color: var(--muted);">CPU Complex</td>
                         <td style="padding: 14px 16px; font-weight: 600;">${s.cpuCores}</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.06);">
+                        <td style="padding: 14px 16px; color: var(--muted);">Real-Time Cores</td>
+                        <td style="padding: 14px 16px; font-weight: 600;">${s.riscvCores}</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.06);">
+                        <td style="padding: 14px 16px; color: var(--muted);">Autonomy Stack</td>
+                        <td style="padding: 14px 16px; font-weight: 600;">${s.autonomyStack}</td>
                     </tr>
                     <tr style="border-bottom: 1px solid rgba(255,255,255,0.06);">
                         <td style="padding: 14px 16px; color: var(--muted);">Vector DSP</td>
@@ -293,12 +470,20 @@ const LVSSharedTabs = {
                         <td style="padding: 14px 16px; font-weight: 600;">${s.rf}</td>
                     </tr>
                     <tr style="border-bottom: 1px solid rgba(255,255,255,0.06);">
+                        <td style="padding: 14px 16px; color: var(--muted);">Covert Comms</td>
+                        <td style="padding: 14px 16px; font-weight: 600;">${s.rfCovert}</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.06);">
                         <td style="padding: 14px 16px; color: var(--muted);">Debug</td>
                         <td style="padding: 14px 16px; font-weight: 600;">${s.debug}</td>
                     </tr>
-                    <tr>
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.06);">
                         <td style="padding: 14px 16px; color: var(--muted);">Security</td>
                         <td style="padding: 14px 16px; font-weight: 600;">${s.security}</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 14px 16px; color: var(--muted);">Encryption</td>
+                        <td style="padding: 14px 16px; font-weight: 600;">${s.encryption}</td>
                     </tr>
                 </table>
             </div>
@@ -319,6 +504,31 @@ const LVSSharedTabs = {
                         <div style="font-size: 24px; font-weight: 800; color: var(--success);">${s.combinedTops}</div>
                         <div style="font-size: 12px; color: var(--muted); margin-top: 4px;">Combined NPU TOPS</div>
                     </div>
+                </div>
+            </div>
+
+            <!-- Fleet Intelligence -->
+            <div class="panel" style="margin-top: 24px;">
+                <h3>Fleet Intelligence Capabilities</h3>
+                <table style="width: 100%; border-collapse: collapse;">
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.06);">
+                        <td style="padding: 14px 16px; color: var(--muted); width: 40%;">Multi-Platform Coordination</td>
+                        <td style="padding: 14px 16px; font-weight: 600;">${s.fleetIntel}</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.06);">
+                        <td style="padding: 14px 16px; color: var(--muted);">Mesh Networking</td>
+                        <td style="padding: 14px 16px; font-weight: 600;">${s.meshNetwork}</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 14px 16px; color: var(--muted);">Collaborative AI</td>
+                        <td style="padding: 14px 16px; font-weight: 600;">${s.collaborativeAI}</td>
+                    </tr>
+                </table>
+                <div style="margin-top: 16px; padding: 14px 16px; background: linear-gradient(135deg, rgba(6,182,212,0.1), rgba(124,77,255,0.1)); border-radius: 8px; border-left: 3px solid #06b6d4;">
+                    <p style="font-size: 13px; color: var(--text); margin: 0;">
+                        <strong style="color: #06b6d4;">Swarm-Ready Architecture:</strong>
+                        Built-in support for UAV, UGV, USV, and fixed installation coordination with zero-trust authentication and PQC-encrypted fleet messaging.
+                    </p>
                 </div>
             </div>
         `;
@@ -408,6 +618,122 @@ const LVSSharedTabs = {
                 <div class="welcome-content">
                     <h1>LVS <span>Software Development Platform</span></h1>
                     <p>Complete toolchain for neural network deployment, system integration, and application development</p>
+                </div>
+            </div>
+
+            <!-- For Decision Makers / For Engineers -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px;">
+                <div style="background: linear-gradient(135deg, rgba(16,185,129,0.15), rgba(16,185,129,0.05)); border: 1px solid rgba(16,185,129,0.3); border-radius: 16px; padding: 24px;">
+                    <div style="font-size: 14px; color: var(--accent-light); font-weight: 600; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px;">For Decision Makers</div>
+                    <h3 style="font-size: 20px; margin-bottom: 12px; color: var(--text);">Accelerate Time-to-Deployment</h3>
+                    <p style="font-size: 14px; color: var(--muted); line-height: 1.6; margin-bottom: 16px;">
+                        Your existing vision AI applications run on LVS hardware with minimal code changes.
+                        No vendor lock-in, no rewrites. Move from prototype to production edge deployment
+                        in weeks, not months.
+                    </p>
+                    <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                        <span style="background: rgba(16,185,129,0.2); color: #10b981; padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;">70% Faster Integration</span>
+                        <span style="background: rgba(16,185,129,0.2); color: #10b981; padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;">Zero Lock-in</span>
+                    </div>
+                </div>
+                <div style="background: linear-gradient(135deg, rgba(212,175,55,0.15), rgba(212,175,55,0.05)); border: 1px solid rgba(212,175,55,0.3); border-radius: 16px; padding: 24px;">
+                    <div style="font-size: 14px; color: var(--gold); font-weight: 600; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px;">For Engineers</div>
+                    <h3 style="font-size: 20px; margin-bottom: 12px; color: var(--text);">We Handle the Hard Parts</h3>
+                    <p style="font-size: 14px; color: var(--muted); line-height: 1.6; margin-bottom: 16px;">
+                        About 40% of vision AI code is image pre/post-processing—resizing, normalization,
+                        color conversion, NMS, anchor decoding. Our model-optimized APIs handle all of it.
+                        You focus on your application logic.
+                    </p>
+                    <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                        <span style="background: rgba(212,175,55,0.2); color: var(--gold); padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;">YOLO Optimized</span>
+                        <span style="background: rgba(212,175,55,0.2); color: var(--gold); padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;">OpenPose Ready</span>
+                        <span style="background: rgba(212,175,55,0.2); color: var(--gold); padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;">Custom Models</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Write Once, Deploy Anywhere -->
+            <div class="panel" style="margin-bottom: 24px; border-left: 3px solid var(--accent);">
+                <h3 style="display: flex; align-items: center; gap: 10px;">
+                    <span style="font-size: 24px;">&#128260;</span>
+                    Write Once, Deploy Anywhere
+                </h3>
+                <p style="color: var(--muted); margin: 12px 0 20px 0; font-size: 14px; line-height: 1.6;">
+                    The LVS SDK abstracts hardware complexity, enabling your application code to run across different
+                    compute targets without modification. Develop on your workstation, deploy to edge—same code, optimized execution.
+                </p>
+                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; text-align: center;">
+                    <div style="background: var(--panel-light); padding: 16px; border-radius: 8px;">
+                        <div style="font-size: 28px; margin-bottom: 8px;">&#128187;</div>
+                        <div style="font-size: 12px; color: var(--muted);">DEVELOP</div>
+                        <div style="font-size: 14px; font-weight: 600;">x86 Workstation</div>
+                    </div>
+                    <div style="background: var(--panel-light); padding: 16px; border-radius: 8px;">
+                        <div style="font-size: 28px; margin-bottom: 8px;">&#9654;</div>
+                        <div style="font-size: 12px; color: var(--muted);">SIMULATE</div>
+                        <div style="font-size: 14px; font-weight: 600;">GPU Server</div>
+                    </div>
+                    <div style="background: var(--panel-light); padding: 16px; border-radius: 8px;">
+                        <div style="font-size: 28px; margin-bottom: 8px;">&#128736;</div>
+                        <div style="font-size: 12px; color: var(--muted);">VALIDATE</div>
+                        <div style="font-size: 14px; font-weight: 600;">DevKit</div>
+                    </div>
+                    <div style="background: linear-gradient(135deg, rgba(212,175,55,0.2), rgba(124,77,255,0.2)); padding: 16px; border-radius: 8px; border: 1px solid var(--gold);">
+                        <div style="font-size: 28px; margin-bottom: 8px;">&#128640;</div>
+                        <div style="font-size: 12px; color: var(--gold);">DEPLOY</div>
+                        <div style="font-size: 14px; font-weight: 600; color: var(--gold);">LVS-250 Edge</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Model-Optimized APIs -->
+            <div class="panel" style="margin-bottom: 24px; border-left: 3px solid var(--gold);">
+                <h3 style="display: flex; align-items: center; gap: 10px;">
+                    <span style="font-size: 24px;">&#129504;</span>
+                    Model-Optimized APIs
+                </h3>
+                <p style="color: var(--muted); margin: 12px 0 20px 0; font-size: 14px; line-height: 1.6;">
+                    Each supported model family has a dedicated API that handles the complete inference pipeline—from raw pixels to actionable results.
+                    No manual tensor manipulation, no post-processing code, no edge cases to debug.
+                </p>
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;">
+                    <div style="background: var(--panel-light); padding: 20px; border-radius: 12px;">
+                        <div style="font-size: 13px; color: var(--accent-light); font-weight: 600; margin-bottom: 8px;">OBJECT DETECTION</div>
+                        <div style="font-size: 18px; font-weight: 700; margin-bottom: 12px;">YOLO Family</div>
+                        <ul style="font-size: 13px; color: var(--muted); line-height: 1.8; padding-left: 16px; margin: 0;">
+                            <li>YOLOv5, v7, v8, v9 supported</li>
+                            <li>Automatic letterboxing & scaling</li>
+                            <li>Built-in NMS & confidence filtering</li>
+                            <li>Bbox, class, confidence output</li>
+                        </ul>
+                    </div>
+                    <div style="background: var(--panel-light); padding: 20px; border-radius: 12px;">
+                        <div style="font-size: 13px; color: var(--accent-light); font-weight: 600; margin-bottom: 8px;">POSE ESTIMATION</div>
+                        <div style="font-size: 18px; font-weight: 700; margin-bottom: 12px;">OpenPose & More</div>
+                        <ul style="font-size: 13px; color: var(--muted); line-height: 1.8; padding-left: 16px; margin: 0;">
+                            <li>17/25/135 keypoint models</li>
+                            <li>Multi-person detection</li>
+                            <li>Skeleton rendering utilities</li>
+                            <li>Action recognition ready</li>
+                        </ul>
+                    </div>
+                    <div style="background: var(--panel-light); padding: 20px; border-radius: 12px;">
+                        <div style="font-size: 13px; color: var(--accent-light); font-weight: 600; margin-bottom: 8px;">SEGMENTATION</div>
+                        <div style="font-size: 18px; font-weight: 700; margin-bottom: 12px;">Instance & Semantic</div>
+                        <ul style="font-size: 13px; color: var(--muted); line-height: 1.8; padding-left: 16px; margin: 0;">
+                            <li>Mask R-CNN, SAM support</li>
+                            <li>Per-pixel class labels</li>
+                            <li>Contour extraction built-in</li>
+                            <li>Depth estimation fusion</li>
+                        </ul>
+                    </div>
+                </div>
+                <div style="margin-top: 20px; padding: 16px; background: rgba(16,185,129,0.1); border-radius: 8px; border-left: 3px solid #10b981;">
+                    <p style="font-size: 13px; color: var(--text); margin: 0;">
+                        <strong style="color: #10b981;">Developer Productivity Gain:</strong>
+                        Our model-optimized APIs eliminate ~40% of typical vision AI code—the tedious image preprocessing,
+                        tensor manipulation, and output parsing that developers usually write from scratch.
+                    </p>
                 </div>
             </div>
 
@@ -796,6 +1122,27 @@ processor = ImageProcessor(resize=model.input_size, normalize=<span class="code-
                     <span style="background: rgba(124,77,255,0.2); color: var(--accent-light); padding: 6px 12px; border-radius: 20px; font-size: 12px;">Anomaly Detection</span>
                 </div>
             </div>
+
+            <!-- SDK Context for Demos -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px;">
+                <div style="background: linear-gradient(135deg, rgba(124,77,255,0.1), transparent); border: 1px solid rgba(124,77,255,0.2); border-radius: 12px; padding: 20px;">
+                    <div style="font-size: 12px; color: var(--accent-light); font-weight: 600; margin-bottom: 6px;">WHAT YOU'RE SEEING</div>
+                    <p style="font-size: 14px; color: var(--text); margin: 0; line-height: 1.6;">
+                        These demos run on the <strong>LVS SDK</strong> using our YOLO-optimized API.
+                        The same code powering these demos can run on your development machine today,
+                        then deploy to LVS-250 hardware without changes.
+                    </p>
+                </div>
+                <div style="background: linear-gradient(135deg, rgba(212,175,55,0.1), transparent); border: 1px solid rgba(212,175,55,0.2); border-radius: 12px; padding: 20px;">
+                    <div style="font-size: 12px; color: var(--gold); font-weight: 600; margin-bottom: 6px;">UNDER THE HOOD</div>
+                    <p style="font-size: 14px; color: var(--text); margin: 0; line-height: 1.6;">
+                        Multiple models run simultaneously: object detection, tracking, and classification.
+                        All pre/post-processing—letterboxing, NMS, coordinate scaling—handled automatically
+                        by our model-optimized APIs.
+                    </p>
+                </div>
+            </div>
+
             <div class="video-grid single-row">
                 <div class="video-card">
                     <div style="background: var(--panel-light); padding: 8px 16px; display: flex; align-items: center; gap: 8px;">
