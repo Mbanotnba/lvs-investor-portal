@@ -99,8 +99,8 @@ const LVSSharedTabs = {
     getProductTab() {
         return `
             <!-- Hero Video -->
-            <div class="hero-video-container" style="position: relative; width: 100%; max-height: 400px; overflow: hidden; border-radius: 16px; margin-bottom: 24px;">
-                <video id="heroVideo" class="hero-video" autoplay muted loop playsinline style="width: 100%; display: block; object-fit: cover;">
+            <div class="hero-video-container" style="position: relative; width: 100%; border-radius: 16px; margin-bottom: 24px; background: #000;">
+                <video id="heroVideo" class="hero-video" autoplay muted loop playsinline style="width: 100%; display: block; object-fit: contain;">
                     <source src="assets/lvs-chiplet-hero.mp4" type="video/mp4">
                 </video>
                 <div class="video-controls" style="position: absolute; bottom: 16px; right: 16px;">
