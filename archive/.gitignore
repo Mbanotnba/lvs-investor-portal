@@ -1,0 +1,4 @@
+# Archive folder - large/legacy files not tracked in git
+# These files are stored locally for reference but not committed
+*.pdf
+*.pptx

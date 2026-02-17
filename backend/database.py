@@ -1407,7 +1407,7 @@ def seed_production_users():
     # All production users - organized by role
     production_users = [
         # ===== FOUNDERS =====
-        {"email": "tayo@lolavisionsystems.com", "name": "Tayo Adesanya", "portal_type": "founder", "company": "lvs", "nda_status": "not_required", "password_suffix": "Founder2026"},
+        {"email": "tayo@lolavisionsystems.com", "name": "Tayo Adesanya", "portal_type": "founder", "company": "lvs", "nda_status": "not_required"},
         {"email": "randy@lolavisionsystems.com", "name": "Randy Hollines", "portal_type": "founder", "company": "lvs", "nda_status": "not_required"},
         {"email": "joshua@lolavisionsystems.com", "name": "Joshua Bush", "portal_type": "founder", "company": "lvs", "nda_status": "not_required"},
         {"email": "jordan@lolavisionsystems.com", "name": "Jordan Page", "portal_type": "founder", "company": "lvs", "nda_status": "not_required"},
@@ -1429,6 +1429,19 @@ def seed_production_users():
         {"email": "seema@dcstartupweek.org", "name": "Seema Alexander", "portal_type": "investor", "company": "DC Startup Week", "nda_status": "not_required"},
         {"email": "rock@rocktechconsultants.com", "name": "Walter McMillian", "portal_type": "investor", "company": "Rock Tech Consultants", "nda_status": "not_required"},
         {"email": "melissa@1863ventures.net", "name": "Melissa Bradley", "portal_type": "investor", "company": "1863 Ventures", "nda_status": "not_required"},
+        {"email": "paige@kstreet.vc", "name": "Paige Soya", "portal_type": "investor", "company": "K Street Capital", "nda_status": "not_required"},
+        {"email": "nick@kstreet.vc", "name": "Nicholas Duafala", "portal_type": "investor", "company": "K Street Capital", "nda_status": "not_required"},
+        {"email": "chris@kstreet.vc", "name": "Chris K Street", "portal_type": "investor", "company": "K Street Capital", "nda_status": "not_required"},
+        {"email": "joseph@kstreet.vc", "name": "Joseph K Street", "portal_type": "investor", "company": "K Street Capital", "nda_status": "not_required"},
+        {"email": "jay@vltrn.agency", "name": "Jay Johnson", "portal_type": "investor", "company": "VLTRN Agency", "nda_status": "not_required"},
+        {"email": "dono@outlander.vc", "name": "Donovan Moss", "portal_type": "investor", "company": "Outlander VC", "nda_status": "not_required"},
+        {"email": "marlon@macventurecapital.com", "name": "Marlon Nichols", "portal_type": "investor", "company": "MaC Venture Capital", "nda_status": "not_required"},
+        {"email": "craig@moonshotscapital.com", "name": "Craig Cummings", "portal_type": "investor", "company": "Moonshots Capital", "nda_status": "not_required"},
+        {"email": "brad@scout.vc", "name": "Brad Harrison", "portal_type": "investor", "company": "Scout VC", "nda_status": "not_required"},
+        {"email": "mike@scout.vc", "name": "Mike Keane", "portal_type": "investor", "company": "Scout VC", "nda_status": "not_required"},
+        {"email": "olivia@rsquaredvc.com", "name": "Olivia Zetter", "portal_type": "investor", "company": "R Squared VC", "nda_status": "not_required"},
+        {"email": "ben@ailaboratory.ai", "name": "Ben Harvey", "portal_type": "investor", "company": "AI Laboratory", "nda_status": "not_required"},
+        {"email": "melissa.henderson@ubs.com", "name": "Melissa Henderson", "portal_type": "investor", "company": "UBS", "nda_status": "not_required"},
 
         # ===== CUSTOMERS =====
         {"email": "caffouda@anduril.com", "name": "Chaffra Affouda", "portal_type": "customer", "company": "anduril", "nda_status": "approved"},

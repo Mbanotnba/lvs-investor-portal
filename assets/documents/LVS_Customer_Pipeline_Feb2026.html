@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LVS Customer Pipeline | February 2026</title>
+    <style>
+        :root {
+            --bg: #0a0f1a;
+            --bg-light: #0d1424;
+            --panel: #111827;
+            --panel-light: #1a2332;
+            --text: #e2e8f0;
+            --muted: #64748b;
+            --accent: #7c4dff;
+            --accent-light: #a78bfa;
+            --gold: #d4af37;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --info: #06b6d4;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 40px 24px;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 40px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .header-content h1 {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .header-content h1 span {
+            color: var(--accent);
+        }
+
+        .header-content p {
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .header-meta {
+            text-align: right;
+        }
+
+        .header-meta .date {
+            font-size: 14px;
+            color: var(--muted);
+            margin-bottom: 8px;
+        }
+
+        .header-meta .badge {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--accent), var(--gold));
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        /* Summary Cards */
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .summary-card {
+            background: var(--panel);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .summary-card .value {
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 4px;
+        }
+
+        .summary-card .label {
+            font-size: 12px;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .summary-card.accent .value { color: var(--accent); }
+        .summary-card.gold .value { color: var(--gold); }
+        .summary-card.success .value { color: var(--success); }
+        .summary-card.info .value { color: var(--info); }
+        .summary-card.warning .value { color: var(--warning); }
+
+        /* Tier Sections */
+        .tier-section {
+            margin-bottom: 32px;
+        }
+
+        .tier-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .tier-badge {
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .tier-badge.tier-1 { background: rgba(124,77,255,0.2); color: var(--accent); }
+        .tier-badge.tier-strategic { background: rgba(212,175,55,0.2); color: var(--gold); }
+        .tier-badge.tier-2 { background: rgba(6,182,212,0.2); color: var(--info); }
+        .tier-badge.tier-3 { background: rgba(16,185,129,0.2); color: var(--success); }
+        .tier-badge.tier-4 { background: rgba(245,158,11,0.2); color: var(--warning); }
+
+        .tier-header h2 {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .tier-count {
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        /* Table */
+        .table-container {
+            background: var(--panel);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: var(--panel-light);
+        }
+
+        th {
+            padding: 14px 16px;
+            text-align: left;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--muted);
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+
+        td {
+            padding: 14px 16px;
+            font-size: 13px;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover {
+            background: rgba(124,77,255,0.05);
+        }
+
+        .company-name {
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .industry {
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .product-badge {
+            display: inline-block;
+            background: rgba(124,77,255,0.15);
+            color: var(--accent-light);
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        /* Status Badges */
+        .status {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .status.active { background: rgba(16,185,129,0.15); color: #10b981; }
+        .status.stalled { background: rgba(239,68,68,0.15); color: #ef4444; }
+        .status.planned { background: rgba(100,116,139,0.15); color: #94a3b8; }
+        .status.exploring { background: rgba(212,175,55,0.15); color: var(--gold); }
+
+        /* Stage Badges */
+        .stage {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .stage.discovery { background: rgba(100,116,139,0.15); color: #94a3b8; }
+        .stage.evaluation { background: rgba(6,182,212,0.15); color: #06b6d4; }
+        .stage.negotiation { background: rgba(245,158,11,0.15); color: #f59e0b; }
+        .stage.opportunity { background: rgba(124,77,255,0.15); color: var(--accent-light); }
+        .stage.proposed { background: rgba(16,185,129,0.15); color: #10b981; }
+        .stage.exploring { background: rgba(212,175,55,0.15); color: var(--gold); }
+
+        .value-cell {
+            font-family: 'SF Mono', Monaco, monospace;
+            font-size: 12px;
+        }
+
+        .value-cell.highlight {
+            color: var(--success);
+            font-weight: 600;
+        }
+
+        .probability {
+            font-weight: 600;
+        }
+
+        .contact {
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        /* Footer */
+        .footer {
+            margin-top: 40px;
+            padding-top: 24px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .footer-logo .logo-text {
+            font-size: 18px;
+            font-weight: 800;
+        }
+
+        .footer-logo .logo-text span {
+            color: var(--accent);
+        }
+
+        .footer-meta {
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .confidential {
+            background: rgba(239,68,68,0.1);
+            color: #ef4444;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        @media print {
+            body { background: white; color: #1a1a1a; }
+            .table-container { border: 1px solid #e5e5e5; }
+            th { background: #f5f5f5; color: #666; }
+            td { border-bottom-color: #e5e5e5; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-content">
+                <h1>Customer <span>Pipeline</span></h1>
+                <p>Lola Vision Systems - Active Customer & Partner Engagements</p>
+            </div>
+            <div class="header-meta">
+                <div class="date">Last Updated: February 5, 2026</div>
+                <div class="badge">24 Companies</div>
+            </div>
+        </div>
+
+        <!-- Summary Cards -->
+        <div class="summary-grid">
+            <div class="summary-card accent">
+                <div class="value">24</div>
+                <div class="label">Total Pipeline</div>
+            </div>
+            <div class="summary-card gold">
+                <div class="value">$316M</div>
+                <div class="label">Total Value</div>
+            </div>
+            <div class="summary-card success">
+                <div class="value">$24M</div>
+                <div class="label">Near-Term</div>
+            </div>
+            <div class="summary-card info">
+                <div class="value">$139M</div>
+                <div class="label">Weighted Value</div>
+            </div>
+            <div class="summary-card warning">
+                <div class="value">11</div>
+                <div class="label">Tier 1 Active</div>
+            </div>
+        </div>
+
+        <!-- Tier 1: Strategic Customers -->
+        <div class="tier-section">
+            <div class="tier-header">
+                <span class="tier-badge tier-1">Tier 1</span>
+                <h2>Strategic Customers</h2>
+                <span class="tier-count">11 companies</span>
+            </div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Company</th>
+                            <th>Industry</th>
+                            <th>Product</th>
+                            <th>Stage</th>
+                            <th>Status</th>
+                            <th>Total Value</th>
+                            <th>Weighted</th>
+                            <th>Prob.</th>
+                            <th>Close</th>
+                            <th>Contact</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><div class="company-name">Anduril Industries</div></td>
+                            <td class="industry">Defense - ISR/C-UAS</td>
+                            <td><span class="product-badge">LVS-250</span></td>
+                            <td><span class="stage proposed">IRAD Proposed</span></td>
+                            <td><span class="status active">Active</span></td>
+                            <td class="value-cell">$15,000,000</td>
+                            <td class="value-cell highlight">$9,000,000</td>
+                            <td class="probability">60%</td>
+                            <td>Q2 2026</td>
+                            <td class="contact">Chaffra Joseph</td>
+                        </tr>
+                        <tr>
+                            <td><div class="company-name">Terrahaptix</div></td>
+                            <td class="industry">Robotics - UGV/ISR UAVs</td>
+                            <td><span class="product-badge">LVS-250</span></td>
+                            <td><span class="stage opportunity">Opportunity</span></td>
+                            <td><span class="status active">Active</span></td>
+                            <td class="value-cell">$67,000,000</td>
+                            <td class="value-cell highlight">$26,800,000</td>
+                            <td class="probability">40%</td>
+                            <td>Q3 2026</td>
+                            <td class="contact">TBD</td>
+                        </tr>
+                        <tr>
+                            <td><div class="company-name">Koniku</div></td>
+                            <td class="industry">Neurotechnology - Biosensors</td>
+                            <td><span class="product-badge">LVS-250</span></td>
+                            <td><span class="stage proposed">MOU Proposed</span></td>
+                            <td><span class="status active">Active</span></td>
+                            <td class="value-cell">$16,500,000</td>
+                            <td class="value-cell highlight">$7,425,000</td>
+                            <td class="probability">45%</td>
+                            <td>2027</td>
+                            <td class="contact">Osh Agabi</td>
+                        </tr>
+                        <tr>
+                            <td><div class="company-name">General Hypersonics</div></td>
+                            <td class="industry">Aerospace - Hypersonic</td>
+                            <td><span class="product-badge">LVS-750</span></td>
+                            <td><span class="stage negotiation">Negotiation</span></td>
+                            <td><span class="status active">Active</span></td>
+                            <td class="value-cell">$12,000,000</td>
+                            <td class="value-cell highlight">$6,000,000</td>
+                            <td class="probability">50%</td>
+                            <td>Q3 2026</td>
+                            <td class="contact">Mark C. Russell</td>
+                        </tr>
+                        <tr>
+                            <td><div class="company-name">Leidos</div></td>
+                            <td class="industry">Defense Prime - C5ISR</td>
+                            <td><span class="product-badge">LVS-750</span></td>
+                            <td><span class="stage evaluation">Evaluation</span></td>
+                            <td><span class="status active">Active</span></td>
+                            <td class="value-cell">$12,000,000</td>
+                            <td class="value-cell highlight">$6,000,000</td>
+                            <td class="probability">50%</td>
+                            <td>Q3 2026</td>
+                            <td class="contact">TBD</td>
+                        </tr>
+                        <tr>
+                            <td><div class="company-name">Mach Industries</div></td>
+                            <td class="industry">Defense - Kamikaze Drones</td>
+                            <td><span class="product-badge">LVS-250</span></td>
+                            <td><span class="stage evaluation">Evaluation</span></td>
+                            <td><span class="status stalled">Stalled</span></td>
+                            <td class="value-cell">$10,000,000</td>
+                            <td class="value-cell">$3,500,000</td>
+                            <td class="probability">35%</td>
+                            <td>TBD</td>
+                            <td class="contact">BD Director</td>
+                        </tr>
+                        <tr>
+                            <td><div class="company-name">First Genesis</div></td>
+                            <td class="industry">Defense - Advanced Systems</td>
+                            <td><span class="product-badge">LVS-250</span></td>
+                            <td><span class="stage evaluation">Evaluation</span></td>
+                            <td><span class="status active">Active</span></td>
+                            <td class="value-cell">$8,000,000</td>
+                            <td class="value-cell highlight">$3,600,000</td>
+                            <td class="probability">45%</td>
+                            <td>Q3 2026</td>
+                            <td class="contact">TBD</td>
+                        </tr>
+                        <tr>
+                            <td><div class="company-name">Eizo Rugged Solutions</div></td>
+                            <td class="industry">Defense - Rugged Computing</td>
+                            <td><span class="product-badge">LVS-750/1000</span></td>
+                            <td><span class="stage evaluation">Evaluation</span></td>
+                            <td><span class="status active">Active</span></td>
+                            <td class="value-cell">$7,000,000</td>
+                            <td class="value-cell highlight">$3,500,000</td>
+                            <td class="probability">50%</td>
+                            <td>Q2 2026</td>
+                            <td class="contact">Selwyn Henriques</td>
+                        </tr>
+                        <tr>
+                            <td><div class="company-name">Glid Technologies</div></td>
+                            <td class="industry">Autonomous Vehicles</td>
+                            <td><span class="product-badge">LVS-750</span></td>
+                            <td><span class="stage evaluation">Evaluation</span></td>
+                            <td><span class="status active">Active</span></td>
+                            <td class="value-cell">$5,000,000</td>
+                            <td class="value-cell highlight">$2,000,000</td>
+                            <td class="probability">40%</td>
+                            <td>Q4 2026</td>
+                            <td class="contact">Kevin A. Damoa</td>
+                        </tr>
+                        <tr>
+                            <td><div class="company-name">Revenant Industries</div></td>
+                            <td class="industry">Defense - Autonomous Systems</td>
+                            <td><span class="product-badge">LVS-250/750</span></td>
+                            <td><span class="stage discovery">Discovery</span></td>
+                            <td><span class="status active">Active</span></td>
+                            <td class="value-cell">$5,000,000</td>
+                            <td class="value-cell">$1,750,000</td>
+                            <td class="probability">35%</td>
+                            <td>Q3 2026</td>
+                            <td class="contact">TBD</td>
+                        </tr>
+                        <tr>
+                            <td><div class="company-name">Seasats</div></td>
+                            <td class="industry">Maritime - Autonomous Systems</td>
+                            <td><span class="product-badge">LVS-250/750</span></td>
+                            <td><span class="stage discovery">Discovery</span></td>
+                            <td><span class="status active">Active</span></td>
+                            <td class="value-cell">$5,000,000</td>
+                            <td class="value-cell">$1,500,000</td>
+                            <td class="probability">30%</td>
+                            <td>Q4 2026</td>
+                            <td class="contact">TBD</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Strategic Partners -->
+        <div class="tier-section">
+            <div class="tier-header">
+                <span class="tier-badge tier-strategic">Strategic</span>
+                <h2>Technology Partners</h2>
+                <span class="tier-count">1 partner</span>
+            </div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Company</th>
+                            <th>Industry</th>
+                            <th>Focus Area</th>
+                            <th>Stage</th>
+                            <th>Status</th>
+                            <th colspan="4">Partnership Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><div class="company-name">AMD</div></td>
+                            <td class="industry">Semiconductor</td>
+                            <td><span class="product-badge">Chiplet Integration</span></td>
+                            <td><span class="stage exploring">Exploring</span></td>
+                            <td><span class="status active">Active</span></td>
+                            <td colspan="4" class="contact">UCIe integration architecture, potential bare die supply for customer solutions</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Tier 2: Defense Primes -->
+        <div class="tier-section">
+            <div class="tier-header">
+                <span class="tier-badge tier-2">Tier 2</span>
+                <h2>Defense Primes</h2>
+                <span class="tier-count">3 companies</span>
+            </div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Company</th>
+                            <th>Industry</th>
+                            <th>Product</th>
+                            <th>Stage</th>
+                            <th>Status</th>
+                            <th>Total Value</th>
+                            <th>Weighted</th>
+                            <th>Prob.</th>
+                            <th>Close</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><div class="company-name">RTX Corporation</div></td>
+                            <td class="industry">Defense Prime - OEM</td>
+                            <td><span class="product-badge">LVS Chiplets</span></td>
+                            <td><span class="stage discovery">Discovery</span></td>
+                            <td><span class="status planned">Planned</span></td>
+                            <td class="value-cell">$3,000,000</td>
+                            <td class="value-cell">$900,000</td>
+                            <td class="probability">30%</td>
+                            <td>2027+</td>
+                        </tr>
+                        <tr>
+                            <td><div class="company-name">Lockheed Martin</div></td>
+                            <td class="industry">Defense Prime - OEM</td>
+                            <td><span class="product-badge">LVS Chiplets</span></td>
+                            <td><span class="stage discovery">Discovery</span></td>
+                            <td><span class="status planned">Planned</span></td>
+                            <td class="value-cell">$3,000,000</td>
+                            <td class="value-cell">$900,000</td>
+                            <td class="probability">30%</td>
+                            <td>2027+</td>
+                        </tr>
+                        <tr>
+                            <td><div class="company-name">Northrop Grumman</div></td>
+                            <td class="industry">Defense Prime - OEM</td>
+                            <td><span class="product-badge">LVS Chiplets</span></td>
+                            <td><span class="stage discovery">Discovery</span></td>
+                            <td><span class="status planned">Planned</span></td>
+                            <td class="value-cell">$3,000,000</td>
+                            <td class="value-cell">$900,000</td>
+                            <td class="probability">30%</td>
+                            <td>2027+</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Tier 3: Growth Accounts -->
+        <div class="tier-section">
+            <div class="tier-header">
+                <span class="tier-badge tier-3">Tier 3</span>
+                <h2>Growth Accounts</h2>
+                <span class="tier-count">7 companies</span>
+            </div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Company</th>
+                            <th>Industry</th>
+                            <th>Product</th>
+                            <th>Stage</th>
+                            <th>Status</th>
+                            <th>Total Value</th>
+                            <th>Weighted</th>
+                            <th>Prob.</th>
+                            <th>Close</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><div class="company-name">Ultraview AI</div></td>
+                            <td class="industry">Aerospace - UAV Inspection</td>
+                            <td><span class="product-badge">LVS-750/1000</span></td>
+                            <td><span class="stage evaluation">Evaluation</span></td>
+                            <td><span class="status active">Active</span></td>
+                            <td class="value-cell">$8,000,000</td>
+                            <td class="value-cell highlight">$3,200,000</td>
+                            <td class="probability">40%</td>
+                            <td>Q3 2026</td>
+                        </tr>
+                        <tr>
+                            <td><div class="company-name">Orb Aerospace</div></td>
+                            <td class="industry">Space - Satellite Systems</td>
+                            <td><span class="product-badge">LVS-750</span></td>
+                            <td><span class="stage opportunity">Opportunity</span></td>
+                            <td><span class="status active">Active</span></td>
+                            <td class="value-cell">$5,000,000</td>
+                            <td class="value-cell highlight">$2,000,000</td>
+                            <td class="probability">40%</td>
+                            <td>Q4 2026</td>
+                        </tr>
+                        <tr>
+                            <td><div class="company-name">Orbits Edge</div></td>
+                            <td class="industry">Space - Edge Computing</td>
+                            <td><span class="product-badge">LVS Chiplets</span></td>
+                            <td><span class="stage evaluation">Evaluation</span></td>
+                            <td><span class="status active">Active</span></td>
+                            <td class="value-cell">$4,000,000</td>
+                            <td class="value-cell">$1,400,000</td>
+                            <td class="probability">35%</td>
+                            <td>Q4 2026</td>
+                        </tr>
+                        <tr>
+                            <td><div class="company-name">Orbitswarm</div></td>
+                            <td class="industry">Space - SoOp Sensors</td>
+                            <td><span class="product-badge">LVS Chiplets</span></td>
+                            <td><span class="stage evaluation">Evaluation</span></td>
+                            <td><span class="status active">Active</span></td>
+                            <td class="value-cell">$3,000,000</td>
+                            <td class="value-cell">$1,050,000</td>
+                            <td class="probability">35%</td>
+                            <td>Q3 2026</td>
+                        </tr>
+                        <tr>
+                            <td><div class="company-name">AMAL Technologies</div></td>
+                            <td class="industry">Industrial IoT - Africa</td>
+                            <td><span class="product-badge">LVS-750</span></td>
+                            <td><span class="stage evaluation">Evaluation</span></td>
+                            <td><span class="status active">Active</span></td>
+                            <td class="value-cell">$3,000,000</td>
+                            <td class="value-cell">$1,050,000</td>
+                            <td class="probability">35%</td>
+                            <td>Q4 2026</td>
+                        </tr>
+                        <tr>
+                            <td><div class="company-name">Esper Industries</div></td>
+                            <td class="industry">Space - Earth Observation</td>
+                            <td><span class="product-badge">LVS-750/1000</span></td>
+                            <td><span class="stage evaluation">Evaluation</span></td>
+                            <td><span class="status active">Active</span></td>
+                            <td class="value-cell">$2,500,000</td>
+                            <td class="value-cell">$1,000,000</td>
+                            <td class="probability">40%</td>
+                            <td>Q3 2026</td>
+                        </tr>
+                        <tr>
+                            <td><div class="company-name">Strut Motors</div></td>
+                            <td class="industry">Electric Vehicles</td>
+                            <td><span class="product-badge">LVS Chiplets</span></td>
+                            <td><span class="stage opportunity">Opportunity</span></td>
+                            <td><span class="status active">Active</span></td>
+                            <td class="value-cell">$2,500,000</td>
+                            <td class="value-cell">$750,000</td>
+                            <td class="probability">30%</td>
+                            <td>Q4 2026</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Tier 4: Long-Term Targets -->
+        <div class="tier-section">
+            <div class="tier-header">
+                <span class="tier-badge tier-4">Tier 4</span>
+                <h2>Long-Term Volume Targets</h2>
+                <span class="tier-count">2 companies</span>
+            </div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Company</th>
+                            <th>Industry</th>
+                            <th>Product</th>
+                            <th>Stage</th>
+                            <th>Status</th>
+                            <th>Total Value</th>
+                            <th>Weighted</th>
+                            <th>Prob.</th>
+                            <th>Close</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><div class="company-name">Stellantis</div></td>
+                            <td class="industry">Automotive - Volume Production</td>
+                            <td><span class="product-badge">LVS-1000</span></td>
+                            <td><span class="stage discovery">Discovery</span></td>
+                            <td><span class="status planned">Planned</span></td>
+                            <td class="value-cell">$120,000,000</td>
+                            <td class="value-cell highlight">$30,000,000</td>
+                            <td class="probability">25%</td>
+                            <td>2028+</td>
+                        </tr>
+                        <tr>
+                            <td><div class="company-name">Ford Motor Company</div></td>
+                            <td class="industry">Automotive - Volume Production</td>
+                            <td><span class="product-badge">LVS-1000</span></td>
+                            <td><span class="stage discovery">Discovery</span></td>
+                            <td><span class="status planned">Planned</span></td>
+                            <td class="value-cell">$100,000,000</td>
+                            <td class="value-cell highlight">$25,000,000</td>
+                            <td class="probability">25%</td>
+                            <td>2028+</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <div class="footer-logo">
+                <div class="logo-text">Lola <span>Vision</span> Systems</div>
+            </div>
+            <div class="confidential">Confidential - Internal Use Only</div>
+            <div class="footer-meta">
+                Generated: February 5, 2026
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -332,6 +332,40 @@
       ]
     },
     {
+      "id": "firstgenesis",
+      "name": "First Genesis",
+      "industry": "Defense - Advanced Systems",
+      "tier": 1,
+      "product": "LVS-250",
+      "currentStage": 2,
+      "stages": [
+        {"name": "Discovery", "date": "Dec 2025", "complete": true},
+        {"name": "NDA Signed", "date": "Jan 2026", "complete": true},
+        {"name": "Evaluation", "date": "Feb 2026", "current": true},
+        {"name": "Proposal", "date": "TBD"},
+        {"name": "Integration", "date": "TBD"},
+        {"name": "Production", "date": "2027"}
+      ],
+      "milestones": [
+        {"title": "Initial Discovery", "date": "Dec 2025", "status": "complete"},
+        {"title": "NDA Executed", "date": "Jan 2026", "status": "complete"},
+        {"title": "Technical Evaluation", "date": "Feb 2026", "status": "in-progress"}
+      ],
+      "summary": {
+        "status": "Evaluation",
+        "totalValue": "$8,000,000",
+        "nearTermValue": "$500,000",
+        "probability": "45%",
+        "weightedValue": "$3,600,000",
+        "expectedClose": "Q3 2026",
+        "primaryContact": "TBD"
+      },
+      "nextActions": [
+        {"task": "Complete technical evaluation", "due": "2026-02-28", "assigned": "Randy"},
+        {"task": "Discuss integration requirements", "due": "2026-03-15", "assigned": "Tayo"}
+      ]
+    },
+    {
       "id": "amd",
       "name": "AMD",
       "industry": "Semiconductor - Strategic Partner",
